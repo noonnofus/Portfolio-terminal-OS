@@ -17,20 +17,18 @@ function cancelAnimation(term: MutableRefObject<Terminal | null>, isAnimating: M
     term.current?.writeln(' ');
     term.current?.writeln(' Hello, I\'m Kevin.');
     term.current?.writeln(' I\'m a software developer.');
-    term.current?.writeln(' Welcome,');
+    term.current?.writeln(' Welcome to my portfolio.');
     term.current?.writeln('    . ');
     term.current?.writeln('    . ');
     term.current?.writeln('    . ');
     term.current?.writeln(' To see available commands, type \"help\" and press Enter.');
-};
+}
 
 function writeText(term: MutableRefObject<Terminal | null>, isAnimating: MutableRefObject<boolean>) {
+    let currentLine = 0;
     isAnimating.current = true;
 
-    term.current?.writeln(' ');
-    term.current?.writeln(' ');
-
-    const asciiArt = [
+    const ascii = [
         ` ███╗   ██╗ ██████╗  ██████╗ ███╗   ██╗███╗   ██╗ ██████╗ ███████╗██╗   ██╗███████╗`,
         ` ████╗  ██║██╔═══██╗██╔═══██╗████╗  ██║████╗  ██║██╔═══██╗██╔════╝██║   ██║██╔════╝`,
         ` ██╔██╗ ██║██║   ██║██║   ██║██╔██╗ ██║██╔██╗ ██║██║   ██║█████╗  ██║   ██║███████╗`,
@@ -42,75 +40,85 @@ function writeText(term: MutableRefObject<Terminal | null>, isAnimating: Mutable
         ` `,
     ];
 
-    let currentLine = 0;
+    const lines = [
+        ' Hello, I\'m Kevin.',
+        ' I\'m a software developer.',
+        ' Welcome to my portfolio.',
+        '    . ',
+        '    . ',
+        '    . ',
+        ' To see available commands, type \"help\" and press Enter.'
+    ];
 
-    const typeNextAscii = () => {
+    term.current?.writeln(' ');
+    term.current?.writeln(' ');
+
+    function typeNextAscii() {
         if (!isAnimating.current) return;
-        if (currentLine < asciiArt.length) {
-            term.current?.writeln(asciiArt[currentLine++]);
+
+        if (currentLine < ascii.length) {
+            term.current?.writeln(ascii[currentLine++]);
             setTimeout(typeNextAscii, 300);
         } else {
             displayText();
         }
-    };
+    }
 
-    const displayText = () => {
+    function textAnimation(text: string, delay: number, callback: () => void) {
+        let i = 0;
+        
+        function animateChar() {
+            if (!isAnimating.current) {
+                callback();
+                return;
+            }
+
+            if (i < text.length) {
+                term.current?.write(text[i++]);
+                setTimeout(animateChar, delay);
+            } else {
+                callback();
+            }
+        }
+
+        animateChar();
+    }
+
+    function displayText() {
         if (!isAnimating.current) return;
-
-        const lines = [
-            ' Hello, I\'m Kevin.',
-            ' I\'m a software developer.',
-            ' Welcome to my portfolio.',
-            '    . ',
-            '    . ',
-            '    . ',
-            ' To see available commands, type \"help\" and press Enter.'
-        ];
 
         let currentTextLine = 0;
 
-        const typeNextLine = () => {
+        function displayNextLine() {
             if (!isAnimating.current) return;
+
             if (currentTextLine < lines.length) {
-                textAnimation(term, lines[currentTextLine], 50, () => {
+                textAnimation(lines[currentTextLine], 50, () => {
                     term.current?.write('\r\n');
                     currentTextLine++;
-                    typeNextLine();
+                    displayNextLine();
                 });
             } else {
-                isAnimating.current = false;
                 term.current?.write(' guest@noonofus.com ~ % ');
+                isAnimating.current = false;
             }
-        };
+        }
 
-        typeNextLine();
-    };
+        displayNextLine();
+    }
 
     typeNextAscii();
 
     term.current?.onData((data) => {
-        if (data.charCodeAt(0) === 13 && isAnimating.current) { // Enter key
+        const char = data.charCodeAt(0);
+        
+        if (!isAnimating.current) return;
+
+        if (char === 32) { // Spacebar to cancel animation.
             cancelAnimation(term, isAnimating);
-        } else {
-            return;
+            term.current?.write(' guest@noonofus.com ~ % ');
         }
     });
 }
-
-const textAnimation = (term: MutableRefObject<Terminal | null>, text: string, delay: number, callback?: () => void) => {
-    let index = 0;
-
-    const type = () => {
-        if (index < text.length) {
-            term.current?.write(text[index]);
-            index++;
-            setTimeout(type, delay);
-        } else if (callback) {
-            callback();
-        }
-    };
-
-    type();
-};
 
 export default writeText;
