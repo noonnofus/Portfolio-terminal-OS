@@ -7,7 +7,7 @@ import { useEffect, useRef } from 'react';
 import writeText from './terminal/write-text';
 import handleInput from './terminal/handle-input';
 
-export default function LocalTerminal() {
+export default function TerminalPage() {
   const terminalRef = useRef<HTMLDivElement | null>(null);
   const term = useRef<Terminal | null>(null);
   const fitAddon = useRef<FitAddon | null>(null);
@@ -46,5 +46,4 @@ export default function LocalTerminal() {
   return <div ref={terminalRef} style={{ height: '100%', width: '100%' }} />;
 }
 
-
-// 버그: 커맨드를 치면 쌓이지 않고 화면 위로 가버림. ✅
+// bug: The typed commands goes to the top instead of storing stacks. ✅
