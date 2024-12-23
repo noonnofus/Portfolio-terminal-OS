@@ -1,29 +1,36 @@
 import { MutableRefObject } from 'react';
 import { Terminal } from 'xterm';
+import { FitAddon } from '@xterm/addon-fit';
 import commands from '../command';
 import writeText from './write-text';
 import shutDown from './shut-down';
+import { isQuestion } from './global-state';
 
 
-const handleInput = (term: MutableRefObject<Terminal | null>, inputRef: MutableRefObject<string>, data: string, isAnimating: MutableRefObject<boolean>) => {
-  if (!term.current || isAnimating.current) return;
+const handleInput = (term: MutableRefObject<Terminal | null>, inputRef: MutableRefObject<string>, data: string, isAnimating: MutableRefObject<boolean>, terminalRef: MutableRefObject<HTMLDivElement | null>, fitAddon: MutableRefObject<FitAddon | null>) => {
+  if (!term.current) return;
 
-    const char = data.charCodeAt(0);
+  const char = data.charCodeAt(0);
 
-    if (char === 13) { // Enter key
-      processCommand(term, inputRef, isAnimating);
-    } else if (char === 127) { // Backspace key
-      if (inputRef.current.length > 0) {
-        inputRef.current = inputRef.current.slice(0, -1);
-        term.current?.write('\b \b');
-      }
-    } else {
-      inputRef.current += data;
-      term.current?.write(data);
+  if (isAnimating.current) {
+    inputRef.current = '';
+    return;
+  }
+
+  if (char === 13 && !isQuestion) { // Enter key
+    processCommand(term, inputRef, isAnimating, terminalRef, fitAddon);
+  } else if (char === 127) { // Backspace key
+    if (inputRef.current.length > 0) {
+      inputRef.current = inputRef.current.slice(0, -1);
+      term.current?.write('\b \b');
     }
+  } else {
+    inputRef.current += data;
+    term.current?.write(data);
+  }
 };
 
-const processCommand = async (term: MutableRefObject<Terminal | null>, inputRef: MutableRefObject<string>, isAnimating: MutableRefObject<boolean>) => {
+const processCommand = async (term: MutableRefObject<Terminal | null>, inputRef: MutableRefObject<string>, isAnimating: MutableRefObject<boolean>, terminalRef: MutableRefObject<HTMLDivElement | null>, fitAddon: MutableRefObject<FitAddon | null>) => {
   if (!term.current) return;
   const cmd = inputRef.current.trim();
 
@@ -43,10 +50,9 @@ const processCommand = async (term: MutableRefObject<Terminal | null>, inputRef:
 
     writeText(term, isAnimating);
   } else if (cmd === 'shutdown') {
-    console.log('hiiitt')
     term.current.clear();
 
-    shutDown(term);
+    shutDown(term, isAnimating, terminalRef, fitAddon, inputRef);
   } else {
     term.current?.writeln(` command not found: ${cmd.trim()}`);
     term.current.write(' guest@noonofus.com ~ % ');
