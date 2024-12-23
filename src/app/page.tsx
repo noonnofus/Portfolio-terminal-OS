@@ -15,35 +15,48 @@ export default function TerminalPage() {
   const isAnimating = useRef(false);
 
   useEffect(() => {
-    if (terminalRef.current && !term.current) {
-      term.current = new Terminal();
-      fitAddon.current = new FitAddon();
-      term.current.loadAddon(fitAddon.current);
-      term.current.open(terminalRef.current);
-
-      // Writing the text that show first.
-      writeText(term, isAnimating);
-
-      const handleResize = () => {
-        if (fitAddon.current) {
-          fitAddon.current.fit();
-        }
-      };
-
-      window.addEventListener('resize', handleResize);
-
-      // Initialize the size
-      handleResize();
-
-      term.current.onData((data) => {
-        if (!isAnimating.current) {
-          handleInput(term, inputRef, data, isAnimating);
-        }
-      });
+    if (!terminalRef.current || term.current) {
+      return;
     }
+
+    term.current = new Terminal();
+    fitAddon.current = new FitAddon();
+    term.current.loadAddon(fitAddon.current);
+    term.current.open(terminalRef.current);
+
+    writeText(term, isAnimating);
+
+    const handleResize = () => {
+      if (fitAddon.current) {
+        fitAddon.current.fit();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+
+    term.current.onData((data) => {
+      if (!isAnimating.current) {
+        handleInput(term, inputRef, data, isAnimating, terminalRef, fitAddon);
+      }
+    });
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      term.current?.dispose();
+      term.current = null;
+      fitAddon.current = null;
+    };
   }, []);
+
+  console.log(
+    `
+      Are you looking for the source code?
+      Here is what you looking for!
+      https://github.com/BCITKevin/Portfolio-terminal-OS
+    `
+  );
 
   return <div ref={terminalRef} style={{ height: '100%', width: '100%' }} />;
 }
-
-// bug: The typed commands goes to the top instead of storing stacks. ✅

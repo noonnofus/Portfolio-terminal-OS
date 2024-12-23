@@ -1,54 +1,40 @@
 import { MutableRefObject } from 'react';
 import { Terminal } from 'xterm';
 
+const ascii = [
+    ` ███╗   ██╗ ██████╗  ██████╗ ███╗   ██╗███╗   ██╗ ██████╗ ███████╗██╗   ██╗███████╗`,
+    ` ████╗  ██║██╔═══██╗██╔═══██╗████╗  ██║████╗  ██║██╔═══██╗██╔════╝██║   ██║██╔════╝`,
+    ` ██╔██╗ ██║██║   ██║██║   ██║██╔██╗ ██║██╔██╗ ██║██║   ██║█████╗  ██║   ██║███████╗`,
+    ` ██║╚██╗██║██║   ██║██║   ██║██║╚██╗██║██║╚██╗██║██║   ██║██╔══╝  ██║   ██║╚════██║`,
+    ` ██║ ╚████║╚██████╔╝╚██████╔╝██║ ╚████║██║ ╚████║╚██████╔╝██║     ╚██████╔╝███████║`,
+    ` ╚═╝  ╚═══╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝      ╚═════╝ ╚══════╝`,
+    ` `,
+    ` `,
+    ` `,
+];
+
+const lines = [
+    ' Hello, I\'m Kevin.',
+    ' I\'m a software developer.',
+    ' Welcome to my portfolio.',
+    '    . ',
+    '    . ',
+    '    . ',
+    ' To see available commands, type \"help\" and press Enter.'
+];
+
 function cancelAnimation(term: MutableRefObject<Terminal | null>, isAnimating: MutableRefObject<boolean>) {
     isAnimating.current = false;
 
-    term.current?.writeln(' ');
-    term.current?.writeln(' ');
-    term.current?.writeln(` ███╗   ██╗ ██████╗  ██████╗ ███╗   ██╗███╗   ██╗ ██████╗ ███████╗██╗   ██╗███████╗`);
-    term.current?.writeln(` ████╗  ██║██╔═══██╗██╔═══██╗████╗  ██║████╗  ██║██╔═══██╗██╔════╝██║   ██║██╔════╝`);
-    term.current?.writeln(` ██╔██╗ ██║██║   ██║██║   ██║██╔██╗ ██║██╔██╗ ██║██║   ██║█████╗  ██║   ██║███████╗`);
-    term.current?.writeln(` ██║╚██╗██║██║   ██║██║   ██║██║╚██╗██║██║╚██╗██║██║   ██║██╔══╝  ██║   ██║╚════██║`);
-    term.current?.writeln(` ██║ ╚████║╚██████╔╝╚██████╔╝██║ ╚████║██║ ╚████║╚██████╔╝██║     ╚██████╔╝███████║`);
-    term.current?.writeln(` ╚═╝  ╚═══╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝      ╚═════╝ ╚══════╝`);
-    term.current?.writeln(' ');
-    term.current?.writeln(' ');
-    term.current?.writeln(' ');
-    term.current?.writeln(' Hello, I\'m Kevin.');
-    term.current?.writeln(' I\'m a software developer.');
-    term.current?.writeln(' Welcome to my portfolio.');
-    term.current?.writeln('    . ');
-    term.current?.writeln('    . ');
-    term.current?.writeln('    . ');
-    term.current?.writeln(' To see available commands, type \"help\" and press Enter.');
+    term.current?.writeln('\n\n');
+    ascii.forEach(line => term.current?.writeln(line));
+    term.current?.writeln('\n\n');
+    lines.forEach(line => term.current?.writeln(line));
 }
 
 function writeText(term: MutableRefObject<Terminal | null>, isAnimating: MutableRefObject<boolean>) {
     let currentLine = 0;
     isAnimating.current = true;
-
-    const ascii = [
-        ` ███╗   ██╗ ██████╗  ██████╗ ███╗   ██╗███╗   ██╗ ██████╗ ███████╗██╗   ██╗███████╗`,
-        ` ████╗  ██║██╔═══██╗██╔═══██╗████╗  ██║████╗  ██║██╔═══██╗██╔════╝██║   ██║██╔════╝`,
-        ` ██╔██╗ ██║██║   ██║██║   ██║██╔██╗ ██║██╔██╗ ██║██║   ██║█████╗  ██║   ██║███████╗`,
-        ` ██║╚██╗██║██║   ██║██║   ██║██║╚██╗██║██║╚██╗██║██║   ██║██╔══╝  ██║   ██║╚════██║`,
-        ` ██║ ╚████║╚██████╔╝╚██████╔╝██║ ╚████║██║ ╚████║╚██████╔╝██║     ╚██████╔╝███████║`,
-        ` ╚═╝  ╚═══╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝      ╚═════╝ ╚══════╝`,
-        ` `,
-        ` `,
-        ` `,
-    ];
-
-    const lines = [
-        ' Hello, I\'m Kevin.',
-        ' I\'m a software developer.',
-        ' Welcome to my portfolio.',
-        '    . ',
-        '    . ',
-        '    . ',
-        ' To see available commands, type \"help\" and press Enter.'
-    ];
 
     term.current?.writeln(' ');
     term.current?.writeln(' ');
