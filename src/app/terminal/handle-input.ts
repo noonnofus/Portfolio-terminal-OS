@@ -1,3 +1,5 @@
+'use client'
+
 import { MutableRefObject } from 'react';
 import { Terminal } from 'xterm';
 import { FitAddon } from '@xterm/addon-fit';
@@ -5,9 +7,10 @@ import commands from '../command';
 import writeText from './write-text';
 import shutDown from './shut-down';
 import { isQuestion } from './global-state';
+import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 
-const handleInput = (term: MutableRefObject<Terminal | null>, inputRef: MutableRefObject<string>, data: string, isAnimating: MutableRefObject<boolean>, terminalRef: MutableRefObject<HTMLDivElement | null>, fitAddon: MutableRefObject<FitAddon | null>) => {
+const handleInput = (term: MutableRefObject<Terminal | null>, inputRef: MutableRefObject<string>, data: string, isAnimating: MutableRefObject<boolean>, terminalRef: MutableRefObject<HTMLDivElement | null>, fitAddon: MutableRefObject<FitAddon | null>, router: AppRouterInstance) => {
   if (!term.current) return;
 
   const char = data.charCodeAt(0);
@@ -18,7 +21,7 @@ const handleInput = (term: MutableRefObject<Terminal | null>, inputRef: MutableR
   }
 
   if (char === 13 && !isQuestion) { // Enter key
-    processCommand(term, inputRef, isAnimating, terminalRef, fitAddon);
+    processCommand(term, inputRef, isAnimating, terminalRef, fitAddon, router);
   } else if (char === 127) { // Backspace key
     if (inputRef.current.length > 0) {
       inputRef.current = inputRef.current.slice(0, -1);
@@ -30,7 +33,7 @@ const handleInput = (term: MutableRefObject<Terminal | null>, inputRef: MutableR
   }
 };
 
-const processCommand = async (term: MutableRefObject<Terminal | null>, inputRef: MutableRefObject<string>, isAnimating: MutableRefObject<boolean>, terminalRef: MutableRefObject<HTMLDivElement | null>, fitAddon: MutableRefObject<FitAddon | null>) => {
+const processCommand = async (term: MutableRefObject<Terminal | null>, inputRef: MutableRefObject<string>, isAnimating: MutableRefObject<boolean>, terminalRef: MutableRefObject<HTMLDivElement | null>, fitAddon: MutableRefObject<FitAddon | null>, router: AppRouterInstance) => {
   if (!term.current) return;
   const cmd = inputRef.current.trim();
 
@@ -52,7 +55,10 @@ const processCommand = async (term: MutableRefObject<Terminal | null>, inputRef:
   } else if (cmd === 'shutdown') {
     term.current.clear();
 
-    shutDown(term, isAnimating, terminalRef, fitAddon, inputRef);
+    shutDown(term, isAnimating, terminalRef, fitAddon, inputRef, router);
+  } else if (cmd === 'startx') {
+    router.push('/gui');
+    
   } else {
     term.current?.writeln(` command not found: ${cmd.trim()}`);
     term.current.write(' guest@noonofus.com ~ % ');

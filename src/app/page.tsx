@@ -4,6 +4,7 @@ import { Terminal } from 'xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import 'xterm/css/xterm.css';
 import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import writeText from './terminal/write-text';
 import handleInput from './terminal/handle-input';
 
@@ -13,6 +14,7 @@ export default function TerminalPage() {
   const fitAddon = useRef<FitAddon | null>(null);
   const inputRef = useRef('');
   const isAnimating = useRef(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (!terminalRef.current || term.current) {
@@ -38,7 +40,7 @@ export default function TerminalPage() {
 
     term.current.onData((data) => {
       if (!isAnimating.current) {
-        handleInput(term, inputRef, data, isAnimating, terminalRef, fitAddon);
+        handleInput(term, inputRef, data, isAnimating, terminalRef, fitAddon, router);
       }
     });
 

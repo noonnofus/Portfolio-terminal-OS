@@ -4,13 +4,15 @@ import { FitAddon } from '@xterm/addon-fit';
 import writeText from './write-text';
 import { setQuestion, isQuestion } from './global-state';
 import handleInput from './handle-input';
+import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 const shutDown = (
   term: MutableRefObject<Terminal | null>,
   isAnimating: MutableRefObject<boolean>,
   terminalRef: MutableRefObject<HTMLDivElement | null>,
   fitAddon: MutableRefObject<FitAddon | null>,
-  inputRef: MutableRefObject<string>
+  inputRef: MutableRefObject<string>,
+  router: AppRouterInstance
 ) => {
   if (!term.current) return;
   term.current?.writeln(' ');
@@ -107,7 +109,7 @@ const shutDown = (
             
             term.current.onData((data) => {
               if (!isAnimating.current) {
-                handleInput(term, inputRef, data, isAnimating, terminalRef, fitAddon);
+                handleInput(term, inputRef, data, isAnimating, terminalRef, fitAddon, router);
               }
             });
             
