@@ -5,11 +5,11 @@ const commands = [
     },
     {
       name: 'reboot',
-      description: 'restart the site'
+      description: 'restart the system'
     },
     {
       name: 'shutdown',
-      description: 'shut the site down'
+      description: 'shut the system down'
     },
     {
       name: 'clear',

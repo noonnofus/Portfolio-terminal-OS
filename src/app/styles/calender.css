@@ -1,0 +1,26 @@
+@import url("react-calendar/dist/Calendar.css");
+
+.react-calendar {
+  border: none;
+}
+
+.react-calendar__tile--now {
+  background: #e3bfac;
+}
+
+.react-calendar__tile--now:hover {
+    background: #c8a998 !important;
+}
+
+.react-calendar__tile--active:hover,
+.react-calendar__tile--active:focus {
+  background: #c8a998 !important;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr[title],
+.react-calendar__month-view__days__day abbr[title] {
+  text-decoration: none;
+  user-select: none;
+  color: #4d332a;
+}
+
