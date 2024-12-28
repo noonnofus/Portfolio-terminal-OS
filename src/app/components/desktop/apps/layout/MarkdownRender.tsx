@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -12,7 +14,6 @@ export default function MarkdownRender({ markdownText, title }: { markdownText: 
             backgroundColor: "white",
             borderRadius: "8px",
         }}>
-            {/* Put app header here. */}
             <AppDesktopHeader title={title} />
             <ReactMarkdown
                 className="react-markdown p-5"

@@ -1,8 +1,18 @@
+'use client';
+
 import { Box, Flex, Icon } from "@chakra-ui/react";
 import { IoCloseCircle } from "react-icons/io5";
 import { BiFullscreen } from "react-icons/bi";
+import { useDispatch } from "react-redux";
+import { setActiveApp } from "@/app/store/features/desktopSlice";
 
 export default function AppDesktopHeader({ title }: { title: string }) {
+    const dispatch = useDispatch();
+
+    const handleCloseClick = () => {
+        dispatch(setActiveApp(''))
+    }
+
     return (
         <div className="relative w-full bg-">
             <Flex
@@ -13,14 +23,19 @@ export default function AppDesktopHeader({ title }: { title: string }) {
                 <Box
                     flex="1"
                     display="flex"
-                    alignItems="center" justifyContent="flex-start" position="relative">
-                    <Box>
+                    alignItems="center" justifyContent="flex-start" position="relative"
+                >
+                    <Box
+                        onClick={handleCloseClick}
+                        cursor="pointer"
+                    >
                         <Icon>
                             <IoCloseCircle />
                         </Icon>
                     </Box>
                     <Box
                         className="ml-2"
+                        cursor="pointer"
                     >
                         <Icon>
                             <BiFullscreen />

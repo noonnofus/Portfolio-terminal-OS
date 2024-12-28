@@ -1,12 +1,17 @@
 'use client';
 
 import { Flex } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 import DesktopApps from "@/lib/apps";
 import { DesktopIcon } from "./DesktopIcon";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from "../store/store";
+import { setActiveApp } from "../store/features/desktopSlice";
 
 export default function DesktopMainTouchArea() {
-    const [activeApp, setActiveApp] = useState<string>('');
+    const activeApp = useSelector((state: RootState) => state.desktop.activeApp);
+
+    const dispatch = useDispatch();
 
     return (
         <Flex
@@ -21,7 +26,7 @@ export default function DesktopMainTouchArea() {
                         <DesktopIcon
                             key={`touchview-${app.appName}`}
                             iconName={app.iconName}
-                            onClick={() => setActiveApp(app.appName)}
+                            onClick={() => dispatch(setActiveApp(app.appName))}
                             title={app.title}
                         />
                         {activeApp === app.appName ? app.component : null}
