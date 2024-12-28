@@ -1,3 +1,5 @@
+'use client';
+
 import MarkdownRender from "./layout/MarkdownRender";
 
 const md = `

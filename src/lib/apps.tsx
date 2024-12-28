@@ -1,3 +1,5 @@
+'use client';
+
 import AppAbout from "@/app/components/desktop/apps/AppAbout";
 import AppContact from "@/app/components/desktop/apps/AppContact";
 

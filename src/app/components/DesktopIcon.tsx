@@ -60,6 +60,7 @@ export function DesktopIcon({
                 bgColor={bgColor}
                 w="100%"
                 borderBottomRadius="8px"
+                className="text-center"
             >
                 {title}
             </Text>
