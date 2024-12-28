@@ -38,7 +38,7 @@ export default function DesktopMainViewHeader() {
                 className="bg-gray-600/20 backdrop-blur-sm px-4 py-2"
             >
                 <Box flex="1">
-                    <img src="/icons/main.png" alt="application list icon" width={22} />
+                    <img src="/icons/main.png" alt="application list icon" width={24} />
                 </Box>
                 <Box
                     height="20px"
