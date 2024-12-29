@@ -14,7 +14,9 @@ export default function AppDesktopHeader({ title }: { title: string }) {
     }
 
     return (
-        <div className="relative w-full bg-">
+        <div className="relative w-full " style={{
+            overflow: 'hidden'
+        }}>
             <Flex
                 gap="3"
                 justify="space-between"

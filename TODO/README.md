@@ -4,3 +4,11 @@
 - 그리고 아래의 state에 redux적용. ✅
     - 목표 state: const [activeApp, setActiveApp] = useState<string>('');
 - 마지막에 AppDesktopHeader.tsx에서 x 버튼을 누르면 activeApp redux 초기화. ✅
+
+
+- Add Projects App. ✅
+- Add framer-motion into components and make them movable. ✅
+    - https://motion.dev/
+
+
+- Add Full-screen & Shrink button functional on the each apps' window.

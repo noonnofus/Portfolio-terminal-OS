@@ -2,13 +2,19 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const desktopSlice = createSlice({
   name: 'desktop',
-  initialState: { activeApp: '' },
+  initialState: {
+    activeApp: '',
+    focusApp: '',
+   },
   reducers: {
     setActiveApp: (state, action: PayloadAction<string>) => {
       state.activeApp = action.payload;
     },
+    setFoucsApp: (state, action: PayloadAction<string>) => {
+      state.focusApp = action.payload;
+    }
   },
 });
 
-export const { setActiveApp } = desktopSlice.actions;
+export const { setActiveApp, setFoucsApp } = desktopSlice.actions;
 export default desktopSlice.reducer;

@@ -38,15 +38,17 @@ export function DesktopIcon({
             onDoubleClick={onDoubleClick}
             onClick={onClick}
             onDragStart={onClick}
+            style={{
+                cursor: 'pointer',
+                borderRadius: '8px',
+                backgroundColor: `${bgColor}`
+            }}
         >
             <Flex
                 w="55px"
                 h="55px"
                 p="5px"
                 m={isMobileIcon ? "5px" : "0"}
-                bgColor={bgColor}
-                borderTopRadius="8px"
-                cursor="pointer"
                 backgroundImage={`url(/icons/${iconName})`}
                 backgroundSize="100%"
                 backgroundRepeat="no-repeat"
@@ -57,9 +59,7 @@ export function DesktopIcon({
                 textAlign="center"
                 color="#FFFFFF"
                 textShadow="1px 1px 1px black"
-                bgColor={bgColor}
                 w="100%"
-                borderBottomRadius="8px"
                 className="text-center"
             >
                 {title}

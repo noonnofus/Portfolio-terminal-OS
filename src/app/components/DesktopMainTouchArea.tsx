@@ -5,12 +5,14 @@ import React from "react";
 import DesktopApps from "@/lib/apps";
 import { DesktopIcon } from "./DesktopIcon";
 import { useSelector, useDispatch } from 'react-redux';
+import { motion } from "framer-motion";
 import { RootState } from "../store/store";
-import { setActiveApp } from "../store/features/desktopSlice";
+import { setActiveApp, setFoucsApp } from "../store/features/desktopSlice";
+import "@/app/styles/dragAreaLayout.css";
 
 export default function DesktopMainTouchArea() {
     const activeApp = useSelector((state: RootState) => state.desktop.activeApp);
-
+    const focusApp = useSelector((state: RootState) => state.desktop.focusApp);
     const dispatch = useDispatch();
 
     return (
@@ -21,15 +23,42 @@ export default function DesktopMainTouchArea() {
             backgroundPosition="center"
         >
             <Flex flexWrap="wrap" h="30%">
-                {DesktopApps().map((app) => (
+                {DesktopApps().map((app, i) => (
                     <React.Fragment key={`touchview-${app.appName}`}>
-                        <DesktopIcon
-                            key={`touchview-${app.appName}`}
-                            iconName={app.iconName}
-                            onClick={() => dispatch(setActiveApp(app.appName))}
-                            title={app.title}
-                        />
-                        {activeApp === app.appName ? app.component : null}
+                        <motion.div
+                            key={i}
+                            drag
+                            dragElastic={0}
+                            dragTransition={{ power: 0 }}
+                            style={{
+                                position: "absolute",
+                                cursor: "grab",
+                            }}
+                            className={`app-initial-position app-${i + 1}`}
+                        >
+                            <DesktopIcon
+                                key={`touchview-${app.appName}`}
+                                iconName={app.iconName}
+                                isFocused={focusApp === app.appName}
+                                onClick={() => dispatch(setFoucsApp(app.appName))}
+                                onDoubleClick={() => dispatch(setActiveApp(app.appName))}
+                                title={app.title}
+                            />
+                        </motion.div>
+                        {activeApp === app.appName && (
+                            <motion.div
+                                drag
+                                dragElastic={0}
+                                dragTransition={{ power: 0 }}
+                                style={{
+                                    position: "absolute",
+                                    transform: "translate(5%, 0%)",
+                                    zIndex: focusApp === app.appName ? 10 : 1,
+                                }}
+                            >
+                                {app.component}
+                            </motion.div>
+                        )}
                     </React.Fragment>
                 ))}
             </Flex>
