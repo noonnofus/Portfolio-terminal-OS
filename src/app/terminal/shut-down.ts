@@ -12,7 +12,8 @@ const shutDown = (
   terminalRef: MutableRefObject<HTMLDivElement | null>,
   fitAddon: MutableRefObject<FitAddon | null>,
   inputRef: MutableRefObject<string>,
-  router: AppRouterInstance
+  router: AppRouterInstance,
+  pathname: string
 ) => {
   if (!term.current) return;
   term.current?.writeln(' ');
@@ -109,7 +110,7 @@ const shutDown = (
             
             term.current.onData((data) => {
               if (!isAnimating.current) {
-                handleInput(term, inputRef, data, isAnimating, terminalRef, fitAddon, router);
+                handleInput(term, inputRef, data, isAnimating, terminalRef, fitAddon, router, pathname);
               }
             });
             

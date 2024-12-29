@@ -2,6 +2,9 @@
 
 import AppAbout from "@/app/components/desktop/apps/AppAbout";
 import AppContact from "@/app/components/desktop/apps/AppContact";
+import AppProjects from "@/app/components/desktop/apps/AppProjects";
+import AppAboutSite from "@/app/components/desktop/apps/AppAboutSite";
+import AppTerminal from "@/app/components/desktop/apps/AppTerminal";
 
 export default function DesktopApps() {
     return [
@@ -16,6 +19,24 @@ export default function DesktopApps() {
             appName: "App Contacts",
             title: "Contacts",
             component: <AppContact />,
+        },
+        {
+            iconName: "/projects.png",
+            appName: "App Projects",
+            title: "Projects",
+            component: <AppProjects />,
+        },
+        {
+            iconName: "/site.png",
+            appName: "App About Site",
+            title: "About Site",
+            component: <AppAboutSite />,
+        },
+        {
+            iconName: "/terminal.png",
+            appName: "App Terminal",
+            title: "Terminal",
+            component: <AppTerminal />,
         },
     ];
 }
