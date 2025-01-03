@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import writeText from './write-text';
 import handleInput from './handle-input';
 import { usePathname } from 'next/navigation';
+import useIsTouchDevice from '@/lib/isTouchDevice';
 
 export default function TerminalPage() {
     const terminalRef = useRef<HTMLDivElement | null>(null);
@@ -18,6 +19,7 @@ export default function TerminalPage() {
     const router = useRouter();
     const pathname = usePathname();
     const mountedRef = useRef(false);
+    const isTouchDevice = useIsTouchDevice();
 
     useEffect(() => {
         if (mountedRef.current) return;
@@ -40,11 +42,11 @@ export default function TerminalPage() {
 
             term.current = new Terminal({
                 cursorBlink: true,
-                fontSize: 14,
+                fontSize: isTouchDevice ? 12 : 14,
                 fontFamily: 'monospace',
                 theme: {
                     background: '#000000',
-                    foreground: '#ffffff'
+                    foreground: '#3CD607'
                 },
                 allowProposedApi: true
             });
@@ -112,7 +114,7 @@ export default function TerminalPage() {
                 fitAddon.current = null;
             }
         };
-    }, [pathname]);
+    }, [pathname, isTouchDevice]);
 
     return <div ref={terminalRef} style={{ height: '100%', width: '100%' }} />;
 }
