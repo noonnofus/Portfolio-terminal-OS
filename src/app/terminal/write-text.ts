@@ -13,6 +13,20 @@ const ascii = [
     ` `,
 ];
 
+const mobileAscii = [
+    `  **                                **              `,
+    ` /**       **   **                 /**              `,
+    ` /**      //** **  **   ** ******* /**       ****** `,
+    ` /******   //***  /**  /**//**///**/******  **////**`,
+    ` /**///**   /**   /**  /** /**  /**/**///**/**   /**`,
+    ` /**  /**   **    /**  /** /**  /**/**  /**/**   /**`,
+    ` /**  /**  **     //****** ***  /**/**  /**//****** `,
+    ` //   //  //       ////// ///   // //   //  //////  `,
+    ` `,
+    ` `,
+    ` `,
+]
+
 const lines = [
     ' Hello, I\'m Kevin, Kim.',
     ' I\'m a software developer.',
@@ -32,17 +46,14 @@ function cancelAnimation(term: MutableRefObject<Terminal | null>, isAnimating: M
     lines.forEach(line => term.current?.writeln(line));
 }
 
-// write-text.ts
 function writeText(term: MutableRefObject<Terminal | null>, isAnimating: MutableRefObject<boolean>) {
     if (!term.current) return;
     
-    // 이미 애니메이션이 진행 중이면 중단
     if (isAnimating.current) return;
     
     let currentLine = 0;
     isAnimating.current = true;
     
-    // 터미널 초기화
     term.current.reset();
     term.current.clear();
     
@@ -97,12 +108,10 @@ function writeText(term: MutableRefObject<Terminal | null>, isAnimating: Mutable
         writeLine();
     };
     
-    // 시작
     term.current.writeln(' ');
     term.current.writeln(' ');
     writeAscii();
     
-    // Space 키 이벤트 핸들러는 한 번만 등록
     const handler = term.current.onData((data) => {
         if (!isAnimating.current || !term.current) return;
         
@@ -110,7 +119,7 @@ function writeText(term: MutableRefObject<Terminal | null>, isAnimating: Mutable
         if (char === 32) {
             cancelAnimation(term, isAnimating);
             term.current.write(' guest@noonofus.com ~ % ');
-            handler.dispose(); // 이벤트 핸들러 제거
+            handler.dispose();
         }
     });
 }
