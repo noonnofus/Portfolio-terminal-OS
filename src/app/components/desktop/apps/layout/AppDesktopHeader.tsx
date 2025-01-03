@@ -2,16 +2,16 @@
 
 import { Box, Flex, Icon } from "@chakra-ui/react";
 import { IoCloseCircle } from "react-icons/io5";
-import { BiFullscreen } from "react-icons/bi";
-import { useDispatch } from "react-redux";
-import { setActiveApp } from "@/app/store/features/desktopSlice";
+import { BiFullscreen, BiExitFullscreen } from "react-icons/bi";
+import { useSelector, useDispatch } from "react-redux";
+import { setActiveApp, setFullScreen } from "@/app/store/features/desktopSlice";
+import { RootState } from "@/app/store/store";
+import useIsTouchDevice from "@/lib/isTouchDevice";
 
 export default function AppDesktopHeader({ title }: { title: string }) {
+    const isTouchDevice = useIsTouchDevice();
+    const isFullScreen = useSelector((state: RootState) => state.desktop.fullScreen);
     const dispatch = useDispatch();
-
-    const handleCloseClick = () => {
-        dispatch(setActiveApp(''))
-    }
 
     return (
         <div className="relative w-full " style={{
@@ -28,7 +28,7 @@ export default function AppDesktopHeader({ title }: { title: string }) {
                     alignItems="center" justifyContent="flex-start" position="relative"
                 >
                     <Box
-                        onClick={handleCloseClick}
+                        onClick={() => dispatch(setActiveApp(''))}
                         cursor="pointer"
                     >
                         <Icon>
@@ -38,10 +38,19 @@ export default function AppDesktopHeader({ title }: { title: string }) {
                     <Box
                         className="ml-2"
                         cursor="pointer"
+                        onClick={() => dispatch(setFullScreen(!isFullScreen))}
                     >
-                        <Icon>
-                            <BiFullscreen />
-                        </Icon>
+                        {isTouchDevice ? (
+                            <></>
+                        ) : (
+                            <Icon>
+                                {isFullScreen ? (
+                                    <BiExitFullscreen />
+                                ) : (
+                                    <BiFullscreen />
+                                )}
+                            </Icon>
+                        )}
                     </Box>
                 </Box>
                 <Box

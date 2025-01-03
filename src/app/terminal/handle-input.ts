@@ -9,7 +9,6 @@ import shutDown from './shut-down';
 import { isQuestion } from './global-state';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
-
 const handleInput = (term: MutableRefObject<Terminal | null>, inputRef: MutableRefObject<string>, data: string, isAnimating: MutableRefObject<boolean>, terminalRef: MutableRefObject<HTMLDivElement | null>, fitAddon: MutableRefObject<FitAddon | null>, router: AppRouterInstance, pathname: string) => {
   if (!term.current) return;
 

@@ -2,14 +2,17 @@
 
 import { Flex } from "@chakra-ui/react"
 import DesktopMainViewHeader from "./DesktopMainViewHeader"
-import DesktopMainTouchArea from "./DesktopMainTouchArea"
+import DesktopMainDragArea from "./DesktopMainDragArea"
 import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { setActiveApp, setFoucsApp } from "../store/features/desktopSlice";
 import { RootState } from "../store/store";
+import useIsTouchDevice from "@/lib/isTouchDevice";
+import DesktopMainTouchArea from "./DesktopMainTouchArea";
 import "../styles/appLayout.css";
 
 export default function DesktopMainView() {
+    const isTouchDevice = useIsTouchDevice();
     const focusApp = useSelector((state: RootState) => state.desktop.focusApp);
     const dispatch = useDispatch();
 
@@ -47,8 +50,17 @@ export default function DesktopMainView() {
             width="100%"
             flexDirection="column"
         >
-            <DesktopMainViewHeader />
-            <DesktopMainTouchArea />
+            {isTouchDevice ? (
+                <>
+                    <DesktopMainViewHeader />
+                    <DesktopMainTouchArea />
+                </>
+            ) : (
+                <>
+                    <DesktopMainViewHeader />
+                    <DesktopMainDragArea />
+                </>
+            )}
         </Flex>
     )
 }

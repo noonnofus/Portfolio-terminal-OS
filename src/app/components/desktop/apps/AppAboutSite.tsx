@@ -5,7 +5,7 @@ import MarkdownRender from "./layout/MarkdownRender";
 const md = `
 ## **About site**
 
-This is Kevin Portfolio site.
+This is Kevin's portfolio site. The purpose of this website is to show all the works & projects that I've done and impress people who visit this site. Thanks to everyone who see this message and visit this website.
 
 <br />
 
@@ -13,7 +13,7 @@ This is Kevin Portfolio site.
 
 Available on github:
 
-[https://github.com/BCITKevin/Portfolio-terminal-OS](https://github.com/BCITKevin/Portfolio-terminal-OS) <ExternalLinkIcon />
+[https://github.com/BCITKevin/Portfolio-terminal-OS](https://github.com/BCITKevin/Portfolio-terminal-OS)
 
 <br />
 
