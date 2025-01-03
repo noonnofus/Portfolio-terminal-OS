@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import Calendar from 'react-calendar';
 import Clock from 'react-clock';
@@ -11,7 +11,6 @@ import { setShowAppMenu } from "../store/features/desktopSlice";
 import '../styles/calender.css';
 
 export default function DesktopMainViewHeader() {
-    const connection = navigator.onLine;
     const [time, setTime] = useState<string>('');
     const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
@@ -70,7 +69,7 @@ export default function DesktopMainViewHeader() {
                 <Box flex="1" display="flex" alignItems="center" justifyContent="flex-end" position="relative">
                     <Box>
                         <img
-                            src={connection ? "/icons/wifi-connect.png" : "/icons/wifi-disconnect.png"}
+                            src={"/icons/wifi-connect.png"}
                             alt="wifi-status-icon"
                             width={16}
                             height={16}
