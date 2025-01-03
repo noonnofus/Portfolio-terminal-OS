@@ -1,9 +1,13 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import Calendar from 'react-calendar';
 import Clock from 'react-clock';
+import DesktopHeaderAppMenu from "./DesktopHeaderAppMenu";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from "../store/store";
+import { setShowAppMenu } from "../store/features/desktopSlice";
 import '../styles/calender.css';
 
 export default function DesktopMainViewHeader() {
@@ -11,6 +15,8 @@ export default function DesktopMainViewHeader() {
     const [time, setTime] = useState<string>('');
     const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
+    const isAppMenuShow = useSelector((state: RootState) => state.desktop.showAppMenu);
+    const dispatch = useDispatch();
 
     const toggleDatePicker = () => {
         if (showDatePicker) {
@@ -38,7 +44,15 @@ export default function DesktopMainViewHeader() {
                 className="bg-gray-600/20 backdrop-blur-sm px-4 py-2"
             >
                 <Box flex="1">
-                    <img src="/icons/main.png" alt="application list icon" width={24} />
+                    <img
+                        src="/icons/main.png"
+                        alt="application list icon"
+                        width={24}
+                        style={{
+                            cursor: 'pointer'
+                        }}
+                        onClick={() => dispatch(setShowAppMenu(!isAppMenuShow))}
+                    />
                 </Box>
                 <Box
                     height="20px"
@@ -73,6 +87,9 @@ export default function DesktopMainViewHeader() {
                     </Box>
                 </Box>
             </Flex>
+            {isAppMenuShow && (
+                <DesktopHeaderAppMenu />
+            )}
             {showDatePicker && (
                 <div className={`absolute right-1 top-10 z-10 p-3 rounded-xl ${isAnimating ? 'animate-slideOut' : 'animate-slideIn'
                     }`}>

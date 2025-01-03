@@ -5,6 +5,7 @@ import MarkdownRender from "./layout/MarkdownRender";
 const md = `
 ## **About me**
 Kevin, Vancouver, BC, CA
+<br />
 Origin: South Korea
 
 <br />

@@ -1,6 +1,10 @@
 import MarkdownRender from "./layout/MarkdownRender";
 
 const md = `
+If you have any questions or would like to contact me, please use the following methods below:
+
+<br />
+
 **Email**
 
 [kevinvancouver@gmail.com](mailto:kevinvancouver@gmail.com)
