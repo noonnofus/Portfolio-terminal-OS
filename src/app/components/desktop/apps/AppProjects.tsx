@@ -128,7 +128,7 @@ export default function AppProjects() {
                     </Link>
                     <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
                         <Text>
-                            This is a video conferencing app with a <strong>real-time translation</strong> feature. WeConnect's target audience includes international students who speak different languages and domestic students who work with other students who speak different languages.
+                            This is a video conferencing app with a <strong>real-time translation</strong> feature. WeConnect&apos;s target audience includes international students who speak different languages and domestic students who work with other students who speak different languages.
                         </Text>
                     </Flex>
                 </Flex>
@@ -175,7 +175,7 @@ export default function AppProjects() {
                     </Link>
                     <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
                         <Text>
-                            This is a multi-function Discord Bot that helps people play music, see game history, and enjoy simulated stock games. MejuBot is a <strong>verified</strong> bot by <strong>Discord</strong>, and my team was able to get an <strong>"Active developer"</strong> badge through this. Moreover, this app is already used by around 30 servers and approximately more than 100 people.
+                            This is a multi-function Discord Bot that helps people play music, see game history, and enjoy simulated stock games. MejuBot is a <strong>verified</strong> bot by <strong>Discord</strong>, and my team was able to get an <strong>&ldquo;Active developer&ldquo;</strong> badge through this. Moreover, this app is already used by around 30 servers and approximately more than 100 people.
                         </Text>
                     </Flex>
                 </Flex>
