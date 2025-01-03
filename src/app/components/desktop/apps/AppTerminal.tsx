@@ -1,7 +1,9 @@
 'use client';
 
-import TerminalPage from "@/app/terminal/TerminalPage";
 import AppDesktopHeader from "./layout/AppDesktopHeader";
+import dynamic from 'next/dynamic';
+
+const TerminalPage = dynamic(() => import("@/app/terminal/TerminalPage"), { ssr: false });
 
 export default function AppTerminal() {
 
