@@ -33,13 +33,17 @@ export default function MarkdownRender({ markdownText, title }: { markdownText: 
                 borderRadius: "0 0 8px 8px",
                 position: "relative",
                 zIndex: 10,
+                color: "black",
             }}>
                 <ReactMarkdown
                     className="react-markdown p-5"
                     rehypePlugins={[rehypeRaw]}
                     components={{
+                        p: ({ node, ...props }) => <p style={{ color: "black" }} {...props} />,
+                        h2: ({ node, ...props }) => <h2 style={{ color: "black" }} {...props} />,
+                        li: ({ node, ...props }) => <li style={{ color: "black" }} {...props} />,
                         div: ({ node, ...props }) => (
-                            <div style={{ position: 'relative', zIndex: 2 }} {...props} />
+                            <div style={{ position: 'relative', zIndex: 2, color: "black" }} {...props} />
                         )
                     }}
                 >
