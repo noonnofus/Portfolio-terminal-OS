@@ -45,11 +45,7 @@ export default function DesktopMainTouchArea() {
                             />
                         </motion.div>
                         {activeApp === app.appName && (
-                            <motion.div
-                                drag
-                                dragElastic={0}
-                                dragTransition={{ power: 0 }}
-                                transition={{ duration: 0 }}
+                            <div
                                 style={{
                                     width: "100vw",
                                     height: "100vh",
@@ -58,7 +54,7 @@ export default function DesktopMainTouchArea() {
                                 }}
                             >
                                 {app.component}
-                            </motion.div>
+                            </div>
                         )}
                     </React.Fragment>
                 ))}
