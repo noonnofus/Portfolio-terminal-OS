@@ -31,6 +31,8 @@ export default function MarkdownRender({ markdownText, title }: { markdownText: 
                 overflow: "auto",
                 backgroundColor: "white",
                 borderRadius: "0 0 8px 8px",
+                position: "relative",
+                zIndex: 1,
             }}>
                 <ReactMarkdown
                     className="react-markdown p-5"
