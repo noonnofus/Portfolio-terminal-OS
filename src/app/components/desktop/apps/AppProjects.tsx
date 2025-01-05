@@ -21,6 +21,7 @@ export default function AppProjects() {
                     overflow: "scroll",
                     backgroundColor: "white",
                     borderRadius: "0 0 8px 8px",
+                    color: 'black',
                 }}
             >
                 <Text className="mt-2 mb-2 text-center">Projects</Text>
