@@ -37,6 +37,11 @@ export default function MarkdownRender({ markdownText, title }: { markdownText: 
                 <ReactMarkdown
                     className="react-markdown p-5"
                     rehypePlugins={[rehypeRaw]}
+                    components={{
+                        div: ({ node, ...props }) => (
+                            <div style={{ position: 'relative', zIndex: 2 }} {...props} />
+                        )
+                    }}
                 >
                     {markdownText}
                 </ReactMarkdown>
