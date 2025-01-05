@@ -32,7 +32,7 @@ export default function MarkdownRender({ markdownText, title }: { markdownText: 
                 backgroundColor: "white",
                 borderRadius: "0 0 8px 8px",
                 position: "relative",
-                zIndex: 1,
+                zIndex: 10,
             }}>
                 <ReactMarkdown
                     className="react-markdown p-5"
