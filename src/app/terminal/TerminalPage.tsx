@@ -4,12 +4,14 @@ import { Terminal } from 'xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import 'xterm/css/xterm.css';
 import { useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
 import writeText from './write-text';
 import handleInput from './handle-input';
-import { usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import useIsTouchDevice from '@/lib/isTouchDevice';
 import DefaultModal from '../components/defaultModal';
+import { useSelector } from 'react-redux';
+import { RootState } from "../store/store";
+
 
 export default function TerminalPage() {
     const terminalRef = useRef<HTMLDivElement | null>(null);
@@ -21,6 +23,7 @@ export default function TerminalPage() {
     const pathname = usePathname();
     const mountedRef = useRef(false);
     const isTouchDevice = useIsTouchDevice();
+    const isModlaOpen = useSelector((state: RootState) => state.desktop.showModal);
 
     useEffect(() => {
         if (mountedRef.current) return;
@@ -118,13 +121,13 @@ export default function TerminalPage() {
     }, [pathname, isTouchDevice]);
 
     return (
-        <>
-            <DefaultModal />
-            <div ref={terminalRef} style={{ height: '100%', width: '100%' }} />;
-        </>
-
-    );
-
-
+        <div ref={terminalRef} style={{ height: '100%', width: '100%' }} >
+            {isModlaOpen && pathname !== "/gui" ? (
+                <DefaultModal />
+            ) : (
+                <></>
+            )}
+        </div>
+    )
 
 }
