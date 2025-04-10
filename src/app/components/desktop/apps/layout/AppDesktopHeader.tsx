@@ -20,7 +20,7 @@ export default function AppDesktopHeader({ title }: { title: string }) {
             <Flex
                 gap="3"
                 justify="space-between"
-                className="bg-yellow-600/60 px-4 py-2"
+                className="bg-gray-300/70 px-4 py-2"
             >
                 <Box
                     flex="1"
@@ -56,7 +56,7 @@ export default function AppDesktopHeader({ title }: { title: string }) {
                 <Box
                     flex="1"
                     textAlign="center"
-                    className="text-white"
+                    className=""
                 >
                     {title}
                 </Box>

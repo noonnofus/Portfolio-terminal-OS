@@ -5,22 +5,25 @@
 }
 
 .react-calendar__tile--now {
-  background: #e3bfac;
+  background: rgba(209, 213, 219, 0.7);
 }
 
 .react-calendar__tile--now:hover {
-    background: #c8a998 !important;
+  background: rgba(209, 213, 219, 0.7) !important;
+}
+
+.react-calendar__tile--active {
+  color: rgba(50, 52, 54, 0.7);
 }
 
 .react-calendar__tile--active:hover,
 .react-calendar__tile--active:focus {
-  background: #c8a998 !important;
+  background: rgba(209, 213, 219, 0.7) !important;
 }
 
 .react-calendar__month-view__weekdays__weekday abbr[title],
 .react-calendar__month-view__days__day abbr[title] {
   text-decoration: none;
   user-select: none;
-  color: #4d332a;
+  color: rgba(50, 52, 54, 0.7);
 }
-
