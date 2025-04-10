@@ -3,8 +3,6 @@
 import { Terminal } from 'xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import 'xterm/css/xterm.css';
-import { useSelector } from 'react-redux';
-import { RootState } from "../store/store";
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import writeText from './write-text';
@@ -24,9 +22,7 @@ export default function TerminalPage() {
     const mountedRef = useRef(false);
     const isTouchDevice = useIsTouchDevice();
 
-    const isModlaOpen = useSelector((state: RootState) => state.desktop.showModal);
     useEffect(() => {
-
         if (mountedRef.current) return;
         mountedRef.current = true;
 
@@ -119,14 +115,16 @@ export default function TerminalPage() {
                 fitAddon.current = null;
             }
         };
-    }, [pathname, isTouchDevice, isModlaOpen]);
+    }, [pathname, isTouchDevice]);
 
     return (
-        isModlaOpen ? (
+        <>
             <DefaultModal />
-        ) : (
-            <div ref={terminalRef} style={{ height: '100%', width: '100%' }} />
-        )
+            <div ref={terminalRef} style={{ height: '100%', width: '100%' }} />;
+        </>
+
     );
+
+
 
 }
