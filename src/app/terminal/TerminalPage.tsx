@@ -12,6 +12,7 @@ import DefaultModal from '../components/defaultModal';
 import { useSelector } from 'react-redux';
 import { RootState } from "../store/store";
 
+
 export default function TerminalPage() {
     const terminalRef = useRef<HTMLDivElement | null>(null);
     const term = useRef<Terminal | null>(null);
