@@ -1,13 +1,14 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const desktopSlice = createSlice({
-  name: 'desktop',
+  name: "desktop",
   initialState: {
-    activeApp: '',
-    focusApp: '',
+    activeApp: "",
+    focusApp: "",
     fullScreen: false,
     showAppMenu: false,
-   },
+    showModal: true,
+  },
   reducers: {
     setActiveApp: (state, action: PayloadAction<string>) => {
       state.activeApp = action.payload;
@@ -21,8 +22,17 @@ const desktopSlice = createSlice({
     setShowAppMenu: (state, action: PayloadAction<boolean>) => {
       state.showAppMenu = action.payload;
     },
+    setShowModal: (state, action: PayloadAction<boolean>) => {
+      state.showModal = action.payload;
+    },
   },
 });
 
-export const { setActiveApp, setFoucsApp, setFullScreen, setShowAppMenu } = desktopSlice.actions;
+export const {
+  setActiveApp,
+  setFoucsApp,
+  setFullScreen,
+  setShowAppMenu,
+  setShowModal,
+} = desktopSlice.actions;
 export default desktopSlice.reducer;
