@@ -17,7 +17,6 @@ export default function DefaultModal() {
     const isModlaOpen = useSelector((state: RootState) => state.desktop.showModal);
 
     const handleRadio = () => {
-        console.log('hit');
         dispatch(setShowModal(false))
         dispatch(setUserRole(role))
         if (role === 'non-technician') {
