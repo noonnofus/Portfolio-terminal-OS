@@ -9,18 +9,6 @@ import AppTerminal from "@/app/components/desktop/apps/AppTerminal";
 export default function DesktopApps() {
     return [
         {
-            iconName: "/main.png",
-            appName: "App About Me",
-            title: "About Kevin",
-            component: <AppAbout />,
-        },
-        {
-            iconName: "/contact.png",
-            appName: "App Contacts",
-            title: "Contacts",
-            component: <AppContact />,
-        },
-        {
             iconName: "/projects.png",
             appName: "App Projects",
             title: "Projects",
@@ -37,6 +25,18 @@ export default function DesktopApps() {
             appName: "App Terminal",
             title: "Terminal",
             component: <AppTerminal />,
+        },
+        {
+            iconName: "/main.png",
+            appName: "App About Me",
+            title: "About Kevin",
+            component: <AppAbout />,
+        },
+        {
+            iconName: "/contact.png",
+            appName: "App Contacts",
+            title: "Contacts",
+            component: <AppContact />,
         },
     ];
 }
