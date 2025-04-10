@@ -5,7 +5,7 @@ const desktopSlice = createSlice({
   initialState: {
     activeApp: "",
     focusApp: "",
-    fullScreen: false,
+    fullScreen: true,
     showAppMenu: false,
     showModal: true,
     userRole: "",
