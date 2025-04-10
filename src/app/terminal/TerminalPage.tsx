@@ -9,6 +9,7 @@ import writeText from './write-text';
 import handleInput from './handle-input';
 import { usePathname } from 'next/navigation';
 import useIsTouchDevice from '@/lib/isTouchDevice';
+import DefaultModal from '../components/defaultModal';
 
 export default function TerminalPage() {
     const terminalRef = useRef<HTMLDivElement | null>(null);
@@ -116,5 +117,14 @@ export default function TerminalPage() {
         };
     }, [pathname, isTouchDevice]);
 
-    return <div ref={terminalRef} style={{ height: '100%', width: '100%' }} />;
+    return (
+        <>
+            <DefaultModal />
+            <div ref={terminalRef} style={{ height: '100%', width: '100%' }} />;
+        </>
+
+    );
+
+
+
 }
