@@ -8,6 +8,7 @@ const desktopSlice = createSlice({
     fullScreen: false,
     showAppMenu: false,
     showModal: true,
+    userRole: "",
   },
   reducers: {
     setActiveApp: (state, action: PayloadAction<string>) => {
@@ -25,6 +26,9 @@ const desktopSlice = createSlice({
     setShowModal: (state, action: PayloadAction<boolean>) => {
       state.showModal = action.payload;
     },
+    setUserRole: (state, action: PayloadAction<string>) => {
+      state.userRole = action.payload;
+    },
   },
 });
 
@@ -34,5 +38,6 @@ export const {
   setFullScreen,
   setShowAppMenu,
   setShowModal,
+  setUserRole,
 } = desktopSlice.actions;
 export default desktopSlice.reducer;

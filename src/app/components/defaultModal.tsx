@@ -4,15 +4,26 @@ import { Button, RadioCard, Dialog, Portal, } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "../store/store";
-import { setShowModal } from "../store/features/desktopSlice";
+import { setShowModal, setUserRole } from "../store/features/desktopSlice";
+import { useState } from 'react';
 
 
 export default function DefaultModal() {
+    const [role, setRole] = useState("technician");
+
     const dispatch = useDispatch();
+    const router = useRouter();
 
     const isModlaOpen = useSelector((state: RootState) => state.desktop.showModal);
 
-    const router = useRouter();
+    const handleRadio = () => {
+        console.log('hit');
+        dispatch(setShowModal(false))
+        dispatch(setUserRole(role))
+        if (role === 'non-technician') {
+            router.push('/gui');
+        }
+    }
 
     return (
         <Dialog.Root
@@ -25,21 +36,24 @@ export default function DefaultModal() {
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
                     <Dialog.Content>
-                        <Dialog.Header>
-                            {/* <Dialog.Title>Before we start</Dialog.Title> */}
+                        <Dialog.Header className='flex text-lg items-center justify-center'>
+                            <Dialog.Title>Are you technician?</Dialog.Title>
                         </Dialog.Header>
                         <Dialog.Body
                             className='flex items-center justify-center'
                         >
                             <RadioCard.Root
+                                value={role}
+                                onChange={(e) => {
+                                    const value = (e.target as HTMLInputElement).value
+                                    setRole(value)
+                                }}
                                 orientation="vertical"
                                 align="center"
                                 maxW="400px"
                                 defaultValue="technician"
                                 className="flex flex-col w-full items-stretch gap-4"
                             >
-                                <RadioCard.Label className="text-center">Are you the technician?</RadioCard.Label>
-
                                 <RadioCard.Item value="technician" className="w-full">
                                     <RadioCard.ItemHiddenInput />
                                     <RadioCard.ItemControl className="flex flex-col items-center justify-center w-full">
@@ -61,7 +75,7 @@ export default function DefaultModal() {
                         </Dialog.Body>
 
                         <Dialog.Footer>
-                            <Button onClick={() => dispatch(setShowModal(false))} colorPalette='teal' variant='outline'>Save</Button>
+                            <Button onClick={handleRadio} colorPalette='teal' variant='outline'>Submit</Button>
                         </Dialog.Footer>
                     </Dialog.Content>
                 </Dialog.Positioner>
