@@ -1,6 +1,6 @@
 'use client';
 
-import { Flex } from "@chakra-ui/react";
+import { Flex, Box } from "@chakra-ui/react";
 import React from "react";
 import DesktopApps from "@/lib/apps";
 import { DesktopIcon } from "./DesktopIcon";
@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { motion } from "framer-motion";
 import { RootState } from "../store/store";
 import { setActiveApp, setFoucsApp } from "../store/features/desktopSlice";
+import GuidePopOver from "./GuidePopOver";
 import "@/app/styles/dragAreaLayout.css";
 
 export default function DesktopMainDragArea() {
@@ -69,6 +70,9 @@ export default function DesktopMainDragArea() {
                     </React.Fragment>
                 ))}
             </Flex>
+            <Box position="fixed" bottom="1rem" left="1rem" zIndex={50}>
+                <GuidePopOver />
+            </Box>
         </Flex>
     );
 }
