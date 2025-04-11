@@ -20,8 +20,6 @@ export default function DesktopHeaderAppMenu() {
         router.push('/');
     }
 
-    // 지금 모바일 디바이스일때 스타일링을 다르게 주는 작업을 하고 있었어. 거의 다 했는데 앱을 눌렀을때 transform(5%) 가 부모 태그에 적용돼서 그거 고쳐야돼. 근데 일단 이 파일은 아닌듯. 그거 찾아서 고쳐. 거의 다 했다 화이팅~
-
     return (
         <>
             <Flex
