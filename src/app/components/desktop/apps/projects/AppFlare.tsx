@@ -1,8 +1,9 @@
-import AppDesktopHeader from "./layout/AppDesktopHeader";
+import AppDesktopHeader from "../layout/AppDesktopHeader";
 import { Flex, Image, Heading, Text, Link, Box } from "@chakra-ui/react";
 import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
 
-export default function AppProjects() {
+
+export default function AppProjcetWeConnect() {
 
     return (
         <>
@@ -10,7 +11,7 @@ export default function AppProjects() {
                 backgroundColor: "white",
                 borderRadius: "8px 8px 0 0",
             }}>
-                <AppDesktopHeader title='Projects' />
+                <AppDesktopHeader appName="Client Project WCHMS" />
             </div>
             <div
                 style={{
