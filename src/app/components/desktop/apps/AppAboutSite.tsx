@@ -31,14 +31,13 @@ Available on github:
 
 ## **Icons**
 
-[Flaticon](https://www.flaticon.com/) by [mattbadal](https://www.flaticon.com/authors/mattbadal), [Freepik](https://www.flaticon.com/authors/freepik), [Ilham Fitrotul Hayat](https://www.flaticon.com/authors/ilham-fitrotul-hayat), 
+[Flaticon](https://www.flaticon.com/) by [mattbadal](https://www.flaticon.com/authors/mattbadal), [Freepik](https://www.flaticon.com/authors/freepik), [Ilham Fitrotul Hayat](https://www.flaticon.com/authors/ilham-fitrotul-hayat), [riajulislam](https://www.flaticon.com/authors/riajulislam),
 
 <br />
 
 ## **Background**
 
 [4kwallpapers](https://4kwallpapers.com/abstract/macos-sonoma-11573.html)
-
 
 `
 

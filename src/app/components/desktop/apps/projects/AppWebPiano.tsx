@@ -1,8 +1,9 @@
-import AppDesktopHeader from "./layout/AppDesktopHeader";
+import AppDesktopHeader from "../layout/AppDesktopHeader";
 import { Flex, Image, Heading, Text, Link, Box } from "@chakra-ui/react";
 import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
 
-export default function AppProjects() {
+
+export default function AppProjcetWeConnect() {
 
     return (
         <>

@@ -26,7 +26,6 @@ export default function DesktopHeaderAppMenu() {
                 w="400px"
                 minH="150px"
                 position="absolute"
-                // left="1"
                 zIndex="10"
                 backgroundColor="whiteAlpha.950"
                 color="black"
