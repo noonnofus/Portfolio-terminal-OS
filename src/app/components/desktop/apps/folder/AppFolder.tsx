@@ -8,62 +8,50 @@ import { RootState } from "@/app/store/store";
 import { setActiveApp, setFoucsApp } from "@/app/store/features/desktopSlice";
 import { DesktopIcon } from "@/app/components/DesktopIcon";
 import "@/app/styles/dragAreaLayout.css";
-import { useState } from "react";
+import { useRef } from "react";
 
 export default function AppFolder() {
-    const [isFullScreen, setIsFullScreen] = useState<boolean>(true);
     const focusApp = useSelector((state: RootState) => state.desktop.focusApp);
     const dispatch = useDispatch();
+
+    const dragAreaRef = useRef<HTMLDivElement>(null);
 
     return (
         <div
             style={{
-                width: isFullScreen ? "100vw" : "75vw",
-                height: isFullScreen ? "100vh" : "75vh",
-                backgroundColor: "white",
+                width: '100%',
+                height: '100%',
+                flexGrow: 1,
+                overflow: "scroll",
+                color: 'black',
                 borderRadius: 8,
-                display: "flex",
-                flexDirection: "column"
             }}
+            ref={dragAreaRef}
         >
-            <AppDesktopHeader
-                appName="Projects Folder"
-                title="Projects"
-                isFullScreen={isFullScreen}
-                setIsFullScreen={setIsFullScreen}
-            />
-            <div
-                style={{
-                    flexGrow: 1,
-                    overflow: "scroll",
-                    backgroundColor: "white",
-                    color: 'black',
-                }}
-            >
-                <Flex flexWrap="wrap" h="30%">
-                    {ProjectsApps().map((app, i) => (
-                        <motion.div
-                            key={`touchview-${app.appName}`}
-                            drag
-                            dragElastic={0}
-                            dragTransition={{ power: 0 }}
-                            style={{ position: "absolute", cursor: "grab" }}
-                            className={`app-initial-position app-${i + 1}`}
-                        >
-                            <DesktopIcon
-                                iconName={app.iconName}
-                                isFocused={focusApp === app.appName}
-                                onClick={() => dispatch(setFoucsApp(app.appName))}
-                                onDoubleClick={() => {
-                                    dispatch(setFoucsApp(app.appName));
-                                    dispatch(setActiveApp(app.appName));
-                                }}
-                                title={app.title}
-                            />
-                        </motion.div>
-                    ))}
-                </Flex>
-            </div>
+            <Flex flexWrap="wrap" h="100%">
+                {ProjectsApps().map((app, i) => (
+                    <motion.div
+                        key={`touchview-${app.appName}`}
+                        drag
+                        dragElastic={0}
+                        dragTransition={{ power: 0 }}
+                        dragConstraints={dragAreaRef}
+                        style={{ position: "absolute", cursor: "grab" }}
+                        className={`app-initial-position app-${i + 1}`}
+                    >
+                        <DesktopIcon
+                            iconName={app.iconName}
+                            isFocused={focusApp === app.appName}
+                            onClick={() => dispatch(setFoucsApp(app.appName))}
+                            onDoubleClick={() => {
+                                dispatch(setFoucsApp(app.appName));
+                                dispatch(setActiveApp(app.appName));
+                            }}
+                            title={app.title}
+                        />
+                    </motion.div>
+                ))}
+            </Flex>
         </div>
     );
 }
