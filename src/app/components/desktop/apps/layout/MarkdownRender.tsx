@@ -4,13 +4,12 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import AppDesktopHeader from "./AppDesktopHeader";
-import { useSelector } from 'react-redux';
-import { RootState } from "@/app/store/store";
 import useIsTouchDevice from "@/lib/isTouchDevice";
+import { useState } from "react";
 
-export default function MarkdownRender({ markdownText, title }: { markdownText: string, title: string }) {
+export default function MarkdownRender({ markdownText, title, appName }: { markdownText: string, title: string, appName: string }) {
+    const [isFullScreen, setIsFullScreen] = useState<boolean>(true);
     const isTouchDevice = useIsTouchDevice();
-    const isFullScreen = useSelector((state: RootState) => state.desktop.fullScreen);
 
     const containerWidth = isTouchDevice ? "100%" : (isFullScreen ? "100vw" : "75vw");
     const containerHeight = isTouchDevice ? "100%" : (isFullScreen ? "100vh" : "75vh");
@@ -22,7 +21,11 @@ export default function MarkdownRender({ markdownText, title }: { markdownText: 
                 backgroundColor: "white",
                 borderRadius: "8px 8px 0 0",
             }}>
-                <AppDesktopHeader title={title} />
+                <AppDesktopHeader
+                    appName={appName}
+                    title={title}
+                    isFullScreen={isFullScreen}
+                    setIsFullScreen={setIsFullScreen} />
             </div>
 
             <div style={{

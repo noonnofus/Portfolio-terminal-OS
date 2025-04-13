@@ -45,7 +45,7 @@ export default function AppAboutSite() {
 
     return (
         <>
-            <MarkdownRender markdownText={md} title="About site" />
+            <MarkdownRender markdownText={md} title="About Site" appName="App About Site" />
         </>
     );
 }

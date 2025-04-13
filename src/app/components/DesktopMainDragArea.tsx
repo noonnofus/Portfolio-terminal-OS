@@ -11,14 +11,34 @@ import { RootState } from "../store/store";
 import { setActiveApp, setFoucsApp } from "../store/features/desktopSlice";
 import GuidePopOver from "./GuidePopOver";
 import "@/app/styles/dragAreaLayout.css";
+import { useState, useEffect } from "react";
 
 export default function DesktopMainDragArea() {
+    type Position = { left: number; top: number };
+    const [fullScreenStates, setFullScreenStates] = useState<Record<string, boolean>>({});
     const isFullScreen = useSelector((state: RootState) => state.desktop.fullScreen);
     const openApps = useSelector((state: RootState) => state.desktop.openApps);
     const focusApp = useSelector((state: RootState) => state.desktop.focusApp);
     const dispatch = useDispatch();
 
     const allAppList = allApps();
+
+    const [openAppPositions, setOpenAppPositions] = useState<Record<string, Position>>({});
+
+    useEffect(() => {
+        const newPositions = { ...openAppPositions };
+
+        openApps.forEach((appName, index) => {
+            if (!newPositions[appName]) {
+                const offset = index * 50;
+                newPositions[appName] = { left: offset, top: offset };
+            }
+        });
+
+        setOpenAppPositions(newPositions);
+    }, [openApps]);
+
+
 
     return (
         <Flex
@@ -44,27 +64,28 @@ export default function DesktopMainDragArea() {
                             iconName={app.iconName}
                             isFocused={focusApp === app.appName}
                             onClick={() => dispatch(setFoucsApp(app.appName))}
-                            onDoubleClick={() => dispatch(setActiveApp(app.appName))}
+                            onDoubleClick={() => {
+                                dispatch(setFoucsApp(app.appName))
+                                dispatch(setActiveApp(app.appName))
+                            }}
                             title={app.title}
                         />
                     </motion.div>
                 ))}
             </Flex>
             {allAppList.map((app, i) =>
-                openApps.includes(app.appName) && (
+                openApps.includes(app.appName) && openAppPositions[app.appName] && (
                     <motion.div
                         key={`opened-${app.appName}`}
                         drag
                         dragElastic={0}
                         dragTransition={{ power: 0 }}
                         animate={{
-                            x: isFullScreen ? 0 : "5%",
-                            y: 0
+                            x: openAppPositions[app.appName].left,
+                            y: openAppPositions[app.appName].top
                         }}
                         transition={{ duration: 0 }}
                         style={{
-                            width: isFullScreen ? "100vw" : "75vw",
-                            height: isFullScreen ? "100vh" : "75vh",
                             position: "absolute",
                             zIndex: focusApp === app.appName ? 10 : 1,
                             border: "0.5px solid black",
