@@ -5,7 +5,6 @@ const desktopSlice = createSlice({
   initialState: {
     activeApp: "",
     focusApp: "",
-    fullScreen: true,
     showAppMenu: false,
     showModal: true,
     userRole: "",
@@ -15,7 +14,6 @@ const desktopSlice = createSlice({
     setActiveApp: (state, action: PayloadAction<string>) => {
       state.activeApp = action.payload;
       if (!state.openApps.includes(action.payload)) {
-        // ToDo: check if the openApps store multiple same apps. - currently, the same app is opening multiple tiems and not able to delete it.
         state.openApps.push(action.payload);
       }
     },
@@ -27,9 +25,6 @@ const desktopSlice = createSlice({
       if (state.activeApp === action.payload) {
         state.activeApp = "";
       }
-    },
-    setFullScreen: (state, action: PayloadAction<boolean>) => {
-      state.fullScreen = action.payload;
     },
     setShowAppMenu: (state, action: PayloadAction<boolean>) => {
       state.showAppMenu = action.payload;
@@ -47,7 +42,6 @@ export const {
   setActiveApp,
   setFoucsApp,
   closeApp,
-  setFullScreen,
   setShowAppMenu,
   setShowModal,
   setUserRole,
