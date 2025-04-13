@@ -3,14 +3,14 @@
 import { Box, Flex, Icon } from "@chakra-ui/react";
 import { IoCloseCircle } from "react-icons/io5";
 import { BiFullscreen, BiExitFullscreen } from "react-icons/bi";
-import { useSelector, useDispatch } from "react-redux";
-import { setFullScreen, closeApp } from "@/app/store/features/desktopSlice";
-import { RootState } from "@/app/store/store";
+import { useDispatch } from "react-redux";
+import { closeApp } from "@/app/store/features/desktopSlice";
 import useIsTouchDevice from "@/lib/isTouchDevice";
 
-export default function AppDesktopHeader({ appName }: { appName: string }) {
+export default function AppDesktopHeader({ appName, title, isFullScreen, setIsFullScreen }: {
+    appName: string, title: string, isFullScreen: boolean, setIsFullScreen: (val: boolean) => void,
+}) {
     const isTouchDevice = useIsTouchDevice();
-    const isFullScreen = useSelector((state: RootState) => state.desktop.fullScreen);
     const dispatch = useDispatch();
 
     return (
@@ -30,7 +30,9 @@ export default function AppDesktopHeader({ appName }: { appName: string }) {
                     alignItems="center" justifyContent="flex-start" position="relative"
                 >
                     <Box
-                        onClick={() => dispatch(closeApp(appName))}
+                        onClick={() => {
+                            dispatch(closeApp(appName))
+                        }}
                         cursor="pointer"
                     >
                         <Icon>
@@ -40,7 +42,7 @@ export default function AppDesktopHeader({ appName }: { appName: string }) {
                     <Box
                         className="ml-2"
                         cursor="pointer"
-                        onClick={() => dispatch(setFullScreen(!isFullScreen))}
+                        onClick={() => setIsFullScreen(!isFullScreen)}
                     >
                         {isTouchDevice ? (
                             <></>
@@ -58,9 +60,8 @@ export default function AppDesktopHeader({ appName }: { appName: string }) {
                 <Box
                     flex="1"
                     textAlign="center"
-                    className=""
                 >
-                    {appName}
+                    {title}
                 </Box>
                 <Box
                     flex="1"

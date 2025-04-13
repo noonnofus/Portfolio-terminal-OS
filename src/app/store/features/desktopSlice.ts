@@ -15,6 +15,7 @@ const desktopSlice = createSlice({
     setActiveApp: (state, action: PayloadAction<string>) => {
       state.activeApp = action.payload;
       if (!state.openApps.includes(action.payload)) {
+        // ToDo: check if the openApps store multiple same apps. - currently, the same app is opening multiple tiems and not able to delete it.
         state.openApps.push(action.payload);
       }
     },

@@ -1,7 +1,12 @@
 'use client';
 
+import AppProjcetWCHMS from "@/app/components/desktop/apps/projects/AppWCHMS";
+import AppProjcetPageSsence from "@/app/components/desktop/apps/projects/AppPageSsence";
+import AppProjcetDiceRoller from "@/app/components/desktop/apps/projects/AppDiceRoller";
 import AppProjcetFlare from "@/app/components/desktop/apps/projects/AppFlare";
+import AppProjcetMejubot from "@/app/components/desktop/apps/projects/AppMejubot";
 import AppProjcetWeConnect from "@/app/components/desktop/apps/projects/AppWeConnect";
+import AppProjcetWebPiano from "@/app/components/desktop/apps/projects/AppWebPiano";
 
 export default function ProjectsApps() {
     return [
@@ -9,19 +14,19 @@ export default function ProjectsApps() {
             iconName: "/wchms.png",
             appName: "Client Project WCHMS",
             title: "WCHMS",
-            component: <AppProjcetWeConnect />,
+            component: <AppProjcetWCHMS />,
         },
         {
             iconName: "/pagessence.png",
             appName: "Project PageSsence",
             title: "PageSsence",
-            component: <AppProjcetWeConnect />,
+            component: <AppProjcetPageSsence />,
         },
         {
             iconName: "/diceroller.png",
             appName: "Project DiceRoller",
             title: "DiceRoller",
-            component: <AppProjcetWeConnect />,
+            component: <AppProjcetDiceRoller />,
         },
         {
             iconName: "/flare.png",
@@ -33,7 +38,7 @@ export default function ProjectsApps() {
             iconName: "/mejubot.png",
             appName: "Project MejuBot",
             title: "Discord Bot",
-            component: <AppProjcetWeConnect />,
+            component: <AppProjcetMejubot />,
         },
         {
             iconName: "/weconnect.svg",
@@ -45,7 +50,7 @@ export default function ProjectsApps() {
             iconName: "/webpiano.png",
             appName: "Project WebPiano",
             title: "WebPiano",
-            component: <AppProjcetWeConnect />,
+            component: <AppProjcetWebPiano />,
         },
     ];
 }

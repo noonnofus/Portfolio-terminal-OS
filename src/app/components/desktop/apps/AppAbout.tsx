@@ -14,15 +14,30 @@ import {
     SiGit, SiJira, SiTrello, SiFigma, SiMysql, SiPostgresql, SiMongodb
 } from "react-icons/si"
 import { Box, Text, Heading, SimpleGrid, VStack, Icon } from "@chakra-ui/react"
+import { useState } from "react";
 
 export default function AppAbout() {
+    const [isFullScreen, setIsFullScreen] = useState<boolean>(true);
     return (
-        <>
+        <div
+            style={{
+                width: isFullScreen ? "100vw" : "75vw",
+                height: isFullScreen ? "100vh" : "75vh",
+                backgroundColor: "white",
+                borderRadius: 8,
+                display: "flex",
+                flexDirection: "column",
+            }}
+        >
             <div style={{
                 backgroundColor: "white",
                 borderRadius: "8px 8px 0 0",
             }}>
-                <AppDesktopHeader title='Projects' />
+                <AppDesktopHeader
+                    appName="App About Me"
+                    title='Projects'
+                    isFullScreen={isFullScreen}
+                    setIsFullScreen={setIsFullScreen} />
             </div>
             <div
                 style={{
@@ -137,7 +152,7 @@ export default function AppAbout() {
                     </Box>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 
