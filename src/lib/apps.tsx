@@ -2,17 +2,17 @@
 
 import AppAbout from "@/app/components/desktop/apps/AppAbout";
 import AppContact from "@/app/components/desktop/apps/AppContact";
-import AppProjects from "@/app/components/desktop/apps/AppProjects";
 import AppAboutSite from "@/app/components/desktop/apps/AppAboutSite";
 import AppTerminal from "@/app/components/desktop/apps/AppTerminal";
+import AppFolder from "@/app/components/desktop/apps/folder/AppFolder";
 
 export default function DesktopApps() {
     return [
         {
-            iconName: "/projects.png",
-            appName: "App Projects",
+            iconName: "/folder.png",
+            appName: "Projects Folder",
             title: "Projects",
-            component: <AppProjects />,
+            component: <AppFolder />,
         },
         {
             iconName: "/site.png",

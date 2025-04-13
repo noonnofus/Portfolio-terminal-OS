@@ -1,16 +1,31 @@
-import AppDesktopHeader from "./layout/AppDesktopHeader";
+import AppDesktopHeader from "../layout/AppDesktopHeader";
 import { Flex, Image, Heading, Text, Link, Box } from "@chakra-ui/react";
 import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
+import { useState } from "react";
 
-export default function AppProjects() {
-
+export default function AppProjcetFlare() {
+    const [isFullScreen, setIsFullScreen] = useState<boolean>(true);
     return (
-        <>
+        <div
+            style={{
+                width: isFullScreen ? "100vw" : "75vw",
+                height: isFullScreen ? "100vh" : "75vh",
+                backgroundColor: "white",
+                borderRadius: 8,
+                display: "flex",
+                flexDirection: "column"
+            }}
+        >
             <div style={{
                 backgroundColor: "white",
                 borderRadius: "8px 8px 0 0",
             }}>
-                <AppDesktopHeader title='Projects' />
+                <AppDesktopHeader
+                    appName="Project Flare"
+                    title="WCHMS"
+                    isFullScreen={isFullScreen}
+                    setIsFullScreen={setIsFullScreen}
+                />
             </div>
             <div
                 style={{
@@ -179,6 +194,6 @@ export default function AppProjects() {
                     </Flex>
                 </Flex>
             </div>
-        </>
+        </div>
     );
 }
