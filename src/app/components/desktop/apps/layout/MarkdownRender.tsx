@@ -8,29 +8,11 @@ import useIsTouchDevice from "@/lib/isTouchDevice";
 import { useState } from "react";
 
 export default function MarkdownRender({ markdownText, title, appName }: { markdownText: string, title: string, appName: string }) {
-    const [isFullScreen, setIsFullScreen] = useState<boolean>(true);
     const isTouchDevice = useIsTouchDevice();
-
-    const containerWidth = isTouchDevice ? "100%" : (isFullScreen ? "100vw" : "75vw");
-    const containerHeight = isTouchDevice ? "100%" : (isFullScreen ? "100vh" : "75vh");
 
     return (
         <>
             <div style={{
-                width: containerWidth,
-                backgroundColor: "white",
-                borderRadius: "8px 8px 0 0",
-            }}>
-                <AppDesktopHeader
-                    appName={appName}
-                    title={title}
-                    isFullScreen={isFullScreen}
-                    setIsFullScreen={setIsFullScreen} />
-            </div>
-
-            <div style={{
-                width: containerWidth,
-                height: containerHeight,
                 overflow: "auto",
                 backgroundColor: "white",
                 borderRadius: "0 0 8px 8px",
