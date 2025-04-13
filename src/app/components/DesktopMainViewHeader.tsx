@@ -41,6 +41,8 @@ export default function DesktopMainViewHeader() {
                 gap="4"
                 justify="space-between"
                 className="bg-gray-600/20 backdrop-blur-sm px-4 py-2"
+                zIndex={11}
+                position="relative"
             >
                 <Box flex="1">
                     <img
