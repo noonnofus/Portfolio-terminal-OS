@@ -1,174 +1,155 @@
-import { Flex, Image, Heading, Text, Link, Box } from "@chakra-ui/react";
+import { Flex, Image, Heading, Text, Link, SimpleGrid, Box, List, } from "@chakra-ui/react";
+import { SiVuedotjs, SiInertia, SiTailwindcss, SiPrime, SiVite, SiGit, SiJavascript, SiMysql, SiLaravel, SiAxios, SiPhp } from "react-icons/si"
+import { FaGithub, FaWindowRestore, } from "react-icons/fa"
+import StackIcon from "../layout/StackIcon";
 import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
 
 export default function AppProjcetPageSsence() {
     return (
         <div
             style={{
-                width: '100%',
-                height: '100%',
                 overflow: "scroll",
                 backgroundColor: "white",
                 borderRadius: "0 0 8px 8px",
                 color: 'black',
             }}
         >
-            <Text className="mt-2 mb-2 text-center">Projects</Text>
-            <Box
-                width="80%"
-                borderTop="1px solid #ccc"
-                margin="0 auto"
-            />
-            <Flex
-                flexDir="column"
-                alignItems="center"
-                className="mt-3 mb-3"
-            >
-                <Heading
-                    fontSize="1.2rem"
-                    fontWeight="bold"
-                    as="h1"
-                    textAlign="center"
-                    mb={2}
+            <div className="my-8 mx-4 md:mx-36">
+                <Flex
+                    flexDir="column"
+                    alignItems="center"
+                    className="mt-8 mb-3"
                 >
-                    <Text>Flare: The real-time wildfire alert app</Text>
-                </Heading>
-                <Image
-                    src="/images/Flare-logo.png"
-                    alt="Flare logo image"
-                    boxSize="150px"
-                    fit="cover"
-                    h="auto"
-                    className="mb-2"
-                />
-                <Image
-                    src="/images/Flare-homeview.png"
-                    alt="Flare home view image"
-                    maxHeight={"600px"}
-                    fit="cover"
-                />
-                <Link
-                    href="https://github.com/BCITKevin/Flare_IDSP"
-                    textDecor="underline"
-                    mb={3}
-                    target="_blank"
-                >
-                    GitHub <ExternalLinkIcon />
-                </Link>
-                <Link
-                    href="https://www.flare-bc.com/"
-                    textDecor="underline"
-                    mb={3}
-                    target="_blank"
-                >
-                    Try Flare <ExternalLinkIcon />
-                </Link>
-                <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
-                    <Text>
-                        This real-time <strong>wildfire alert</strong> app shows the wildfire risk in BC, Canada. Our team focused on people who live in rural areas and have nowhere to get information about wildfires near their homes. <strong>Flare</strong> works on a web-based basis, but it is installable to your phone, since we implemented PWA into it.
-                    </Text>
+                    <Heading size="lg" className="font-bold text-3xl text-gray-800 mb-6">
+                        <Text>PageSsence - The Book Review Platform</Text>
+                    </Heading>
+
+                    <Image
+                        src="/icons/pagessence.png"
+                        alt="project WCHMS logo image"
+                        boxSize="150px"
+                        fit="cover"
+                        h="auto"
+                        className="mb-4"
+                    />
+                    <Link
+                        href="/" // need to put it here
+                        textDecor="underline"
+                        mb={4}
+                        target="_blank"
+                    >
+                        See PageSsence <ExternalLinkIcon />
+                    </Link>
+                    <Link
+                        href="https://github.com/noonnofus/PageSsence"
+                        textDecor="underline"
+                        mb={4}
+                        target="_blank"
+                    >
+                        Source Code <ExternalLinkIcon />
+                    </Link>
+                    <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
+                        <Box className="mb-6">
+                            <Heading size="md" className="font-semibold text-xl text-gray-800">
+                                Overview
+                            </Heading>
+                            <Text mt={2}>
+                                PageSsence is a community-driven book review platform that allows users to explore a wide range of books, read authentic reviews, leave their own thoughts, and rate books with a star-based system. Built with Laravel, Vue, and PrimeVue, the platform focuses on clean UI, seamless UX, and personalized reading experiences. Whether you're discovering a new favorite or sharing your opinion, PageSsence brings book lovers together.
+                            </Text>
+                        </Box>
+
+                        <Box
+                            width="100%"
+                            borderTop="1px solid #ccc"
+                            margin="0 auto"
+                        />
+
+                        <Box className="mb-6 mt-6">
+                            <Heading size="md" className="font-semibold text-xl text-gray-800">
+                                Key Features
+                            </Heading>
+
+                            <List.Root mt={4} ps={4} gap={3} className="text-gray-700">
+                                <List.Item>
+                                    <strong>Book Browsing & Search:</strong> Users can explore a curated collection of books and search titles using keyword-based filtering.
+                                </List.Item>
+                                <List.Item>
+                                    <strong>Interactive Reviews & Ratings:</strong> Logged-in users can leave detailed reviews and rate books with a 5-star system, all managed through a dynamic modal interface.
+                                </List.Item>
+                                <List.Item>
+                                    <strong>Role-Based Access Control:</strong> Admin users can add, edit, or delete books, while regular users can only leave reviews and view content.
+                                </List.Item>
+                                <List.Item>
+                                    <strong>Modern Stack & UI:</strong> Built with Laravel, Vue.js, Inertia.js, and styled using PrimeVue components for a clean, responsive, and intuitive interface.
+                                </List.Item>
+                            </List.Root>
+                        </Box>
+
+                        <Box
+                            width="100%"
+                            borderTop="1px solid #ccc"
+                            margin="0 auto"
+                        />
+
+                        <Box className="mb-6 mt-6">
+                            <Heading mb={2} size="md" className="font-semibold text-xl text-gray-800">
+                                Tech Stack
+                            </Heading>
+
+                            <Heading mt={6} mb={2} className="text-lg font-semibold">Frontend</Heading>
+                            <SimpleGrid columns={3} gap={5} mb={12}>
+                                <StackIcon label="Vue.js" icon={SiVuedotjs} color="#42b883" />
+                                <StackIcon label="Inertia.js" icon={SiInertia} color="#000000" />
+                                <StackIcon label="PrimeVue" icon={SiPrime} color="#4CAF50" />
+                                <StackIcon label="Vite" icon={SiVite} color="#646CFF" />
+                                <StackIcon label="JavaScript" icon={SiJavascript} color="#f7df1e" />
+                                <StackIcon label="TailwindCSS" icon={SiTailwindcss} color="#38B2AC" />
+                            </SimpleGrid>
+
+                            <Heading mt={6} mb={2} className="text-lg font-semibold">Backend</Heading>
+                            <SimpleGrid columns={3} gap={5} mb={12}>
+                                <StackIcon label="Laravel" icon={SiLaravel} color="#FF2D20" />
+                                <StackIcon label="PHP" icon={SiPhp} color="#777BB4" />
+                                <StackIcon label="MySQL" icon={SiMysql} color="#00758F" />
+                            </SimpleGrid>
+
+                            <Heading mt={6} mb={2} className="text-lg font-semibold">Authentication</Heading>
+                            <SimpleGrid columns={3} gap={5} mb={12}>
+                                <StackIcon label="Laravel Breeze" icon={SiLaravel} color="#FF2D20" />
+                            </SimpleGrid>
+
+                            <Heading mt={6} mb={2} className="text-lg font-semibold">Libraries & Services</Heading>
+                            <SimpleGrid columns={3} gap={5} mb={12}>
+                                <StackIcon label="Axios" icon={SiAxios} color="#5A29E4" />
+                                <StackIcon label="Ziggy" icon={SiLaravel} color="#FF2D20" />
+                                <StackIcon label="Inertia Modal" icon={FaWindowRestore} color="#4A5568" />
+                            </SimpleGrid>
+
+                            <Heading mt={6} mb={2} className="text-lg font-semibold">Other Tools</Heading>
+                            <SimpleGrid columns={3} gap={5} mb={6}>
+                                <StackIcon label="GitHub" icon={FaGithub} color="black" />
+                                <StackIcon label="Git" icon={SiGit} color="#F05033" />
+                            </SimpleGrid>
+                        </Box>
+
+                        <Box
+                            width="100%"
+                            borderTop="1px solid #ccc"
+                            margin="0 auto"
+                            className="mb-6"
+                        />
+
+                        {/* <Box className="mt-6">
+                            <Heading size="md" className="font-semibold text-xl text-gray-800">
+                                App Walkthrough
+                            </Heading>
+                            <Text mt={2}>
+                                Watch how users browse books, read and write reviews, and rate their favorite reads.
+                            </Text>
+                        </Box> */}
+                    </Flex>
                 </Flex>
-            </Flex>
-
-            <Flex
-                flexDir="column"
-                alignItems="center"
-                className="mt-8 mb-3"
-            >
-                <Heading
-                    fontSize="1.2rem"
-                    fontWeight="bold"
-                    as="h1"
-                    textAlign="center"
-                    mb={2}
-                >
-                    <Text>WeConnect: The video conferencing app with a real-time translating</Text>
-                </Heading>
-
-                <Image
-                    src="/images/construction.png"
-                    alt="under construction image"
-                    boxSize="150px"
-                    fit="cover"
-                    h="auto"
-                    className="mb-2"
-                />
-                <Image
-                    src="/images/construction.png"
-                    alt="under construction image"
-                    maxHeight={"450px"}
-                    fit="cover"
-                />
-                <Link
-                    href="https://github.com/BCITKevin/IDSP_weconnect"
-                    textDecor="underline"
-                    mb={3}
-                    target="_blank"
-                >
-                    GitHub <ExternalLinkIcon />
-                </Link>
-                <Text>※This might takes more than 1 mintues due to hosting server.</Text>
-                <Link
-                    href="https://idsp-weconnect-1.onrender.com/"
-                    textDecor="underline"
-                    mb={3}
-                    target="_blank"
-                >
-                    Try WeConnect <ExternalLinkIcon />
-                </Link>
-                <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
-                    <Text>
-                        This is a video conferencing app with a <strong>real-time translation</strong> feature. WeConnect&apos;s target audience includes international students who speak different languages and domestic students who work with other students who speak different languages.
-                    </Text>
-                </Flex>
-            </Flex>
-
-
-            <Flex
-                flexDir="column"
-                alignItems="center"
-                className="mt-8 mb-3"
-            >
-                <Heading
-                    fontSize="1.2rem"
-                    fontWeight="bold"
-                    as="h1"
-                    textAlign="center"
-                    mb={2}
-                >
-                    <Text>MejuBot: A multi-function Discord bot</Text>
-                </Heading>
-
-                <Image
-                    src="/images/MejuBot.png"
-                    alt="MejuBot logo image"
-                    boxSize="150px"
-                    borderRadius="20%"
-                    fit="cover"
-                    h="auto"
-                    className="mb-2"
-                />
-                <Image
-                    src="/images/MejuBot-preview.png"
-                    alt="MejuBot preview image"
-                    maxHeight={"450px"}
-                    fit="cover"
-                />
-
-                <Link
-                    href="https://discord.com/oauth2/authorize?client_id=1263899843055583254&permissions=8&integration_type=0&scope=bot"
-                    textDecor="underline"
-                    mb={3}
-                    target="_blank"
-                >
-                    Invite Meju on your Discord server <ExternalLinkIcon />
-                </Link>
-                <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
-                    <Text>
-                        This is a multi-function Discord Bot that helps people play music, see game history, and enjoy simulated stock games. MejuBot is a <strong>verified</strong> bot by <strong>Discord</strong>, and my team was able to get an <strong>&ldquo;Active developer&ldquo;</strong> badge through this. Moreover, this app is already used by around 30 servers and approximately more than 100 people.
-                    </Text>
-                </Flex>
-            </Flex>
+            </div>
         </div>
     );
 }
