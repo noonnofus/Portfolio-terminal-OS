@@ -8,6 +8,7 @@ import writeText from "./write-text";
 import shutDown from "./shut-down";
 import { isQuestion } from "./global-state";
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import useIsTouchDevice from "@/lib/isTouchDevice";
 
 const handleInput = (
   term: MutableRefObject<Terminal | null>,
@@ -61,6 +62,7 @@ const processCommand = async (
   pathname: string
 ) => {
   if (!term.current) return;
+  const IsTouchDevice = useIsTouchDevice();
   const cmd = inputRef.current.trim();
 
   term.current.write("\r\n");
@@ -78,8 +80,7 @@ const processCommand = async (
     term.current.write(" guest@noonofus.com ~ % ");
   } else if (cmd === "reboot") {
     term.current.clear();
-
-    writeText(term, isAnimating);
+    writeText(term, isAnimating, IsTouchDevice);
   } else if (cmd === "shutdown") {
     term.current.clear();
 
