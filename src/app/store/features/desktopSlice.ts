@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const desktopSlice = createSlice({
   name: "desktop",
   initialState: {
+    isTouchDevice: true,
     activeApp: "",
     focusApp: "",
     showAppMenu: false,
@@ -11,6 +12,9 @@ const desktopSlice = createSlice({
     openApps: <string[]>[],
   },
   reducers: {
+    setIsTouchDevice: (state, action: PayloadAction<boolean>) => {
+      state.isTouchDevice = action.payload;
+    },
     setActiveApp: (state, action: PayloadAction<string>) => {
       state.activeApp = action.payload;
       if (!state.openApps.includes(action.payload)) {
@@ -39,6 +43,7 @@ const desktopSlice = createSlice({
 });
 
 export const {
+  setIsTouchDevice,
   setActiveApp,
   setFoucsApp,
   closeApp,

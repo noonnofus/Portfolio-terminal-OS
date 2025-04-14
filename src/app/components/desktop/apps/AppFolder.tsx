@@ -1,4 +1,3 @@
-import AppDesktopHeader from "../layout/AppDesktopHeader";
 import { Flex } from "@chakra-ui/react";
 import ProjectsApps from "@/lib/projectsApps";
 import React from "react";
@@ -7,11 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "@/app/store/store";
 import { setActiveApp, setFoucsApp } from "@/app/store/features/desktopSlice";
 import { DesktopIcon } from "@/app/components/DesktopIcon";
-import "@/app/styles/dragAreaLayout.css";
+import "@/app/styles/touchFolderLayout.css";
 import { useRef } from "react";
 
 export default function AppFolder() {
     const focusApp = useSelector((state: RootState) => state.desktop.focusApp);
+    const isTouchDevice = useSelector((state: RootState) => state.desktop.isTouchDevice);
     const dispatch = useDispatch();
 
     const dragAreaRef = useRef<HTMLDivElement>(null);
@@ -37,7 +37,8 @@ export default function AppFolder() {
                         dragTransition={{ power: 0 }}
                         dragConstraints={dragAreaRef}
                         style={{ position: "absolute", cursor: "grab" }}
-                        className={`app-initial-position app-${i + 1}`}
+                        className={`app-initial-position ${isTouchDevice ? `folder-app-${i + 1}` : `app-${i + 1}`}`}
+
                     >
                         <DesktopIcon
                             iconName={app.iconName}
