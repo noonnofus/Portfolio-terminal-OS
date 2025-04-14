@@ -4,7 +4,7 @@ import AppAbout from "@/app/components/desktop/apps/AppAbout";
 import AppContact from "@/app/components/desktop/apps/AppContact";
 import AppAboutSite from "@/app/components/desktop/apps/AppAboutSite";
 import AppTerminal from "@/app/components/desktop/apps/AppTerminal";
-import AppFolder from "@/app/components/desktop/apps/folder/AppFolder";
+import AppFolder from "@/app/components/desktop/apps/AppFolder";
 
 export default function DesktopApps() {
     return [
