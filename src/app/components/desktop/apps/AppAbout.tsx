@@ -1,6 +1,5 @@
 'use client';
 
-import AppDesktopHeader from "./layout/AppDesktopHeader";
 import { TbBrandCSharp } from "react-icons/tb";
 import { FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaJs, FaGithub } from "react-icons/fa"
 import {
@@ -14,6 +13,7 @@ import {
     SiGit, SiJira, SiTrello, SiFigma, SiMysql, SiPostgresql, SiMongodb
 } from "react-icons/si"
 import { Box, Text, Heading, SimpleGrid, VStack, Icon } from "@chakra-ui/react"
+import StackIcon from "./layout/StackIcon";
 
 export default function AppAbout() {
     return (
@@ -130,14 +130,5 @@ export default function AppAbout() {
                 </Box>
             </div>
         </div>
-    );
-}
-
-function StackIcon({ label, icon, color }: { label: string; icon: any; color: string }) {
-    return (
-        <VStack gap={1} align="center">
-            <Icon as={icon} boxSize={8} color={color} />
-            <Text fontSize="sm">{label}</Text>
-        </VStack>
     );
 }

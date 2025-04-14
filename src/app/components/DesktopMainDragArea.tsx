@@ -86,51 +86,10 @@ export default function DesktopMainDragArea() {
                     </motion.div>
                 ))}
             </Flex>
-            {/* {allAppList.map((app, i) =>
-                openApps.includes(app.appName) && openAppPositions[app.appName] && (
-                    <motion.div
-                        key={`opened-${app.appName}`}
-                        drag
-                        dragControls={dragControls}
-                        dragElastic={0}
-                        dragTransition={{ power: 0 }}
-                        dragConstraints={{ top: 0 }}
-                        dragListener={false}
-                        animate={{
-                            x: openAppPositions[app.appName].left,
-                            y: openAppPositions[app.appName].top
-                        }}
-                        transition={{ duration: 0 }}
-                        style={{
-                            position: "absolute",
-                            zIndex: focusApp === app.appName ? 10 : 1,
-                            border: "0.5px solid black",
-                            borderRadius: "9px",
-                            width: fullscreenStates[app.appName] ? "100vw" : "75vw",
-                            height: fullscreenStates[app.appName] ? "100vh" : "75vh",
-                            backgroundColor: "white"
-                        }}
-                        className="border-black"
-                        onClick={() => dispatch(setFoucsApp(app.appName))}
-                    >
-                        <div onPointerDown={(e) => dragControls.start(e)}>
-                            <AppDesktopHeader
-                                appName={app.appName}
-                                title={app.title}
-                                isFullScreen={!!fullscreenStates[app.appName]}
-                                setIsFullScreen={() => toggleFullscreen(app.appName)}
-                            />
-                        </div>
-                        <Box height="100%" overflow="auto">
-                            {app.component}
-                        </Box>
-                    </motion.div>
-                )
-            )} */}
             {allAppList.map((app, i) =>
                 openApps.includes(app.appName) && openAppPositions[app.appName] && (
                     <motion.div
-                        key={`opened-${app.appName}`}
+                        key={`opened-${app.appName}-${fullscreenStates[app.appName] ? "fs" : "normal"}`}
                         drag
                         dragControls={dragControlsMap[app.appName]}
                         dragElastic={0}
@@ -138,18 +97,20 @@ export default function DesktopMainDragArea() {
                         dragConstraints={{ top: 0 }}
                         dragListener={false}
                         animate={{
-                            x: openAppPositions[app.appName].left,
-                            y: openAppPositions[app.appName].top
+                            x: fullscreenStates[app.appName] ? 0 : openAppPositions[app.appName].left,
+                            y: fullscreenStates[app.appName] ? 0 : openAppPositions[app.appName].top,
                         }}
                         transition={{ duration: 0 }}
                         style={{
                             position: "absolute",
                             zIndex: focusApp === app.appName ? 10 : 1,
-                            border: "0.5px solid black",
+                            border: "0.3px solid gray",
                             borderRadius: "9px",
                             width: fullscreenStates[app.appName] ? "100vw" : "75vw",
                             height: fullscreenStates[app.appName] ? "100vh" : "75vh",
-                            backgroundColor: "white"
+                            backgroundColor: "white",
+                            display: "flex",
+                            flexDirection: "column"
                         }}
                         className="border-black"
                         onClick={() => dispatch(setFoucsApp(app.appName))}
@@ -162,7 +123,7 @@ export default function DesktopMainDragArea() {
                                 setIsFullScreen={() => toggleFullscreen(app.appName)}
                             />
                         </div>
-                        <Box height="100%" overflow="auto">
+                        <Box flex="1" overflow="auto">
                             {app.component}
                         </Box>
                     </motion.div>
