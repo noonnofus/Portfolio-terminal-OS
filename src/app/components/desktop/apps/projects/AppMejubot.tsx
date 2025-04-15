@@ -45,8 +45,11 @@ export default function AppProjcetMejubot() {
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
                                 Overview
                             </Heading>
+                            <Text mt={1} fontSize="sm" color="gray.600">
+                                📌 <b>Project Type:</b> Solo Project
+                            </Text>
                             <Text mt={2}>
-                                Officially verified by Discord, MejuBot is your all-in-one server companion — stream music, check PUBG stats, or dive into mini-games like stock market simulations. With powerful features and seamless integration, it makes your server more interactive, engaging, and fun.
+                                MejuBot is an all-in-one server companion I built to make Discord communities more interactive, engaging, and fun. Officially verified by Discord, it lets users stream music, check PUBG stats, and enjoy mini-games like stock market simulations. I focused on seamless integration and powerful features to enhance the overall user experience.
                             </Text>
                         </Box>
 

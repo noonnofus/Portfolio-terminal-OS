@@ -1,6 +1,7 @@
-import { Flex, Image, Heading, Text, Link, SimpleGrid, Box, List, AspectRatio } from "@chakra-ui/react";
+import { Flex, Image, Heading, Text, Link, SimpleGrid, Box, List, AspectRatio, Icon } from "@chakra-ui/react";
+import { Tooltip as ChakraTooltip } from "@/components/ui/tooltip"
 import { SiJavascript, SiEjs, SiCss3 } from "react-icons/si"
-import { FaMusic } from "react-icons/fa"
+import { FaMusic, FaGithub } from "react-icons/fa"
 import StackIcon from "../layout/StackIcon";
 import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
 
@@ -32,21 +33,40 @@ export default function AppProjcetWebPiano() {
                         h="auto"
                         className="mb-4"
                     />
+                    <ChakraTooltip
+                        content="App may take over 30 seconds to load on first visit."
+                        openDelay={100}
+                        closeDelay={200}
+                        showArrow
+                    >
+                        <Link
+                            href="https://play-piano-project.onrender.com"
+                            textDecor="underline"
+                            mb={4}
+                            target="_blank"
+                        >
+                            Play Piano on WebPiano<ExternalLinkIcon />
+                        </Link>
+                    </ChakraTooltip>
                     <Link
-                        href="https://play-piano-project.onrender.com"
+                        href="https://github.com/noonnofus/play_piano_project"
                         textDecor="underline"
                         mb={4}
                         target="_blank"
                     >
-                        Play Piano on WebPiano<ExternalLinkIcon />
+                        <Icon as={FaGithub} boxSize={5} />
+                        Source Code <ExternalLinkIcon />
                     </Link>
                     <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
                         <Box className="mb-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
                                 Overview
                             </Heading>
+                            <Text mt={1} fontSize="sm" color="gray.600">
+                                📌 <b>Project Type:</b> Solo Project
+                            </Text>
                             <Text mt={2}>
-                                A web-based piano application that lets users play music directly from their keyboard. It offers adjustable tuning controls and even supports uploading MP3 files to turn any sound into playable notes.
+                                I built a web-based piano application that lets users play music directly from their keyboard. It includes adjustable tuning controls and even allows users to upload MP3 files and turn any sound into playable notes.
                             </Text>
                         </Box>
 

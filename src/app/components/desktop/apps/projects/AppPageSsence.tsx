@@ -1,4 +1,4 @@
-import { Flex, Image, Heading, Text, Link, SimpleGrid, Box, List, } from "@chakra-ui/react";
+import { Flex, Image, Heading, Text, Link, SimpleGrid, Box, List, Icon } from "@chakra-ui/react";
 import { SiVuedotjs, SiInertia, SiTailwindcss, SiPrime, SiVite, SiGit, SiJavascript, SiMysql, SiLaravel, SiAxios, SiPhp } from "react-icons/si"
 import { FaGithub, FaWindowRestore, } from "react-icons/fa"
 import StackIcon from "../layout/StackIcon";
@@ -46,6 +46,7 @@ export default function AppProjcetPageSsence() {
                         mb={4}
                         target="_blank"
                     >
+                        <Icon as={FaGithub} boxSize={5} />
                         Source Code <ExternalLinkIcon />
                     </Link>
                     <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
@@ -53,8 +54,14 @@ export default function AppProjcetPageSsence() {
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
                                 Overview
                             </Heading>
+                            <Text mt={1} fontSize="sm" color="gray.600">
+                                📌 <b>Project Type:</b> Solo Project
+                            </Text>
                             <Text mt={2}>
-                                PageSsence is a community-driven book review platform that allows users to explore a wide range of books, read authentic reviews, leave their own thoughts, and rate books with a star-based system. Built with Laravel, Vue, and PrimeVue, the platform focuses on clean UI, seamless UX, and personalized reading experiences. Whether you're discovering a new favorite or sharing your opinion, PageSsence brings book lovers together.
+                                PageSsence is a community-driven book review platform I created to help people discover, share, and connect through books. It allows users to browse a wide range of titles, read real opinions from other readers, leave thoughtful reviews, and rate books with a simple star system.
+                                <Text mt={1}>
+                                    My goal was to make reading more interactive and meaningful by building a space where book lovers can express their perspectives and find inspiration in others&#39;.
+                                </Text>
                             </Text>
                         </Box>
 

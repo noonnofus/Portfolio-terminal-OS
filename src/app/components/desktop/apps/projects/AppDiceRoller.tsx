@@ -1,6 +1,6 @@
-import { Flex, Image, Heading, Text, Link, SimpleGrid, Box, List, AspectRatio } from "@chakra-ui/react";
+import { Flex, Image, Heading, Text, Link, SimpleGrid, Box, List, AspectRatio, Icon } from "@chakra-ui/react";
 import { SiTypescript, SiExpo, } from "react-icons/si"
-import { FaReact, FaCube, FaMobileAlt, FaKeyboard, FaGlobe } from "react-icons/fa"
+import { FaReact, FaCube, FaMobileAlt, FaKeyboard, FaGlobe, FaGithub } from "react-icons/fa"
 import { TbBrandThreejs } from "react-icons/tb";
 import StackIcon from "../layout/StackIcon";
 import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
@@ -41,15 +41,27 @@ export default function AppProjcetDiceRoller() {
                     >
                         See DiceRoller on Web<ExternalLinkIcon />
                     </Link>
+                    <Link
+                        href="https://github.com/noonnofus/diceRoller"
+                        textDecor="underline"
+                        mb={4}
+                        target="_blank"
+                    >
+                        <Icon as={FaGithub} boxSize={5} />
+                        Source Code <ExternalLinkIcon />
+                    </Link>
                     <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
                         <Box className="mb-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
                                 Overview
                             </Heading>
+                            <Text mt={1} fontSize="sm" color="gray.600">
+                                📌 <b>Project Type:</b> Solo Project
+                            </Text>
                             <Text mt={2}>
-                                DiceRoller is a cross-platform mobile and web application that simulates realistic 3D dice rolling using expo-three for 3D rendering and Cannon.js for physics simulation. The app is built with React Native and Expo, providing users with an interactive dice-rolling experience on both mobile and web platforms.
-                                <Text>
-                                    On mobile devices, users can shake their phone to roll the dice, using react-native-shake to detect motion. On the web, the dice can be rolled using WASD keyboard inputs, offering responsive and fluid control.
+                                DiceRoller is a cross-platform app I built to deliver a fun and interactive 3D dice-rolling experience across both mobile and web.
+                                <Text mt={1}>
+                                    On mobile, users can simply shake their phone to roll the dice, while on the web, they can use the WASD keys for keyboard input to move the dice. I built the app using Expo and React Native, and integrated expo-three for real-time 3D rendering and Cannon.js for realistic physics.
                                 </Text>
                             </Text>
                         </Box>
@@ -116,7 +128,6 @@ export default function AppProjcetDiceRoller() {
                                 <StackIcon label="Cross Platform" icon={FaGlobe} color="#2D3748" />
                             </SimpleGrid>
                         </Box>
-
 
                         <Box
                             width="100%"
