@@ -1,4 +1,15 @@
-import { Flex, Image, Heading, Text, Link, SimpleGrid, Box, List, } from "@chakra-ui/react";
+import {
+    Flex,
+    Image,
+    Heading,
+    Text,
+    Link,
+    SimpleGrid,
+    Box,
+    List,
+    Icon,
+} from "@chakra-ui/react";
+import { Tooltip as ChakraTooltip } from "@/components/ui/tooltip"
 import { SiTypescript, SiJavascript, SiEjs, SiCss3, SiExpress, SiGit, SiPrisma, SiMysql, SiWebrtc, SiGooglecloud, SiRender } from "react-icons/si"
 import { FaGithub, FaBrain, FaProjectDiagram, FaNodeJs } from "react-icons/fa"
 import StackIcon from "../layout/StackIcon";
@@ -32,21 +43,40 @@ export default function AppProjcetWeConnect() {
                         h="auto"
                         className="mb-4"
                     />
+                    <ChakraTooltip
+                        content="App may take over 30 seconds to load on first visit."
+                        openDelay={100}
+                        closeDelay={200}
+                        showArrow
+                    >
+                        <Link
+                            href="https://idsp-weconnect-1.onrender.com"
+                            textDecor="underline"
+                            mb={4}
+                            target="_blank"
+                        >
+                            See WeConnect <ExternalLinkIcon />
+                        </Link>
+                    </ChakraTooltip>
                     <Link
-                        href="https://idsp-weconnect-1.onrender.com"
+                        href="https://github.com/noonnofus/IDSP_weconnect"
                         textDecor="underline"
                         mb={4}
                         target="_blank"
                     >
-                        See WeConnect <ExternalLinkIcon />
+                        <Icon as={FaGithub} boxSize={5} />
+                        Source Code <ExternalLinkIcon />
                     </Link>
                     <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
                         <Box className="mb-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
                                 Overview
                             </Heading>
+                            <Text mt={1} fontSize="sm" color="gray.600">
+                                📌 <b>Project Type:</b> Group Project
+                            </Text>
                             <Text mt={2}>
-                                This is a video conferencing app with a <strong>real-time translation</strong> feature. WeConnect&apos;s target audience includes international students who speak different languages and domestic students who work with other students who speak different languages.
+                                WeConnect is a video conferencing app that my team and I built with a real-time translation feature to help people overcome language barriers during online meetings. We designed it with international students in mind—especially those who work with classmates who speak different languages.
                             </Text>
                         </Box>
 

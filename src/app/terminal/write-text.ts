@@ -1,43 +1,8 @@
 import { MutableRefObject } from "react";
 import { Terminal } from "xterm";
+import chooseASCII from "@/lib/ascii";
 
-// Old ASCII
-
-// const ascii = [
-//   ` ██╗  ██╗██╗   ██╗██╗   ██╗███╗   ██╗██╗  ██╗ ██████╗`,
-//   ` ██║  ██║╚██╗ ██╔╝██║   ██║████╗  ██║██║  ██║██╔═══██╗`,
-//   ` ███████║ ╚████╔╝ ██║   ██║██╔██╗ ██║███████║██║   ██║`,
-//   ` ██╔══██║  ╚██╔╝  ██║   ██║██║╚██╗██║██╔══██║██║   ██║`,
-//   ` ██║  ██║   ██║   ╚██████╔╝██║ ╚████║██║  ██║╚██████╔╝`,
-//   ` ╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═════╝ `,
-//   ` `,
-//   ` `,
-//   ` `,
-// ];
-
-const ascii = [
-  // prettier-ignore
-  " .-. .-')     ('-.        (`-.                .-') _  ",
-  // prettier-ignore
-  " \\  ( OO )  _(  OO)     _(OO  )_             ( OO ) ) ",
-  // prettier-ignore
-  " ,--. ,--. (,------.,--(_/   ,. \\ ,-.-') ,--./ ,--,'  ",
-  // prettier-ignore
-  " |  .'   /  |  .---'\\   \\   /(__/ |  |OO)|   \\ |  |\\  ",
-  // prettier-ignore
-  " |      /,  |  |     \\   \\ /   /  |  |  \\|    \\|  | ) ",
-  // prettier-ignore
-  " |     ' _)(|  '--.   \\   '   /,  |  |(_/|  .     |/  ",
-  // prettier-ignore
-  " |  .   \\   |  .--'    \\     /__),|  |_.'|  |\\    |   ",
-  // prettier-ignore
-  " |  |\\   \\  |  `---.    \\   /   (_|  |   |  | \\   |   ",
-  // prettier-ignore
-  " `--' '--'  `------'     `-'      `--'   `--'  `--'   ",
-  ` `,
-  ` `,
-  ` `,
-];
+let ascii: string[];
 
 const lines = [
   " Hello, I'm Kevin, Kim.",
@@ -63,11 +28,14 @@ function cancelAnimation(
 
 function writeText(
   term: MutableRefObject<Terminal | null>,
-  isAnimating: MutableRefObject<boolean>
+  isAnimating: MutableRefObject<boolean>,
+  isTouchDevice: boolean
 ) {
   if (!term.current) return;
 
   if (isAnimating.current) return;
+
+  ascii = chooseASCII(isTouchDevice);
 
   let currentLine = 0;
   isAnimating.current = true;
