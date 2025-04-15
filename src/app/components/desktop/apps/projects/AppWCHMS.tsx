@@ -1,4 +1,5 @@
-import { Flex, Image, Heading, Text, Link, SimpleGrid, Box, List, AspectRatio } from "@chakra-ui/react";
+import { Flex, Image, Heading, Text, Link, SimpleGrid, Box, List } from "@chakra-ui/react";
+import { Tooltip as ChakraTooltip } from "@/components/ui/tooltip"
 import { SiTypescript, SiNextdotjs, SiTailwindcss, SiShadcnui, SiDrizzle, SiGit, SiJira, SiMysql } from "react-icons/si"
 import { FaGithub, FaBrain, FaProjectDiagram, FaKey, FaAws, FaFilePdf } from "react-icons/fa"
 import StackIcon from "../layout/StackIcon";
@@ -32,21 +33,34 @@ export default function AppProjcetWCHMS() {
                         h="auto"
                         className="mb-4"
                     />
-                    <Link
-                        href="https://wchms-idsp4.fly.dev/"
-                        textDecor="underline"
-                        mb={4}
-                        target="_blank"
+                    <ChakraTooltip
+                        content="App may take over 30 seconds to load on first visit."
+                        openDelay={100}
+                        closeDelay={200}
+                        showArrow
                     >
-                        See WCHMS <ExternalLinkIcon />
-                    </Link>
+                        <Link
+                            href="https://wchms-idsp4.fly.dev/"
+                            textDecor="underline"
+                            mb={4}
+                            target="_blank"
+                        >
+                            See WCHMS <ExternalLinkIcon />
+                        </Link>
+                    </ChakraTooltip>
                     <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
                         <Box className="mb-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
                                 Overview
                             </Heading>
+                            <Text mt={1} fontSize="sm" color="gray.600">
+                                📌 <b>Project Type:</b> Client Group Project
+                            </Text>
                             <Text mt={2}>
-                                WCHMS is a full-stack web application designed to support dementia prevention for Japanese seniors living in Vancouver. The app allows users to register for dementia prevention programs and utilize AI-powered self-study features for simple math and reading activities. It also supports Japanese translation throughout the platform and provides real-time in-app notifications. Additionally, the admin panel enables administrators to efficiently manage users, staff, courses, and rooms.
+                                WCHMS is a full-stack web application I built with my team to support dementia prevention for Japanese seniors living in Vancouver. We designed the platform to allow users to register for dementia prevention programs and use AI-powered self-study tools for simple math and reading exercises. We also implemented full Japanese translation throughout the site and added real-time in-app notifications.
+                                <Text mt={1}>
+                                    On the admin side, I created a management interface that allows admins to generate course materials using AI in PDF format, as well as a dashboard where they can efficiently manage users, staff, courses, and rooms.
+                                </Text>
                             </Text>
                         </Box>
 
@@ -139,12 +153,12 @@ export default function AppProjcetWCHMS() {
                             <Text mt={2}>
                                 Watch how seniors can practice math and reading exercises interactively with AI-generated content.
                             </Text>
-                            <AspectRatio ratio={2 / 1}>
+                            <Box w="100%">
                                 <video controls>
                                     <source src="videos/wchms-walkthrough.mp4" type="video/mp4" />
                                     Your browser does not support the video tag.
                                 </video>
-                            </AspectRatio>
+                            </Box>
                         </Box>
                     </Flex>
                 </Flex>
