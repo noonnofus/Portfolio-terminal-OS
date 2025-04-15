@@ -47,6 +47,10 @@ export default function DesktopMainTouchArea() {
         setOpenAppPositions(newPositions);
     }, [openApps]);
 
+    useEffect(() => {
+        console.log(focusApp);
+    }, [focusApp])
+
     return (
         <Flex
             flexGrow={1}
@@ -103,7 +107,11 @@ export default function DesktopMainTouchArea() {
                             flexDirection: "column"
                         }}
                         className="border-black"
-                        onClick={() => dispatch(setFoucsApp(app.appName))}
+                        onPointerDown={(e) => {
+                            if (e.target === e.currentTarget) {
+                                dispatch(setFoucsApp(app.appName));
+                            }
+                        }}
                     >
                         <div onPointerDown={(e) => dragControlsMap[app.appName].start(e)}>
                             <AppDesktopHeader
