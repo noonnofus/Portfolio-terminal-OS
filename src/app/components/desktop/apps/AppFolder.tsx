@@ -36,20 +36,39 @@ export default function AppFolder() {
                         dragElastic={0}
                         dragTransition={{ power: 0 }}
                         dragConstraints={dragAreaRef}
-                        style={{ position: "absolute", cursor: "grab" }}
+                        style={{
+                            position: "absolute",
+                            zIndex: focusApp === app.appName ? 10 : 1,
+                            cursor: "grab",
+                        }}
                         className={`app-initial-position ${isTouchDevice ? `folder-app-${i + 1}` : `app-${i + 1}`}`}
 
                     >
-                        <DesktopIcon
-                            iconName={app.iconName}
-                            isFocused={focusApp === app.appName}
-                            onClick={() => dispatch(setFoucsApp(app.appName))}
-                            onDoubleClick={() => {
-                                dispatch(setFoucsApp(app.appName));
-                                dispatch(setActiveApp(app.appName));
-                            }}
-                            title={app.title}
-                        />
+                        {isTouchDevice ? (
+                            <DesktopIcon
+                                iconName={app.iconName}
+                                isFocused={focusApp === app.appName}
+                                onClick={() => {
+                                    dispatch(setFoucsApp(app.appName));
+                                    dispatch(setActiveApp(app.appName));
+                                }}
+                                title={app.title}
+                            />
+
+                        ) : (
+                            <DesktopIcon
+                                iconName={app.iconName}
+                                isFocused={focusApp === app.appName}
+                                onClick={() => {
+                                    dispatch(setFoucsApp(app.appName));
+                                }}
+                                onDoubleClick={() => {
+                                    dispatch(setFoucsApp(app.appName));
+                                    dispatch(setActiveApp(app.appName));
+                                }}
+                                title={app.title}
+                            />
+                        )}
                     </motion.div>
                 ))}
             </Flex>
