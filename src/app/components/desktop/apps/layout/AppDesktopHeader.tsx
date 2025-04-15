@@ -40,21 +40,17 @@ export default function AppDesktopHeader({ appName, title, isFullScreen, setIsFu
                         </Icon>
                     </Box>
                     <Box
-                        className="ml-2"
+                        className="ml-3"
                         cursor="pointer"
                         onClick={() => setIsFullScreen(!isFullScreen)}
                     >
-                        {isTouchDevice ? (
-                            <></>
-                        ) : (
-                            <Icon>
-                                {isFullScreen ? (
-                                    <BiExitFullscreen />
-                                ) : (
-                                    <BiFullscreen />
-                                )}
-                            </Icon>
-                        )}
+                        <Icon>
+                            {isFullScreen ? (
+                                <BiExitFullscreen />
+                            ) : (
+                                <BiFullscreen />
+                            )}
+                        </Icon>
                     </Box>
                 </Box>
                 <Box

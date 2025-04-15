@@ -96,7 +96,7 @@ export default function DesktopMainTouchArea() {
                             zIndex: focusApp === app.appName ? 10 : 1,
                             border: "0.3px solid gray",
                             borderRadius: "9px",
-                            width: fullscreenStates[app.appName] ? "100vw" : "75vw",
+                            width: fullscreenStates[app.appName] ? "100vw" : "85vw",
                             height: fullscreenStates[app.appName] ? "100vh" : "75vh",
                             backgroundColor: "white",
                             display: "flex",
