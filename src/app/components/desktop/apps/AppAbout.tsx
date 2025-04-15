@@ -12,7 +12,7 @@ import {
     SiNpm, SiVercel, SiHeroku, SiRender,
     SiGit, SiJira, SiTrello, SiFigma, SiMysql, SiPostgresql, SiMongodb
 } from "react-icons/si"
-import { Box, Text, Heading, SimpleGrid, VStack, Icon } from "@chakra-ui/react"
+import { Box, Text, Heading, SimpleGrid } from "@chakra-ui/react"
 import StackIcon from "./layout/StackIcon";
 
 export default function AppAbout() {
@@ -36,7 +36,7 @@ export default function AppAbout() {
                         A full-stack web developer based in <b>Vancouver, BC</b> 🇨🇦, originally from <b>South Korea</b> 🇰🇷.
                     </Text>
                     <Text mt={1} fontSize="md" color="gray.600">
-                        Currently studying at <b>BCIT</b> — graduating <b>April 2025</b> 🎓
+                        Currently studying at <b>BCIT</b> — graduated <b>April 2025</b> 🎓
                     </Text>
                 </Box>
 

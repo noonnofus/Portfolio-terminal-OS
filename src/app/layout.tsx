@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "HyunHo Portfolio",
-  description: "This is a terminal & OS style personal portfolio website. Thank you for visiting.",
+  description: "This is a Kevin's portfolio website. Thank you for visiting.",
   icons: {
     icon: '/images/favicon.png'
   }

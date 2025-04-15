@@ -1,6 +1,6 @@
-import { Flex, Image, Heading, Text, Link, SimpleGrid, Box, List, AspectRatio } from "@chakra-ui/react";
+import { Flex, Image, Heading, Text, Link, SimpleGrid, Box, List, AspectRatio, Icon } from "@chakra-ui/react";
 import { SiTypescript, SiNextdotjs, SiTailwindcss, SiDrizzle, SiPostgresql, SiFirebase } from "react-icons/si"
-import { FaSpider, FaBrain, FaProjectDiagram, FaBell, FaAws, FaReact } from "react-icons/fa"
+import { FaSpider, FaBrain, FaProjectDiagram, FaBell, FaAws, FaReact, FaGithub } from "react-icons/fa"
 import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
 import StackIcon from "../layout/StackIcon";
 
@@ -40,13 +40,25 @@ export default function AppProjcetFlare() {
                     >
                         See Flare <ExternalLinkIcon />
                     </Link>
+                    <Link
+                        href="https://github.com/noonnofus/Flare_IDSP"
+                        textDecor="underline"
+                        mb={4}
+                        target="_blank"
+                    >
+                        <Icon as={FaGithub} boxSize={5} />
+                        Source Code <ExternalLinkIcon />
+                    </Link>
                     <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
                         <Box className="mb-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
                                 Overview
                             </Heading>
+                            <Text mt={1} fontSize="sm" color="gray.600">
+                                📌 <b>Project Type:</b> Group Project
+                            </Text>
                             <Text mt={2}>
-                                Flare is a progressive web application (PWA) built to help rural communities access real-time wildfire information. It offers an interactive map of current wildfire locations, risk level indicators wildfire-related news, latest, and the chatbot that answers anything related to wildfire questions. The app also supports push notifications to alert users about nearby wildfire threats.
+                                Flare is a progressive web app that my team and I built to help rural communities easily access real-time wildfire information. The app features an interactive map that displays current wildfire locations, risk level indicators, and the latest wildfire-related news. I developed the chatbot that answers users&#39; wildfire-related questions and ensured the app is installable on both mobile and desktop devices.
                             </Text>
                         </Box>
 
