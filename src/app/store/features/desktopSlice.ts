@@ -22,6 +22,10 @@ const desktopSlice = createSlice({
       }
     },
     setFoucsApp: (state, action: PayloadAction<string>) => {
+      if (state.focusApp === action.payload) return;
+      if (state.focusApp === action.payload) {
+        state.focusApp = "";
+      }
       state.focusApp = action.payload;
     },
     closeApp: (state, action: PayloadAction<string>) => {
