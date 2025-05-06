@@ -10,6 +10,7 @@ const desktopSlice = createSlice({
     showModal: true,
     userRole: "",
     openApps: <string[]>[],
+    user: null,
   },
   reducers: {
     setIsTouchDevice: (state, action: PayloadAction<boolean>) => {
@@ -43,6 +44,12 @@ const desktopSlice = createSlice({
     setUserRole: (state, action: PayloadAction<string>) => {
       state.userRole = action.payload;
     },
+    setUser: (state, action: PayloadAction<any>) => {
+      state.user = action.payload;
+    },
+    logout: (state) => {
+      state.user = null;
+    },
   },
 });
 
@@ -54,5 +61,6 @@ export const {
   setShowAppMenu,
   setShowModal,
   setUserRole,
+  setUser,
 } = desktopSlice.actions;
 export default desktopSlice.reducer;

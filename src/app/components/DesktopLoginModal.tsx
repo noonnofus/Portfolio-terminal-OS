@@ -6,6 +6,9 @@ import { createClient } from "@/lib/supabaseClient";
 import { Input } from '@chakra-ui/react';
 import { Tooltip } from "@/components/ui/tooltip"
 import { ArrowRight } from "lucide-react";
+import { setUser } from "../store/features/desktopSlice";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from "../store/store";
 
 export default function LoginModal() {
     const [now, setNow] = useState(new Date());
@@ -14,20 +17,46 @@ export default function LoginModal() {
     const [error, setError] = useState('');
     const [showError, setShowError] = useState(false);
 
+    const dispatch = useDispatch();
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         const supabase = await createClient();
 
-        const data = {
+        const input = {
             email: email,
             password: password,
         }
-        const { error } = await supabase.auth.signInWithPassword(data);
+        const { data, error } = await supabase.auth.signInWithPassword(input);
 
         if (error) {
             setError('Invalid email or password, Please try it again.');
             setShowError(true);
+        } else {
+            const { data: profile, error: profileError } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("id", data.user.id)
+                .single();
+
+            if (profileError) {
+                console.error("Failed to fetch profile:", profileError.message);
+            } else {
+                dispatch(setUser(profile));
+            }
         }
+    }
+
+    const handleGuestLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const guestUser = {
+            id: 'guest',
+            username: 'Guest',
+            role: 'guest',
+        };
+
+        dispatch(setUser(guestUser));
     }
 
     useEffect(() => {
@@ -67,7 +96,10 @@ export default function LoginModal() {
             </div>
 
             <div className="absolute bottom-20 w-full flex flex-col items-center">
-                <form className="flex flex-col items-center" onSubmit={handleLogin}>
+                <form
+                    className="flex flex-col items-center"
+                    onSubmit={handleLogin}
+                >
                     <Input
                         placeholder="Email"
                         className="bg-white/10 backdrop-blur-sm text-white placeholder-white px-4 py-2 rounded-3xl mb-2 w-64"
@@ -99,7 +131,10 @@ export default function LoginModal() {
                     </div>
                 </form>
 
-                <button className="mt-4 text-white text-md underline">
+                <button
+                    onClick={handleGuestLogin}
+                    className="mt-4 text-white text-md underline"
+                >
                     Continue with Guest
                 </button>
             </div>
