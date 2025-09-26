@@ -18,6 +18,12 @@ import koWeConnect from '../../public/locales/ko/WeConnect.json';
 import enWeConnect from '../../public/locales/en/WeConnect.json';
 import koWebPiano from '../../public/locales/ko/WebPiano.json';
 import enWebPiano from '../../public/locales/en/WebPiano.json';
+import koAboutSite from '../../public/locales/ko/AboutSite.json';
+import enAboutSite from '../../public/locales/en/AboutSite.json';
+import koAbout from '../../public/locales/ko/About.json';
+import enAbout from '../../public/locales/en/About.json';
+import koContact from '../../public/locales/ko/Contact.json';
+import enContact from '../../public/locales/en/Contact.json';
 
 const resources = {
   ko: {
@@ -29,6 +35,9 @@ const resources = {
     Mejubot: koMejubot,
     WeConnect: koWeConnect,
     WebPiano: koWebPiano,
+    AboutSite: koAboutSite,
+    About: koAbout,
+    Contact: koContact,
   },
   en: {
     common: enCommon,
@@ -39,6 +48,9 @@ const resources = {
     Mejubot: enMejubot,
     WeConnect: enWeConnect,
     WebPiano: enWebPiano,
+    AboutSite: enAboutSite,
+    About: enAbout,
+    Contact: enContact,
   },
 };
 
