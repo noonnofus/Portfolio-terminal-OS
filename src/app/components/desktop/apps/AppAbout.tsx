@@ -14,8 +14,15 @@ import {
 } from "react-icons/si"
 import { Box, Text, Heading, SimpleGrid } from "@chakra-ui/react"
 import StackIcon from "./layout/StackIcon";
+import { useTranslation } from 'react-i18next';
+import { Language } from "@/app/store/features/languageSlice";
 
-export default function AppAbout() {
+interface AppAboutProps {
+    language: Language;
+}
+
+export default function AppAbout({ language }: AppAboutProps) {
+    const { t } = useTranslation(['About', 'common']);
     return (
         <div
             style={{
@@ -30,13 +37,13 @@ export default function AppAbout() {
             <div className="my-8 mx-4 md:mx-36">
                 <Box className="mb-8">
                     <Heading size="lg" className="font-bold text-3xl text-gray-800">
-                        👋 Hi, I’m Kevin!
+                        {t('title')}
                     </Heading>
                     <Text mt={2} fontSize="md" color="gray.700">
-                        A full-stack web developer based in <b>Vancouver, BC</b> 🇨🇦, originally from <b>South Korea</b> 🇰🇷.
+                        {t('description')}
                     </Text>
                     <Text mt={1} fontSize="md" color="gray.600">
-                        Currently studying at <b>BCIT</b> — graduated <b>April 2025</b> 🎓
+                        {t('education')}
                     </Text>
                 </Box>
 
@@ -46,10 +53,10 @@ export default function AppAbout() {
                         mb={4}
                         className="font-bold text-2xl"
                     >
-                        🧑‍💻 Tech Stack
+                        {t('techStackTitle')}
                     </Heading>
 
-                    <Heading mt={6} mb={2} className="text-lg font-semibold">Languages</Heading>
+                    <Heading mt={6} mb={2} className="text-lg font-semibold">{t('languages')}</Heading>
                     <SimpleGrid columns={3} gap={5} mb={12}>
                         <StackIcon label="HTML5" icon={FaHtml5} color="#E34F26" />
                         <StackIcon label="CSS3" icon={FaCss3Alt} color="#1572B6" />
@@ -59,7 +66,7 @@ export default function AppAbout() {
                         <StackIcon label="PHP" icon={SiPhp} color="#777BB4" />
                         <StackIcon label="Markdown" icon={SiMarkdown} color="#000000" />
                     </SimpleGrid>
-                    <Heading mt={6} mb={2} className="text-lg font-semibold">Frontend Frameworks & Libraries</Heading>
+                    <Heading mt={6} mb={2} className="text-lg font-semibold">{t('frontendFrameworks')}</Heading>
                     <SimpleGrid columns={3} gap={1} mb={12}>
                         <StackIcon label="React" icon={FaReact} color="#61DAFB" />
                         <StackIcon label="Next.js" icon={SiNextdotjs} color="black" />
@@ -72,7 +79,7 @@ export default function AppAbout() {
                         <StackIcon label="Chakra UI" icon={SiChakraui} color="#4ED1C5" />
                     </SimpleGrid>
 
-                    <Heading mt={6} mb={2} className="text-lg font-semibold">Backend Frameworks & Libraries</Heading>
+                    <Heading mt={6} mb={2} className="text-lg font-semibold">{t('backendFrameworks')}</Heading>
                     <SimpleGrid columns={3} gap={2} mb={12}>
                         <StackIcon label="Express.js" icon={SiExpress} color="#404d59" />
                         <StackIcon label="Hono" icon={SiHono} color="#FF9859" />
@@ -80,26 +87,26 @@ export default function AppAbout() {
                         <StackIcon label=".NET" icon={SiDotnet} color="#5C2D91" />
                     </SimpleGrid>
 
-                    <Heading mt={6} mb={2} className="text-lg font-semibold">State Management & Utilities</Heading>
+                    <Heading mt={6} mb={2} className="text-lg font-semibold">{t('stateManagement')}</Heading>
                     <SimpleGrid columns={3} gap={2} mb={12}>
                         <StackIcon label="React Router" icon={SiReactrouter} color="#CA4245" />
                         <StackIcon label="React Query" icon={SiReactquery} color="#FF4154" />
                         <StackIcon label="Zod" icon={SiZod} color="#3068b7" />
                     </SimpleGrid>
 
-                    <Heading mt={6} mb={2} className="text-lg font-semibold">Web Technologies</Heading>
+                    <Heading mt={6} mb={2} className="text-lg font-semibold">{t('webTechnologies')}</Heading>
                     <SimpleGrid columns={3} gap={2} mb={12}>
                         <StackIcon label="WebRTC" icon={SiWebrtc} color="#333" />
                         <StackIcon label="Socket.IO" icon={SiSocketdotio} color="black" />
                     </SimpleGrid>
 
-                    <Heading mt={6} mb={2} className="text-lg font-semibold">Runtime Environments</Heading>
+                    <Heading mt={6} mb={2} className="text-lg font-semibold">{t('runtimeEnvironments')}</Heading>
                     <SimpleGrid columns={3} gap={2} mb={12}>
                         <StackIcon label="Node.js" icon={FaNodeJs} color="#339933" />
                         <StackIcon label="Bun" icon={SiBun} color="black" />
                     </SimpleGrid>
 
-                    <Heading mt={6} mb={2} className="text-lg font-semibold">Databases & ORMs</Heading>
+                    <Heading mt={6} mb={2} className="text-lg font-semibold">{t('databasesORMs')}</Heading>
                     <SimpleGrid columns={3} gap={2} mb={12}>
                         <StackIcon label="MySQL" icon={SiMysql} color="#00758F" />
                         <StackIcon label="PostgreSQL" icon={SiPostgresql} color="#336791" />
@@ -110,7 +117,7 @@ export default function AppAbout() {
                         <StackIcon label="Prisma" icon={SiPrisma} color="#3982CE" />
                     </SimpleGrid>
 
-                    <Heading mt={6} mb={2} className="text-lg font-semibold">DevOps & Deployment</Heading>
+                    <Heading mt={6} mb={2} className="text-lg font-semibold">{t('devopsDeployment')}</Heading>
                     <SimpleGrid columns={3} gap={2} mb={12}>
                         <StackIcon label="NPM" icon={SiNpm} color="#CB3837" />
                         <StackIcon label="Vercel" icon={SiVercel} color="black" />
@@ -119,7 +126,7 @@ export default function AppAbout() {
                         <StackIcon label="GitHub Pages" icon={FaGithub} color="black" />
                     </SimpleGrid>
 
-                    <Heading mt={6} mb={2} className="text-lg font-semibold">Tools & Collaborations</Heading>
+                    <Heading mt={6} mb={2} className="text-lg font-semibold">{t('toolsCollaborations')}</Heading>
                     <SimpleGrid columns={3} gap={2} mb={12}>
                         <StackIcon label="Git" icon={SiGit} color="#F05033" />
                         <StackIcon label="Jira" icon={SiJira} color="#0A0FFF" />

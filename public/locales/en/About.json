@@ -1,0 +1,15 @@
+{
+    "title": "👋 Hi, I'm Kevin!",
+    "description": "A full-stack web developer based in Vancouver, BC 🇨🇦, originally from South Korea 🇰🇷. (UPDATED: Now, in Korea!)",
+    "education": "Studied Full-Stack Web Development at BCIT — graduated June 2025 🎓",
+    "techStackTitle": "🧑💻 Tech Stack",
+    "languages": "Languages",
+    "frontendFrameworks": "Frontend Frameworks & Libraries",
+    "backendFrameworks": "Backend Frameworks & Libraries",
+    "stateManagement": "State Management & Utilities",
+    "webTechnologies": "Web Technologies",
+    "runtimeEnvironments": "Runtime Environments",
+    "databasesORMs": "Databases & ORMs",
+    "devopsDeployment": "DevOps & Deployment",
+    "toolsCollaborations": "Tools & Collaborations"
+}
