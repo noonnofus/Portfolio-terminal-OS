@@ -4,8 +4,15 @@ import { FaReact, FaCube, FaMobileAlt, FaKeyboard, FaGlobe, FaGithub } from "rea
 import { TbBrandThreejs } from "react-icons/tb";
 import StackIcon from "../layout/StackIcon";
 import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
+import { useTranslation } from 'react-i18next';
+import { Language } from "@/app/store/features/languageSlice";
 
-export default function AppProjcetDiceRoller() {
+interface AppProjectDiceRollerProps {
+    language: Language;
+}
+
+export default function AppProjcetDiceRoller({ language }: AppProjectDiceRollerProps) {
+    const { t } = useTranslation(['DiceRoller', 'common']);
     return (
         <div
             style={{
@@ -22,7 +29,7 @@ export default function AppProjcetDiceRoller() {
                     className="mt-8 mb-3"
                 >
                     <Heading size="lg" className="font-bold text-3xl text-gray-800 mb-6">
-                        <Text>DiceRoller - physics engine 3D dice rolling simulation</Text>
+                        <Text>{t('title')}</Text>
                     </Heading>
 
                     <Image
@@ -39,7 +46,7 @@ export default function AppProjcetDiceRoller() {
                         mb={4}
                         target="_blank"
                     >
-                        See DiceRoller on Web<ExternalLinkIcon />
+                        {t('linkAction')}<ExternalLinkIcon />
                     </Link>
                     <Link
                         href="https://github.com/noonnofus/diceRoller"
@@ -48,20 +55,20 @@ export default function AppProjcetDiceRoller() {
                         target="_blank"
                     >
                         <Icon as={FaGithub} boxSize={5} />
-                        Source Code <ExternalLinkIcon />
+                        {t('common:sourceCode')} <ExternalLinkIcon />
                     </Link>
                     <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
                         <Box className="mb-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
-                                Overview
+                                {t('common:overview')}
                             </Heading>
                             <Text mt={1} fontSize="sm" color="gray.600">
-                                📌 <b>Project Type:</b> Solo Project
+                                📌 <b>{t('common:projectType')}:</b> {t('common:soloProject')}
                             </Text>
                             <Text mt={2}>
-                                DiceRoller is a cross-platform app I built to deliver a fun and interactive 3D dice-rolling experience across both mobile and web.
+                                {t('description')}
                                 <Text mt={1}>
-                                    On mobile, users can simply shake their phone to roll the dice, while on the web, they can use the WASD keys for keyboard input to move the dice. I built the app using Expo and React Native, and integrated expo-three for real-time 3D rendering and Cannon.js for realistic physics.
+                                    {t('descriptionContinued')}
                                 </Text>
                             </Text>
                         </Box>
@@ -74,24 +81,24 @@ export default function AppProjcetDiceRoller() {
 
                         <Box className="mb-6 mt-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
-                                Key Features
+                                {t('common:keyFeatures')}
                             </Heading>
 
                             <List.Root mt={4} ps={4} gap={3} className="text-gray-700">
                                 <List.Item>
-                                    <strong>3D Dice Simulation:</strong> Rendered realistic 3D dice using <u>expo-three</u> and applied a physics engine with <u>Cannon.js</u>.
+                                    <strong>{t('threeDDiceSimulation')}:</strong> {t('threeDDiceSimulationDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>Cross-Platform Support:</strong> Built with React Native and Expo, supporting both mobile and web platforms.
+                                    <strong>{t('crossPlatformSupport')}:</strong> {t('crossPlatformSupportDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>Shake Detection on Mobile:</strong> Used <u>react-native-shake</u> to detect device motion and roll the dice by shaking the phone.
+                                    <strong>{t('shakeDetectionMobile')}:</strong> {t('shakeDetectionMobileDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>Keyboard Interaction on Web:</strong> Enabled WASD key input to roll the dice in the browser environment.
+                                    <strong>{t('keyboardInteractionWeb')}:</strong> {t('keyboardInteractionWebDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>Camera Position & Lighting Setup:</strong> Implemented a fixed camera angle and ambient lighting to enhance visibility and realism.
+                                    <strong>{t('cameraPositionLighting')}:</strong> {t('cameraPositionLightingDesc')}
                                 </List.Item>
                             </List.Root>
                         </Box>
@@ -114,18 +121,18 @@ export default function AppProjcetDiceRoller() {
                                 <StackIcon label="TypeScript" icon={SiTypescript} color="#3178C6" />
                             </SimpleGrid>
 
-                            <Heading mt={6} mb={2} className="text-lg font-semibold">3D & Interaction</Heading>
+                            <Heading mt={6} mb={2} className="text-lg font-semibold">{t('threeDInteraction')}</Heading>
                             <SimpleGrid columns={3} gap={5} mb={12}>
                                 <StackIcon label="expo-three" icon={TbBrandThreejs} color="black" />
                                 <StackIcon label="cannon-es" icon={FaCube} color="#555" />
                                 <StackIcon label="react-native-shake" icon={FaMobileAlt} color="#1E88E5" />
                             </SimpleGrid>
 
-                            <Heading mt={6} mb={2} className="text-lg font-semibold">Platform</Heading>
+                            <Heading mt={6} mb={2} className="text-lg font-semibold">{t('platform')}</Heading>
                             <SimpleGrid columns={3} gap={5} mb={6}>
-                                <StackIcon label="Mobile (Shake)" icon={FaMobileAlt} color="#6C63FF" />
-                                <StackIcon label="Web (Keyboard)" icon={FaKeyboard} color="#4A5568" />
-                                <StackIcon label="Cross Platform" icon={FaGlobe} color="#2D3748" />
+                                <StackIcon label={t('mobileShake')} icon={FaMobileAlt} color="#6C63FF" />
+                                <StackIcon label={t('webKeyboard')} icon={FaKeyboard} color="#4A5568" />
+                                <StackIcon label={t('crossPlatform')} icon={FaGlobe} color="#2D3748" />
                             </SimpleGrid>
                         </Box>
 
@@ -141,12 +148,12 @@ export default function AppProjcetDiceRoller() {
                                 App Walkthrough
                             </Heading>
                             <Text mt={2}>
-                                Watch how users can roll the dice by physically shaking their phone in this mobile walkthrough.
+                                {t('appWalkthroughDescription')}
                             </Text>
                             <AspectRatio ratio={9 / 16} maxW="400px" mx="auto">
                                 <video controls>
                                     <source src="videos/diceroller-walkthrough-app.mp4" type="video/mp4" />
-                                    Your browser does not support the video tag.
+                                    {t('common:videoNotSupported')}
                                 </video>
                             </AspectRatio>
                         </Box>

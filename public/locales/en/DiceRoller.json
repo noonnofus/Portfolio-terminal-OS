@@ -1,0 +1,27 @@
+{
+    "title": "DiceRoller - physics engine 3D dice rolling simulation",
+    "linkAction": "See DiceRoller on Web",
+
+    "description": "DiceRoller is a cross-platform app I built to deliver a fun and interactive 3D dice-rolling experience across both mobile and web.",
+    "descriptionContinued": "On mobile, users can simply shake their phone to roll the dice, while on the web, they can use the WASD keys for keyboard input to move the dice. I built the app using Expo and React Native, and integrated expo-three for real-time 3D rendering and Cannon.js for realistic physics.",
+
+    "threeDDiceSimulation": "3D Dice Simulation",
+    "threeDDiceSimulationDesc": "Rendered realistic 3D dice using expo-three and applied a physics engine with Cannon.js.",
+    "crossPlatformSupport": "Cross-Platform Support",
+    "crossPlatformSupportDesc": "Built with React Native and Expo, supporting both mobile and web platforms.",
+    "shakeDetectionMobile": "Shake Detection on Mobile",
+    "shakeDetectionMobileDesc": "Used react-native-shake to detect device motion and roll the dice by shaking the phone.",
+    "keyboardInteractionWeb": "Keyboard Interaction on Web",
+    "keyboardInteractionWebDesc": "Enabled WASD key input to roll the dice in the browser environment.",
+    "cameraPositionLighting": "Camera Position & Lighting Setup",
+    "cameraPositionLightingDesc": "Implemented a fixed camera angle and ambient lighting to enhance visibility and realism.",
+
+    "threeDInteraction": "3D & Interaction",
+    "platform": "Platform",
+    "mobileShake": "Mobile (Shake)",
+    "webKeyboard": "Web (Keyboard)",
+    "crossPlatform": "Cross Platform",
+
+    "appWalkthroughDescription": "Watch how users can roll the dice by physically shaking their phone in this mobile walkthrough.",
+    "videoNotSupported": "Your browser does not support the video tag."
+}

@@ -1,0 +1,19 @@
+{
+    "overview": "Overview",
+    "projectType": "Project Type",
+    "soloProject": "Solo Project",
+    "groupProject": "Group Project",
+    "clientGroupProject": "Client Group Project",
+    "myRole": "My Role",
+    "keyFeatures": "Key Features",
+    "techStack": "Tech Stack",
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "authentication": "Authentication",
+    "librariesServices": "Libraries & Services",
+    "otherTools": "Other Tools",
+    "appWalkthrough": "App Walkthrough",
+    "sourceCode": "Source Code",
+    "tooltipContent": "App may take over 30 seconds to load on first visit.",
+    "videoNotSupported": "Your browser does not support the video tag."
+}

@@ -1,0 +1,21 @@
+{
+    "title": "MejuBot — Music, Stats, and More in One Discord Bot",
+    "linkAction": "Add Mejubot on your Discord server",
+
+    "description": "MejuBot is an all-in-one server companion I built to make Discord communities more interactive, engaging, and fun. Officially verified by Discord, it lets users stream music, check PUBG stats, and enjoy mini-games like stock market simulations. I focused on seamless integration and powerful features to enhance the overall user experience.",
+
+    "youtubeMusicPlayback": "YouTube Music Playback",
+    "youtubeMusicPlaybackDesc": "Stream music from YouTube directly into your voice channels using discord-player and @discordjs/opus.",
+    "pubgStatsIntegration": "PUBG Stats Integration",
+    "pubgStatsIntegrationDesc": "Fetch and display real-time PUBG player statistics through external APIs.",
+    "virtualStockMarketGame": "Virtual Stock Market Game",
+    "virtualStockMarketGameDesc": "Engage users with a simulated stock trading game, complete with real-time updates and leaderboard tracking.",
+    "multiLanguageSupport": "Multi-language Support",
+    "multiLanguageSupportDesc": "Users can set their preferred language, and all commands and responses adapt dynamically.",
+
+    "botFramework": "Bot Framework",
+    "apisFeatures": "APIs & Features",
+    "frontend": "Frontend",
+    "databaseAuth": "Database & Auth",
+    "deploymentTools": "Deployment & Tools"
+}

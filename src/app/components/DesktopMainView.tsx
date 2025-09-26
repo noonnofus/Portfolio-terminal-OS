@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { Flex } from "@chakra-ui/react"
-import DesktopMainViewHeader from "./DesktopMainViewHeader"
-import DesktopMainDragArea from "./DesktopMainDragArea"
+import { Flex } from "@chakra-ui/react";
+import DesktopMainViewHeader from "./DesktopMainViewHeader";
+import DesktopMainDragArea from "./DesktopMainDragArea";
 import { useEffect } from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import { setActiveApp, setFoucsApp } from "../store/features/desktopSlice";
 import { RootState } from "../store/store";
 import useIsTouchDevice from "@/lib/isTouchDevice";
@@ -16,13 +16,12 @@ export default function DesktopMainView() {
     const focusApp = useSelector((state: RootState) => state.desktop.focusApp);
     const dispatch = useDispatch();
 
-
     function setActiveDesktopApp(focusApp: string) {
-        dispatch(setActiveApp(focusApp))
+        dispatch(setActiveApp(focusApp));
     }
 
     function resetFocusedDesktopApp() {
-        dispatch(setFoucsApp(''));
+        dispatch(setFoucsApp(""));
     }
 
     useEffect(() => {
@@ -62,5 +61,5 @@ export default function DesktopMainView() {
                 </>
             )}
         </Flex>
-    )
+    );
 }

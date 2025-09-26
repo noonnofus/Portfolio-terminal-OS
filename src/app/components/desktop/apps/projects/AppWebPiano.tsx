@@ -4,8 +4,15 @@ import { SiJavascript, SiEjs, SiCss3 } from "react-icons/si"
 import { FaMusic, FaGithub } from "react-icons/fa"
 import StackIcon from "../layout/StackIcon";
 import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
+import { useTranslation } from 'react-i18next';
+import { Language } from "@/app/store/features/languageSlice";
 
-export default function AppProjcetWebPiano() {
+interface AppProjectWebPianoProps {
+    language: Language;
+}
+
+export default function AppProjcetWebPiano({ language }: AppProjectWebPianoProps) {
+    const { t } = useTranslation(['WebPiano', 'common']);
     return (
         <div
             style={{
@@ -22,7 +29,7 @@ export default function AppProjcetWebPiano() {
                     className="mt-8 mb-3"
                 >
                     <Heading size="lg" className="font-bold text-3xl text-gray-800 mb-6">
-                        <Text>WebPiano — A Browser-Based Interactive Instrument</Text>
+                        <Text>{t('title')}</Text>
                     </Heading>
 
                     <Image
@@ -34,7 +41,7 @@ export default function AppProjcetWebPiano() {
                         className="mb-4"
                     />
                     <ChakraTooltip
-                        content="App may take over 30 seconds to load on first visit."
+                        content={t('common:tooltipContent')}
                         openDelay={100}
                         closeDelay={200}
                         showArrow
@@ -45,7 +52,7 @@ export default function AppProjcetWebPiano() {
                             mb={4}
                             target="_blank"
                         >
-                            Play Piano on WebPiano<ExternalLinkIcon />
+                            {t('linkAction')}<ExternalLinkIcon />
                         </Link>
                     </ChakraTooltip>
                     <Link
@@ -55,18 +62,18 @@ export default function AppProjcetWebPiano() {
                         target="_blank"
                     >
                         <Icon as={FaGithub} boxSize={5} />
-                        Source Code <ExternalLinkIcon />
+                        {t('common:sourceCode')} <ExternalLinkIcon />
                     </Link>
                     <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
                         <Box className="mb-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
-                                Overview
+                                {t('common:overview')}
                             </Heading>
                             <Text mt={1} fontSize="sm" color="gray.600">
-                                📌 <b>Project Type:</b> Solo Project
+                                📌 <b>{t('common:projectType')}:</b> {t('common:soloProject')}
                             </Text>
                             <Text mt={2}>
-                                I built a web-based piano application that lets users play music directly from their keyboard. It includes adjustable tuning controls and even allows users to upload MP3 files and turn any sound into playable notes.
+                                {t('description')}
                             </Text>
                         </Box>
 
@@ -78,21 +85,21 @@ export default function AppProjcetWebPiano() {
 
                         <Box className="mb-6 mt-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
-                                Key Features
+                                {t('common:keyFeatures')}
                             </Heading>
 
                             <List.Root mt={4} ps={4} gap={3} className="text-gray-700">
                                 <List.Item>
-                                    <strong>Keyboard-Based Play:</strong> Users can perform melodies using their computer keyboard, with keys mapped to corresponding musical notes.
+                                    <strong>{t('keyboardBasedPlay')}:</strong> {t('keyboardBasedPlayDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>Pitch & Tuning Control:</strong> Offers fine-grained tuning options, allowing users to adjust the pitch of each note for a customized sound experience.
+                                    <strong>{t('pitchTuningControl')}:</strong> {t('pitchTuningControlDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>MP3 Sound Mapping:</strong> Users can upload their own MP3 files and convert them into playable instruments within the piano interface.
+                                    <strong>{t('mp3SoundMapping')}:</strong> {t('mp3SoundMappingDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>Membrane Sound Support:</strong> Includes an alternative membrane synth mode to create deeper, more ambient tones.
+                                    <strong>{t('membraneSoundSupport')}:</strong> {t('membraneSoundSupportDesc')}
                                 </List.Item>
                             </List.Root>
                         </Box>
@@ -105,7 +112,7 @@ export default function AppProjcetWebPiano() {
 
                         <Box className="mb-6 mt-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
-                                Tech Stack
+                                {t('common:techStack')}
                             </Heading>
 
                             <SimpleGrid columns={3} gap={5} mt={4} mb={6}>
@@ -127,15 +134,15 @@ export default function AppProjcetWebPiano() {
                         />
                         <Box className="mt-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
-                                App Walkthrough
+                                {t('common:appWalkthrough')}
                             </Heading>
                             <Text mt={2} mb={2}>
-                                Watch how to play piano on web with various ways.
+                                {t('appWalkthroughDescription')}
                             </Text>
                             <AspectRatio>
                                 <video controls>
                                     <source src="videos/webpiano-walkthrough.mp4" type="video/mp4" />
-                                    Your browser does not support the video tag.
+                                    {t('common:videoNotSupported')}
                                 </video>
                             </AspectRatio>
                         </Box>

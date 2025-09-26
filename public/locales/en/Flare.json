@@ -1,0 +1,21 @@
+{
+    "title": "Flare - Real-Time Wildfire Alert System",
+    "linkAction": "See Flare",
+
+    "description": "Flare is a progressive web app that my team and I built to help rural communities easily access real-time wildfire information. The app features an interactive map that displays current wildfire locations, risk level indicators, and the latest wildfire-related news. I developed the chatbot that answers users' wildfire-related questions and ensured the app is installable on both mobile and desktop devices.",
+
+    "myRoleDescription": "As a Full-Stack Developer, I designed and implemented key features including:",
+    "pwaIntegration": "PWA Integration",
+    "pwaIntegrationDesc": "Enabled the app to be installable from the browser for both android and IOS, supporting offline access and a native-like experience.",
+    "chatbotDevelopment": "Chatbot Development",
+    "chatbotDevelopmentDesc": "Built an AI-powered chatbot to help users ask wildfire-related questions and get instant responses using OpenAI API.",
+    "realtimeNotifications": "Real-time Notifications",
+    "realtimeNotificationsDesc": "Implemented push notifications to alert users about nearby wildfire threats in real-time.",
+
+    "backendDatabase": "Backend & Database",
+    "cloudAPIs": "Cloud & APIs",
+    "pwaRealtime": "PWA & Realtime",
+
+    "appWalkthroughDescription": "Watch a full walkthrough of the Flare app, showcasing key features and user interactions.",
+    "videoNotSupported": "Your browser does not support the video tag."
+}

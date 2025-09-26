@@ -3,8 +3,15 @@ import { SiTypescript, SiNextdotjs, SiTailwindcss, SiDrizzle, SiPostgresql, SiFi
 import { FaSpider, FaBrain, FaProjectDiagram, FaBell, FaAws, FaReact, FaGithub } from "react-icons/fa"
 import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
 import StackIcon from "../layout/StackIcon";
+import { useTranslation } from 'react-i18next';
+import { Language } from "@/app/store/features/languageSlice";
 
-export default function AppProjcetFlare() {
+interface AppProjectFlareProps {
+    language: Language;
+}
+
+export default function AppProjcetFlare({ language }: AppProjectFlareProps) {
+    const { t } = useTranslation(['Flare', 'common']);
     return (
         <div
             style={{
@@ -21,7 +28,7 @@ export default function AppProjcetFlare() {
                     className="mt-8 mb-3"
                 >
                     <Heading size="lg" className="font-bold text-3xl text-gray-800 mb-6">
-                        <Text>Flare - Real-Time Wildfire Alert System</Text>
+                        <Text>{t('title')}</Text>
                     </Heading>
 
                     <Image
@@ -38,7 +45,7 @@ export default function AppProjcetFlare() {
                         mb={4}
                         target="_blank"
                     >
-                        See Flare <ExternalLinkIcon />
+                        {t('linkAction')} <ExternalLinkIcon />
                     </Link>
                     <Link
                         href="https://github.com/noonnofus/Flare_IDSP"
@@ -47,18 +54,18 @@ export default function AppProjcetFlare() {
                         target="_blank"
                     >
                         <Icon as={FaGithub} boxSize={5} />
-                        Source Code <ExternalLinkIcon />
+                        {t('common:sourceCode')} <ExternalLinkIcon />
                     </Link>
                     <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
                         <Box className="mb-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
-                                Overview
+                                {t('common:overview')}
                             </Heading>
                             <Text mt={1} fontSize="sm" color="gray.600">
-                                📌 <b>Project Type:</b> Group Project
+                                📌 <b>{t('common:projectType')}:</b> {t('common:groupProject')}
                             </Text>
                             <Text mt={2}>
-                                Flare is a progressive web app that my team and I built to help rural communities easily access real-time wildfire information. The app features an interactive map that displays current wildfire locations, risk level indicators, and the latest wildfire-related news. I developed the chatbot that answers users&#39; wildfire-related questions and ensured the app is installable on both mobile and desktop devices.
+                                {t('description')}
                             </Text>
                         </Box>
 
@@ -70,22 +77,22 @@ export default function AppProjcetFlare() {
 
                         <Box className="mb-6 mt-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
-                                My Role
+                                {t('common:myRole')}
                             </Heading>
 
                             <Text mt={2} className="text-gray-700">
-                                As a Full-Stack Developer, I designed and implemented key features including:
+                                {t('myRoleDescription')}
                             </Text>
 
                             <List.Root mt={4} ps={4} gap={3} className="text-gray-700">
                                 <List.Item>
-                                    <strong>PWA Integration:</strong> Enabled the app to be installable from the browser for both android and IOS, supporting offline access and a native-like experience.
+                                    <strong>{t('pwaIntegration')}:</strong> {t('pwaIntegrationDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>Chatbot Development:</strong> Built an AI-powered chatbot to help users ask wildfire-related questions and get instant responses using OpenAI API.
+                                    <strong>{t('chatbotDevelopment')}:</strong> {t('chatbotDevelopmentDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>Real-time Notifications:</strong>  Implemented push notifications to alert users about nearby wildfire threats in real-time.
+                                    <strong>{t('realtimeNotifications')}:</strong> {t('realtimeNotificationsDesc')}
                                 </List.Item>
                             </List.Root>
                         </Box>
@@ -109,13 +116,13 @@ export default function AppProjcetFlare() {
                                 <StackIcon label="Tailwind CSS" icon={SiTailwindcss} color="#38B2AC" />
                             </SimpleGrid>
 
-                            <Heading mt={6} mb={2} className="text-lg font-semibold">Backend & Database</Heading>
+                            <Heading mt={6} mb={2} className="text-lg font-semibold">{t('backendDatabase')}</Heading>
                             <SimpleGrid columns={3} gap={5} mb={12}>
                                 <StackIcon label="PostgreSQL" icon={SiPostgresql} color="#336791" />
                                 <StackIcon label="Drizzle ORM" icon={SiDrizzle} color="#C5F74F" />
                             </SimpleGrid>
 
-                            <Heading mt={6} mb={2} className="text-lg font-semibold">Cloud & APIs</Heading>
+                            <Heading mt={6} mb={2} className="text-lg font-semibold">{t('cloudAPIs')}</Heading>
                             <SimpleGrid columns={3} gap={5} mb={12}>
                                 <StackIcon label="AWS S3" icon={FaAws} color="#FF9900" />
                                 <StackIcon label="OpenAI API" icon={FaBrain} color="#7fdbff" />
@@ -123,7 +130,7 @@ export default function AppProjcetFlare() {
                                 <StackIcon label="Firebase" icon={SiFirebase} color="#FFCA28" />
                             </SimpleGrid>
 
-                            <Heading mt={6} mb={2} className="text-lg font-semibold">PWA & Realtime</Heading>
+                            <Heading mt={6} mb={2} className="text-lg font-semibold">{t('pwaRealtime')}</Heading>
                             <SimpleGrid columns={3} gap={5} mb={12}>
                                 <StackIcon label="Next.js PWA" icon={SiNextdotjs} color="black" />
                                 <StackIcon label="Push Notifications" icon={FaBell} color="#f59e0b" />
@@ -143,18 +150,18 @@ export default function AppProjcetFlare() {
                                 App Walkthrough
                             </Heading>
                             <Text mt={2}>
-                                Watch a full walkthrough of the Flare app, showcasing key features and user interactions.
+                                {t('appWalkthroughDescription')}
                             </Text>
                             <AspectRatio ratio={2 / 1}>
                                 <video controls>
                                     <source src="videos/flare-walkthrough-web.mp4" type="video/mp4" />
-                                    Your browser does not support the video tag.
+                                    {t('common:videoNotSupported')}
                                 </video>
                             </AspectRatio>
                             <AspectRatio ratio={2 / 1}>
                                 <video controls>
                                     <source src="videos/flare-walkthrough-app.mp4" type="video/mp4" />
-                                    Your browser does not support the video tag.
+                                    {t('common:videoNotSupported')}
                                 </video>
                             </AspectRatio>
                         </Box>

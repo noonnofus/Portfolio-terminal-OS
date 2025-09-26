@@ -1,0 +1,19 @@
+{
+    "title": "WebPiano — A Browser-Based Interactive Instrument",
+    "linkAction": "Play Piano on WebPiano",
+
+    "description": "I built a web-based piano application that lets users play music directly from their keyboard. It includes adjustable tuning controls and even allows users to upload MP3 files and turn any sound into playable notes.",
+
+    "keyboardBasedPlay": "Keyboard-Based Play",
+    "keyboardBasedPlayDesc": "Users can perform melodies using their computer keyboard, with keys mapped to corresponding musical notes.",
+    "pitchTuningControl": "Pitch & Tuning Control",
+    "pitchTuningControlDesc": "Offers fine-grained tuning options, allowing users to adjust the pitch of each note for a customized sound experience.",
+    "mp3SoundMapping": "MP3 Sound Mapping",
+    "mp3SoundMappingDesc": "Users can upload their own MP3 files and convert them into playable instruments within the piano interface.",
+    "membraneSoundSupport": "Membrane Sound Support",
+    "membraneSoundSupportDesc": "Includes an alternative membrane synth mode to create deeper, more ambient tones.",
+
+
+    "appWalkthroughDescription": "Watch how to play piano on web with various ways.",
+    "videoNotSupported": "Your browser does not support the video tag."
+}
