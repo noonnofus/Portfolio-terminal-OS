@@ -1,20 +1,24 @@
-'use client';
-
 import { useState } from "react";
 import { Box, Flex } from "@chakra-ui/react";
-import Calendar from 'react-calendar';
-import Clock from 'react-clock';
+import Calendar from "react-calendar";
+import Clock from "react-clock";
 import DesktopHeaderAppMenu from "./DesktopHeaderAppMenu";
-import { useSelector, useDispatch } from 'react-redux';
+import LanguageSelector from "./desktop/apps/LanguageSelector";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
 import { setShowAppMenu } from "../store/features/desktopSlice";
-import '../styles/calender.css';
+import "../styles/calender.css";
 
 export default function DesktopMainViewHeader() {
-    const [time, setTime] = useState<string>('');
+    const [time, setTime] = useState<string>("");
     const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
-    const isAppMenuShow = useSelector((state: RootState) => state.desktop.showAppMenu);
+    const isAppMenuShow = useSelector(
+        (state: RootState) => state.desktop.showAppMenu
+    );
+    const currentLanguage = useSelector(
+        (state: RootState) => state.language.currentLanguage
+    );
     const dispatch = useDispatch();
 
     const toggleDatePicker = () => {
@@ -27,6 +31,11 @@ export default function DesktopMainViewHeader() {
         } else {
             setShowDatePicker(true);
         }
+    };
+
+    const headerTexts = {
+        ko: "김현호",
+        en: "HyunHoKim",
     };
 
     setInterval(() => {
@@ -50,7 +59,7 @@ export default function DesktopMainViewHeader() {
                         alt="application list icon"
                         width={24}
                         style={{
-                            cursor: 'pointer'
+                            cursor: "pointer",
                         }}
                         onClick={() => dispatch(setShowAppMenu(!isAppMenuShow))}
                     />
@@ -61,14 +70,28 @@ export default function DesktopMainViewHeader() {
                     margin="0 8px"
                 />
                 <Box flex="2" textAlign="center" className="text-white">
-                    HyunHoKim
+                    {headerTexts[currentLanguage]}
                 </Box>
                 <Box
                     height="20px"
                     borderRight="1px solid #ccc"
                     margin="0 8px"
                 />
-                <Box flex="1" display="flex" alignItems="center" justifyContent="flex-end" position="relative">
+                <Box
+                    flex="1"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="flex-end"
+                    position="relative"
+                    gap={2}
+                >
+                    <Box
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                    >
+                        <LanguageSelector />
+                    </Box>
                     <Box>
                         <img
                             src={"/icons/wifi-connect.png"}
@@ -88,12 +111,13 @@ export default function DesktopMainViewHeader() {
                     </Box>
                 </Box>
             </Flex>
-            {isAppMenuShow && (
-                <DesktopHeaderAppMenu />
-            )}
+            {isAppMenuShow && <DesktopHeaderAppMenu />}
             {showDatePicker && (
-                <div className={`absolute right-1 top-10 z-10 p-3 rounded-xl ${isAnimating ? 'animate-slideOut' : 'animate-slideIn'
-                    }`}>
+                <div
+                    className={`absolute right-1 top-10 z-10 p-3 rounded-xl ${
+                        isAnimating ? "animate-slideOut" : "animate-slideIn"
+                    }`}
+                >
                     <DatePicker />
                 </div>
             )}

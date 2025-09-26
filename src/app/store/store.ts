@@ -1,10 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit';
-import desktopReducer from './features/desktopSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import desktopReducer from "./features/desktopSlice";
+import languageSlice from "./features/languageSlice";
 
 export const store = configureStore({
-  reducer: {
-    desktop: desktopReducer,
-  },
+    reducer: {
+        desktop: desktopReducer,
+        language: languageSlice,
+    },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

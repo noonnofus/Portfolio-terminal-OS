@@ -3,8 +3,15 @@ import { SiVuedotjs, SiInertia, SiTailwindcss, SiPrime, SiVite, SiGit, SiJavascr
 import { FaGithub, FaWindowRestore, } from "react-icons/fa"
 import StackIcon from "../layout/StackIcon";
 import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
+import { useTranslation } from 'react-i18next';
+import { Language } from "@/app/store/features/languageSlice";
 
-export default function AppProjcetPageSsence() {
+interface AppProjectPageSsenceProps {
+    language: Language;
+}
+
+export default function AppProjcetPageSsence({ language }: AppProjectPageSsenceProps) {
+    const { t } = useTranslation(['PageSsence', 'common']);
     return (
         <div
             style={{
@@ -21,7 +28,7 @@ export default function AppProjcetPageSsence() {
                     className="mt-8 mb-3"
                 >
                     <Heading size="lg" className="font-bold text-3xl text-gray-800 mb-6">
-                        <Text>PageSsence - The Book Review Platform</Text>
+                        <Text>{t('title')}</Text>
                     </Heading>
 
                     <Image
@@ -38,7 +45,7 @@ export default function AppProjcetPageSsence() {
                         mb={4}
                         target="_blank"
                     >
-                        See PageSsence <ExternalLinkIcon />
+                        {t('linkAction')} <ExternalLinkIcon />
                     </Link>
                     <Link
                         href="https://github.com/noonnofus/PageSsence"
@@ -47,20 +54,20 @@ export default function AppProjcetPageSsence() {
                         target="_blank"
                     >
                         <Icon as={FaGithub} boxSize={5} />
-                        Source Code <ExternalLinkIcon />
+                        {t('common:sourceCode')} <ExternalLinkIcon />
                     </Link>
                     <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
                         <Box className="mb-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
-                                Overview
+                                {t('common:overview')}
                             </Heading>
                             <Text mt={1} fontSize="sm" color="gray.600">
-                                📌 <b>Project Type:</b> Solo Project
+                                📌 <b>{t('common:projectType')}:</b> {t('common:soloProject')}
                             </Text>
                             <Text mt={2}>
-                                PageSsence is a community-driven book review platform I created to help people discover, share, and connect through books. It allows users to browse a wide range of titles, read real opinions from other readers, leave thoughtful reviews, and rate books with a simple star system.
+                                {t('description')}
                                 <Text mt={1}>
-                                    My goal was to make reading more interactive and meaningful by building a space where book lovers can express their perspectives and find inspiration in others&#39;.
+                                    {t('descriptionContinued')}
                                 </Text>
                             </Text>
                         </Box>
@@ -73,21 +80,21 @@ export default function AppProjcetPageSsence() {
 
                         <Box className="mb-6 mt-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
-                                Key Features
+                                {t('common:keyFeatures')}
                             </Heading>
 
                             <List.Root mt={4} ps={4} gap={3} className="text-gray-700">
                                 <List.Item>
-                                    <strong>Book Browsing & Search:</strong> Users can explore a curated collection of books and search titles using keyword-based filtering.
+                                    <strong>{t('bookBrowsingSearch')}:</strong> {t('bookBrowsingSearchDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>Interactive Reviews & Ratings:</strong> Logged-in users can leave detailed reviews and rate books with a 5-star system, all managed through a dynamic modal interface.
+                                    <strong>{t('interactiveReviewsRatings')}:</strong> {t('interactiveReviewsRatingsDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>Role-Based Access Control:</strong> Admin users can add, edit, or delete books, while regular users can only leave reviews and view content.
+                                    <strong>{t('roleBasedAccessControl')}:</strong> {t('roleBasedAccessControlDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>Modern Stack & UI:</strong> Built with Laravel, Vue.js, Inertia.js, and styled using PrimeVue components for a clean, responsive, and intuitive interface.
+                                    <strong>{t('modernStackUI')}:</strong> {t('modernStackUIDesc')}
                                 </List.Item>
                             </List.Root>
                         </Box>

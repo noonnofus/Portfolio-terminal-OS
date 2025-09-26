@@ -1,0 +1,21 @@
+{
+    "title": "WeConnect - The video conferencing app with a real-time translating",
+    "linkAction": "See WeConnect",
+
+    "description": "WeConnect is a video conferencing app that my team and I built with a real-time translation feature to help people overcome language barriers during online meetings. We designed it with international students in mind—especially those who work with classmates who speak different languages.",
+
+    "myRoleDescription": "As a Full-Stack Web Developer, I was responsible for architecting and implementing core features of the WeConnect application.",
+    "realtimeTranslation": "Real-Time Translation",
+    "realtimeTranslationDesc": "Integrated live speech-to-text and translation services, allowing multilingual participants to communicate seamlessly during video calls.",
+    "videoChatInfrastructure": "Video Chat Infrastructure",
+    "videoChatInfrastructureDesc": "Built a secure and scalable WebRTC-based video chat system that supports group and one-on-one conversations.",
+    "userInterfaceUX": "User Interface & UX",
+    "userInterfaceUXDesc": "Designed an intuitive frontend for joining meetings, selecting languages, and viewing live translated subtitles, enhancing accessibility and ease of use.",
+    "authenticationRoomManagement": "Authentication & Room Management",
+    "authenticationRoomManagementDesc": "Implemented user login, room creation, and participant tracking to ensure smooth meeting workflows and secure access control.",
+
+    "backendDatabase": "Backend & Database",
+    "realtimeCommunication": "Real-Time Communication",
+    "apis": "APIs",
+    "deploymentTools": "Deployment & Tools"
+}

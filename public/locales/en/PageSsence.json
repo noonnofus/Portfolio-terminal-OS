@@ -1,0 +1,17 @@
+{
+    "title": "PageSsence - The Book Review Platform",
+    "linkAction": "See PageSsence",
+
+    "description": "PageSsence is a community-driven book review platform I created to help people discover, share, and connect through books. It allows users to browse a wide range of titles, read real opinions from other readers, leave thoughtful reviews, and rate books with a simple star system.",
+    "descriptionContinued": "My goal was to make reading more interactive and meaningful by building a space where book lovers can express their perspectives and find inspiration in others'.",
+
+    "bookBrowsingSearch": "Book Browsing & Search",
+    "bookBrowsingSearchDesc": "Users can explore a curated collection of books and search titles using keyword-based filtering.",
+    "interactiveReviewsRatings": "Interactive Reviews & Ratings",
+    "interactiveReviewsRatingsDesc": "Logged-in users can leave detailed reviews and rate books with a 5-star system, all managed through a dynamic modal interface.",
+    "roleBasedAccessControl": "Role-Based Access Control",
+    "roleBasedAccessControlDesc": "Admin users can add, edit, or delete books, while regular users can only leave reviews and view content.",
+    "modernStackUI": "Modern Stack & UI",
+    "modernStackUIDesc": "Built with Laravel, Vue.js, Inertia.js, and styled using PrimeVue components for a clean, responsive, and intuitive interface.",
+    "otherTools": "Other Tools"
+}

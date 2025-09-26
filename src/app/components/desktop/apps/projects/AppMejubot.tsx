@@ -3,8 +3,15 @@ import { SiJavascript, SiDiscord, SiMongodb, SiPubg, } from "react-icons/si"
 import { FaPlayCircle, FaMicrophoneAlt, FaGithub } from "react-icons/fa"
 import StackIcon from "../layout/StackIcon";
 import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
+import { useTranslation } from 'react-i18next';
+import { Language } from "@/app/store/features/languageSlice";
 
-export default function AppProjcetMejubot() {
+interface AppProjectMejubotProps {
+    language: Language;
+}
+
+export default function AppProjcetMejubot({ language }: AppProjectMejubotProps) {
+    const { t } = useTranslation(['Mejubot', 'common']);
     return (
         <div
             style={{
@@ -21,7 +28,7 @@ export default function AppProjcetMejubot() {
                     className="mt-8 mb-3"
                 >
                     <Heading size="lg" className="font-bold text-3xl text-gray-800 mb-6">
-                        <Text>MejuBot — Music, Stats, and More in One Discord Bot</Text>
+                        <Text>{t('title')}</Text>
                     </Heading>
 
                     <Image
@@ -38,18 +45,18 @@ export default function AppProjcetMejubot() {
                         mb={4}
                         target="_blank"
                     >
-                        Add Mejubot on your Discord server<ExternalLinkIcon />
+                        {t('linkAction')}<ExternalLinkIcon />
                     </Link>
                     <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
                         <Box className="mb-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
-                                Overview
+                                {t('common:overview')}
                             </Heading>
                             <Text mt={1} fontSize="sm" color="gray.600">
-                                📌 <b>Project Type:</b> Solo Project
+                                📌 <b>{t('common:projectType')}:</b> {t('common:soloProject')}
                             </Text>
                             <Text mt={2}>
-                                MejuBot is an all-in-one server companion I built to make Discord communities more interactive, engaging, and fun. Officially verified by Discord, it lets users stream music, check PUBG stats, and enjoy mini-games like stock market simulations. I focused on seamless integration and powerful features to enhance the overall user experience.
+                                {t('description')}
                             </Text>
                         </Box>
 
@@ -61,21 +68,21 @@ export default function AppProjcetMejubot() {
 
                         <Box className="mb-6 mt-6">
                             <Heading size="md" className="font-semibold text-xl text-gray-800">
-                                Key Features
+                                {t('common:keyFeatures')}
                             </Heading>
 
                             <List.Root mt={4} ps={4} gap={3} className="text-gray-700">
                                 <List.Item>
-                                    <strong>YouTube Music Playback:</strong> Stream music from YouTube directly into your voice channels using <u>discord-player</u> and <u>@discordjs/opus</u>.
+                                    <strong>{t('youtubeMusicPlayback')}:</strong> {t('youtubeMusicPlaybackDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>PUBG Stats Integration:</strong> Fetch and display real-time PUBG player statistics through external APIs.
+                                    <strong>{t('pubgStatsIntegration')}:</strong> {t('pubgStatsIntegrationDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>Virtual Stock Market Game:</strong> Engage users with a simulated stock trading game, complete with real-time updates and leaderboard tracking.
+                                    <strong>{t('virtualStockMarketGame')}:</strong> {t('virtualStockMarketGameDesc')}
                                 </List.Item>
                                 <List.Item>
-                                    <strong>Multi-language Support:</strong> Users can set their preferred language, and all commands and responses adapt dynamically.
+                                    <strong>{t('multiLanguageSupport')}:</strong> {t('multiLanguageSupportDesc')}
                                 </List.Item>
                             </List.Root>
                         </Box>
@@ -91,14 +98,14 @@ export default function AppProjcetMejubot() {
                                 Tech Stack
                             </Heading>
 
-                            <Heading mt={6} mb={2} className="text-lg font-semibold">Bot Framework</Heading>
+                            <Heading mt={6} mb={2} className="text-lg font-semibold">{t('botFramework')}</Heading>
                             <SimpleGrid columns={3} gap={5} mb={12}>
                                 <StackIcon label="Discord.js" icon={SiDiscord} color="#5865F2" />
                                 <StackIcon label="discord-player" icon={FaPlayCircle} color="#FF5722" />
                                 <StackIcon label="discordjs/opus" icon={FaMicrophoneAlt} color="#2D3748" />
                             </SimpleGrid>
 
-                            <Heading mt={6} mb={2} className="text-lg font-semibold">APIs & Features</Heading>
+                            <Heading mt={6} mb={2} className="text-lg font-semibold">{t('apisFeatures')}</Heading>
                             <SimpleGrid columns={3} gap={5} mb={12}>
                                 <StackIcon label="PUBG API" icon={SiPubg} color="black" />
                             </SimpleGrid>
@@ -108,12 +115,12 @@ export default function AppProjcetMejubot() {
                                 <StackIcon label="JavaScript" icon={SiJavascript} color="#f7df1e" />
                             </SimpleGrid>
 
-                            <Heading mt={6} mb={2} className="text-lg font-semibold">Database & Auth</Heading>
+                            <Heading mt={6} mb={2} className="text-lg font-semibold">{t('databaseAuth')}</Heading>
                             <SimpleGrid columns={3} gap={5} mb={12}>
                                 <StackIcon label="MongoDB" icon={SiMongodb} color="#47A248" />
                             </SimpleGrid>
 
-                            <Heading mt={6} mb={2} className="text-lg font-semibold">Deployment & Tools</Heading>
+                            <Heading mt={6} mb={2} className="text-lg font-semibold">{t('deploymentTools')}</Heading>
                             <SimpleGrid columns={3} gap={5} mb={6}>
                                 <StackIcon label="GitHub" icon={FaGithub} color="black" />
                             </SimpleGrid>

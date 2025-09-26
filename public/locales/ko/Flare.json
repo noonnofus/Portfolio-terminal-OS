@@ -1,0 +1,21 @@
+{
+    "title": "Flare - 실시간 산불 경보 시스템",
+    "linkAction": "Flare 보기",
+
+    "description": "캐나다는 한국과 다르게 산불이 자주 일어납니다. 특히, 겨울엔 그 정도가 심해 매년 평균 411만 ha(헥타르)가 불에 타는 등 심각한 피해를 입고 있습니다. Flare는 이러한 정보를 쉽게 얻기 힘든 캐나다 시골 지역 사회가 실시간 산불 정보에 쉽게 접근할 수 있도록 도와주기 위해 구축된 플랫폼입니다. 이 앱은 현재 산불 위치, 위험 수준 지표, 최신 산불 관련 뉴스를 표시하는 기능을 가지고 있습니다. 또한, 앱에 있는 기능들로 충분한 정보를 얻을수 없는 경우를 위해 사용자의 산불 관련 질문에만 답하는 챗봇을 개발했으며 접근성을 위해 앱이 모바일과 데스크톱 기기 모두에 설치 가능하도록 했습니다.",
+
+    "myRoleDescription": "풀스택 개발자로서 다음 주요 기능을 설계하고 구현했습니다:",
+    "pwaIntegration": "PWA 통합",
+    "pwaIntegrationDesc": "Nextjs PWA를 이용하여 마치 apk 앱과 같이 안드로이드와 iOS 모두에서 브라우저로부터 앱을 설치할 수 있도록 하여 오프라인 접근과 네이티브와 같은 경험을 지원했습니다. 이러한 경험은 쉽게 언제 어디서든 산불에 대한 정보를 얻을 수 있게끔 만들었습니다.",
+    "chatbotDevelopment": "챗봇 개발",
+    "chatbotDevelopmentDesc": "사용자가 산불 관련 질문을 하고 OpenAI API를 통하여 즉시 관련된 응답을 받을 수 있는 AI 기반 챗봇을 구축했습니다. 해당 봇은 오직 산불 관련된 질문에만 답변을 할수 있도록 프롬프팅 되어있습니다.",
+    "realtimeNotifications": "실시간 알림",
+    "realtimeNotificationsDesc": "사용자의 위치 근처 산불 위협에 대해 실시간으로 경고하는 푸시 알림을 구현했습니다.",
+
+    "backendDatabase": "백엔드 및 데이터베이스",
+    "cloudAPIs": "클라우드 및 API",
+    "pwaRealtime": "PWA 및 실시간",
+
+    "appWalkthroughDescription": "",
+    "videoNotSupported": "브라우저가 비디오 태그를 지원하지 않습니다."
+}
