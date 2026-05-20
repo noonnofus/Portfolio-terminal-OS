@@ -16,7 +16,7 @@ interface AppContactProps {
     language: Language;
 }
 
-export default function AppContact({ language }: AppContactProps) {
+export default function AppContact({}: AppContactProps) {
     const { t } = useTranslation(["Contact", "common"]);
     return (
         <div

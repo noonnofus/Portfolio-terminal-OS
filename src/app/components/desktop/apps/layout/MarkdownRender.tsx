@@ -3,13 +3,7 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import AppDesktopHeader from "./AppDesktopHeader";
-import useIsTouchDevice from "@/lib/isTouchDevice";
-import { useState } from "react";
-
-export default function MarkdownRender({ markdownText, title, appName }: { markdownText: string, title: string, appName: string }) {
-    const isTouchDevice = useIsTouchDevice();
-
+export default function MarkdownRender({ markdownText }: { markdownText: string, title: string, appName: string }) {
     return (
         <>
             <div style={{
@@ -24,10 +18,10 @@ export default function MarkdownRender({ markdownText, title, appName }: { markd
                     className="react-markdown p-5"
                     rehypePlugins={[rehypeRaw]}
                     components={{
-                        p: ({ node, ...props }) => <p style={{ color: "black" }} {...props} />,
-                        h2: ({ node, ...props }) => <h2 style={{ color: "black" }} {...props} />,
-                        li: ({ node, ...props }) => <li style={{ color: "black" }} {...props} />,
-                        div: ({ node, ...props }) => (
+                        p: ({ node: _node, ...props }) => <p style={{ color: "black" }} {...props} />, // eslint-disable-line @typescript-eslint/no-unused-vars
+                        h2: ({ node: _node, ...props }) => <h2 style={{ color: "black" }} {...props} />, // eslint-disable-line @typescript-eslint/no-unused-vars
+                        li: ({ node: _node, ...props }) => <li style={{ color: "black" }} {...props} />, // eslint-disable-line @typescript-eslint/no-unused-vars
+                        div: ({ node: _node, ...props }) => ( // eslint-disable-line @typescript-eslint/no-unused-vars
                             <div style={{ position: 'relative', zIndex: 2, color: "black" }} {...props} />
                         )
                     }}

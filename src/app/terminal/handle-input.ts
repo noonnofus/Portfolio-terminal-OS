@@ -1,14 +1,13 @@
 "use client";
 
 import { MutableRefObject } from "react";
-import { Terminal } from "xterm";
+import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import commands from "../command";
 import writeText from "./write-text";
 import shutDown from "./shut-down";
 import { isQuestion } from "./global-state";
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import useIsTouchDevice from "@/lib/isTouchDevice";
 
 const handleInput = (
   term: MutableRefObject<Terminal | null>,
@@ -18,7 +17,8 @@ const handleInput = (
   terminalRef: MutableRefObject<HTMLDivElement | null>,
   fitAddon: MutableRefObject<FitAddon | null>,
   router: AppRouterInstance,
-  pathname: string
+  pathname: string,
+  isTouchDevice: boolean
 ) => {
   if (!term.current) return;
 
@@ -38,7 +38,8 @@ const handleInput = (
       terminalRef,
       fitAddon,
       router,
-      pathname
+      pathname,
+      isTouchDevice
     );
   } else if (char === 127) {
     // Backspace key
@@ -59,10 +60,10 @@ const processCommand = async (
   terminalRef: MutableRefObject<HTMLDivElement | null>,
   fitAddon: MutableRefObject<FitAddon | null>,
   router: AppRouterInstance,
-  pathname: string
+  pathname: string,
+  isTouchDevice: boolean
 ) => {
   if (!term.current) return;
-  const IsTouchDevice = useIsTouchDevice();
   const cmd = inputRef.current.trim();
 
   term.current.write("\r\n");
@@ -80,7 +81,7 @@ const processCommand = async (
     term.current.write(" guest@noonofus.com ~ % ");
   } else if (cmd === "reboot") {
     term.current.clear();
-    writeText(term, isAnimating, IsTouchDevice);
+    writeText(term, isAnimating, isTouchDevice);
   } else if (cmd === "shutdown") {
     term.current.clear();
 

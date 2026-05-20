@@ -1,5 +1,5 @@
 import { MutableRefObject } from "react";
-import { Terminal } from "xterm";
+import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import writeText from "./write-text";
 import { setQuestion, isQuestion } from "./global-state";

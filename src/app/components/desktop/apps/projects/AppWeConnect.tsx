@@ -7,7 +7,6 @@ import {
     SimpleGrid,
     Box,
     List,
-    Icon,
 } from "@chakra-ui/react";
 import { Tooltip as ChakraTooltip } from "@/components/ui/tooltip";
 import {
@@ -33,9 +32,7 @@ interface AppProjectWeConnectProps {
     language: Language;
 }
 
-export default function AppProjcetWeConnect({
-    language,
-}: AppProjectWeConnectProps) {
+export default function AppProjcetWeConnect({}: AppProjectWeConnectProps) {
     const { t } = useTranslation(["WeConnect", "common"]);
     return (
         <div

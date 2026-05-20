@@ -10,7 +10,7 @@ interface AppProjectFlareProps {
     language: Language;
 }
 
-export default function AppProjcetFlare({ language }: AppProjectFlareProps) {
+export default function AppProjcetFlare({}: AppProjectFlareProps) {
     const { t } = useTranslation(['Flare', 'common']);
     return (
         <div

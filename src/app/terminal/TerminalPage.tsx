@@ -1,8 +1,7 @@
 'use client';
 
-import { Terminal } from 'xterm';
+import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
-import 'xterm/css/xterm.css';
 import { useEffect, useRef } from 'react';
 import writeText from './write-text';
 import handleInput from './handle-input';
@@ -85,7 +84,7 @@ export default function TerminalPage() {
             if (term.current) {
                 term.current.onData((data) => {
                     if (!isAnimating.current && term.current && isComponentMounted) {
-                        handleInput(term, inputRef, data, isAnimating, terminalRef, fitAddon, router, pathname);
+                        handleInput(term, inputRef, data, isAnimating, terminalRef, fitAddon, router, pathname, isTouchDevice);
                     }
                 });
             }

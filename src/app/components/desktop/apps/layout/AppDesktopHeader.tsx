@@ -5,7 +5,6 @@ import { IoCloseCircle } from "react-icons/io5";
 import { BiFullscreen, BiExitFullscreen } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { closeApp } from "@/app/store/features/desktopSlice";
-import useIsTouchDevice from "@/lib/isTouchDevice";
 
 export default function AppDesktopHeader({
     appName,
@@ -18,7 +17,6 @@ export default function AppDesktopHeader({
     isFullScreen: boolean;
     setIsFullScreen: (val: boolean) => void;
 }) {
-    const isTouchDevice = useIsTouchDevice();
     const dispatch = useDispatch();
 
     return (
