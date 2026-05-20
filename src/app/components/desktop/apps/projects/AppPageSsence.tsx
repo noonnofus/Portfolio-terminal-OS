@@ -10,7 +10,7 @@ interface AppProjectPageSsenceProps {
     language: Language;
 }
 
-export default function AppProjcetPageSsence({ language }: AppProjectPageSsenceProps) {
+export default function AppProjcetPageSsence({}: AppProjectPageSsenceProps) {
     const { t } = useTranslation(['PageSsence', 'common']);
     return (
         <div

@@ -18,7 +18,7 @@ interface AppAboutSiteProps {
     language: Language;
 }
 
-export default function AppAboutSite({ language }: AppAboutSiteProps) {
+export default function AppAboutSite({}: AppAboutSiteProps) {
     const { t } = useTranslation(['AboutSite', 'common']);
     return (
         <div className="my-8 mx-4 md:mx-36">

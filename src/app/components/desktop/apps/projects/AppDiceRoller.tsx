@@ -11,7 +11,7 @@ interface AppProjectDiceRollerProps {
     language: Language;
 }
 
-export default function AppProjcetDiceRoller({ language }: AppProjectDiceRollerProps) {
+export default function AppProjcetDiceRoller({}: AppProjectDiceRollerProps) {
     const { t } = useTranslation(['DiceRoller', 'common']);
     return (
         <div

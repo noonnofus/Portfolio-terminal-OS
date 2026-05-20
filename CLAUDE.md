@@ -33,26 +33,29 @@ Redux Provider → I18nextProvider → ChakraProvider → I18nWrapper (syncs Red
 
 ### Terminal System (`src/app/terminal/`)
 
-xterm.js with FitAddon. Flow: `TerminalPage` → `write-text.ts` (animated typing) → `handle-input.ts` (command parsing). `global-state.ts` holds terminal state. Typing `gui` navigates to `/gui`.
+@xterm/xterm (formerly xterm.js) with FitAddon. Flow: `TerminalPage` → `write-text.ts` (animated typing) → `handle-input.ts` (command parsing). `global-state.ts` holds terminal state. Typing `gui` navigates to `/gui`.
 
 ### Desktop App System
 
-Apps are defined as objects (`iconName`, `appName`, `title`, `component`) in `src/lib/apps.tsx` and `src/lib/projectsApps.tsx`, combined via `allApps.tsx`. Redux tracks which apps are open/focused. Desktop renders draggable windows (Framer Motion); mobile renders a touch-friendly folder view. Device detection via `src/lib/isTouchDevice.ts` hook.
+Apps are defined as objects (`iconName`, `appName`, `title`, `component`) in `src/lib/apps.tsx` and `src/lib/projectsApps.tsx`, combined via `allApps.tsx`. Redux tracks which apps are open/focused. `DesktopAppWindow` (`src/app/components/desktop/DesktopAppWindow.tsx`) is the standard container for windowed apps, handling dragging, focus, and fullscreen logic via Framer Motion. Mobile renders a touch-friendly folder view. Device detection via `src/lib/isTouchDevice.ts` hook.
 
 ### i18n (`src/lib/i18n.ts`)
 
 react-i18next with 11 JSON namespaces per language under `public/locales/{ko,en}/`. Components use `useTranslation(['namespace', 'common'])`. Language switch dispatches to Redux which syncs to i18next via `I18nWrapper`.
 
-### Styling
+### Styling & Security
 
-Tailwind CSS (primary) + Chakra UI (component library) + component-specific CSS in `src/app/styles/`. CSS variables `--background`/`--foreground` for theming. Path alias: `@/*` → `src/*`.
+- **Styling**: Tailwind CSS (primary) + Chakra UI (component library) + component-specific CSS in `src/app/styles/`.
+- **Security**: Hardened headers (CSP-lite, Frame Options, etc.) in `next.config.ts`.
+- **Path Alias**: `@/*` → `src/*`.
 
 ## Key Conventions
 
-- ESLint and TypeScript errors are ignored during builds (`next.config.ts`) — they still run via `npm run lint`
-- Chakra UI imports are optimized via `experimental.optimizePackageImports`
-- Desktop apps follow a consistent pattern: use `AppDesktopHeader` for window chrome, `MarkdownRender` for content, `StackIcon` for tech badges
-- Touch vs desktop rendering is decided at the `DesktopMainView` level, not per-component
+- **Window Management**: Always wrap desktop apps in `DesktopAppWindow` for consistent OS behavior.
+- **Builds**: ESLint and TypeScript errors are ignored during builds (`next.config.ts`) — they still run via `npm run lint`.
+- **Performance**: Chakra UI imports are optimized via `experimental.optimizePackageImports`.
+- **AI Hygiene**: `.claude/`, `.gemini/`, and `.serena/` directories are ignored via `.gitignore`.
+- **Components**: Use `AppDesktopHeader` for window chrome, `MarkdownRender` for content, `StackIcon` for tech badges.
 
 ## Skill routing
 
@@ -66,7 +69,9 @@ Key routing rules:
 - Ship, deploy, push, create PR → invoke ship
 - QA, test the site, find bugs → invoke qa
 - Code review, check my diff → invoke review
-- Update docs after shipping → invoke document-release
+- Update ARCHITECTURE.md → invoke architecture-update
+- Update CLAUDE.md or other docs → invoke md-update
+- Feature development finished, wrap up, finalize → invoke feature-finalize
 - Weekly retro → invoke retro
 - Design system, brand → invoke design-consultation
 - Visual audit, design polish → invoke design-review

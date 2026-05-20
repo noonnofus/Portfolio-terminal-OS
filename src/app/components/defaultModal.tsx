@@ -66,7 +66,7 @@ export default function DefaultModal() {
                                     <RadioCard.ItemHiddenInput />
                                     <RadioCard.ItemControl className="flex flex-col items-center justify-center w-full">
                                         <RadioCard.ItemContent className="w-full text-center">
-                                            <RadioCard.ItemText>No, I'm not.</RadioCard.ItemText>
+                                            <RadioCard.ItemText>No, I&apos;m not.</RadioCard.ItemText>
                                         </RadioCard.ItemContent>
                                     </RadioCard.ItemControl>
                                 </RadioCard.Item>

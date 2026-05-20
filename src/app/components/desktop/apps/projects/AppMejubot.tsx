@@ -10,7 +10,7 @@ interface AppProjectMejubotProps {
     language: Language;
 }
 
-export default function AppProjcetMejubot({ language }: AppProjectMejubotProps) {
+export default function AppProjcetMejubot({}: AppProjectMejubotProps) {
     const { t } = useTranslation(['Mejubot', 'common']);
     return (
         <div

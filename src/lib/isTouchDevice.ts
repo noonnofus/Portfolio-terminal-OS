@@ -21,7 +21,7 @@ function isTouchDevice() {
 
   if (
     "ontouchstart" in window ||
-    // @ts-ignore
+    // @ts-expect-error: DocumentTouch is a legacy non-standard property
     (window?.DocumentTouch && document instanceof DocumentTouch)
   ) {
     return true;

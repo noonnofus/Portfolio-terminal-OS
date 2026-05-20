@@ -1,7 +1,5 @@
-let ascii: string[] = [];
-
 export default function chooseASCII(isTouch: boolean) {
-  return (ascii = isTouch
+  return isTouch
     ? [
         // prettier-ignore
         "__ _  ____  _  _  __  __ _ ",
@@ -37,5 +35,5 @@ export default function chooseASCII(isTouch: boolean) {
         ` `,
         ` `,
         ` `,
-      ]);
+      ];
 }

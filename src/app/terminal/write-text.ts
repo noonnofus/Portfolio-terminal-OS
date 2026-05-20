@@ -1,5 +1,5 @@
 import { MutableRefObject } from "react";
-import { Terminal } from "xterm";
+import { Terminal } from "@xterm/xterm";
 import chooseASCII from "@/lib/ascii";
 
 let ascii: string[];

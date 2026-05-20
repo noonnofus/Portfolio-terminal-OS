@@ -11,7 +11,7 @@ interface AppProjectWebPianoProps {
     language: Language;
 }
 
-export default function AppProjcetWebPiano({ language }: AppProjectWebPianoProps) {
+export default function AppProjcetWebPiano({}: AppProjectWebPianoProps) {
     const { t } = useTranslation(['WebPiano', 'common']);
     return (
         <div

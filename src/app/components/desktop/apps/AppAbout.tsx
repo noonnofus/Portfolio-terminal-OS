@@ -21,7 +21,7 @@ interface AppAboutProps {
     language: Language;
 }
 
-export default function AppAbout({ language }: AppAboutProps) {
+export default function AppAbout({}: AppAboutProps) {
     const { t } = useTranslation(['About', 'common']);
     return (
         <div

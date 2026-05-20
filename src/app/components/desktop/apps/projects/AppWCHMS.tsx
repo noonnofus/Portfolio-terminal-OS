@@ -36,7 +36,7 @@ interface AppProjectWCHMSProps {
     language: Language;
 }
 
-export default function AppProjcetWCHMS({ language }: AppProjectWCHMSProps) {
+export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
     const { t } = useTranslation(["WCHMS", "common"]);
     return (
         <div

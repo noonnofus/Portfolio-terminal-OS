@@ -1,8 +1,6 @@
 'use client';
 
-import AppDesktopHeader from "./layout/AppDesktopHeader";
 import dynamic from 'next/dynamic';
-import { useState } from "react";
 
 const TerminalPage = dynamic(() => import("@/app/terminal/TerminalPage"), { ssr: false });
 

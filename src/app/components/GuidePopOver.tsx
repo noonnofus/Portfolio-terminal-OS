@@ -41,7 +41,7 @@ export default function GuidePopOver() {
                                 <p>🧩 Feel free to drag icons around — it works on both mobile and desktop, just like a real OS.</p>
                             )}
                             {step === 4 && (
-                                <p>📁 Not sure where to start? Try opening the "Projects" app to explore everything I've worked on.</p>
+                                <p>📁 Not sure where to start? Try opening the &quot;Projects&quot; app to explore everything I&apos;ve worked on.</p>
                             )}
                         </Popover.Body>
                         <Popover.Footer className="flex justify-between items-center">
