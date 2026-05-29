@@ -1,14 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-    eslint: {
-        ignoreDuringBuilds: true,
-    },
+    reactCompiler: true,
     typescript: {
         ignoreBuildErrors: true,
     },
     experimental: {
-        reactCompiler: true,
         optimizePackageImports: ["@chakra-ui/react"],
     },
     async headers() {
