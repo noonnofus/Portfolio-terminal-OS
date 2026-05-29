@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
         ignoreBuildErrors: true,
     },
     experimental: {
+        reactCompiler: true,
         optimizePackageImports: ["@chakra-ui/react"],
     },
     async headers() {
