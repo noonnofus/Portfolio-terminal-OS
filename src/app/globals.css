@@ -1,6 +1,26 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Pretendard", sans-serif;
+  
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --color-primary-light: #60A5FA;
+  --color-primary: #3B82F6;
+  --color-primary-dark: #1D4ED8;
+  
+  --color-terminal-bg: #000000;
+  --color-terminal-fg: #3CD607;
+  
+  --color-mac-close: #FF605C;
+  --color-mac-minimize: #FFBD2E;
+  --color-mac-maximize: #00CA4E;
+  
+  --color-glass-bg: #4B556333;
+  --color-glass-border: #0000001A;
+}
 
 :root {
   --background: #ffffff;
