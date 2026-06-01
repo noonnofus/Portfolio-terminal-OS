@@ -1,0 +1,16 @@
+## 2. Architecture & Directory Structure
+- **3-Layer FSD Architecture**: `app/`, `features/`, `shared/` 계층 구조를 엄격히 준수합니다.
+- **Naming Conventions**:
+    - **Slices/Domain Folders**: `PascalCase` 사용 (예: `Terminal`, `About`, `Desktop`, `Layout`).
+    - **Technical Sub-folders**: `lowercase` 사용 (예: `components`, `hooks`, `lib`, `ui`, `stores`).
+    - **Components**: `PascalCase`.
+    - **Hooks**: `camelCase` (`use` 접두사).
+- **Encapsulation**:
+    - 모든 비즈니스 로직(앱, 기능 단위)은 폴더 단위로 캡슐화되어야 합니다.
+    - `features/apps/` 내의 모든 앱은 폴더 형태여야 하며, `index.ts` (Barrel Export)를 통해서만 외부에 노출합니다.
+- **Component Placement**:
+    - **Shared UI**: 원자(Atom) 단위의 범용 컴포넌트는 `src/shared/ui/`에 위치합니다.
+    - **Shared Components**: 여러 도메인에서 재사용되는 복합 컴포넌트(`MarkdownRender`, `StackIcon` 등)는 `src/shared/components/`에 위치합니다.
+    - **Feature Components**: 특정 도메인 전용 UI는 해당 도메인의 `components/` 폴더에 위치합니다.
+- **Dependency Flow**: `shared` → `features` → `app` 순으로만 의존성을 허용합니다. (Shared는 절대로 다른 계층을 import 할 수 없습니다.)
+- **Cleanup**: 사용하지 않는 빈 폴더(`src/components`, `src/app/components` 등) 및 중복 계층은 발견 즉시 제거합니다.
