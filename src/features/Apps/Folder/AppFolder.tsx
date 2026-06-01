@@ -1,0 +1,76 @@
+import { Flex } from "@chakra-ui/react";
+import ProjectsApps from "@/features/Apps/Config/projectsApps";
+import React from "react";
+import { motion } from "framer-motion";
+import { useDesktopStore } from "@/features/Desktop/store/useDesktopStore";
+import { DesktopIcon } from "@/features/Desktop/components/DesktopIcon";
+import "@/shared/styles/touchFolderLayout.css";
+import { useRef } from "react";
+
+export default function AppFolder() {
+    const focusApp = useDesktopStore((state) => state.focusApp);
+    const isTouchDevice = useDesktopStore((state) => state.isTouchDevice);
+    const setFocusApp = useDesktopStore((state) => state.setFocusApp);
+    const setActiveApp = useDesktopStore((state) => state.setActiveApp);
+
+    const dragAreaRef = useRef<HTMLDivElement>(null);
+
+    return (
+        <div
+            style={{
+                width: '100%',
+                height: '100%',
+                flexGrow: 1,
+                overflow: "scroll",
+                color: 'black',
+                borderRadius: 8,
+            }}
+            ref={dragAreaRef}
+        >
+            <Flex flexWrap="wrap" h="100%">
+                {ProjectsApps().map((app, i) => (
+                    <motion.div
+                        key={`touchview-${app.appName}`}
+                        drag
+                        dragElastic={0}
+                        dragTransition={{ power: 0 }}
+                        dragConstraints={dragAreaRef}
+                        style={{
+                            position: "absolute",
+                            zIndex: focusApp === app.appName ? 10 : 1,
+                            cursor: "grab",
+                        }}
+                        className={`app-initial-position ${isTouchDevice ? `folder-app-${i + 1}` : `app-${i + 1}`}`}
+
+                    >
+                        {isTouchDevice ? (
+                            <DesktopIcon
+                                iconName={app.iconName}
+                                isFocused={focusApp === app.appName}
+                                onClick={() => {
+                                    setFocusApp(app.appName);
+                                    setActiveApp(app.appName);
+                                }}
+                                title={app.title}
+                            />
+
+                        ) : (
+                            <DesktopIcon
+                                iconName={app.iconName}
+                                isFocused={focusApp === app.appName}
+                                onClick={() => {
+                                    setFocusApp(app.appName);
+                                }}
+                                onDoubleClick={() => {
+                                    setFocusApp(app.appName);
+                                    setActiveApp(app.appName);
+                                }}
+                                title={app.title}
+                            />
+                        )}
+                    </motion.div>
+                ))}
+            </Flex>
+        </div>
+    );
+}
