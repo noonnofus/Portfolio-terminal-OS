@@ -2,13 +2,21 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "@xterm/xterm/css/xterm.css";
 import ClientProvider from "./ClientProvider";
+import localFont from "next/font/local";
+
+const pretendard = localFont({
+  src: "../../public/fonts/PretendardVariable.woff2",
+  display: "swap",
+  weight: "45 920",
+  variable: "--font-pretendard",
+});
 
 export const metadata: Metadata = {
   title: "HyunHo Portfolio",
   description: "This is a Kevin's portfolio website. Thank you for visiting.",
   icons: {
-    icon: '/images/favicon.png'
-  }
+    icon: "/images/favicon.png",
+  },
 };
 
 export default function RootLayout({
@@ -17,14 +25,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`antialiased font-sans`}
-        suppressHydrationWarning
-      >
-        <ClientProvider>
-          {children}
-        </ClientProvider>
+    <html lang="en" className={pretendard.variable} suppressHydrationWarning>
+      <body className={pretendard.className} suppressHydrationWarning>
+        <ClientProvider>{children}</ClientProvider>
       </body>
     </html>
   );
