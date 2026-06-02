@@ -1,4 +1,3 @@
-import { Flex, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { MutableRefObject } from "react";
 
@@ -44,26 +43,22 @@ export function DesktopIcon({
                 backgroundColor: `${bgColor}`
             }}
         >
-            <Flex
-                w="55px"
-                h="55px"
-                p="5px"
-                m={isMobileIcon ? "5px" : "0"}
-                backgroundImage={`url(/icons/${iconName})`}
-                backgroundSize="100%"
-                backgroundRepeat="no-repeat"
+            <div
+                className={`w-[55px] h-[55px] p-[5px] ${isMobileIcon ? 'm-[5px]' : 'm-0'}`}
+                style={{
+                    backgroundImage: `url(/icons/${iconName})`,
+                    backgroundSize: '100%',
+                    backgroundRepeat: 'no-repeat',
+                }}
             />
-            <Text
-                fontSize="12px"
-                fontWeight="600"
-                textAlign="center"
-                color="#FFFFFF"
-                textShadow="1px 1px 1px black"
-                w="100%"
-                className="text-center"
+            <p
+                className="text-[12px] font-semibold text-center text-white w-full"
+                style={{
+                    textShadow: '1px 1px 1px black',
+                }}
             >
                 {title}
-            </Text>
+            </p>
         </motion.div>
     );
 }

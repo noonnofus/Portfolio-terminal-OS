@@ -8,13 +8,7 @@ export default function AppTerminal() {
 
     return (
         <div
-            style={{
-                width: '100%',
-                height: '100%',
-                overflow: "scroll",
-                backgroundColor: "white",
-                borderRadius: "0 0 8px 8px",
-            }}
+            className="w-full h-full overflow-hidden bg-black rounded-b-lg"
         >
             <TerminalPage />
         </div>

@@ -3,8 +3,6 @@
 import React from "react";
 import { motion, useDragControls } from "framer-motion";
 import { useDesktopStore } from "@/features/Desktop/store/useDesktopStore";
-
-import { Box } from "@chakra-ui/react";
 import AppDesktopHeader from "./AppDesktopHeader";
 
 interface AppDefinition {
@@ -55,15 +53,11 @@ export const DesktopAppWindow: React.FC<DesktopAppWindowProps> = ({
             style={{
                 position: "absolute",
                 zIndex: isFocused ? 10 : 1,
-                border: "0.3px solid gray",
                 borderRadius: "9px",
                 width: isFullScreen ? "100vw" : width,
                 height: isFullScreen ? "100vh" : height,
-                backgroundColor: "white",
-                display: "flex",
-                flexDirection: "column",
             }}
-            className="border-black"
+            className="border-[0.3px] border-gray-500 bg-white flex flex-col overflow-hidden"
             onPointerDown={(e) => {
                 setFocusApp(app.appName);
                 if (onPointerDown) onPointerDown(e);
@@ -77,9 +71,9 @@ export const DesktopAppWindow: React.FC<DesktopAppWindowProps> = ({
                     setIsFullScreen={() => toggleFullscreen(app.appName)}
                 />
             </div>
-            <Box flex="1" overflow="auto">
+            <div className="flex-1 overflow-auto">
                 {app.component}
-            </Box>
+            </div>
         </motion.div>
     );
 };

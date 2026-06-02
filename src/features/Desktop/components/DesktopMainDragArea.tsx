@@ -1,7 +1,6 @@
 "use client";
 
-import { Flex, Box } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import DesktopApps from "@/features/Apps/Config/apps";
 import allApps from "@/features/Apps/Config/allApps";
 import { DesktopIcon } from "./DesktopIcon";
@@ -25,9 +24,15 @@ export default function DesktopMainDragArea() {
     const [fullscreenStates, setFullscreenStates] = useState<
         Record<string, boolean>
     >({});
-    const [openAppPositions, setOpenAppPositions] = useState<
-        Record<string, Position>
-    >({});
+    const openAppPositions = useMemo(
+        () =>
+            openApps.reduce<Record<string, Position>>((positions, appName, index) => {
+                const offset = index * 50;
+                positions[appName] = { left: offset, top: offset };
+                return positions;
+            }, {}),
+        [openApps]
+    );
 
     const toggleFullscreen = (appName: string) => {
         setFullscreenStates((prev) => ({
@@ -36,27 +41,9 @@ export default function DesktopMainDragArea() {
         }));
     };
 
-    useEffect(() => {
-        const newPositions = { ...openAppPositions };
-
-        openApps.forEach((appName, index) => {
-            if (!newPositions[appName]) {
-                const offset = index * 50;
-                newPositions[appName] = { left: offset, top: offset };
-            }
-        });
-
-        setOpenAppPositions(newPositions);
-    }, [openApps]);
-
     return (
-        <Flex
-            flexGrow={1}
-            backgroundRepeat="no-repeat"
-            pos="relative"
-            backgroundPosition="center"
-        >
-            <Flex flexWrap="wrap" h="30%">
+        <div className="grow relative bg-no-repeat bg-center">
+            <div className="flex flex-wrap h-[30%]">
                 {DesktopApps(language).map((app, i) => (
                     <motion.div
                         key={`icon-${app.appName}`}
@@ -81,7 +68,7 @@ export default function DesktopMainDragArea() {
                         />
                     </motion.div>
                 ))}
-            </Flex>
+            </div>
             {allAppList.map(
                 (app) =>
                     openApps.includes(app.appName) &&
@@ -99,9 +86,9 @@ export default function DesktopMainDragArea() {
                     )
             )}
 
-            <Box position="fixed" bottom="1rem" left="1rem" zIndex={50}>
+            <div className="fixed bottom-4 left-4 z-50">
                 <GuidePopOver />
-            </Box>
-        </Flex>
+            </div>
+        </div>
     );
 }

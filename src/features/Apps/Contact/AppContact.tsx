@@ -1,12 +1,3 @@
-import {
-    Box,
-    VStack,
-    HStack,
-    Text,
-    Link,
-    Icon,
-    Heading,
-} from "@chakra-ui/react";
 import { LuExternalLink } from "react-icons/lu";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
@@ -20,58 +11,51 @@ export default function AppContact({}: AppContactProps) {
     const { t } = useTranslation(["Contact", "common"]);
     return (
         <div
-            style={{
-                width: "100%",
-                height: "95%",
-                overflow: "scroll",
-                backgroundColor: "white",
-                borderRadius: "0 0 8px 8px",
-                color: "black",
-            }}
+            className="w-full h-[95%] overflow-scroll bg-white rounded-b-lg text-black"
         >
             <div className="my-8 mx-4 md:mx-36">
-                <Box px={6} py={4}>
-                    <Heading size="xl" mb={4} className="font-bold text-2xl">
+                <div className="px-6 py-4">
+                    <h2 className="font-bold text-2xl mb-4">
                         {t("title")}
-                    </Heading>
+                    </h2>
 
-                    <Text mt={2} mb={4} fontSize="md" color="gray.700">
+                    <p className="mt-2 mb-4 text-md text-gray-700">
                         {t("description")}
-                    </Text>
+                    </p>
 
-                    <VStack gap={4} align="start">
-                        <HStack gap={3}>
-                            <Icon as={FaEnvelope} boxSize={5} />
-                            <Link
+                    <div className="flex flex-col gap-4 items-start">
+                        <div className="flex items-center gap-3">
+                            <FaEnvelope className="w-5 h-5" />
+                            <a
                                 href="mailto:kevinvancouver02@gmail.com"
-                                className="underline"
+                                className="underline flex items-center gap-1"
                             >
                                 kevinvancouver02@gmail.com <LuExternalLink />
-                            </Link>
-                        </HStack>
+                            </a>
+                        </div>
 
-                        <HStack gap={3}>
-                            <Icon as={FaGithub} boxSize={5} />
-                            <Link
+                        <div className="flex items-center gap-3">
+                            <FaGithub className="w-5 h-5" />
+                            <a
                                 href="https://github.com/noonnofus"
-                                className="underline"
+                                className="underline flex items-center gap-1"
                             >
                                 github.com/noonnofus <LuExternalLink />
-                            </Link>
-                        </HStack>
+                            </a>
+                        </div>
 
-                        <HStack gap={3}>
-                            <Icon as={FaLinkedin} boxSize={5} />
-                            <Link
+                        <div className="flex items-center gap-3">
+                            <FaLinkedin className="w-5 h-5" />
+                            <a
                                 href="https://www.linkedin.com/in/kevin-hyun-ho-kim/"
-                                className="underline"
+                                className="underline flex items-center gap-1"
                             >
                                 linkedin.com/in/kevin-hyun-ho-kim{" "}
                                 <LuExternalLink />
-                            </Link>
-                        </HStack>
-                    </VStack>
-                </Box>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

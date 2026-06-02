@@ -32,23 +32,25 @@ function isTouchDevice() {
   return mq(query);
 }
 
+function getTouchCheck() {
+  return (
+    isAndroid ||
+    isIPad13 ||
+    isIPhone13 ||
+    isWinPhone ||
+    isMobileSafari ||
+    isTablet ||
+    isTouchDevice()
+  );
+}
+
 export default function useIsTouchDevice() {
-  const [isTouch, setIsTouch] = useState(false);
+  const [isTouch] = useState(getTouchCheck);
   const setIsTouchDeviceState = useDesktopStore((state) => state.setIsTouchDevice);
 
   useEffect(() => {
-    const touchCheck =
-      isAndroid ||
-      isIPad13 ||
-      isIPhone13 ||
-      isWinPhone ||
-      isMobileSafari ||
-      isTablet ||
-      isTouchDevice();
-
-    setIsTouch(touchCheck);
-    setIsTouchDeviceState(touchCheck);
-  }, [setIsTouchDeviceState]);
+    setIsTouchDeviceState(isTouch);
+  }, [isTouch, setIsTouchDeviceState]);
 
   return isTouch;
 }

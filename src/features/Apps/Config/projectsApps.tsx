@@ -1,16 +1,27 @@
 "use client";
 
-import AppProjcetWCHMS from "@/features/Apps/WCHMS/AppWCHMS";
-import AppProjcetPageSsence from "@/features/Apps/PageSsence/AppPageSsence";
-import AppProjcetDiceRoller from "@/features/Apps/DiceRoller/AppDiceRoller";
-import AppProjcetFlare from "@/features/Apps/Flare/AppFlare";
-import AppProjcetMejubot from "@/features/Apps/Mejubot/AppMejubot";
-import AppProjcetWeConnect from "@/features/Apps/WeConnect/AppWeConnect";
-import AppProjcetWebPiano from "@/features/Apps/WebPiano/AppWebPiano";
+import AppProjcetWCHMS from "@/features/Apps/WCHMS";
+import AppProjcetPageSsence from "@/features/Apps/PageSsence";
+import AppProjcetDiceRoller from "@/features/Apps/DiceRoller";
+import AppProjcetFlare from "@/features/Apps/Flare";
+import AppProjcetMejubot from "@/features/Apps/Mejubot";
+import AppProjcetWeConnect from "@/features/Apps/WeConnect";
+import AppProjcetWebPiano from "@/features/Apps/WebPiano";
 import { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { AppDefinition } from "./apps";
 
-export default function ProjectsApps(language: Language = "ko") {
-    const projectTexts: Record<Language, any> = {
+type ProjectAppText = {
+    wchms: string;
+    pagessence: string;
+    diceroller: string;
+    flare: string;
+    mejubot: string;
+    weconnect: string;
+    webpiano: string;
+};
+
+export default function ProjectsApps(language: Language = "ko"): AppDefinition[] {
+    const projectTexts: Record<Language, ProjectAppText> = {
         ko: {
             wchms: "WCHMS",
             pagessence: "pageSsence",

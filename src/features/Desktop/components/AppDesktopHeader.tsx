@@ -1,6 +1,5 @@
 "use client";
 
-import { Box, Flex, Icon } from "@chakra-ui/react";
 import { IoCloseCircle } from "react-icons/io5";
 import { BiFullscreen, BiExitFullscreen } from "react-icons/bi";
 import { useDesktopStore } from "@/features/Desktop/store/useDesktopStore";
@@ -19,55 +18,33 @@ export default function AppDesktopHeader({
     const closeApp = useDesktopStore((state) => state.closeApp);
 
     return (
-        <div
-            className="relative w-full "
-            style={{
-                overflow: "hidden",
-            }}
-        >
-            <Flex
-                gap="3"
-                justify="space-between"
-                className="bg-gray-300/70 px-4 py-2"
-                borderTopLeftRadius="8px"
-                borderTopRightRadius="8px"
-            >
-                <Box
-                    flex="1"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="flex-start"
-                    position="relative"
-                >
-                    <Box
+        <div className="relative w-full overflow-hidden">
+            <div className="flex gap-3 justify-between bg-gray-300/70 px-4 py-2 rounded-t-lg">
+                <div className="flex-1 flex items-center justify-start relative">
+                    <div
                         onClick={() => {
                             closeApp(appName);
                         }}
-                        cursor="pointer"
+                        className="cursor-pointer flex items-center"
                     >
-                        <Icon>
-                            <IoCloseCircle className="text-[#FF605C]" />
-                        </Icon>
-                    </Box>
-                    <Box
-                        className="ml-3"
-                        cursor="pointer"
+                        <IoCloseCircle className="text-[#FF605C] w-[1.2em] h-[1.2em]" />
+                    </div>
+                    <div
+                        className="ml-3 cursor-pointer flex items-center"
                         onClick={() => setIsFullScreen(!isFullScreen)}
                     >
-                        <Icon>
-                            {isFullScreen ? (
-                                <BiExitFullscreen className="text-[#00CA4E]" />
-                            ) : (
-                                <BiFullscreen className="text-[#00CA4E]" />
-                            )}
-                        </Icon>
-                    </Box>
-                </Box>
-                <Box flex="1" textAlign="center" color="black">
+                        {isFullScreen ? (
+                            <BiExitFullscreen className="text-[#00CA4E] w-[1.2em] h-[1.2em]" />
+                        ) : (
+                            <BiFullscreen className="text-[#00CA4E] w-[1.2em] h-[1.2em]" />
+                        )}
+                    </div>
+                </div>
+                <div className="flex-1 text-center text-black font-medium">
                     {title}
-                </Box>
-                <Box flex="1" textAlign="center"></Box>
-            </Flex>
+                </div>
+                <div className="flex-1" />
+            </div>
         </div>
     );
 }

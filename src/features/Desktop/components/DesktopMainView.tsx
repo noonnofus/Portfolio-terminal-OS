@@ -1,6 +1,5 @@
 "use client";
 
-import { Flex } from "@chakra-ui/react";
 import DesktopMainViewHeader from "./DesktopMainViewHeader";
 import DesktopMainDragArea from "./DesktopMainDragArea";
 import { useDesktopShortcuts } from "../hooks/useDesktopShortcuts";
@@ -13,13 +12,11 @@ export default function DesktopMainView() {
     useDesktopShortcuts();
 
     return (
-        <Flex
-            backgroundImage="url(/images/desktop-bg.jpg)"
-            backgroundSize="cover"
-            backgroundPosition="center"
-            height="100vh"
-            width="100%"
-            flexDirection="column"
+        <div
+            className="flex flex-col h-screen w-full bg-cover bg-center"
+            style={{
+                backgroundImage: "url(/images/desktop-bg.jpg)",
+            }}
         >
             {isTouchDevice ? (
                 <>
@@ -32,6 +29,6 @@ export default function DesktopMainView() {
                     <DesktopMainDragArea />
                 </>
             )}
-        </Flex>
+        </div>
     );
 }

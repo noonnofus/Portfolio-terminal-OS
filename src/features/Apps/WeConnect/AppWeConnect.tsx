@@ -1,14 +1,4 @@
-import {
-    Flex,
-    Image,
-    Heading,
-    Text,
-    Link,
-    SimpleGrid,
-    Box,
-    List,
-} from "@chakra-ui/react";
-import { Tooltip as ChakraTooltip } from "@/shared/ui/tooltip";
+import Image from "next/image";
 import {
     SiTypescript,
     SiJavascript,
@@ -36,142 +26,106 @@ export default function AppProjcetWeConnect({}: AppProjectWeConnectProps) {
     const { t } = useTranslation(["WeConnect", "common"]);
     return (
         <div
-            style={{
-                overflow: "scroll",
-                backgroundColor: "white",
-                borderRadius: "0 0 8px 8px",
-                color: "black",
-            }}
+            className="overflow-scroll bg-white rounded-b-lg text-black"
         >
             <div className="my-8 mx-4 md:mx-36">
-                <Flex
-                    flexDir="column"
-                    alignItems="center"
-                    className="mt-8 mb-3"
+                <div
+                    className="flex flex-col items-center mt-8 mb-3"
                 >
-                    <Heading
-                        size="lg"
+                    <h2
                         className="font-bold text-3xl text-gray-800 mb-6"
                     >
-                        <Text>{t("title")}</Text>
-                    </Heading>
+                        {t("title")}
+                    </h2>
 
                     <Image
                         src="/images/weconnect-logo.svg"
                         alt="project WCHMS logo image"
-                        boxSize="300px"
-                        fit="cover"
-                        h="auto"
-                        className="mb-4"
+                        width={300}
+                        height={120}
+                        className="mb-4 w-[300px] h-auto object-cover"
                     />
-                    <ChakraTooltip
-                        content={t("common:tooltipContent")}
-                        openDelay={100}
-                        closeDelay={200}
-                        showArrow
-                    >
-                        <Link
-                            href="https://idsp-weconnect-1.onrender.com"
-                            textDecor="underline"
-                            mb={4}
-                            target="_blank"
-                        >
-                            {t("linkAction")} <ExternalLinkIcon />
-                        </Link>
-                    </ChakraTooltip>
-                    {/* <Link
-                        href="https://github.com/noonnofus/IDSP_weconnect"
-                        textDecor="underline"
-                        mb={4}
+                    
+                    <a
+                        href="https://idsp-weconnect-1.onrender.com"
+                        className="underline mb-4 flex items-center gap-1"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >
-                        <Icon as={FaGithub} boxSize={5} />
-                        {t('common:sourceCode')} <ExternalLinkIcon />
-                    </Link> */}
-                    <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
-                        <Box className="mb-6">
-                            <Heading
-                                size="md"
+                        {t("linkAction")} <ExternalLinkIcon />
+                    </a>
+
+                    <div className="max-w-[700px] flex flex-col ml-1 mr-1">
+                        <div className="mb-6">
+                            <h3
                                 className="font-semibold text-xl text-gray-800"
                             >
                                 {t("common:overview")}
-                            </Heading>
-                            <Text mt={1} fontSize="sm" color="gray.600">
+                            </h3>
+                            <p className="mt-1 text-sm text-gray-600">
                                 📌 <b>{t("common:projectType")}:</b>{" "}
                                 {t("common:groupProject")}
-                            </Text>
-                            <Text mt={2}>{t("description")}</Text>
-                        </Box>
+                            </p>
+                            <p className="mt-2">{t("description")}</p>
+                        </div>
 
-                        <Box
-                            width="100%"
-                            borderTop="1px solid #ccc"
-                            margin="0 auto"
+                        <div
+                            className="w-full border-t border-[#ccc] mx-auto"
                         />
 
-                        <Box className="mb-6 mt-6">
-                            <Heading
-                                size="md"
+                        <div className="mb-6 mt-6">
+                            <h3
                                 className="font-semibold text-xl text-gray-800"
                             >
                                 {t("common:myRole")}
-                            </Heading>
-                            <Text mt={2} className="text-gray-700">
+                            </h3>
+                            <p className="mt-2 text-gray-700">
                                 {t("myRoleDescription")}
-                            </Text>
+                            </p>
 
-                            <List.Root
-                                mt={4}
-                                ps={4}
-                                gap={3}
-                                className="text-gray-700"
+                            <ul
+                                className="mt-4 ps-4 flex flex-col gap-3 text-gray-700 list-disc"
                             >
-                                <List.Item>
+                                <li>
                                     <strong>{t("realtimeTranslation")}:</strong>{" "}
                                     {t("realtimeTranslationDesc")}
-                                </List.Item>
-                                <List.Item>
+                                </li>
+                                <li>
                                     <strong>
                                         {t("videoChatInfrastructure")}:
                                     </strong>{" "}
                                     {t("videoChatInfrastructureDesc")}
-                                </List.Item>
-                                <List.Item>
+                                </li>
+                                <li>
                                     <strong>{t("userInterfaceUX")}:</strong>{" "}
                                     {t("userInterfaceUXDesc")}
-                                </List.Item>
-                                <List.Item>
+                                </li>
+                                <li>
                                     <strong>
                                         {t("authenticationRoomManagement")}:
                                     </strong>{" "}
                                     {t("authenticationRoomManagementDesc")}
-                                </List.Item>
-                            </List.Root>
-                        </Box>
+                                </li>
+                            </ul>
+                        </div>
 
-                        <Box
-                            width="100%"
-                            borderTop="1px solid #ccc"
-                            margin="0 auto"
+                        <div
+                            className="w-full border-t border-[#ccc] mx-auto"
                         />
 
-                        <Box className="mb-6 mt-6">
-                            <Heading
-                                mb={2}
-                                size="md"
-                                className="font-semibold text-xl text-gray-800"
+                        <div className="mb-6 mt-6">
+                            <h3
+                                className="mb-2 font-semibold text-xl text-gray-800"
                             >
                                 Tech Stack
-                            </Heading>
+                            </h3>
 
-                            <Heading
-                                mt={6}
-                                mb={2}
-                                className="text-lg font-semibold"
+                            <h4
+                                className="mt-6 mb-2 text-lg font-semibold"
                             >
                                 Frontend
-                            </Heading>
-                            <SimpleGrid columns={3} gap={5} mb={12}>
+                            </h4>
+                            <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="JavaScript"
                                     icon={SiJavascript}
@@ -187,16 +141,14 @@ export default function AppProjcetWeConnect({}: AppProjectWeConnectProps) {
                                     icon={SiCss3}
                                     color="#264de4"
                                 />
-                            </SimpleGrid>
+                            </div>
 
-                            <Heading
-                                mt={6}
-                                mb={2}
-                                className="text-lg font-semibold"
+                            <h4
+                                className="mt-6 mb-2 text-lg font-semibold"
                             >
                                 {t("backendDatabase")}
-                            </Heading>
-                            <SimpleGrid columns={3} gap={5} mb={12}>
+                            </h4>
+                            <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="TypeScript"
                                     icon={SiTypescript}
@@ -222,16 +174,14 @@ export default function AppProjcetWeConnect({}: AppProjectWeConnectProps) {
                                     icon={SiMysql}
                                     color="#00758F"
                                 />
-                            </SimpleGrid>
+                            </div>
 
-                            <Heading
-                                mt={6}
-                                mb={2}
-                                className="text-lg font-semibold"
+                            <h4
+                                className="mt-6 mb-2 text-lg font-semibold"
                             >
                                 {t("realtimeCommunication")}
-                            </Heading>
-                            <SimpleGrid columns={3} gap={5} mb={12}>
+                            </h4>
+                            <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="WebRTC"
                                     icon={SiWebrtc}
@@ -242,16 +192,14 @@ export default function AppProjcetWeConnect({}: AppProjectWeConnectProps) {
                                     icon={FaProjectDiagram}
                                     color="#4A5568"
                                 />
-                            </SimpleGrid>
+                            </div>
 
-                            <Heading
-                                mt={6}
-                                mb={2}
-                                className="text-lg font-semibold"
+                            <h4
+                                className="mt-6 mb-2 text-lg font-semibold"
                             >
                                 {t("apis")}
-                            </Heading>
-                            <SimpleGrid columns={3} gap={5} mb={12}>
+                            </h4>
+                            <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="OpenAI API"
                                     icon={FaBrain}
@@ -262,16 +210,14 @@ export default function AppProjcetWeConnect({}: AppProjectWeConnectProps) {
                                     icon={SiGooglecloud}
                                     color="#4285F4"
                                 />
-                            </SimpleGrid>
+                            </div>
 
-                            <Heading
-                                mt={6}
-                                mb={2}
-                                className="text-lg font-semibold"
+                            <h4
+                                className="mt-6 mb-2 text-lg font-semibold"
                             >
                                 {t("deploymentTools")}
-                            </Heading>
-                            <SimpleGrid columns={3} gap={5} mb={6}>
+                            </h4>
+                            <div className="grid grid-cols-3 gap-5 mb-6">
                                 <StackIcon
                                     label="Render"
                                     icon={SiRender}
@@ -287,26 +233,14 @@ export default function AppProjcetWeConnect({}: AppProjectWeConnectProps) {
                                     icon={SiGit}
                                     color="#F05033"
                                 />
-                            </SimpleGrid>
-                        </Box>
+                            </div>
+                        </div>
 
-                        <Box
-                            width="100%"
-                            borderTop="1px solid #ccc"
-                            margin="0 auto"
-                            className="mb-6"
+                        <div
+                            className="w-full border-t border-[#ccc] mx-auto mb-6"
                         />
-
-                        {/* <Box className="mt-6">
-                            <Heading size="md" className="font-semibold text-xl text-gray-800">
-                                App Walkthrough
-                            </Heading>
-                            <Text mt={2}>
-                                Watch how to create, join the room, and use real-time translation feature.
-                            </Text>
-                        </Box> */}
-                    </Flex>
-                </Flex>
+                    </div>
+                </div>
             </div>
         </div>
     );

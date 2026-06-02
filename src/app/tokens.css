@@ -1,0 +1,46 @@
+@theme {
+  /* =========================================
+     Pencil Design System Tokens
+     Extracted from untitled.pen
+  ========================================= */
+
+  /* Typography */
+  --font-pen-primary: "Pretendard", sans-serif;
+
+  /* Primary Colors (Blue Scale) */
+  --color-pen-primary-light: #60A5FA;
+  --color-pen-primary: #3B82F6;
+  --color-pen-primary-dark: #1D4ED8;
+
+  /* Gray Scale (Cool Gray) */
+  --color-pen-gray-100: #F3F4F6;
+  --color-pen-gray-200: #E5E7EB;
+  --color-pen-gray-300: #D1D5DB;
+  --color-pen-gray-400: #9CA3AF;
+  --color-pen-gray-500: #6B7280;
+  --color-pen-gray-600: #4B5563;
+  --color-pen-gray-700: #374151;
+  --color-pen-gray-800: #1F2937;
+  --color-pen-gray-900: #111827;
+
+  /* OS Specific Colors */
+  --color-terminal-bg: #000000;
+  --color-terminal-fg: #3CD607;
+  --color-mac-close: #FF605C;
+  --color-mac-minimize: #FFBD2E;
+  --color-mac-maximize: #00CA4E;
+  --color-glass-bg: #4B556333;
+  --color-glass-border: #0000001A;
+
+  /* Border Radii */
+  --radius-pen-sm: 4px;
+  --radius-pen-md: 10px;
+  --radius-pen-lg: 12px;
+
+  /* Spacing */
+  --spacing-pen-xs: 4px;
+  --spacing-pen-sm: 8px;
+  --spacing-pen-md: 16px;
+  --spacing-pen-lg: 24px;
+  --spacing-pen-xl: 32px;
+}

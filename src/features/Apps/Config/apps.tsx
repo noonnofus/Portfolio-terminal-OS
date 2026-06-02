@@ -1,14 +1,30 @@
 "use client";
 
-import AppAbout from "@/features/Apps/About/AppAbout";
-import AppContact from "@/features/Apps/Contact/AppContact";
-import AppAboutSite from "@/features/Apps/AboutSite/AppAboutSite";
-import AppTerminal from "@/features/Apps/Terminal/AppTerminal";
-import AppFolder from "@/features/Apps/Folder/AppFolder";
+import AppAbout from "@/features/Apps/About";
+import AppContact from "@/features/Apps/Contact";
+import AppAboutSite from "@/features/Apps/AboutSite";
+import { AppTerminal } from "@/features/Apps/Terminal";
+import AppFolder from "@/features/Apps/Folder";
 import { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { ReactNode } from "react";
 
-export default function DesktopApps(language: Language = "ko") {
-    const appTexts: Record<Language, any> = {
+export interface AppDefinition {
+    iconName: string;
+    appName: string;
+    title: string;
+    component: ReactNode;
+}
+
+type DesktopAppText = {
+    projects: string;
+    aboutSite: string;
+    terminal: string;
+    aboutMe: string;
+    contacts: string;
+};
+
+export default function DesktopApps(language: Language = "ko"): AppDefinition[] {
+    const appTexts: Record<Language, DesktopAppText> = {
         ko: {
             projects: "프로젝트_폴더",
             aboutSite: "사이트_소개",
