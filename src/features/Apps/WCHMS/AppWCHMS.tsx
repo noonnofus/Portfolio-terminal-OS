@@ -1,14 +1,4 @@
-import {
-    Flex,
-    Image,
-    Heading,
-    Text,
-    Link,
-    SimpleGrid,
-    Box,
-    List,
-} from "@chakra-ui/react";
-import { Tooltip as ChakraTooltip } from "@/shared/ui/tooltip";
+import Image from "next/image";
 import {
     SiTypescript,
     SiNextdotjs,
@@ -40,133 +30,106 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
     const { t } = useTranslation(["WCHMS", "common"]);
     return (
         <div
-            style={{
-                overflow: "scroll",
-                backgroundColor: "white",
-                borderRadius: "0 0 8px 8px",
-                color: "black",
-            }}
+            className="overflow-scroll bg-white rounded-b-lg text-black"
         >
             <div className="my-8 mx-4 md:mx-36">
-                <Flex
-                    flexDir="column"
-                    alignItems="center"
-                    className="mt-8 mb-3"
+                <div
+                    className="flex flex-col items-center mt-8 mb-3"
                 >
-                    <Heading
-                        size="lg"
+                    <h2
                         className="font-bold text-3xl text-gray-800 mb-6"
                     >
-                        <Text>{t("title")}</Text>
-                    </Heading>
+                        {t("title")}
+                    </h2>
 
                     <Image
                         src="/icons/wchms.png"
                         alt="project WCHMS logo image"
-                        boxSize="150px"
-                        fit="cover"
-                        h="auto"
-                        className="mb-4"
+                        width={150}
+                        height={150}
+                        className="mb-4 w-[150px] h-auto object-cover"
                     />
-                    <ChakraTooltip
-                        content="App may take over 30 seconds to load on first visit."
-                        openDelay={100}
-                        closeDelay={200}
-                        showArrow
+                    
+                    <a
+                        href="https://wchms-idsp4.fly.dev/"
+                        className="underline mb-4 flex items-center gap-1"
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
-                        <Link
-                            href="https://wchms-idsp4.fly.dev/"
-                            textDecor="underline"
-                            mb={4}
-                            target="_blank"
-                        >
-                            {t("linkAction")} <ExternalLinkIcon />
-                        </Link>
-                    </ChakraTooltip>
-                    <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
-                        <Box className="mb-6">
-                            <Heading
-                                size="md"
+                        {t("linkAction")} <ExternalLinkIcon />
+                    </a>
+
+                    <div className="max-w-[700px] flex flex-col ml-1 mr-1">
+                        <div className="mb-6">
+                            <h3
                                 className="font-semibold text-xl text-gray-800"
                             >
                                 {t("common:overview")}
-                            </Heading>
-                            <Text mt={1} fontSize="sm" color="gray.600">
+                            </h3>
+                            <p className="mt-1 text-sm text-gray-600">
                                 📌 <b>{t("common:projectType")}:</b>{" "}
                                 {t("common:clientGroupProject")}
-                            </Text>
-                            <Text mt={2}>
+                            </p>
+                            <div className="mt-2">
                                 {t("description")}
-                                <Text mt={1}>{t("descriptionContinued")}</Text>
-                            </Text>
-                        </Box>
+                                <p className="mt-1">{t("descriptionContinued")}</p>
+                            </div>
+                        </div>
 
-                        <Box
-                            width="100%"
-                            borderTop="1px solid #ccc"
-                            margin="0 auto"
+                        <div
+                            className="w-full border-t border-[#ccc] mx-auto"
                         />
 
-                        <Box className="mb-6 mt-6">
-                            <Heading
-                                size="md"
+                        <div className="mb-6 mt-6">
+                            <h3
                                 className="font-semibold text-xl text-gray-800"
                             >
                                 {t("common:myRole")}
-                            </Heading>
+                            </h3>
 
-                            <Text mt={2} className="text-gray-700">
+                            <p className="mt-2 text-gray-700">
                                 {t("myRoleDescription")}
-                            </Text>
+                            </p>
 
-                            <List.Root
-                                mt={4}
-                                ps={4}
-                                gap={3}
-                                className="text-gray-700"
+                            <ul
+                                className="mt-4 ps-4 flex flex-col gap-3 text-gray-700 list-disc"
                             >
-                                <List.Item>
+                                <li>
                                     <strong>{t("aiPoweredSelfStudy")}:</strong>{" "}
                                     {t("aiPoweredSelfStudyDesc")}
-                                </List.Item>
-                                <List.Item>
+                                </li>
+                                <li>
                                     <strong>
                                         {t("automatedCourseMaterial")}:
                                     </strong>{" "}
                                     {t("automatedCourseMaterialDesc")}
-                                </List.Item>
-                                <List.Item>
+                                </li>
+                                <li>
                                     <strong>
                                         {t("adminManagementSystem")}:
                                     </strong>{" "}
                                     {t("adminManagementSystemDesc")}
-                                </List.Item>
-                            </List.Root>
-                        </Box>
+                                </li>
+                            </ul>
+                        </div>
 
-                        <Box
-                            width="100%"
-                            borderTop="1px solid #ccc"
-                            margin="0 auto"
+                        <div
+                            className="w-full border-t border-[#ccc] mx-auto"
                         />
 
-                        <Box className="mb-6 mt-6">
-                            <Heading
-                                mb={2}
-                                size="md"
-                                className="font-semibold text-xl text-gray-800"
+                        <div className="mb-6 mt-6">
+                            <h3
+                                className="mb-2 font-semibold text-xl text-gray-800"
                             >
                                 {t("common:techStack")}
-                            </Heading>
+                            </h3>
 
-                            <Heading
-                                mt={6}
-                                mb={2}
-                                className="text-lg font-semibold"
+                            <h4
+                                className="mt-6 mb-2 text-lg font-semibold"
                             >
                                 {t("common:frontend")}
-                            </Heading>
-                            <SimpleGrid columns={3} gap={5} mb={12}>
+                            </h4>
+                            <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="TypeScript"
                                     icon={SiTypescript}
@@ -192,16 +155,14 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
                                     icon={SiNextdotjs}
                                     color="black"
                                 />
-                            </SimpleGrid>
+                            </div>
 
-                            <Heading
-                                mt={6}
-                                mb={2}
-                                className="text-lg font-semibold"
+                            <h4
+                                className="mt-6 mb-2 text-lg font-semibold"
                             >
                                 {t("common:backend")}
-                            </Heading>
-                            <SimpleGrid columns={3} gap={5} mb={12}>
+                            </h4>
+                            <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="Drizzle ORM"
                                     icon={SiDrizzle}
@@ -217,31 +178,27 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
                                     icon={FaProjectDiagram}
                                     color="black"
                                 />
-                            </SimpleGrid>
+                            </div>
 
-                            <Heading
-                                mt={6}
-                                mb={2}
-                                className="text-lg font-semibold"
+                            <h4
+                                className="mt-6 mb-2 text-lg font-semibold"
                             >
                                 {t("common:authentication")}
-                            </Heading>
-                            <SimpleGrid columns={3} gap={5} mb={12}>
+                            </h4>
+                            <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="NextAuth"
                                     icon={FaKey}
                                     color="black"
                                 />
-                            </SimpleGrid>
+                            </div>
 
-                            <Heading
-                                mt={6}
-                                mb={2}
-                                className="text-lg font-semibold"
+                            <h4
+                                className="mt-6 mb-2 text-lg font-semibold"
                             >
                                 {t("common:librariesServices")}
-                            </Heading>
-                            <SimpleGrid columns={3} gap={5} mb={12}>
+                            </h4>
+                            <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="OpenAI API"
                                     icon={FaBrain}
@@ -257,16 +214,14 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
                                     icon={FaFilePdf}
                                     color="#d32f2f"
                                 />
-                            </SimpleGrid>
+                            </div>
 
-                            <Heading
-                                mt={6}
-                                mb={2}
-                                className="text-lg font-semibold"
+                            <h4
+                                className="mt-6 mb-2 text-lg font-semibold"
                             >
                                 {t("common:otherTools")}
-                            </Heading>
-                            <SimpleGrid columns={3} gap={5} mb={6}>
+                            </h4>
+                            <div className="grid grid-cols-3 gap-5 mb-6">
                                 <StackIcon
                                     label="GitHub"
                                     icon={FaGithub}
@@ -282,36 +237,32 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
                                     icon={SiJira}
                                     color="#0052CC"
                                 />
-                            </SimpleGrid>
-                        </Box>
+                            </div>
+                        </div>
 
-                        <Box
-                            width="100%"
-                            borderTop="1px solid #ccc"
-                            margin="0 auto"
-                            className="mb-6"
+                        <div
+                            className="w-full border-t border-[#ccc] mx-auto mb-6"
                         />
 
-                        <Box className="mt-6">
-                            <Heading
-                                size="md"
+                        <div className="mt-6">
+                            <h3
                                 className="font-semibold text-xl text-gray-800"
                             >
                                 {t("common:appWalkthrough")}
-                            </Heading>
-                            <Text mt={2}>{t("appWalkthroughDescription")}</Text>
-                            <Box w="100%">
-                                <video controls>
+                            </h3>
+                            <p className="mt-2">{t("appWalkthroughDescription")}</p>
+                            <div className="w-full aspect-video">
+                                <video controls className="w-full h-full">
                                     <source
                                         src="videos/wchms-walkthrough.mp4"
                                         type="video/mp4"
                                     />
                                     {t("common:videoNotSupported")}
                                 </video>
-                            </Box>
-                        </Box>
-                    </Flex>
-                </Flex>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

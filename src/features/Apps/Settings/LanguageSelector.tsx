@@ -1,7 +1,5 @@
 "use client";
 
-import { Box, Portal, Select } from "@chakra-ui/react";
-import { createListCollection } from "@chakra-ui/react/collection";
 import { useLanguageStore, Language } from "@/shared/lib/i18n/useLanguageStore";
 
 const languageOptions = [
@@ -9,75 +7,28 @@ const languageOptions = [
     { label: "🇺🇸", value: "en" },
 ];
 
-const languageCollection = createListCollection({
-    items: languageOptions,
-});
-
 export default function LanguageSelector() {
     const currentLanguage = useLanguageStore((state) => state.currentLanguage);
     const setLanguage = useLanguageStore((state) => state.setLanguage);
 
-    const handleLanguageChange = (details: { value: string[] }) => {
-        if (details.value.length > 0) {
-            setLanguage(details.value[0] as Language);
-        }
+    const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setLanguage(e.target.value as Language);
     };
 
     return (
-        <Box>
-            <Select.Root
-                multiple={false}
-                value={[currentLanguage]}
-                onValueChange={handleLanguageChange}
-                collection={languageCollection}
+        <div className="flex items-center">
+            <select
+                value={currentLanguage}
+                onChange={handleLanguageChange}
+                className="bg-transparent border-none focus:outline-none cursor-pointer text-lg appearance-none px-2"
+                aria-label="Select Language"
             >
-                <Select.Control>
-                    <Select.Trigger
-                        background="transparent"
-                        border="none"
-                        _focus={{ boxShadow: "none" }}
-                        _hover={{ bg: "transparent" }}
-                        px={0}
-                        minW="40px"
-                        justifyContent="center"
-                        h="20px"
-                        minH="unset"
-                        lineHeight="1"
-                    >
-                        <Select.ValueText
-                            placeholder={
-                                currentLanguage === "ko"
-                                    ? "언어를 선택하세요."
-                                    : "Select Language"
-                            }
-                        />
-                    </Select.Trigger>
-                </Select.Control>
-
-                <Portal>
-                    <Select.Positioner>
-                        <Select.Content
-                            bg="white"
-                            border="1px solid"
-                            borderColor="gray.200"
-                            boxShadow="md"
-                            minW="60px"
-                        >
-                            {languageOptions.map((lang) => (
-                                <Select.Item
-                                    key={lang.value}
-                                    item={lang}
-                                    px={2}
-                                    py={1}
-                                    _hover={{ bg: "gray.100" }}
-                                >
-                                    {lang.label}
-                                </Select.Item>
-                            ))}
-                        </Select.Content>
-                    </Select.Positioner>
-                </Portal>
-            </Select.Root>
-        </Box>
+                {languageOptions.map((lang) => (
+                    <option key={lang.value} value={lang.value}>
+                        {lang.label}
+                    </option>
+                ))}
+            </select>
+        </div>
     );
 }

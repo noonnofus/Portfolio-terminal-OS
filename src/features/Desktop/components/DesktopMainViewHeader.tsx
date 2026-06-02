@@ -1,29 +1,60 @@
-import { useState } from "react";
-import { Box, Flex } from "@chakra-ui/react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import Calendar from "react-calendar";
-import Clock from "react-clock";
 import DesktopHeaderAppMenu from "./DesktopHeaderAppMenu";
 import LanguageSelector from "@/features/Apps/Settings/LanguageSelector";
 import { useDesktopStore } from "@/features/Desktop/store/useDesktopStore";
 import { useLanguageStore } from "@/shared/lib/i18n/useLanguageStore";
 import "@/shared/styles/calender.css";
 
+function formatCurrentTime() {
+    const now = new Date();
+    return `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+}
+
 export default function DesktopMainViewHeader() {
-    const [time, setTime] = useState<string>("");
+    const [time, setTime] = useState<string>(formatCurrentTime);
     const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
+    const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const isAppMenuShow = useDesktopStore((state) => state.showAppMenu);
     const setShowAppMenu = useDesktopStore((state) => state.setShowAppMenu);
     const currentLanguage = useLanguageStore((state) => state.currentLanguage);
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setTime(formatCurrentTime());
+        }, 1000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            if (closeTimeoutRef.current) {
+                clearTimeout(closeTimeoutRef.current);
+            }
+        };
+    }, []);
+
     const toggleDatePicker = () => {
+        if (closeTimeoutRef.current) {
+            clearTimeout(closeTimeoutRef.current);
+            closeTimeoutRef.current = null;
+        }
+
         if (showDatePicker) {
             setIsAnimating(true);
-            setTimeout(() => {
+
+            closeTimeoutRef.current = setTimeout(() => {
                 setShowDatePicker(false);
                 setIsAnimating(false);
+                closeTimeoutRef.current = null;
             }, 300);
         } else {
+            setIsAnimating(false);
             setShowDatePicker(true);
         }
     };
@@ -33,83 +64,49 @@ export default function DesktopMainViewHeader() {
         en: "HyunHoKim",
     };
 
-    setInterval(() => {
-        const now = new Date();
-        const formattedTime = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-        setTime(formattedTime);
-    }, 1000);
-
     return (
         <div className="relative w-full">
-            <Flex
-                gap="4"
-                justify="space-between"
-                className="bg-gray-600/20 backdrop-blur-sm px-4 py-2"
-                zIndex={11}
-                position="relative"
-            >
-                <Box flex="1">
-                    <img
+            <div className="flex gap-4 justify-between bg-gray-600/20 backdrop-blur-sm px-4 py-2 relative z-10">
+                <div className="flex-1">
+                    <Image
                         src="/icons/main.png"
                         alt="application list icon"
                         width={24}
-                        style={{
-                            cursor: "pointer",
-                        }}
+                        height={24}
+                        className="w-6 cursor-pointer"
                         onClick={() => setShowAppMenu(!isAppMenuShow)}
                     />
-                </Box>
-                <Box
-                    height="20px"
-                    borderRight="1px solid #ccc"
-                    margin="0 8px"
-                />
-                <Box flex="2" textAlign="center" className="text-white">
+                </div>
+                <div className="h-5 border-r border-border/80 mx-2" />
+                <div className="flex-[2] text-center text-white">
                     {headerTexts[currentLanguage]}
-                </Box>
-                <Box
-                    height="20px"
-                    borderRight="1px solid #ccc"
-                    margin="0 8px"
-                />
-                <Box
-                    flex="1"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="flex-end"
-                    position="relative"
-                    gap={2}
-                >
-                    <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                    >
+                </div>
+                <div className="h-5 border-r border-border/80 mx-2" />
+                <div className="flex-1 flex items-center justify-end relative gap-2">
+                    <div className="flex items-center justify-center">
                         <LanguageSelector />
-                    </Box>
-                    <Box>
-                        <img
+                    </div>
+                    <div>
+                        <Image
                             src={"/icons/wifi-connect.png"}
                             alt="wifi-status-icon"
                             width={16}
                             height={16}
-                            style={{
-                                objectFit: "contain",
-                            }}
+                            className="w-4 h-4 object-contain"
                         />
-                    </Box>
-                    <Box
+                    </div>
+                    <div
                         onClick={toggleDatePicker}
                         className="ml-2 cursor-pointer text-white"
                     >
-                        {time}
-                    </Box>
-                </Box>
-            </Flex>
+                        {time || "--:--:--"}
+                    </div>
+                </div>
+            </div>
             {isAppMenuShow && <DesktopHeaderAppMenu />}
             {showDatePicker && (
                 <div
-                    className={`absolute right-1 top-10 z-10 p-3 rounded-xl ${
+                    className={`absolute right-1 top-10 z-10 ${
                         isAnimating ? "animate-slideOut" : "animate-slideIn"
                     }`}
                 >
@@ -122,9 +119,8 @@ export default function DesktopMainViewHeader() {
 
 function DatePicker() {
     return (
-        <Box className="rounded-lg">
-            <Clock />
-            <Calendar />
-        </Box>
+        <div className="calendar-panel">
+            <Calendar className="design-calendar" />
+        </div>
     );
 }

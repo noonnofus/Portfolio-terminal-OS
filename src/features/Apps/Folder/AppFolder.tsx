@@ -1,4 +1,3 @@
-import { Flex } from "@chakra-ui/react";
 import ProjectsApps from "@/features/Apps/Config/projectsApps";
 import React from "react";
 import { motion } from "framer-motion";
@@ -17,17 +16,10 @@ export default function AppFolder() {
 
     return (
         <div
-            style={{
-                width: '100%',
-                height: '100%',
-                flexGrow: 1,
-                overflow: "scroll",
-                color: 'black',
-                borderRadius: 8,
-            }}
+            className="w-full h-full grow overflow-scroll text-black rounded-lg relative"
             ref={dragAreaRef}
         >
-            <Flex flexWrap="wrap" h="100%">
+            <div className="flex flex-wrap h-full">
                 {ProjectsApps().map((app, i) => (
                     <motion.div
                         key={`touchview-${app.appName}`}
@@ -70,7 +62,7 @@ export default function AppFolder() {
                         )}
                     </motion.div>
                 ))}
-            </Flex>
+            </div>
         </div>
     );
 }

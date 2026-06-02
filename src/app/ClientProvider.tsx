@@ -1,6 +1,6 @@
 'use client';
 
-import { Provider as ChakraProvider } from "@/shared/ui/provider"
+import { Provider } from '@/shared/ui/provider';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/shared/lib/i18n';
 import { useEffect } from 'react';
@@ -23,11 +23,11 @@ export default function ClientProvider({
 }>) {
     return (
         <I18nextProvider i18n={i18n}>
-            <ChakraProvider>
+            <Provider>
                 <I18nWrapper>
                     {children}
                 </I18nWrapper>
-            </ChakraProvider>
+            </Provider>
         </I18nextProvider>
     );
 }

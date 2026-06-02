@@ -1,7 +1,9 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
 @import "tailwindcss";
+@import "./tokens.css";
 
 @theme {
-  --font-sans: var(--font-pretendard), "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -40,15 +42,6 @@
   --color-chart-3: hsl(var(--chart-3));
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
-
-  /* OS Specific Colors */
-  --color-terminal-bg: #000000;
-  --color-terminal-fg: #3CD607;
-  --color-mac-close: #FF605C;
-  --color-mac-minimize: #FFBD2E;
-  --color-mac-maximize: #00CA4E;
-  --color-glass-bg: #4B556333;
-  --color-glass-border: #0000001A;
 
   /* Custom Z-Indexes */
   --z-index-10: 10;

@@ -9,7 +9,6 @@ import {
     SiVercel,
 } from "react-icons/si";
 import StackIcon from "@/shared/components/StackIcon";
-import { Box, Text, Heading, SimpleGrid, Link, Icon } from "@chakra-ui/react";
 import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
 import { useTranslation } from 'react-i18next';
 import { Language } from "@/shared/lib/i18n/useLanguageStore";
@@ -21,44 +20,39 @@ interface AppAboutSiteProps {
 export default function AppAboutSite({}: AppAboutSiteProps) {
     const { t } = useTranslation(['AboutSite', 'common']);
     return (
-        <div className="my-8 mx-4 md:mx-36">
-            <Box className="mb-8">
-                <Heading size="lg" className="font-bold text-3xl text-gray-800">
+        <div className="my-8 mx-4 md:mx-36 text-black">
+            <div className="mb-8">
+                <h2 className="font-bold text-3xl text-gray-800">
                     {t('title')}
-                </Heading>
-                <Text mt={3} fontSize="md" color="gray.700">
+                </h2>
+                <p className="mt-3 text-md text-gray-700">
                     {t('description')}
-                </Text>
-            </Box>
+                </p>
+            </div>
 
-            <Box className="mb-8">
-                <Heading mb={4} className="font-bold text-2xl text-black">
+            <div className="mb-8">
+                <h2 className="mb-4 font-bold text-2xl">
                     {t('sourceCodeTitle')}
-                </Heading>
-                <Link
+                </h2>
+                <a
                     href="https://github.com/noonnofus/Portfolio-terminal-OS"
-                    textDecor="underline"
-                    mb={4}
+                    className="underline mb-4 inline-flex items-center gap-1"
                     target="_blank"
-                    color="black"
+                    rel="noopener noreferrer"
                 >
-                    <Icon as={FaGithub} boxSize={5} />
+                    <FaGithub size={20} />
                     {t('sourceCodeTitle')} <ExternalLinkIcon />
-                </Link>
-            </Box>
-            <Box className="mb-8">
-                <Heading mb={4} className="font-bold text-2xl text-black">
+                </a>
+            </div>
+            <div className="mb-8">
+                <h2 className="mb-4 font-bold text-2xl">
                     {t('techStackTitle')}
-                </Heading>
+                </h2>
 
-                <Heading
-                    mt={6}
-                    mb={2}
-                    className="text-lg font-semibold text-black"
-                >
+                <h3 className="mt-6 mb-2 text-lg font-semibold">
                     {t('coreStack')}
-                </Heading>
-                <SimpleGrid columns={3} gap={5} mb={12} color="black">
+                </h3>
+                <div className="grid grid-cols-3 gap-5 mb-12">
                     <StackIcon
                         label="TypeScript"
                         icon={SiTypescript}
@@ -70,16 +64,12 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                         icon={SiNextdotjs}
                         color="black"
                     />
-                </SimpleGrid>
+                </div>
 
-                <Heading
-                    mt={6}
-                    mb={2}
-                    className="text-lg font-semibold text-black"
-                >
+                <h3 className="mt-6 mb-2 text-lg font-semibold">
                     {t('uiAnimation')}
-                </Heading>
-                <SimpleGrid columns={3} gap={5} mb={12} color="black">
+                </h3>
+                <div className="grid grid-cols-3 gap-5 mb-12">
                     <StackIcon
                         label="Chakra UI"
                         icon={SiChakraui}
@@ -90,97 +80,94 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                         icon={SiFramer}
                         color="black"
                     />
-                </SimpleGrid>
+                </div>
 
-                <Heading
-                    mt={6}
-                    mb={2}
-                    className="text-lg font-semibold text-black"
-                >
+                <h3 className="mt-6 mb-2 text-lg font-semibold">
                     {t('terminalInterface')}
-                </Heading>
-                <SimpleGrid columns={3} gap={5} mb={12} color="black">
+                </h3>
+                <div className="grid grid-cols-3 gap-5 mb-12">
                     <StackIcon
                         label="xterm.js"
                         icon={FaTerminal}
                         color="#0F4C81"
                     />
-                </SimpleGrid>
+                </div>
 
-                <Heading
-                    mt={6}
-                    mb={2}
-                    className="text-lg font-semibold text-black"
-                >
+                <h3 className="mt-6 mb-2 text-lg font-semibold">
                     {t('deployment')}
-                </Heading>
-                <SimpleGrid columns={3} gap={5} mb={12} color="black">
+                </h3>
+                <div className="grid grid-cols-3 gap-5 mb-12">
                     <StackIcon label="Vercel" icon={SiVercel} color="black" />
-                </SimpleGrid>
-            </Box>
-            <Box className="mb-8">
-                <Heading mb={4} className="font-bold text-2xl text-black">
+                </div>
+            </div>
+            <div className="mb-8">
+                <h2 className="mb-4 font-bold text-2xl">
                     {t('iconsBackgroundCredits')}
-                </Heading>
-                <Text mt={2} fontSize="md" color="gray.700">
+                </h2>
+                <p className="mt-2 text-md text-gray-700">
                     <b>{t('iconsCredit')}</b> <br />
                     {t('iconsProvidedBy')}{" "}
-                    <Link
+                    <a
                         href="https://www.flaticon.com/"
-                        textDecor="underline"
-                        color="teal.500"
-                        fontWeight="medium"
+                        className="underline text-teal-600 font-medium inline-flex items-center gap-1"
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
                         Flaticon <ExternalLinkIcon />
-                    </Link>{" "}
+                    </a>{" "}
                     {t('iconsCreatedBy')}{" "}
-                    <Link
+                    <a
                         href="https://www.flaticon.com/authors/mattbadal"
-                        textDecor="underline"
-                        color="teal.500"
+                        className="underline text-teal-600 inline-flex items-center gap-1"
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
                         mattbadal <ExternalLinkIcon />
-                    </Link>
+                    </a>
                     ,{" "}
-                    <Link
+                    <a
                         href="https://www.flaticon.com/authors/freepik"
-                        textDecor="underline"
-                        color="teal.500"
+                        className="underline text-teal-600 inline-flex items-center gap-1"
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
                         Freepik <ExternalLinkIcon />
-                    </Link>
+                    </a>
                     ,{" "}
-                    <Link
+                    <a
                         href="https://www.flaticon.com/authors/ilham-fitrotul-hayat"
-                        textDecor="underline"
-                        color="teal.500"
+                        className="underline text-teal-600 inline-flex items-center gap-1"
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
                         Ilham Fitrotul Hayat <ExternalLinkIcon />
-                    </Link>
+                    </a>
                     , and{" "}
-                    <Link
+                    <a
                         href="https://www.flaticon.com/authors/riajulislam"
-                        textDecor="underline"
-                        color="teal.500"
+                        className="underline text-teal-600 inline-flex items-center gap-1"
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
                         riajulislam <ExternalLinkIcon />
-                    </Link>
+                    </a>
                     .
-                </Text>
+                </p>
 
-                <Text mt={4} fontSize="md" color="gray.700">
+                <p className="mt-4 text-md text-gray-700">
                     <b>{t('backgroundCredit')}</b> <br />
                     {t('backgroundFrom')}{" "}
-                    <Link
+                    <a
                         href="https://4kwallpapers.com/abstract/macos-sonoma-11573.html"
-                        textDecor="underline"
-                        color="teal.500"
+                        className="underline text-teal-600 inline-flex items-center gap-1"
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
                         4kwallpapers <ExternalLinkIcon />
-                    </Link>
+                    </a>
                     .
-                </Text>
-            </Box>
+                </p>
+            </div>
         </div>
     );
 }

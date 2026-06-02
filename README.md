@@ -13,7 +13,7 @@
 🔗 **Live Website:** [Go to Website](https://hyunho.vercel.app/)
 
 ## 📜 Description  
-This project is a portfolio website designed with a terminal and OS-style interface. It was developed using **Next.js, React, React-Redux, and Tailwind CSS**, along with libraries such as **xterm.js, Chakra UI, and Framer Motion**.  
+This project is a portfolio website designed with a terminal and OS-style interface. It is built with **Next.js 16, React 19, TypeScript, Zustand, and Tailwind CSS**, with **xterm.js** powering the terminal experience.
 
 ### 🚀 **Planned Features**  
 - Add OS-like built-in applications (e.g., web browser, file manager)  
@@ -26,9 +26,34 @@ This project is a portfolio website designed with a terminal and OS-style interf
 
 ## 🛠️ Tech Stack  
 - **Frontend:** Next.js, React, TypeScript, Tailwind CSS
-- **State Management:** Redux Toolkit
-- **UI Libraries:** Chakra UI, framer-motion
+- **State Management:** Zustand
+- **UI Libraries:** framer-motion, Radix UI primitives
 - **Terminal Emulator:** xterm.js
+
+## ✅ Verification Gates
+
+Run these commands before treating a refactor as complete:
+
+```bash
+npm test
+npm run lint
+npx tsc --noEmit --pretty false
+npm run build
+```
+
+Recommended order:
+
+1. `npm test`
+2. `npm run lint`
+3. `npx tsc --noEmit --pretty false`
+4. `npm run build`
+
+Current meaning of each gate:
+
+- `npm test`: runs core unit tests with Vitest
+- `npm run lint`: runs ESLint with the Next.js 16 flat config baseline
+- `npx tsc --noEmit --pretty false`: runs standalone TypeScript validation
+- `npm run build`: runs the production build including Next.js TypeScript validation
 
 ## 📦 Installation  
 ```bash
@@ -45,9 +70,18 @@ npm install
 npm run dev
 ```
 
+## 🧪 Local Commands
+
+```bash
+npm run dev
+npm test
+npm run lint
+npx tsc --noEmit --pretty false
+npm run build
+```
+
 ## License
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-
 
 
 

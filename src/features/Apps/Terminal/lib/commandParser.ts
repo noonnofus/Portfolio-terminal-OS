@@ -1,4 +1,5 @@
 import commands from "../command";
+import type { TerminalCommand } from "../command";
 
 export type CommandAction = 'clear' | 'reboot' | 'shutdown' | 'startx' | 'none';
 
@@ -12,7 +13,7 @@ export const executeCommand = (cmd: string, pathname: string): ParseResult => {
   const trimmed = cmd.trim().toLowerCase();
   
   if (trimmed === "help") {
-    const lines = commands.map((c: any) => `   ${c.name.padEnd(15)} ${c.description}`);
+    const lines = commands.map((command: TerminalCommand) => `   ${command.name.padEnd(15)} ${command.description}`);
     return { action: 'none', lines: [" Available commands:", ...lines] };
   } 
   

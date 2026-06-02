@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { Terminal } from '@xterm/xterm';
-import { FitAddon } from '@xterm/addon-fit';
+import type { Terminal, IDisposable } from '@xterm/xterm';
+import type { FitAddon } from '@xterm/addon-fit';
 
 interface UseTerminalProps {
     fontSize?: number;
@@ -12,63 +12,85 @@ export function useTerminal({ fontSize = 14, onInput }: UseTerminalProps = {}) {
     const termInstance = useRef<Terminal | null>(null);
     const fitAddonInstance = useRef<FitAddon | null>(null);
     const resizeObserver = useRef<ResizeObserver | null>(null);
+    const fitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
         if (!terminalRef.current) return;
         const targetElement = terminalRef.current;
+        let isDisposed = false;
+        let term: Terminal | null = null;
+        let fitAddon: FitAddon | null = null;
+        let onDataDisposable: IDisposable | null = null;
 
-        // Initialize xterm
-        const term = new Terminal({
-            cursorBlink: true,
-            fontSize,
-            fontFamily: 'Pretendard, monospace',
-            theme: {
-                background: '#000000',
-                foreground: '#3CD607',
-            },
-        });
-        
-        const fitAddon = new FitAddon();
-        term.loadAddon(fitAddon);
-        
-        termInstance.current = term;
-        fitAddonInstance.current = fitAddon;
+        const init = async () => {
+            const { Terminal: XTerm } = await import('@xterm/xterm');
+            const { FitAddon: XFit } = await import('@xterm/addon-fit');
 
-        term.open(targetElement);
+            if (isDisposed || !terminalRef.current) return;
 
-        // Safely fit once opened
-        setTimeout(() => {
-            if (targetElement && targetElement.clientWidth > 0) {
-                try {
-                    fitAddon.fit();
-                } catch (e) {
-                    console.debug('Initial fit skipped', e);
+            // Initialize xterm
+            const nextTerm = new XTerm({
+                cursorBlink: true,
+                fontSize,
+                fontFamily: 'Menlo, Monaco, "Courier New", monospace',
+                theme: {
+                    background: '#000000',
+                    foreground: '#3CD607',
+                },
+            });
+
+            term = nextTerm;
+            const nextFitAddon = new XFit();
+            fitAddon = nextFitAddon;
+            nextTerm.loadAddon(nextFitAddon);
+            
+            termInstance.current = nextTerm;
+            fitAddonInstance.current = nextFitAddon;
+
+            nextTerm.open(targetElement);
+
+            // Safely fit once opened
+            fitTimeoutRef.current = setTimeout(() => {
+                if (targetElement && targetElement.clientWidth > 0) {
+                    try {
+                        fitAddon?.fit();
+                    } catch {
+                        // FitAddon may race the first layout pass; ResizeObserver retries.
+                    }
                 }
-            }
-        }, 50);
+                fitTimeoutRef.current = null;
+            }, 50);
 
-        // Handle Input
-        const onDataDisposable = term.onData((data) => {
-            if (onInput) onInput(data, term);
-        });
+            // Handle Input
+            onDataDisposable = nextTerm.onData((data) => {
+                if (onInput) onInput(data, nextTerm);
+            });
 
-        // Resize observer for dynamic container sizing
-        resizeObserver.current = new ResizeObserver(() => {
-            if (targetElement.clientWidth > 0 && targetElement.clientHeight > 0) {
-                try {
-                    fitAddon.fit();
-                } catch (e) {
-                    console.debug('Resize fit skipped', e);
+            // Resize observer for dynamic container sizing
+            resizeObserver.current = new ResizeObserver(() => {
+                if (targetElement.clientWidth > 0 && targetElement.clientHeight > 0) {
+                    try {
+                        nextFitAddon.fit();
+                    } catch {
+                        // Ignore transient layout races during resize.
+                    }
                 }
-            }
-        });
-        resizeObserver.current.observe(targetElement);
+            });
+            resizeObserver.current.observe(targetElement);
+        };
+
+        init();
 
         // Cleanup
         return () => {
-            onDataDisposable.dispose();
+            isDisposed = true;
+            if (fitTimeoutRef.current) {
+                clearTimeout(fitTimeoutRef.current);
+                fitTimeoutRef.current = null;
+            }
+            onDataDisposable?.dispose();
             resizeObserver.current?.disconnect();
-            term.dispose();
+            term?.dispose();
             termInstance.current = null;
             fitAddonInstance.current = null;
         };
@@ -91,6 +113,5 @@ export function useTerminal({ fontSize = 14, onInput }: UseTerminalProps = {}) {
         write,
         writeln,
         clear,
-        term: termInstance.current,
     };
 }

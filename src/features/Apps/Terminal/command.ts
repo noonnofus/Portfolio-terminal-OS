@@ -1,4 +1,9 @@
-const commands = [
+export interface TerminalCommand {
+    name: string;
+    description: string;
+}
+
+const commands: TerminalCommand[] = [
     {
       name: 'startx',
       description: 'access to GUI'

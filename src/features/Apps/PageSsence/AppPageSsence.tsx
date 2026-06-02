@@ -1,4 +1,4 @@
-import { Flex, Image, Heading, Text, Link, SimpleGrid, Box, List, Icon } from "@chakra-ui/react";
+import Image from "next/image";
 import { SiVuedotjs, SiInertia, SiTailwindcss, SiPrime, SiVite, SiGit, SiJavascript, SiMysql, SiLaravel, SiAxios, SiPhp } from "react-icons/si"
 import { FaGithub, FaWindowRestore, } from "react-icons/fa"
 import StackIcon from "@/shared/components/StackIcon";
@@ -14,155 +14,131 @@ export default function AppProjcetPageSsence({}: AppProjectPageSsenceProps) {
     const { t } = useTranslation(['PageSsence', 'common']);
     return (
         <div
-            style={{
-                overflow: "scroll",
-                backgroundColor: "white",
-                borderRadius: "0 0 8px 8px",
-                color: 'black',
-            }}
+            className="overflow-scroll bg-white rounded-b-lg text-black"
         >
             <div className="my-8 mx-4 md:mx-36">
-                <Flex
-                    flexDir="column"
-                    alignItems="center"
-                    className="mt-8 mb-3"
+                <div
+                    className="flex flex-col items-center mt-8 mb-3"
                 >
-                    <Heading size="lg" className="font-bold text-3xl text-gray-800 mb-6">
-                        <Text>{t('title')}</Text>
-                    </Heading>
+                    <h2 className="font-bold text-3xl text-gray-800 mb-6">
+                        {t('title')}
+                    </h2>
 
                     <Image
                         src="/icons/pagessence.png"
                         alt="project WCHMS logo image"
-                        boxSize="150px"
-                        fit="cover"
-                        h="auto"
-                        className="mb-4"
+                        width={150}
+                        height={150}
+                        className="mb-4 w-[150px] h-auto object-cover"
                     />
-                    <Link
+                    <a
                         href="/" // need to put it here
-                        textDecor="underline"
-                        mb={4}
+                        className="underline mb-4 flex items-center gap-1"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >
                         {t('linkAction')} <ExternalLinkIcon />
-                    </Link>
-                    <Link
+                    </a>
+                    <a
                         href="https://github.com/noonnofus/PageSsence"
-                        textDecor="underline"
-                        mb={4}
+                        className="underline mb-4 flex items-center gap-1"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >
-                        <Icon as={FaGithub} boxSize={5} />
+                        <FaGithub className="w-5 h-5" />
                         {t('common:sourceCode')} <ExternalLinkIcon />
-                    </Link>
-                    <Flex maxW="700px" flexDir="column" className="ml-1 mr-1">
-                        <Box className="mb-6">
-                            <Heading size="md" className="font-semibold text-xl text-gray-800">
+                    </a>
+                    <div className="max-w-[700px] flex flex-col ml-1 mr-1">
+                        <div className="mb-6">
+                            <h3 className="font-semibold text-xl text-gray-800">
                                 {t('common:overview')}
-                            </Heading>
-                            <Text mt={1} fontSize="sm" color="gray.600">
+                            </h3>
+                            <p className="mt-1 text-sm text-gray-600">
                                 📌 <b>{t('common:projectType')}:</b> {t('common:soloProject')}
-                            </Text>
-                            <Text mt={2}>
+                            </p>
+                            <div className="mt-2">
                                 {t('description')}
-                                <Text mt={1}>
+                                <p className="mt-1">
                                     {t('descriptionContinued')}
-                                </Text>
-                            </Text>
-                        </Box>
+                                </p>
+                            </div>
+                        </div>
 
-                        <Box
-                            width="100%"
-                            borderTop="1px solid #ccc"
-                            margin="0 auto"
+                        <div
+                            className="w-full border-t border-[#ccc] mx-auto"
                         />
 
-                        <Box className="mb-6 mt-6">
-                            <Heading size="md" className="font-semibold text-xl text-gray-800">
+                        <div className="mb-6 mt-6">
+                            <h3 className="font-semibold text-xl text-gray-800">
                                 {t('common:keyFeatures')}
-                            </Heading>
+                            </h3>
 
-                            <List.Root mt={4} ps={4} gap={3} className="text-gray-700">
-                                <List.Item>
+                            <ul className="mt-4 ps-4 flex flex-col gap-3 text-gray-700 list-disc">
+                                <li>
                                     <strong>{t('bookBrowsingSearch')}:</strong> {t('bookBrowsingSearchDesc')}
-                                </List.Item>
-                                <List.Item>
+                                </li>
+                                <li>
                                     <strong>{t('interactiveReviewsRatings')}:</strong> {t('interactiveReviewsRatingsDesc')}
-                                </List.Item>
-                                <List.Item>
+                                </li>
+                                <li>
                                     <strong>{t('roleBasedAccessControl')}:</strong> {t('roleBasedAccessControlDesc')}
-                                </List.Item>
-                                <List.Item>
+                                </li>
+                                <li>
                                     <strong>{t('modernStackUI')}:</strong> {t('modernStackUIDesc')}
-                                </List.Item>
-                            </List.Root>
-                        </Box>
+                                </li>
+                            </ul>
+                        </div>
 
-                        <Box
-                            width="100%"
-                            borderTop="1px solid #ccc"
-                            margin="0 auto"
+                        <div
+                            className="w-full border-t border-[#ccc] mx-auto"
                         />
 
-                        <Box className="mb-6 mt-6">
-                            <Heading mb={2} size="md" className="font-semibold text-xl text-gray-800">
+                        <div className="mb-6 mt-6">
+                            <h3 className="mb-2 font-semibold text-xl text-gray-800">
                                 Tech Stack
-                            </Heading>
+                            </h3>
 
-                            <Heading mt={6} mb={2} className="text-lg font-semibold">Frontend</Heading>
-                            <SimpleGrid columns={3} gap={5} mb={12}>
+                            <h4 className="mt-6 mb-2 text-lg font-semibold">Frontend</h4>
+                            <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon label="Vue.js" icon={SiVuedotjs} color="#42b883" />
                                 <StackIcon label="Inertia.js" icon={SiInertia} color="#000000" />
                                 <StackIcon label="PrimeVue" icon={SiPrime} color="#4CAF50" />
                                 <StackIcon label="Vite" icon={SiVite} color="#646CFF" />
                                 <StackIcon label="JavaScript" icon={SiJavascript} color="#f7df1e" />
                                 <StackIcon label="TailwindCSS" icon={SiTailwindcss} color="#38B2AC" />
-                            </SimpleGrid>
+                            </div>
 
-                            <Heading mt={6} mb={2} className="text-lg font-semibold">Backend</Heading>
-                            <SimpleGrid columns={3} gap={5} mb={12}>
+                            <h4 className="mt-6 mb-2 text-lg font-semibold">Backend</h4>
+                            <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon label="Laravel" icon={SiLaravel} color="#FF2D20" />
                                 <StackIcon label="PHP" icon={SiPhp} color="#777BB4" />
                                 <StackIcon label="MySQL" icon={SiMysql} color="#00758F" />
-                            </SimpleGrid>
+                            </div>
 
-                            <Heading mt={6} mb={2} className="text-lg font-semibold">Authentication</Heading>
-                            <SimpleGrid columns={3} gap={5} mb={12}>
+                            <h4 className="mt-6 mb-2 text-lg font-semibold">Authentication</h4>
+                            <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon label="Laravel Breeze" icon={SiLaravel} color="#FF2D20" />
-                            </SimpleGrid>
+                            </div>
 
-                            <Heading mt={6} mb={2} className="text-lg font-semibold">Libraries & Services</Heading>
-                            <SimpleGrid columns={3} gap={5} mb={12}>
+                            <h4 className="mt-6 mb-2 text-lg font-semibold">Libraries & Services</h4>
+                            <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon label="Axios" icon={SiAxios} color="#5A29E4" />
                                 <StackIcon label="Ziggy" icon={SiLaravel} color="#FF2D20" />
                                 <StackIcon label="Inertia Modal" icon={FaWindowRestore} color="#4A5568" />
-                            </SimpleGrid>
+                            </div>
 
-                            <Heading mt={6} mb={2} className="text-lg font-semibold">Other Tools</Heading>
-                            <SimpleGrid columns={3} gap={5} mb={6}>
+                            <h4 className="mt-6 mb-2 text-lg font-semibold">Other Tools</h4>
+                            <div className="grid grid-cols-3 gap-5 mb-6">
                                 <StackIcon label="GitHub" icon={FaGithub} color="black" />
                                 <StackIcon label="Git" icon={SiGit} color="#F05033" />
-                            </SimpleGrid>
-                        </Box>
+                            </div>
+                        </div>
 
-                        <Box
-                            width="100%"
-                            borderTop="1px solid #ccc"
-                            margin="0 auto"
-                            className="mb-6"
+                        <div
+                            className="w-full border-t border-[#ccc] mx-auto mb-6"
                         />
-
-                        {/* <Box className="mt-6">
-                            <Heading size="md" className="font-semibold text-xl text-gray-800">
-                                App Walkthrough
-                            </Heading>
-                            <Text mt={2}>
-                                Watch how users browse books, read and write reviews, and rate their favorite reads.
-                            </Text>
-                        </Box> */}
-                    </Flex>
-                </Flex>
+                    </div>
+                </div>
             </div>
         </div>
     );

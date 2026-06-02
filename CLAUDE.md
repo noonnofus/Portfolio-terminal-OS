@@ -1,19 +1,30 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance for agents working in this repository.
 
 ## Project Overview
 
-A Next.js 15 portfolio website styled as a terminal/desktop OS. Users land on a full-screen xterm.js terminal emulator (`/`) and can switch to a windowed desktop GUI (`/gui`) via the `gui` command. Fully bilingual (Korean/English).
+A Next.js 16 portfolio website styled as a terminal/desktop OS. Users land on a full-screen xterm.js terminal emulator (`/`) and can switch to a windowed desktop GUI (`/gui`) via the `startx` command. Fully bilingual (Korean/English).
 
 ## Commands
 
 ```bash
 npm run dev      # Dev server at localhost:3000
+npm test         # Vitest unit tests under src/
+npx tsc --noEmit --pretty false  # Standalone TypeScript gate
 npm run build    # Production build
 npm run start    # Start production server
-npm run lint     # ESLint (next lint)
+npm run lint     # ESLint (flat config, Next.js 16 baseline)
 ```
+
+## Verification Order
+
+Run these in order before closing a refactor task:
+
+1. `npm test`
+2. `npm run lint`
+3. `npx tsc --noEmit --pretty false`
+4. `npm run build`
 
 ## Architecture
 
@@ -24,35 +35,43 @@ npm run lint     # ESLint (next lint)
 
 ### Provider Stack (`ClientProvider.tsx`)
 
-Redux Provider → I18nextProvider → ChakraProvider → I18nWrapper (syncs Redux language state to i18next)
+I18nextProvider → ChakraProvider → I18nWrapper (syncs Zustand language state to i18next)
 
-### State Management (Redux Toolkit — `src/app/store/`)
+### State Management (Zustand)
 
-- **desktopSlice** — window management: `openApps`, `activeApp`, `focusApp`, `isTouchDevice`, `showAppMenu`, `showModal`, `userRole`
-- **languageSlice** — i18n: `currentLanguage` ("ko" | "en"), auto-detects browser language
+- **Desktop store** — `src/features/Desktop/store/useDesktopStore.ts`
+- **Language store** — `src/shared/lib/i18n/useLanguageStore.ts`
+- Window state includes `openApps`, `activeApp`, `focusApp`, `isTouchDevice`, `showAppMenu`, `showModal`, `userRole`
 
-### Terminal System (`src/app/terminal/`)
+### Terminal System (`src/features/Apps/Terminal/`)
 
-@xterm/xterm (formerly xterm.js) with FitAddon. Flow: `TerminalPage` → `write-text.ts` (animated typing) → `handle-input.ts` (command parsing). `global-state.ts` holds terminal state. Typing `gui` navigates to `/gui`.
+`@xterm/xterm` with FitAddon. Main files:
+
+- `TerminalPage.tsx`
+- `hooks/useTerminal.ts`
+- `lib/commandParser.ts`
+- `command.ts`
+
+Typing `startx` navigates to `/gui`.
 
 ### Desktop App System
 
-Apps are defined as objects (`iconName`, `appName`, `title`, `component`) in `src/lib/apps.tsx` and `src/lib/projectsApps.tsx`, combined via `allApps.tsx`. Redux tracks which apps are open/focused. `DesktopAppWindow` (`src/app/components/desktop/DesktopAppWindow.tsx`) is the standard container for windowed apps, handling dragging, focus, and fullscreen logic via Framer Motion. Mobile renders a touch-friendly folder view. Device detection via `src/lib/isTouchDevice.ts` hook.
+Apps are defined in `src/features/Apps/Config/` and rendered inside the Desktop feature. Zustand tracks which apps are open/focused. `DesktopAppWindow` under `src/features/Desktop/components/` is the standard container for windowed apps, handling dragging, focus, and fullscreen logic via Framer Motion. Mobile renders a touch-friendly folder view. Device detection lives in `src/features/Desktop/hooks/useIsTouchDevice.ts`.
 
-### i18n (`src/lib/i18n.ts`)
+### i18n (`src/shared/lib/i18n.ts`)
 
-react-i18next with 11 JSON namespaces per language under `public/locales/{ko,en}/`. Components use `useTranslation(['namespace', 'common'])`. Language switch dispatches to Redux which syncs to i18next via `I18nWrapper`.
+react-i18next with JSON namespaces under `public/locales/{ko,en}/`. Components use `useTranslation(['namespace', 'common'])`. Language state is stored in Zustand and synced to i18next via `I18nWrapper`.
 
 ### Styling & Security
 
-- **Styling**: Tailwind CSS (primary) + Chakra UI (component library) + component-specific CSS in `src/app/styles/`.
+- **Styling**: Tailwind CSS (primary) + Chakra UI provider + shared CSS files in `src/shared/styles/` and `src/app/globals.css`.
 - **Security**: Hardened headers (CSP-lite, Frame Options, etc.) in `next.config.ts`.
 - **Path Alias**: `@/*` → `src/*`.
 
 ## Key Conventions
 
 - **Window Management**: Always wrap desktop apps in `DesktopAppWindow` for consistent OS behavior.
-- **Builds**: ESLint and TypeScript errors are ignored during builds (`next.config.ts`) — they still run via `npm run lint`.
+- **Verification**: A task is not complete until `npm test`, `npm run lint`, `npx tsc --noEmit --pretty false`, and `npm run build` all pass.
 - **Performance**: Chakra UI imports are optimized via `experimental.optimizePackageImports`.
 - **AI Hygiene**: `.claude/`, `.gemini/`, and `.serena/` directories are ignored via `.gitignore`.
 - **Components**: Use `AppDesktopHeader` for window chrome, `MarkdownRender` for content, `StackIcon` for tech badges.
