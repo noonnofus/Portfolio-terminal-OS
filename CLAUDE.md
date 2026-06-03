@@ -76,6 +76,10 @@ react-i18next with JSON namespaces under `public/locales/{ko,en}/`. Components u
 - **AI Hygiene**: `.claude/`, `.gemini/`, and `.serena/` directories are ignored via `.gitignore`.
 - **Components**: Use `AppDesktopHeader` for window chrome, `MarkdownRender` for content, `StackIcon` for tech badges.
 - **Commit Messages**: Write commit messages in Korean using `<branch-type>: <작업 간략 설명>`. Use the branch prefix before `/` as `<branch-type>` when applicable, e.g. `refactor: 아이콘 변경`.
+- **PR Rules**: Open PRs as a knowledge base, not just a code approval request. Keep commits atomic, keep one PR scoped to one purpose, self-review before opening, and write the PR title/body in Korean.
+- **PR Title Format**: Use `<branch-type>: <작업 간략 설명>`, matching the commit rule. Example: `refactor: 아이콘 변경`.
+- **PR Body Format**: Include Context, Summary of Changes, Trade-offs, How to Test, Out of Scope, and Visuals when UI changes are included.
+- **Review Etiquette**: Add self-comments for non-obvious trade-offs, avoid meaningless feedback commits, and summarize any synchronous review decisions back in the PR thread.
 
 ## Skill routing
 
