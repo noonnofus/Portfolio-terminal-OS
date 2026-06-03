@@ -75,6 +75,7 @@ react-i18next with JSON namespaces under `public/locales/{ko,en}/`. Components u
 - **Performance**: Chakra UI imports are optimized via `experimental.optimizePackageImports`.
 - **AI Hygiene**: `.claude/`, `.gemini/`, and `.serena/` directories are ignored via `.gitignore`.
 - **Components**: Use `AppDesktopHeader` for window chrome, `MarkdownRender` for content, `StackIcon` for tech badges.
+- **Commit Messages**: Write commit messages in Korean using `<branch-type>: <작업 간략 설명>`. Use the branch prefix before `/` as `<branch-type>` when applicable, e.g. `refactor: 아이콘 변경`.
 
 ## Skill routing
 
