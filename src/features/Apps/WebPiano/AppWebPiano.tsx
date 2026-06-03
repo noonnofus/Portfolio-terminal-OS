@@ -14,13 +14,13 @@ export default function AppProjcetWebPiano({}: AppProjectWebPianoProps) {
     const { t } = useTranslation(['WebPiano', 'common']);
     return (
         <div
-            className="overflow-scroll bg-white rounded-b-lg text-black"
+            className="overflow-scroll bg-white rounded-b-pen-lg text-black"
         >
             <div className="my-8 mx-4 md:mx-36">
                 <div
                     className="flex flex-col items-center mt-8 mb-3"
                 >
-                    <h2 className="font-bold text-3xl text-gray-800 mb-6">
+                    <h2 className="font-bold text-3xl text-pen-gray-800 mb-6">
                         {t('title')}
                     </h2>
 
@@ -52,10 +52,10 @@ export default function AppProjcetWebPiano({}: AppProjectWebPianoProps) {
                     </a>
                     <div className="max-w-[700px] flex flex-col ml-1 mr-1">
                         <div className="mb-6">
-                            <h3 className="font-semibold text-xl text-gray-800">
+                            <h3 className="font-semibold text-xl text-pen-gray-800">
                                 {t('common:overview')}
                             </h3>
-                            <p className="mt-1 text-sm text-gray-600">
+                            <p className="mt-1 text-sm text-pen-gray-600">
                                 📌 <b>{t('common:projectType')}:</b> {t('common:soloProject')}
                             </p>
                             <p className="mt-2">
@@ -64,15 +64,15 @@ export default function AppProjcetWebPiano({}: AppProjectWebPianoProps) {
                         </div>
 
                         <div
-                            className="w-full border-t border-[#ccc] mx-auto"
+                            className="w-full border-t border-pen-gray-300 mx-auto"
                         />
 
                         <div className="mb-6 mt-6">
-                            <h3 className="font-semibold text-xl text-gray-800">
+                            <h3 className="font-semibold text-xl text-pen-gray-800">
                                 {t('common:keyFeatures')}
                             </h3>
 
-                            <ul className="mt-4 ps-4 flex flex-col gap-3 text-gray-700 list-disc">
+                            <ul className="mt-4 ps-4 flex flex-col gap-3 text-pen-gray-700 list-disc">
                                 <li>
                                     <strong>{t('keyboardBasedPlay')}:</strong> {t('keyboardBasedPlayDesc')}
                                 </li>
@@ -89,11 +89,11 @@ export default function AppProjcetWebPiano({}: AppProjectWebPianoProps) {
                         </div>
 
                         <div
-                            className="w-full border-t border-[#ccc] mx-auto"
+                            className="w-full border-t border-pen-gray-300 mx-auto"
                         />
 
                         <div className="mb-6 mt-6">
-                            <h3 className="font-semibold text-xl text-gray-800">
+                            <h3 className="font-semibold text-xl text-pen-gray-800">
                                 {t('common:techStack')}
                             </h3>
 
@@ -109,10 +109,10 @@ export default function AppProjcetWebPiano({}: AppProjectWebPianoProps) {
 
 
                         <div
-                            className="w-full border-t border-[#ccc] mx-auto mb-6"
+                            className="w-full border-t border-pen-gray-300 mx-auto mb-6"
                         />
                         <div className="mt-6">
-                            <h3 className="font-semibold text-xl text-gray-800">
+                            <h3 className="font-semibold text-xl text-pen-gray-800">
                                 {t('common:appWalkthrough')}
                             </h3>
                             <p className="mt-2 mb-2">

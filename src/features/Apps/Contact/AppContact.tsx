@@ -11,7 +11,7 @@ export default function AppContact({}: AppContactProps) {
     const { t } = useTranslation(["Contact", "common"]);
     return (
         <div
-            className="w-full h-[95%] overflow-scroll bg-white rounded-b-lg text-black"
+            className="w-full h-[95%] overflow-scroll bg-white rounded-b-pen-lg text-black"
         >
             <div className="my-8 mx-4 md:mx-36">
                 <div className="px-6 py-4">
@@ -19,7 +19,7 @@ export default function AppContact({}: AppContactProps) {
                         {t("title")}
                     </h2>
 
-                    <p className="mt-2 mb-4 text-md text-gray-700">
+                    <p className="mt-2 mb-4 text-md text-pen-gray-700">
                         {t("description")}
                     </p>
 

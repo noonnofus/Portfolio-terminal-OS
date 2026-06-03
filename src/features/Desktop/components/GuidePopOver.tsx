@@ -18,7 +18,7 @@ export default function GuidePopOver() {
             <PopoverTrigger asChild>
                 <button
                     className="h-8 w-8 rounded-full flex items-center justify-center text-lg shadow-md text-white
-                    bg-[#5488c0] border-[#4776a6] border hover:bg-[#4776a6] hover:border-[#365d85] transition-colors duration-200"
+                    bg-pen-primary-light border-pen-primary border hover:bg-pen-primary hover:border-[#365d85] transition-colors duration-200"
                     aria-label="Help"
                 >
                     <MdOutlineQuestionMark />

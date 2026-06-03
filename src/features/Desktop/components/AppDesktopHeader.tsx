@@ -19,7 +19,7 @@ export default function AppDesktopHeader({
 
     return (
         <div className="relative w-full overflow-hidden">
-            <div className="flex gap-3 justify-between bg-gray-300/70 px-4 py-2 rounded-t-lg">
+            <div className="flex gap-3 justify-between bg-pen-gray-300/70 px-4 py-2 rounded-t-pen-lg">
                 <div className="flex-1 flex items-center justify-start relative">
                     <div
                         onClick={() => {

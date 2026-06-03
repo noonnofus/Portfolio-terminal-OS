@@ -66,7 +66,7 @@ export default function DesktopMainViewHeader() {
 
     return (
         <div className="relative w-full">
-            <div className="flex gap-4 justify-between bg-gray-600/20 backdrop-blur-sm px-4 py-2 relative z-10">
+            <div className="flex gap-4 justify-between bg-pen-gray-600/20 backdrop-blur-sm px-4 py-2 relative z-10">
                 <div className="flex-1">
                     <Image
                         src="/icons/main.png"

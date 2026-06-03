@@ -45,7 +45,7 @@ export default function DefaultModal() {
             className="flex flex-col gap-4"
           >
             <div
-              className={`flex items-center space-x-3 rounded-lg border p-4 transition-colors cursor-pointer ${
+              className={`flex items-center space-x-3 rounded-pen-lg border p-4 transition-colors cursor-pointer ${
                 role === 'technician'
                   ? 'border-primary bg-accent/50'
                   : 'border-border hover:bg-accent/30'
@@ -61,7 +61,7 @@ export default function DefaultModal() {
               </Label>
             </div>
             <div
-              className={`flex items-center space-x-3 rounded-lg border p-4 transition-colors cursor-pointer ${
+              className={`flex items-center space-x-3 rounded-pen-lg border p-4 transition-colors cursor-pointer ${
                 role === 'non-technician'
                   ? 'border-primary bg-accent/50'
                   : 'border-border hover:bg-accent/30'

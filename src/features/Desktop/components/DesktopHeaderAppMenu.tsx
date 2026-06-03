@@ -21,7 +21,7 @@ export default function DesktopHeaderAppMenu() {
     }
 
     return (
-        <div className="w-[400px] min-h-[150px] absolute z-10 bg-white/95 text-black p-4 border border-black/10 rounded-lg flex flex-col shadow-[1.5px_1.5px_1.5px_rgba(0,0,0,0.1)]">
+        <div className="w-[400px] min-h-[150px] absolute z-10 bg-white/95 text-black p-4 border border-black/10 rounded-pen-lg flex flex-col shadow-[1.5px_1.5px_1.5px_rgba(0,0,0,0.1)]">
             <div className="flex">
                 <div className="w-[40%] border-r border-black/10 pt-2">
                     Applications
@@ -31,7 +31,7 @@ export default function DesktopHeaderAppMenu() {
                         return (
                             <div
                                 key={i}
-                                className="flex items-center p-2 hover:bg-gray-200 rounded-[5px] cursor-pointer"
+                                className="flex items-center p-2 hover:bg-pen-gray-200 rounded-pen-sm cursor-pointer"
                                 onClick={() => {
                                     setActiveApp(app.appName);
                                     setShowAppMenu(false);
@@ -53,7 +53,7 @@ export default function DesktopHeaderAppMenu() {
             </div>
             <div className="flex flex-col border-t border-black/10 pt-3 mt-3">
                 <div
-                    className="hover:bg-gray-200 p-2 cursor-pointer w-[180px] rounded-[10px] flex items-center"
+                    className="hover:bg-pen-gray-200 p-2 cursor-pointer w-[180px] rounded-pen-md flex items-center"
                     onClick={hanldeShutdownClick}
                 >
                     <RiShutDownLine className="w-[30px] h-[30px]" />
@@ -61,7 +61,7 @@ export default function DesktopHeaderAppMenu() {
                     <span className="select-none">Shutdown</span>
                 </div>
                 <div
-                    className="hover:bg-gray-200 p-2 cursor-pointer w-[180px] rounded-[10px] flex items-center"
+                    className="hover:bg-pen-gray-200 p-2 cursor-pointer w-[180px] rounded-pen-md flex items-center"
                     onClick={handleRebootClick}
                 >
                     <MdOutlineRestartAlt className="w-[30px] h-[30px]" />

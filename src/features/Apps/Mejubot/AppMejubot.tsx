@@ -25,7 +25,7 @@ export default function AppProjcetMejubot({}: AppProjectMejubotProps) {
         >
             <div className="my-8 mx-4 md:mx-36">
                 <div className="flex flex-col items-center mt-8 mb-3">
-                    <h2 className="font-bold text-3xl text-gray-800 mb-6 text-center">
+                    <h2 className="font-bold text-3xl text-pen-gray-800 mb-6 text-center">
                         {t('title')}
                     </h2>
 
@@ -46,10 +46,10 @@ export default function AppProjcetMejubot({}: AppProjectMejubotProps) {
                     </a>
                     <div className="max-w-[700px] flex flex-col mx-1">
                         <div className="mb-6">
-                            <h3 className="font-semibold text-xl text-gray-800">
+                            <h3 className="font-semibold text-xl text-pen-gray-800">
                                 {t('common:overview')}
                             </h3>
-                            <p className="mt-1 text-sm text-gray-600">
+                            <p className="mt-1 text-sm text-pen-gray-600">
                                 📌 <b>{t('common:projectType')}:</b> {t('common:soloProject')}
                             </p>
                             <p className="mt-2">
@@ -57,14 +57,14 @@ export default function AppProjcetMejubot({}: AppProjectMejubotProps) {
                             </p>
                         </div>
 
-                        <div className="w-full border-t border-[#ccc] mx-auto" />
+                        <div className="w-full border-t border-pen-gray-300 mx-auto" />
 
                         <div className="mb-6 mt-6">
-                            <h3 className="font-semibold text-xl text-gray-800">
+                            <h3 className="font-semibold text-xl text-pen-gray-800">
                                 {t('common:keyFeatures')}
                             </h3>
 
-                            <ul className="mt-4 ps-4 space-y-3 text-gray-700 list-disc">
+                            <ul className="mt-4 ps-4 space-y-3 text-pen-gray-700 list-disc">
                                 <li>
                                     <strong>{t('youtubeMusicPlayback')}:</strong> {t('youtubeMusicPlaybackDesc')}
                                 </li>
@@ -80,10 +80,10 @@ export default function AppProjcetMejubot({}: AppProjectMejubotProps) {
                             </ul>
                         </div>
 
-                        <div className="w-full border-t border-[#ccc] mx-auto" />
+                        <div className="w-full border-t border-pen-gray-300 mx-auto" />
 
                         <div className="mb-6 mt-6">
-                            <h3 className="mb-2 font-semibold text-xl text-gray-800">
+                            <h3 className="mb-2 font-semibold text-xl text-pen-gray-800">
                                 Tech Stack
                             </h3>
 
@@ -115,7 +115,7 @@ export default function AppProjcetMejubot({}: AppProjectMejubotProps) {
                             </div>
                         </div>
 
-                        <div className="w-full border-t border-[#ccc] mx-auto mb-6" />
+                        <div className="w-full border-t border-pen-gray-300 mx-auto mb-6" />
                     </div>
                 </div>
             </div>

@@ -22,10 +22,10 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
     return (
         <div className="my-8 mx-4 md:mx-36 text-black">
             <div className="mb-8">
-                <h2 className="font-bold text-3xl text-gray-800">
+                <h2 className="font-bold text-3xl text-pen-gray-800">
                     {t('title')}
                 </h2>
-                <p className="mt-3 text-md text-gray-700">
+                <p className="mt-3 text-md text-pen-gray-700">
                     {t('description')}
                 </p>
             </div>
@@ -104,7 +104,7 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                 <h2 className="mb-4 font-bold text-2xl">
                     {t('iconsBackgroundCredits')}
                 </h2>
-                <p className="mt-2 text-md text-gray-700">
+                <p className="mt-2 text-md text-pen-gray-700">
                     <b>{t('iconsCredit')}</b> <br />
                     {t('iconsProvidedBy')}{" "}
                     <a
@@ -154,7 +154,7 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                     .
                 </p>
 
-                <p className="mt-4 text-md text-gray-700">
+                <p className="mt-4 text-md text-pen-gray-700">
                     <b>{t('backgroundCredit')}</b> <br />
                     {t('backgroundFrom')}{" "}
                     <a
