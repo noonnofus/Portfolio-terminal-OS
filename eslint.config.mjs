@@ -22,6 +22,8 @@ const eslintConfig = defineConfig([
         ".Codex/**",
         ".gemini/**",
         ".serena/**",
+        ".venv-rembg/**",
+        ".playwright-mcp/**",
     ]),
 ]);
 
