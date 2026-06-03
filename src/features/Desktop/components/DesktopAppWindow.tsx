@@ -57,7 +57,7 @@ export const DesktopAppWindow: React.FC<DesktopAppWindowProps> = ({
                 width: isFullScreen ? "100vw" : width,
                 height: isFullScreen ? "100vh" : height,
             }}
-            className="border-[0.3px] border-gray-500 bg-white flex flex-col overflow-hidden"
+            className="border-[0.3px] border-pen-gray-500 bg-white flex flex-col overflow-hidden"
             onPointerDown={(e) => {
                 setFocusApp(app.appName);
                 if (onPointerDown) onPointerDown(e);

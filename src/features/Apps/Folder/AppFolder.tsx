@@ -16,7 +16,7 @@ export default function AppFolder() {
 
     return (
         <div
-            className="w-full h-full grow overflow-scroll text-black rounded-lg relative"
+            className="w-full h-full grow overflow-scroll text-black rounded-pen-lg relative"
             ref={dragAreaRef}
         >
             <div className="flex flex-wrap h-full">

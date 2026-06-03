@@ -23,16 +23,16 @@ interface AppAboutProps {
 export default function AppAbout({}: AppAboutProps) {
     const { t } = useTranslation(['About', 'common']);
     return (
-        <div className="w-full h-[95%] overflow-y-auto bg-white rounded-b-lg text-black">
+        <div className="w-full h-[95%] overflow-y-auto bg-white rounded-b-pen-lg text-black">
             <div className="my-8 mx-4 md:mx-36">
                 <div className="mb-8">
-                    <h2 className="font-bold text-3xl text-gray-800">
+                    <h2 className="font-bold text-3xl text-pen-gray-800">
                         {t('title')}
                     </h2>
-                    <p className="mt-2 text-md text-gray-700">
+                    <p className="mt-2 text-md text-pen-gray-700">
                         {t('description')}
                     </p>
-                    <p className="mt-1 text-md text-gray-600">
+                    <p className="mt-1 text-md text-pen-gray-600">
                         {t('education')}
                     </p>
                 </div>

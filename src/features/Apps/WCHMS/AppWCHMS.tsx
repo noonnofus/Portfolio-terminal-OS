@@ -30,14 +30,14 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
     const { t } = useTranslation(["WCHMS", "common"]);
     return (
         <div
-            className="overflow-scroll bg-white rounded-b-lg text-black"
+            className="overflow-scroll bg-white rounded-b-pen-lg text-black"
         >
             <div className="my-8 mx-4 md:mx-36">
                 <div
                     className="flex flex-col items-center mt-8 mb-3"
                 >
                     <h2
-                        className="font-bold text-3xl text-gray-800 mb-6"
+                        className="font-bold text-3xl text-pen-gray-800 mb-6"
                     >
                         {t("title")}
                     </h2>
@@ -62,11 +62,11 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
                     <div className="max-w-[700px] flex flex-col ml-1 mr-1">
                         <div className="mb-6">
                             <h3
-                                className="font-semibold text-xl text-gray-800"
+                                className="font-semibold text-xl text-pen-gray-800"
                             >
                                 {t("common:overview")}
                             </h3>
-                            <p className="mt-1 text-sm text-gray-600">
+                            <p className="mt-1 text-sm text-pen-gray-600">
                                 📌 <b>{t("common:projectType")}:</b>{" "}
                                 {t("common:clientGroupProject")}
                             </p>
@@ -77,22 +77,22 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
                         </div>
 
                         <div
-                            className="w-full border-t border-[#ccc] mx-auto"
+                            className="w-full border-t border-pen-gray-300 mx-auto"
                         />
 
                         <div className="mb-6 mt-6">
                             <h3
-                                className="font-semibold text-xl text-gray-800"
+                                className="font-semibold text-xl text-pen-gray-800"
                             >
                                 {t("common:myRole")}
                             </h3>
 
-                            <p className="mt-2 text-gray-700">
+                            <p className="mt-2 text-pen-gray-700">
                                 {t("myRoleDescription")}
                             </p>
 
                             <ul
-                                className="mt-4 ps-4 flex flex-col gap-3 text-gray-700 list-disc"
+                                className="mt-4 ps-4 flex flex-col gap-3 text-pen-gray-700 list-disc"
                             >
                                 <li>
                                     <strong>{t("aiPoweredSelfStudy")}:</strong>{" "}
@@ -114,12 +114,12 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
                         </div>
 
                         <div
-                            className="w-full border-t border-[#ccc] mx-auto"
+                            className="w-full border-t border-pen-gray-300 mx-auto"
                         />
 
                         <div className="mb-6 mt-6">
                             <h3
-                                className="mb-2 font-semibold text-xl text-gray-800"
+                                className="mb-2 font-semibold text-xl text-pen-gray-800"
                             >
                                 {t("common:techStack")}
                             </h3>
@@ -241,12 +241,12 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
                         </div>
 
                         <div
-                            className="w-full border-t border-[#ccc] mx-auto mb-6"
+                            className="w-full border-t border-pen-gray-300 mx-auto mb-6"
                         />
 
                         <div className="mt-6">
                             <h3
-                                className="font-semibold text-xl text-gray-800"
+                                className="font-semibold text-xl text-pen-gray-800"
                             >
                                 {t("common:appWalkthrough")}
                             </h3>
