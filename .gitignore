@@ -43,8 +43,10 @@ next-env.d.ts
 # AI Assistants
 .claude/
 .gemini/
+.gemini/rules/
 .serena/
 .agents/
+CLAUDE.md
 GEMINI.md
 
 # Documentation
