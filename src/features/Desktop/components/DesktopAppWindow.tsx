@@ -6,10 +6,10 @@ import { useDesktopStore } from "@/features/Desktop/store/useDesktopStore";
 import AppDesktopHeader from "./AppDesktopHeader";
 
 interface AppDefinition {
-    iconName: string;
+    iconSrc: string;
     appName: string;
     title: string;
-    component: React.ReactNode;
+    render: () => React.ReactNode;
 }
 
 interface DesktopAppWindowProps {
@@ -57,7 +57,7 @@ export const DesktopAppWindow: React.FC<DesktopAppWindowProps> = ({
                 width: isFullScreen ? "100vw" : width,
                 height: isFullScreen ? "100vh" : height,
             }}
-            className="border-[0.3px] border-pen-gray-500 bg-white flex flex-col overflow-hidden"
+            className="flex flex-col overflow-hidden border border-window-border bg-window-surface text-window-foreground"
             onPointerDown={(e) => {
                 setFocusApp(app.appName);
                 if (onPointerDown) onPointerDown(e);
@@ -72,7 +72,7 @@ export const DesktopAppWindow: React.FC<DesktopAppWindowProps> = ({
                 />
             </div>
             <div className="flex-1 overflow-auto">
-                {app.component}
+                {app.render()}
             </div>
         </motion.div>
     );

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react";
-import { MdOutlineQuestionMark } from "react-icons/md";
+import { CircleQuestionMark } from "lucide-react";
 import {
     Popover,
     PopoverTrigger,
@@ -17,17 +17,17 @@ export default function GuidePopOver() {
         <Popover>
             <PopoverTrigger asChild>
                 <button
-                    className="h-8 w-8 rounded-full flex items-center justify-center text-lg shadow-md text-white
-                    bg-pen-primary-light border-pen-primary border hover:bg-pen-primary hover:border-[#365d85] transition-colors duration-200"
+                    type="button"
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-primary bg-primary/85 text-primary-foreground shadow-md transition-colors duration-200 hover:bg-primary"
                     aria-label="Help"
                 >
-                    <MdOutlineQuestionMark />
+                    <CircleQuestionMark />
                 </button>
             </PopoverTrigger>
-            <PopoverContent className="w-80 bg-zinc-950 border-zinc-800 text-white p-4">
+            <PopoverContent className="w-80 border-panel-border bg-panel text-panel-foreground">
                 <div className="flex flex-col gap-3">
                     <h4 className="font-bold text-lg">Quick Guide</h4>
-                    <div className="text-sm text-zinc-300">
+                    <div className="text-sm text-muted-foreground">
                         {step === 1 && (
                             <>
                                 <p className="mb-2">🖱 Double-click an icon or click an icon and press enter to open an app.</p>
@@ -45,7 +45,7 @@ export default function GuidePopOver() {
                         )}
                     </div>
                     <div className="flex justify-between items-center mt-2">
-                        <span className="text-xs text-zinc-500">
+                        <span className="text-xs text-muted-foreground">
                             Step {step} of {TOTAL_STEPS}
                         </span>
                         <div className="flex gap-2">
@@ -54,7 +54,7 @@ export default function GuidePopOver() {
                                 variant="outline"
                                 onClick={() => setStep(step - 1)}
                                 disabled={step === 1}
-                                className="h-8 text-xs border-zinc-700"
+                                className="h-8 border-panel-border bg-transparent text-xs text-panel-foreground hover:bg-accent/70 hover:text-panel-foreground"
                             >
                                 Prev
                             </Button>
@@ -63,7 +63,7 @@ export default function GuidePopOver() {
                                 variant="outline"
                                 onClick={() => setStep(step + 1)}
                                 disabled={step === TOTAL_STEPS}
-                                className="h-8 text-xs border-zinc-700"
+                                className="h-8 border-panel-border bg-transparent text-xs text-panel-foreground hover:bg-accent/70 hover:text-panel-foreground"
                             >
                                 Next
                             </Button>

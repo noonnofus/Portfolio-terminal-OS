@@ -3,6 +3,7 @@ import "./globals.css";
 import "@xterm/xterm/css/xterm.css";
 import ClientProvider from "./ClientProvider";
 import localFont from "next/font/local";
+import { DEFAULT_LANGUAGE } from "@/shared/lib/i18n/useLanguageStore";
 
 const pretendard = localFont({
   src: "../../public/fonts/PretendardVariable.woff2",
@@ -22,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={pretendard.variable} suppressHydrationWarning>
-      <body className={pretendard.className} suppressHydrationWarning>
+    <html lang={DEFAULT_LANGUAGE} className={pretendard.variable} suppressHydrationWarning>
+      <body className={pretendard.className}>
         <ClientProvider>{children}</ClientProvider>
       </body>
     </html>

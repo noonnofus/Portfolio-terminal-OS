@@ -1,5 +1,4 @@
-import { LuExternalLink } from "react-icons/lu";
-import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import { Contact, ExternalLink, GitBranch, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Language } from "@/shared/lib/i18n/useLanguageStore";
 
@@ -25,33 +24,33 @@ export default function AppContact({}: AppContactProps) {
 
                     <div className="flex flex-col gap-4 items-start">
                         <div className="flex items-center gap-3">
-                            <FaEnvelope className="w-5 h-5" />
+                            <Mail className="w-5 h-5" />
                             <a
                                 href="mailto:kevinvancouver02@gmail.com"
                                 className="underline flex items-center gap-1"
                             >
-                                kevinvancouver02@gmail.com <LuExternalLink />
+                                kevinvancouver02@gmail.com <ExternalLink />
                             </a>
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <FaGithub className="w-5 h-5" />
+                            <GitBranch className="w-5 h-5" />
                             <a
                                 href="https://github.com/noonnofus"
                                 className="underline flex items-center gap-1"
                             >
-                                github.com/noonnofus <LuExternalLink />
+                                github.com/noonnofus <ExternalLink />
                             </a>
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <FaLinkedin className="w-5 h-5" />
+                            <Contact className="w-5 h-5" />
                             <a
                                 href="https://www.linkedin.com/in/kevin-hyun-ho-kim/"
                                 className="underline flex items-center gap-1"
                             >
                                 linkedin.com/in/kevin-hyun-ho-kim{" "}
-                                <LuExternalLink />
+                                <ExternalLink />
                             </a>
                         </div>
                     </div>

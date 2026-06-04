@@ -19,7 +19,7 @@ export default function DesktopMainDragArea() {
     const setActiveApp = useDesktopStore((state) => state.setActiveApp);
     const language = useLanguageStore((state) => state.currentLanguage);
     
-    const allAppList = allApps();
+    const allAppList = allApps(language);
 
     const [fullscreenStates, setFullscreenStates] = useState<
         Record<string, boolean>
@@ -57,7 +57,7 @@ export default function DesktopMainDragArea() {
                         className={`app-initial-position app-${i + 1}`}
                     >
                         <DesktopIcon
-                            iconName={app.iconName}
+                            iconSrc={app.iconSrc}
                             isFocused={focusApp === app.appName}
                             onClick={() => setFocusApp(app.appName)}
                             onDoubleClick={() => {

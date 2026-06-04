@@ -1,15 +1,17 @@
 "use client";
 
-import { FaReact, FaTerminal, FaGithub } from "react-icons/fa";
 import {
-    SiTypescript,
-    SiFramer,
-    SiNextdotjs,
-    SiChakraui,
-    SiVercel,
-} from "react-icons/si";
+    ExternalLink,
+    FileCode2,
+    GitBranch,
+    Orbit,
+    Palette,
+    Rocket,
+    Sparkles,
+    Terminal,
+    Triangle,
+} from "lucide-react";
 import StackIcon from "@/shared/components/StackIcon";
-import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
 import { useTranslation } from 'react-i18next';
 import { Language } from "@/shared/lib/i18n/useLanguageStore";
 
@@ -40,8 +42,8 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    <FaGithub size={20} />
-                    {t('sourceCodeTitle')} <ExternalLinkIcon />
+                    <GitBranch size={20} />
+                    {t('sourceCodeTitle')} <ExternalLink />
                 </a>
             </div>
             <div className="mb-8">
@@ -55,13 +57,13 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                 <div className="grid grid-cols-3 gap-5 mb-12">
                     <StackIcon
                         label="TypeScript"
-                        icon={SiTypescript}
+                        icon={FileCode2}
                         color="#3178C6"
                     />
-                    <StackIcon label="ReactJS" icon={FaReact} color="#61DAFB" />
+                    <StackIcon label="ReactJS" icon={Orbit} color="#61DAFB" />
                     <StackIcon
                         label="Next.js"
-                        icon={SiNextdotjs}
+                        icon={Triangle}
                         color="black"
                     />
                 </div>
@@ -72,12 +74,12 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                 <div className="grid grid-cols-3 gap-5 mb-12">
                     <StackIcon
                         label="Chakra UI"
-                        icon={SiChakraui}
+                        icon={Palette}
                         color="#4ED1C5"
                     />
                     <StackIcon
                         label="Framer Motion"
-                        icon={SiFramer}
+                        icon={Sparkles}
                         color="black"
                     />
                 </div>
@@ -88,7 +90,7 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                 <div className="grid grid-cols-3 gap-5 mb-12">
                     <StackIcon
                         label="xterm.js"
-                        icon={FaTerminal}
+                        icon={Terminal}
                         color="#0F4C81"
                     />
                 </div>
@@ -97,7 +99,7 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                     {t('deployment')}
                 </h3>
                 <div className="grid grid-cols-3 gap-5 mb-12">
-                    <StackIcon label="Vercel" icon={SiVercel} color="black" />
+                    <StackIcon label="Vercel" icon={Rocket} color="black" />
                 </div>
             </div>
             <div className="mb-8">
@@ -113,7 +115,7 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Flaticon <ExternalLinkIcon />
+                        Flaticon <ExternalLink />
                     </a>{" "}
                     {t('iconsCreatedBy')}{" "}
                     <a
@@ -122,7 +124,7 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        mattbadal <ExternalLinkIcon />
+                        mattbadal <ExternalLink />
                     </a>
                     ,{" "}
                     <a
@@ -131,7 +133,7 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Freepik <ExternalLinkIcon />
+                        Freepik <ExternalLink />
                     </a>
                     ,{" "}
                     <a
@@ -140,7 +142,7 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Ilham Fitrotul Hayat <ExternalLinkIcon />
+                        Ilham Fitrotul Hayat <ExternalLink />
                     </a>
                     , and{" "}
                     <a
@@ -149,7 +151,7 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        riajulislam <ExternalLinkIcon />
+                        riajulislam <ExternalLink />
                     </a>
                     .
                 </p>
@@ -163,7 +165,7 @@ export default function AppAboutSite({}: AppAboutSiteProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        4kwallpapers <ExternalLinkIcon />
+                        4kwallpapers <ExternalLink />
                     </a>
                     .
                 </p>

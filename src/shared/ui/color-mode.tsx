@@ -3,7 +3,7 @@
 import { ThemeProvider, useTheme } from "next-themes"
 import type { ThemeProviderProps } from "next-themes"
 import * as React from "react"
-import { LuMoon, LuSun } from "react-icons/lu"
+import { Moon, Sun } from "lucide-react"
 
 export type ColorModeProviderProps = ThemeProviderProps
 
@@ -40,7 +40,7 @@ export function useColorModeValue<T>(light: T, dark: T) {
 
 export function ColorModeIcon() {
   const { colorMode } = useColorMode()
-  return colorMode === "dark" ? <LuMoon /> : <LuSun />
+  return colorMode === "dark" ? <Moon /> : <Sun />
 }
 
 export const ColorModeButton = React.forwardRef<
@@ -62,7 +62,7 @@ export const ColorModeButton = React.forwardRef<
       onClick={toggleColorMode}
       aria-label="Toggle color mode"
       ref={ref}
-      className="p-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+      className="rounded-md p-2 transition-colors hover:bg-accent/60"
       {...props}
     >
       <div className="w-5 h-5 flex items-center justify-center">

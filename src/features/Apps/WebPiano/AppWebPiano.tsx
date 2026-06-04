@@ -1,8 +1,6 @@
 import Image from "next/image";
-import { SiJavascript, SiEjs, SiCss3 } from "react-icons/si"
-import { FaMusic, FaGithub } from "react-icons/fa"
+import { Braces, ExternalLink, FileCode, GitBranch, Music, Palette } from "lucide-react";
 import StackIcon from "@/shared/components/StackIcon";
-import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
 import { useTranslation } from 'react-i18next';
 import { Language } from "@/shared/lib/i18n/useLanguageStore";
 
@@ -38,7 +36,7 @@ export default function AppProjcetWebPiano({}: AppProjectWebPianoProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        {t('linkAction')}<ExternalLinkIcon />
+                        {t('linkAction')}<ExternalLink />
                     </a>
                     
                     <a
@@ -47,8 +45,8 @@ export default function AppProjcetWebPiano({}: AppProjectWebPianoProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <FaGithub className="w-5 h-5" />
-                        {t('common:sourceCode')} <ExternalLinkIcon />
+                        <GitBranch className="w-5 h-5" />
+                        {t('common:sourceCode')} <ExternalLink />
                     </a>
                     <div className="max-w-[700px] flex flex-col ml-1 mr-1">
                         <div className="mb-6">
@@ -98,10 +96,10 @@ export default function AppProjcetWebPiano({}: AppProjectWebPianoProps) {
                             </h3>
 
                             <div className="grid grid-cols-3 gap-5 mt-4 mb-6">
-                                <StackIcon label="JavaScript" icon={SiJavascript} color="#f7df1e" />
-                                <StackIcon label="EJS" icon={SiEjs} color="#A91E50" />
-                                <StackIcon label="CSS3" icon={SiCss3} color="#264de4" />
-                                <StackIcon label="Tone.js" icon={FaMusic} color="#888" />
+                                <StackIcon label="JavaScript" icon={Braces} color="#f7df1e" />
+                                <StackIcon label="EJS" icon={FileCode} color="#A91E50" />
+                                <StackIcon label="CSS3" icon={Palette} color="#264de4" />
+                                <StackIcon label="Tone.js" icon={Music} color="#888" />
                             </div>
 
                         </div>

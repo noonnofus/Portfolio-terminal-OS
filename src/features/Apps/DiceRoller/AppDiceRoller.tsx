@@ -1,11 +1,18 @@
 'use client';
 
 import Image from "next/image";
-import { SiTypescript, SiExpo, } from "react-icons/si"
-import { FaReact, FaCube, FaMobileAlt, FaKeyboard, FaGlobe, FaGithub } from "react-icons/fa"
-import { TbBrandThreejs } from "react-icons/tb";
+import {
+    Box,
+    Cuboid,
+    ExternalLink,
+    FileCode2,
+    GitBranch,
+    Globe,
+    Keyboard,
+    Orbit,
+    Smartphone,
+} from "lucide-react";
 import StackIcon from "@/shared/components/StackIcon";
-import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
 import { useTranslation } from 'react-i18next';
 import { Language } from "@/shared/lib/i18n/useLanguageStore";
 
@@ -43,7 +50,7 @@ export default function AppProjcetDiceRoller({}: AppProjectDiceRollerProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        {t('linkAction')}<ExternalLinkIcon />
+                        {t('linkAction')}<ExternalLink />
                     </a>
                     <a
                         href="https://github.com/noonnofus/diceRoller"
@@ -51,8 +58,8 @@ export default function AppProjcetDiceRoller({}: AppProjectDiceRollerProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <FaGithub className="w-5 h-5" />
-                        {t('common:sourceCode')} <ExternalLinkIcon />
+                        <GitBranch className="w-5 h-5" />
+                        {t('common:sourceCode')} <ExternalLink />
                     </a>
                     <div className="max-w-[700px] flex flex-col mx-1">
                         <div className="mb-6">
@@ -105,23 +112,23 @@ export default function AppProjcetDiceRoller({}: AppProjectDiceRollerProps) {
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold">Frontend</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
-                                <StackIcon label="React Native" icon={FaReact} color="#61DAFB" />
-                                <StackIcon label="Expo" icon={SiExpo} color="black" />
-                                <StackIcon label="TypeScript" icon={SiTypescript} color="#3178C6" />
+                                <StackIcon label="React Native" icon={Orbit} color="#61DAFB" />
+                                <StackIcon label="Expo" icon={Smartphone} color="black" />
+                                <StackIcon label="TypeScript" icon={FileCode2} color="#3178C6" />
                             </div>
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold">{t('threeDInteraction')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
-                                <StackIcon label="expo-three" icon={TbBrandThreejs} color="black" />
-                                <StackIcon label="cannon-es" icon={FaCube} color="#555" />
-                                <StackIcon label="react-native-shake" icon={FaMobileAlt} color="#1E88E5" />
+                                <StackIcon label="expo-three" icon={Cuboid} color="black" />
+                                <StackIcon label="cannon-es" icon={Box} color="#555" />
+                                <StackIcon label="react-native-shake" icon={Smartphone} color="#1E88E5" />
                             </div>
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold">{t('platform')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-6">
-                                <StackIcon label={t('mobileShake')} icon={FaMobileAlt} color="#6C63FF" />
-                                <StackIcon label={t('webKeyboard')} icon={FaKeyboard} color="#4A5568" />
-                                <StackIcon label={t('crossPlatform')} icon={FaGlobe} color="#2D3748" />
+                                <StackIcon label={t('mobileShake')} icon={Smartphone} color="#6C63FF" />
+                                <StackIcon label={t('webKeyboard')} icon={Keyboard} color="#4A5568" />
+                                <StackIcon label={t('crossPlatform')} icon={Globe} color="#2D3748" />
                             </div>
                         </div>
 
