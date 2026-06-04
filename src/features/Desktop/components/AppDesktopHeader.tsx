@@ -1,7 +1,6 @@
 "use client";
 
-import { IoCloseCircle } from "react-icons/io5";
-import { BiFullscreen, BiExitFullscreen } from "react-icons/bi";
+import { CircleX, Maximize2, Minimize2 } from "lucide-react";
 import { useDesktopStore } from "@/features/Desktop/store/useDesktopStore";
 
 export default function AppDesktopHeader({
@@ -19,28 +18,32 @@ export default function AppDesktopHeader({
 
     return (
         <div className="relative w-full overflow-hidden">
-            <div className="flex gap-3 justify-between bg-pen-gray-300/70 px-4 py-2 rounded-t-pen-lg">
+            <div className="flex justify-between gap-3 bg-window-surface px-4 py-2 text-window-foreground">
                 <div className="flex-1 flex items-center justify-start relative">
-                    <div
+                    <button
+                        type="button"
                         onClick={() => {
                             closeApp(appName);
                         }}
-                        className="cursor-pointer flex items-center"
+                        className="flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-window-foreground"
+                        aria-label={`Close ${title}`}
                     >
-                        <IoCloseCircle className="text-[#FF605C] w-[1.2em] h-[1.2em]" />
-                    </div>
-                    <div
-                        className="ml-3 cursor-pointer flex items-center"
+                        <CircleX className="text-[#FF605C] w-[1.2em] h-[1.2em]" />
+                    </button>
+                    <button
+                        type="button"
+                        className="ml-3 flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-window-foreground"
                         onClick={() => setIsFullScreen(!isFullScreen)}
+                        aria-label={isFullScreen ? `Exit fullscreen for ${title}` : `Enter fullscreen for ${title}`}
                     >
                         {isFullScreen ? (
-                            <BiExitFullscreen className="text-[#00CA4E] w-[1.2em] h-[1.2em]" />
+                            <Minimize2 className="text-[#00CA4E] w-[1.2em] h-[1.2em]" />
                         ) : (
-                            <BiFullscreen className="text-[#00CA4E] w-[1.2em] h-[1.2em]" />
+                            <Maximize2 className="text-[#00CA4E] w-[1.2em] h-[1.2em]" />
                         )}
-                    </div>
+                    </button>
                 </div>
-                <div className="flex-1 text-center text-black font-medium">
+                <div className="flex-1 text-center font-medium text-window-foreground">
                     {title}
                 </div>
                 <div className="flex-1" />

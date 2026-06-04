@@ -1,9 +1,21 @@
 'use client';
 
 import Image from "next/image";
-import { SiTypescript, SiNextdotjs, SiTailwindcss, SiDrizzle, SiPostgresql, SiFirebase } from "react-icons/si"
-import { FaSpider, FaBrain, FaProjectDiagram, FaBell, FaAws, FaReact, FaGithub } from "react-icons/fa"
-import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
+import {
+    Bell,
+    Brain,
+    Bug,
+    Cloud,
+    Database,
+    DatabaseZap,
+    ExternalLink,
+    FileCode2,
+    GitBranch,
+    Network,
+    Orbit,
+    Palette,
+    Triangle,
+} from "lucide-react";
 import StackIcon from "@/shared/components/StackIcon";
 import { useTranslation } from 'react-i18next';
 import { Language } from "@/shared/lib/i18n/useLanguageStore";
@@ -35,7 +47,7 @@ export default function AppProjectFlare({}: AppProjectFlareProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        {t('linkAction')} <ExternalLinkIcon />
+                        {t('linkAction')} <ExternalLink />
                     </a>
                     <a
                         href="https://github.com/noonnofus/Flare_IDSP"
@@ -43,8 +55,8 @@ export default function AppProjectFlare({}: AppProjectFlareProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <FaGithub size={20} />
-                        {t('common:sourceCode')} <ExternalLinkIcon />
+                        <GitBranch size={20} />
+                        {t('common:sourceCode')} <ExternalLink />
                     </a>
                     <div className="max-w-[700px] flex flex-col mx-1">
                         <div className="mb-6">
@@ -92,31 +104,31 @@ export default function AppProjectFlare({}: AppProjectFlareProps) {
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold text-black">Frontend</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
-                                <StackIcon label="Next.js" icon={SiNextdotjs} color="black" />
-                                <StackIcon label="React" icon={FaReact} color="#61DAFB" />
-                                <StackIcon label="TypeScript" icon={SiTypescript} color="#3178C6" />
-                                <StackIcon label="Tailwind CSS" icon={SiTailwindcss} color="#38B2AC" />
+                                <StackIcon label="Next.js" icon={Triangle} color="black" />
+                                <StackIcon label="React" icon={Orbit} color="#61DAFB" />
+                                <StackIcon label="TypeScript" icon={FileCode2} color="#3178C6" />
+                                <StackIcon label="Tailwind CSS" icon={Palette} color="#38B2AC" />
                             </div>
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold text-black">{t('backendDatabase')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
-                                <StackIcon label="PostgreSQL" icon={SiPostgresql} color="#336791" />
-                                <StackIcon label="Drizzle ORM" icon={SiDrizzle} color="#C5F74F" />
+                                <StackIcon label="PostgreSQL" icon={Database} color="#336791" />
+                                <StackIcon label="Drizzle ORM" icon={DatabaseZap} color="#C5F74F" />
                             </div>
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold text-black">{t('cloudAPIs')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
-                                <StackIcon label="AWS S3" icon={FaAws} color="#FF9900" />
-                                <StackIcon label="OpenAI API" icon={FaBrain} color="#7fdbff" />
-                                <StackIcon label="Bing News API" icon={FaProjectDiagram} color="#008272" />
-                                <StackIcon label="Firebase" icon={SiFirebase} color="#FFCA28" />
+                                <StackIcon label="AWS S3" icon={Cloud} color="#FF9900" />
+                                <StackIcon label="OpenAI API" icon={Brain} color="#7fdbff" />
+                                <StackIcon label="Bing News API" icon={Network} color="#008272" />
+                                <StackIcon label="Firebase" icon={Cloud} color="#FFCA28" />
                             </div>
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold text-black">{t('pwaRealtime')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
-                                <StackIcon label="Next.js PWA" icon={SiNextdotjs} color="black" />
-                                <StackIcon label="Push Notifications" icon={FaBell} color="#f59e0b" />
-                                <StackIcon label="Web Crawler" icon={FaSpider} color="#9CA3AF" />
+                                <StackIcon label="Next.js PWA" icon={Triangle} color="black" />
+                                <StackIcon label="Push Notifications" icon={Bell} color="#f59e0b" />
+                                <StackIcon label="Web Crawler" icon={Bug} color="#9CA3AF" />
                             </div>
                         </div>
 

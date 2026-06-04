@@ -2,14 +2,15 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { Power, RotateCcw } from "lucide-react";
 import DesktopApps from "@/features/Apps/Config/apps";
-import { RiShutDownLine } from "react-icons/ri";
-import { MdOutlineRestartAlt } from "react-icons/md";
 import { useDesktopStore } from "@/features/Desktop/store/useDesktopStore";
+import { useLanguageStore } from "@/shared/lib/i18n/useLanguageStore";
 
 export default function DesktopHeaderAppMenu() {
     const setActiveApp = useDesktopStore((state) => state.setActiveApp);
     const setShowAppMenu = useDesktopStore((state) => state.setShowAppMenu);
+    const language = useLanguageStore((state) => state.currentLanguage);
     const router = useRouter();
 
     const hanldeShutdownClick = () => {
@@ -21,24 +22,29 @@ export default function DesktopHeaderAppMenu() {
     }
 
     return (
-        <div className="w-[400px] min-h-[150px] absolute z-10 bg-white/95 text-black p-4 border border-black/10 rounded-pen-lg flex flex-col shadow-[1.5px_1.5px_1.5px_rgba(0,0,0,0.1)]">
+        <div
+            className="absolute z-10 flex min-h-[150px] w-[400px] flex-col rounded-pen-lg border border-window-border bg-window-surface p-4 text-window-foreground shadow-[1.5px_1.5px_1.5px_rgba(0,0,0,0.1)] backdrop-blur-md"
+            role="menu"
+            aria-label="Application menu"
+        >
             <div className="flex">
-                <div className="w-[40%] border-r border-black/10 pt-2">
+                <div className="w-[40%] border-r border-window-border pt-2">
                     Applications
                 </div>
                 <div className="w-[60%] flex flex-col pl-2">
-                    {DesktopApps().map((app, i) => {
+                    {DesktopApps(language).map((app, i) => {
                         return (
-                            <div
+                            <button
+                                type="button"
                                 key={i}
-                                className="flex items-center p-2 hover:bg-pen-gray-200 rounded-pen-sm cursor-pointer"
+                                className="flex items-center rounded-pen-sm p-2 text-left hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-window-foreground"
                                 onClick={() => {
                                     setActiveApp(app.appName);
                                     setShowAppMenu(false);
                                 }}
                             >
                                 <Image
-                                    src={`/icons/${app.iconName}`}
+                                    src={app.iconSrc}
                                     alt={app.title}
                                     width={30}
                                     height={30}
@@ -46,28 +52,30 @@ export default function DesktopHeaderAppMenu() {
                                 />
                                 <div className="w-2" />
                                 <span className="select-none">{app.title}</span>
-                            </div>
+                            </button>
                         );
                     })}
                 </div>
             </div>
-            <div className="flex flex-col border-t border-black/10 pt-3 mt-3">
-                <div
-                    className="hover:bg-pen-gray-200 p-2 cursor-pointer w-[180px] rounded-pen-md flex items-center"
+            <div className="mt-3 flex flex-col border-t border-window-border pt-3">
+                <button
+                    type="button"
+                    className="flex w-[180px] items-center rounded-pen-md p-2 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-window-foreground"
                     onClick={hanldeShutdownClick}
                 >
-                    <RiShutDownLine className="w-[30px] h-[30px]" />
+                    <Power className="w-[30px] h-[30px]" />
                     <div className="w-2" />
                     <span className="select-none">Shutdown</span>
-                </div>
-                <div
-                    className="hover:bg-pen-gray-200 p-2 cursor-pointer w-[180px] rounded-pen-md flex items-center"
+                </button>
+                <button
+                    type="button"
+                    className="flex w-[180px] items-center rounded-pen-md p-2 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-window-foreground"
                     onClick={handleRebootClick}
                 >
-                    <MdOutlineRestartAlt className="w-[30px] h-[30px]" />
+                    <RotateCcw className="w-[30px] h-[30px]" />
                     <div className="w-2" />
                     <span className="select-none">Reboot</span>
-                </div>
+                </button>
             </div>
         </div>
     );

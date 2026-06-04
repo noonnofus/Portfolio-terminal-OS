@@ -1,10 +1,8 @@
 'use client';
 
 import Image from "next/image";
-import { SiJavascript, SiDiscord, SiMongodb, SiPubg, } from "react-icons/si"
-import { FaPlayCircle, FaMicrophoneAlt, FaGithub } from "react-icons/fa"
+import { Braces, Database, ExternalLink, Gamepad2, GitBranch, MessageCircle, Mic, PlayCircle } from "lucide-react";
 import StackIcon from "@/shared/components/StackIcon";
-import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
 import { useTranslation } from 'react-i18next';
 import { Language } from "@/shared/lib/i18n/useLanguageStore";
 
@@ -42,7 +40,7 @@ export default function AppProjcetMejubot({}: AppProjectMejubotProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        {t('linkAction')}<ExternalLinkIcon />
+                        {t('linkAction')}<ExternalLink />
                     </a>
                     <div className="max-w-[700px] flex flex-col mx-1">
                         <div className="mb-6">
@@ -89,29 +87,29 @@ export default function AppProjcetMejubot({}: AppProjectMejubotProps) {
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold">{t('botFramework')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
-                                <StackIcon label="Discord.js" icon={SiDiscord} color="#5865F2" />
-                                <StackIcon label="discord-player" icon={FaPlayCircle} color="#FF5722" />
-                                <StackIcon label="discordjs/opus" icon={FaMicrophoneAlt} color="#2D3748" />
+                                <StackIcon label="Discord.js" icon={MessageCircle} color="#5865F2" />
+                                <StackIcon label="discord-player" icon={PlayCircle} color="#FF5722" />
+                                <StackIcon label="discordjs/opus" icon={Mic} color="#2D3748" />
                             </div>
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold">{t('apisFeatures')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
-                                <StackIcon label="PUBG API" icon={SiPubg} color="black" />
+                                <StackIcon label="PUBG API" icon={Gamepad2} color="black" />
                             </div>
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold">Frontend</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
-                                <StackIcon label="JavaScript" icon={SiJavascript} color="#f7df1e" />
+                                <StackIcon label="JavaScript" icon={Braces} color="#f7df1e" />
                             </div>
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold">{t('databaseAuth')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
-                                <StackIcon label="MongoDB" icon={SiMongodb} color="#47A248" />
+                                <StackIcon label="MongoDB" icon={Database} color="#47A248" />
                             </div>
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold">{t('deploymentTools')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-6">
-                                <StackIcon label="GitHub" icon={FaGithub} color="black" />
+                                <StackIcon label="GitHub" icon={GitBranch} color="black" />
                             </div>
                         </div>
 

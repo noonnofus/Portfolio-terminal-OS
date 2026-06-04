@@ -11,6 +11,7 @@ function I18nWrapper({ children }: { children: React.ReactNode }) {
     
     useEffect(() => {
         i18n.changeLanguage(language);
+        document.documentElement.lang = language;
     }, [language]);
     
     return <>{children}</>;

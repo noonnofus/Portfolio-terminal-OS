@@ -1,24 +1,21 @@
 import Image from "next/image";
 import {
-    SiTypescript,
-    SiNextdotjs,
-    SiTailwindcss,
-    SiShadcnui,
-    SiDrizzle,
-    SiGit,
-    SiJira,
-    SiMysql,
-} from "react-icons/si";
-import {
-    FaGithub,
-    FaBrain,
-    FaProjectDiagram,
-    FaKey,
-    FaAws,
-    FaFilePdf,
-} from "react-icons/fa";
+    Brain,
+    Cable,
+    ClipboardList,
+    Cloud,
+    Database,
+    DatabaseZap,
+    ExternalLink,
+    FileCode2,
+    FileText,
+    GitBranch,
+    Key,
+    Palette,
+    PanelsTopLeft,
+    Triangle,
+} from "lucide-react";
 import StackIcon from "@/shared/components/StackIcon";
-import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
 import { useTranslation } from "react-i18next";
 import { Language } from "@/shared/lib/i18n/useLanguageStore";
 
@@ -56,7 +53,7 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        {t("linkAction")} <ExternalLinkIcon />
+                        {t("linkAction")} <ExternalLink />
                     </a>
 
                     <div className="max-w-[700px] flex flex-col ml-1 mr-1">
@@ -132,27 +129,27 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="TypeScript"
-                                    icon={SiTypescript}
+                                    icon={FileCode2}
                                     color="#3178C6"
                                 />
                                 <StackIcon
                                     label="Next.js"
-                                    icon={SiNextdotjs}
+                                    icon={Triangle}
                                     color="black"
                                 />
                                 <StackIcon
                                     label="TailwindCSS"
-                                    icon={SiTailwindcss}
+                                    icon={Palette}
                                     color="#38B2AC"
                                 />
                                 <StackIcon
                                     label="shadcn/ui"
-                                    icon={SiShadcnui}
+                                    icon={PanelsTopLeft}
                                     color="black"
                                 />
                                 <StackIcon
                                     label="next-i18n"
-                                    icon={SiNextdotjs}
+                                    icon={Triangle}
                                     color="black"
                                 />
                             </div>
@@ -165,17 +162,17 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="Drizzle ORM"
-                                    icon={SiDrizzle}
+                                    icon={DatabaseZap}
                                     color="#C5F74F"
                                 />
                                 <StackIcon
                                     label="MySQL"
-                                    icon={SiMysql}
+                                    icon={Database}
                                     color="#00758F"
                                 />
                                 <StackIcon
                                     label="WebSocket"
-                                    icon={FaProjectDiagram}
+                                    icon={Cable}
                                     color="black"
                                 />
                             </div>
@@ -188,7 +185,7 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="NextAuth"
-                                    icon={FaKey}
+                                    icon={Key}
                                     color="black"
                                 />
                             </div>
@@ -201,17 +198,17 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="OpenAI API"
-                                    icon={FaBrain}
+                                    icon={Brain}
                                     color="#7fdbff"
                                 />
                                 <StackIcon
                                     label="AWS S3 Bucket"
-                                    icon={FaAws}
+                                    icon={Cloud}
                                     color="#FF9900"
                                 />
                                 <StackIcon
                                     label="react-pdf"
-                                    icon={FaFilePdf}
+                                    icon={FileText}
                                     color="#d32f2f"
                                 />
                             </div>
@@ -224,17 +221,17 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
                             <div className="grid grid-cols-3 gap-5 mb-6">
                                 <StackIcon
                                     label="GitHub"
-                                    icon={FaGithub}
+                                    icon={GitBranch}
                                     color="black"
                                 />
                                 <StackIcon
                                     label="Git"
-                                    icon={SiGit}
+                                    icon={GitBranch}
                                     color="#F05033"
                                 />
                                 <StackIcon
                                     label="Jira"
-                                    icon={SiJira}
+                                    icon={ClipboardList}
                                     color="#0052CC"
                                 />
                             </div>

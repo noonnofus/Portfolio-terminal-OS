@@ -9,10 +9,10 @@ import { Language } from "@/shared/lib/i18n/useLanguageStore";
 import type { ReactNode } from "react";
 
 export interface AppDefinition {
-    iconName: string;
+    iconSrc: string;
     appName: string;
     title: string;
-    component: ReactNode;
+    render: () => ReactNode;
 }
 
 type DesktopAppText = {
@@ -23,7 +23,7 @@ type DesktopAppText = {
     contacts: string;
 };
 
-export default function DesktopApps(language: Language = "ko"): AppDefinition[] {
+export default function DesktopApps(language: Language): AppDefinition[] {
     const appTexts: Record<Language, DesktopAppText> = {
         ko: {
             projects: "프로젝트_폴더",
@@ -45,34 +45,34 @@ export default function DesktopApps(language: Language = "ko"): AppDefinition[] 
 
     return [
         {
-            iconName: "/folder.png",
+            iconSrc: "/icons/folder.png",
             appName: "Projects Folder",
             title: texts.projects,
-            component: <AppFolder />,
+            render: () => <AppFolder />,
         },
         {
-            iconName: "/site.png",
+            iconSrc: "/icons/site.png",
             appName: "App About Site",
             title: texts.aboutSite,
-            component: <AppAboutSite language={language} />,
+            render: () => <AppAboutSite language={language} />,
         },
         {
-            iconName: "/terminal.png",
+            iconSrc: "/icons/terminal.png",
             appName: "App Terminal",
             title: texts.terminal,
-            component: <AppTerminal />,
+            render: () => <AppTerminal />,
         },
         {
-            iconName: "/main.png",
+            iconSrc: "/icons/main.png",
             appName: "App About Me",
             title: texts.aboutMe,
-            component: <AppAbout language={language} />,
+            render: () => <AppAbout language={language} />,
         },
         {
-            iconName: "/contact.png",
+            iconSrc: "/icons/contact.png",
             appName: "App Contacts",
             title: texts.contacts,
-            component: <AppContact language={language} />,
+            render: () => <AppContact language={language} />,
         },
     ];
 }

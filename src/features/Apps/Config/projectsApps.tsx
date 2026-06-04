@@ -20,7 +20,7 @@ type ProjectAppText = {
     webpiano: string;
 };
 
-export default function ProjectsApps(language: Language = "ko"): AppDefinition[] {
+export default function ProjectsApps(language: Language): AppDefinition[] {
     const projectTexts: Record<Language, ProjectAppText> = {
         ko: {
             wchms: "WCHMS",
@@ -46,46 +46,46 @@ export default function ProjectsApps(language: Language = "ko"): AppDefinition[]
 
     return [
         {
-            iconName: "/wchms.png",
+            iconSrc: "/icons/wchms.png",
             appName: "Client Project WCHMS",
             title: texts.wchms,
-            component: <AppProjcetWCHMS language={language} />,
+            render: () => <AppProjcetWCHMS language={language} />,
         },
         {
-            iconName: "/flare.png",
+            iconSrc: "/icons/flare.png",
             appName: "Project Flare",
             title: texts.flare,
-            component: <AppProjcetFlare language={language} />,
+            render: () => <AppProjcetFlare language={language} />,
         },
         {
-            iconName: "/weconnect.svg",
+            iconSrc: "/icons/weconnect.svg",
             appName: "Project WeConnect",
             title: texts.weconnect,
-            component: <AppProjcetWeConnect language={language} />,
+            render: () => <AppProjcetWeConnect language={language} />,
         },
         {
-            iconName: "/pagessence.png",
+            iconSrc: "/icons/pagessence.png",
             appName: "Project PageSsence",
             title: texts.pagessence,
-            component: <AppProjcetPageSsence language={language} />,
+            render: () => <AppProjcetPageSsence language={language} />,
         },
         {
-            iconName: "/diceroller.png",
+            iconSrc: "/icons/diceroller.png",
             appName: "Project DiceRoller",
             title: texts.diceroller,
-            component: <AppProjcetDiceRoller language={language} />,
+            render: () => <AppProjcetDiceRoller language={language} />,
         },
         {
-            iconName: "/mejubot.png",
+            iconSrc: "/icons/mejubot.png",
             appName: "Project MejuBot",
             title: texts.mejubot,
-            component: <AppProjcetMejubot language={language} />,
+            render: () => <AppProjcetMejubot language={language} />,
         },
         {
-            iconName: "/webpiano.png",
+            iconSrc: "/icons/webpiano.png",
             appName: "Project WebPiano",
             title: texts.webpiano,
-            component: <AppProjcetWebPiano language={language} />,
+            render: () => <AppProjcetWebPiano language={language} />,
         },
     ];
 }

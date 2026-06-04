@@ -22,6 +22,8 @@
   --color-pen-gray-700: #374151;
   --color-pen-gray-800: #1F2937;
   --color-pen-gray-900: #111827;
+  --color-pen-white: #FFFFFF;
+  --color-pen-black: #000000;
 
   /* OS Specific Colors */
   --color-terminal-bg: #000000;
@@ -31,6 +33,14 @@
   --color-mac-maximize: #00CA4E;
   --color-glass-bg: #4B556333;
   --color-glass-border: #0000001A;
+  --color-os-scrim: rgb(15 23 42 / 72%);
+  --color-os-scrim-strong: rgb(0 0 0 / 82%);
+  --color-os-window-surface: rgb(255 255 255 / 95%);
+  --color-os-window-border: rgb(17 24 39 / 12%);
+  --color-os-panel-surface: rgb(24 24 27 / 94%);
+  --color-os-panel-border: rgb(255 255 255 / 12%);
+  --color-os-bar-surface: rgb(75 85 99 / 24%);
+  --color-os-bar-border: rgb(255 255 255 / 18%);
 
   /* Border Radii */
   --radius-pen-sm: 4px;

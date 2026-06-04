@@ -1,20 +1,22 @@
 import Image from "next/image";
 import {
-    SiTypescript,
-    SiJavascript,
-    SiEjs,
-    SiCss3,
-    SiExpress,
-    SiGit,
-    SiPrisma,
-    SiMysql,
-    SiWebrtc,
-    SiGooglecloud,
-    SiRender,
-} from "react-icons/si";
-import { FaGithub, FaBrain, FaProjectDiagram, FaNodeJs } from "react-icons/fa";
+    Brain,
+    Braces,
+    Cable,
+    Cloud,
+    Database,
+    DatabaseZap,
+    ExternalLink,
+    FileCode,
+    FileCode2,
+    GitBranch,
+    Palette,
+    RadioTower,
+    Rocket,
+    Server,
+    ServerCog,
+} from "lucide-react";
 import StackIcon from "@/shared/components/StackIcon";
-import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
 import { useTranslation } from "react-i18next";
 import { Language } from "@/shared/lib/i18n/useLanguageStore";
 
@@ -52,7 +54,7 @@ export default function AppProjcetWeConnect({}: AppProjectWeConnectProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        {t("linkAction")} <ExternalLinkIcon />
+                        {t("linkAction")} <ExternalLink />
                     </a>
 
                     <div className="max-w-[700px] flex flex-col ml-1 mr-1">
@@ -128,17 +130,17 @@ export default function AppProjcetWeConnect({}: AppProjectWeConnectProps) {
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="JavaScript"
-                                    icon={SiJavascript}
+                                    icon={Braces}
                                     color="#f7df1e"
                                 />
                                 <StackIcon
                                     label="EJS"
-                                    icon={SiEjs}
+                                    icon={FileCode}
                                     color="#A91E50"
                                 />
                                 <StackIcon
                                     label="CSS3"
-                                    icon={SiCss3}
+                                    icon={Palette}
                                     color="#264de4"
                                 />
                             </div>
@@ -151,27 +153,27 @@ export default function AppProjcetWeConnect({}: AppProjectWeConnectProps) {
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="TypeScript"
-                                    icon={SiTypescript}
+                                    icon={FileCode2}
                                     color="#3178C6"
                                 />
                                 <StackIcon
                                     label="Node.js"
-                                    icon={FaNodeJs}
+                                    icon={Server}
                                     color="#339933"
                                 />
                                 <StackIcon
                                     label="Express"
-                                    icon={SiExpress}
+                                    icon={ServerCog}
                                     color="black"
                                 />
                                 <StackIcon
                                     label="Prisma ORM"
-                                    icon={SiPrisma}
+                                    icon={DatabaseZap}
                                     color="#0C344B"
                                 />
                                 <StackIcon
                                     label="MySQL"
-                                    icon={SiMysql}
+                                    icon={Database}
                                     color="#00758F"
                                 />
                             </div>
@@ -184,12 +186,12 @@ export default function AppProjcetWeConnect({}: AppProjectWeConnectProps) {
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="WebRTC"
-                                    icon={SiWebrtc}
+                                    icon={RadioTower}
                                     color="#3333cc"
                                 />
                                 <StackIcon
                                     label="WebSocket"
-                                    icon={FaProjectDiagram}
+                                    icon={Cable}
                                     color="#4A5568"
                                 />
                             </div>
@@ -202,12 +204,12 @@ export default function AppProjcetWeConnect({}: AppProjectWeConnectProps) {
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon
                                     label="OpenAI API"
-                                    icon={FaBrain}
+                                    icon={Brain}
                                     color="#7fdbff"
                                 />
                                 <StackIcon
                                     label="Google Speech-to-Text"
-                                    icon={SiGooglecloud}
+                                    icon={Cloud}
                                     color="#4285F4"
                                 />
                             </div>
@@ -220,17 +222,17 @@ export default function AppProjcetWeConnect({}: AppProjectWeConnectProps) {
                             <div className="grid grid-cols-3 gap-5 mb-6">
                                 <StackIcon
                                     label="Render"
-                                    icon={SiRender}
+                                    icon={Rocket}
                                     color="#46E3B7"
                                 />
                                 <StackIcon
                                     label="GitHub"
-                                    icon={FaGithub}
+                                    icon={GitBranch}
                                     color="black"
                                 />
                                 <StackIcon
                                     label="Git"
-                                    icon={SiGit}
+                                    icon={GitBranch}
                                     color="#F05033"
                                 />
                             </div>

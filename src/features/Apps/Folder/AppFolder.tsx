@@ -5,12 +5,14 @@ import { useDesktopStore } from "@/features/Desktop/store/useDesktopStore";
 import { DesktopIcon } from "@/features/Desktop/components/DesktopIcon";
 import "@/shared/styles/touchFolderLayout.css";
 import { useRef } from "react";
+import { useLanguageStore } from "@/shared/lib/i18n/useLanguageStore";
 
 export default function AppFolder() {
     const focusApp = useDesktopStore((state) => state.focusApp);
     const isTouchDevice = useDesktopStore((state) => state.isTouchDevice);
     const setFocusApp = useDesktopStore((state) => state.setFocusApp);
     const setActiveApp = useDesktopStore((state) => state.setActiveApp);
+    const language = useLanguageStore((state) => state.currentLanguage);
 
     const dragAreaRef = useRef<HTMLDivElement>(null);
 
@@ -20,7 +22,7 @@ export default function AppFolder() {
             ref={dragAreaRef}
         >
             <div className="flex flex-wrap h-full">
-                {ProjectsApps().map((app, i) => (
+                {ProjectsApps(language).map((app, i) => (
                     <motion.div
                         key={`touchview-${app.appName}`}
                         drag
@@ -37,7 +39,7 @@ export default function AppFolder() {
                     >
                         {isTouchDevice ? (
                             <DesktopIcon
-                                iconName={app.iconName}
+                                iconSrc={app.iconSrc}
                                 isFocused={focusApp === app.appName}
                                 onClick={() => {
                                     setFocusApp(app.appName);
@@ -48,7 +50,7 @@ export default function AppFolder() {
 
                         ) : (
                             <DesktopIcon
-                                iconName={app.iconName}
+                                iconSrc={app.iconSrc}
                                 isFocused={focusApp === app.appName}
                                 onClick={() => {
                                     setFocusApp(app.appName);

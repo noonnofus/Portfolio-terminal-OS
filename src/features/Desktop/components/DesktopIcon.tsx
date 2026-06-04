@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { MutableRefObject } from "react";
+import { KeyboardEvent, MutableRefObject } from "react";
 
 type Props = {
-    iconName: string;
+    iconSrc: string;
     dragConstraintRef?: MutableRefObject<HTMLDivElement>;
     onClick?: () => void;
     onDoubleClick?: () => void;
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export function DesktopIcon({
-    iconName,
+    iconSrc,
     dragConstraintRef,
     onClick,
     onDoubleClick,
@@ -21,9 +21,20 @@ export function DesktopIcon({
     const isDraggable = dragConstraintRef ? true : false;
     const isMobileIcon = !isDraggable;
     const bgColor = isFocused ? "rgba(0, 0, 0, 0.3)" : "rgba(0, 0, 0, 0)";
+    const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            if (onDoubleClick) {
+                onDoubleClick();
+                return;
+            }
+            onClick?.();
+        }
+    };
 
     return (
-        <motion.div
+        <motion.button
+            type="button"
             drag={isDraggable}
             dragConstraints={dragConstraintRef}
             dragElastic={0}
@@ -37,16 +48,19 @@ export function DesktopIcon({
             onDoubleClick={onDoubleClick}
             onClick={onClick}
             onDragStart={onClick}
+            onKeyDown={handleKeyDown}
+            aria-label={title}
             style={{
                 cursor: 'pointer',
-                borderRadius: '8px',
                 backgroundColor: `${bgColor}`
             }}
+            className="rounded-[8px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         >
             <div
                 className={`w-[55px] h-[55px] p-[5px] ${isMobileIcon ? 'm-[5px]' : 'm-0'}`}
+                aria-hidden="true"
                 style={{
-                    backgroundImage: `url(/icons/${iconName})`,
+                    backgroundImage: `url(${iconSrc})`,
                     backgroundSize: '100%',
                     backgroundRepeat: 'no-repeat',
                 }}
@@ -59,6 +73,6 @@ export function DesktopIcon({
             >
                 {title}
             </p>
-        </motion.div>
+        </motion.button>
     );
 }

@@ -1,8 +1,21 @@
 import Image from "next/image";
-import { SiVuedotjs, SiInertia, SiTailwindcss, SiPrime, SiVite, SiGit, SiJavascript, SiMysql, SiLaravel, SiAxios, SiPhp } from "react-icons/si"
-import { FaGithub, FaWindowRestore, } from "react-icons/fa"
+import {
+    AppWindow,
+    Box,
+    Braces,
+    Database,
+    ExternalLink,
+    FileCode,
+    GitBranch,
+    Palette,
+    PanelTop,
+    Plug,
+    Route,
+    Shield,
+    Component,
+    Zap,
+} from "lucide-react";
 import StackIcon from "@/shared/components/StackIcon";
-import { GoLinkExternal as ExternalLinkIcon } from "react-icons/go";
 import { useTranslation } from 'react-i18next';
 import { Language } from "@/shared/lib/i18n/useLanguageStore";
 
@@ -10,7 +23,7 @@ interface AppProjectPageSsenceProps {
     language: Language;
 }
 
-export default function AppProjcetPageSsence({}: AppProjectPageSsenceProps) {
+export default function AppProjcetPageSsence({ language }: AppProjectPageSsenceProps) {
     const { t } = useTranslation(['PageSsence', 'common']);
     return (
         <div
@@ -31,22 +44,17 @@ export default function AppProjcetPageSsence({}: AppProjectPageSsenceProps) {
                         height={150}
                         className="mb-4 w-[150px] h-auto object-cover"
                     />
-                    <a
-                        href="/" // need to put it here
-                        className="underline mb-4 flex items-center gap-1"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        {t('linkAction')} <ExternalLinkIcon />
-                    </a>
+                    <p className="mb-4 text-sm text-pen-gray-600">
+                        {language === "ko" ? "라이브 데모는 현재 제공되지 않습니다." : "Live demo is not currently available."}
+                    </p>
                     <a
                         href="https://github.com/noonnofus/PageSsence"
                         className="underline mb-4 flex items-center gap-1"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <FaGithub className="w-5 h-5" />
-                        {t('common:sourceCode')} <ExternalLinkIcon />
+                        <GitBranch className="w-5 h-5" />
+                        {t('common:sourceCode')} <ExternalLink />
                     </a>
                     <div className="max-w-[700px] flex flex-col ml-1 mr-1">
                         <div className="mb-6">
@@ -100,37 +108,37 @@ export default function AppProjcetPageSsence({}: AppProjectPageSsenceProps) {
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold">Frontend</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
-                                <StackIcon label="Vue.js" icon={SiVuedotjs} color="#42b883" />
-                                <StackIcon label="Inertia.js" icon={SiInertia} color="#000000" />
-                                <StackIcon label="PrimeVue" icon={SiPrime} color="#4CAF50" />
-                                <StackIcon label="Vite" icon={SiVite} color="#646CFF" />
-                                <StackIcon label="JavaScript" icon={SiJavascript} color="#f7df1e" />
-                                <StackIcon label="TailwindCSS" icon={SiTailwindcss} color="#38B2AC" />
+                                <StackIcon label="Vue.js" icon={Component} color="#42b883" />
+                                <StackIcon label="Inertia.js" icon={Route} color="#000000" />
+                                <StackIcon label="PrimeVue" icon={PanelTop} color="#4CAF50" />
+                                <StackIcon label="Vite" icon={Zap} color="#646CFF" />
+                                <StackIcon label="JavaScript" icon={Braces} color="#f7df1e" />
+                                <StackIcon label="TailwindCSS" icon={Palette} color="#38B2AC" />
                             </div>
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold">Backend</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
-                                <StackIcon label="Laravel" icon={SiLaravel} color="#FF2D20" />
-                                <StackIcon label="PHP" icon={SiPhp} color="#777BB4" />
-                                <StackIcon label="MySQL" icon={SiMysql} color="#00758F" />
+                                <StackIcon label="Laravel" icon={Box} color="#FF2D20" />
+                                <StackIcon label="PHP" icon={FileCode} color="#777BB4" />
+                                <StackIcon label="MySQL" icon={Database} color="#00758F" />
                             </div>
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold">Authentication</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
-                                <StackIcon label="Laravel Breeze" icon={SiLaravel} color="#FF2D20" />
+                                <StackIcon label="Laravel Breeze" icon={Shield} color="#FF2D20" />
                             </div>
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold">Libraries & Services</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
-                                <StackIcon label="Axios" icon={SiAxios} color="#5A29E4" />
-                                <StackIcon label="Ziggy" icon={SiLaravel} color="#FF2D20" />
-                                <StackIcon label="Inertia Modal" icon={FaWindowRestore} color="#4A5568" />
+                                <StackIcon label="Axios" icon={Plug} color="#5A29E4" />
+                                <StackIcon label="Ziggy" icon={Route} color="#FF2D20" />
+                                <StackIcon label="Inertia Modal" icon={AppWindow} color="#4A5568" />
                             </div>
 
                             <h4 className="mt-6 mb-2 text-lg font-semibold">Other Tools</h4>
                             <div className="grid grid-cols-3 gap-5 mb-6">
-                                <StackIcon label="GitHub" icon={FaGithub} color="black" />
-                                <StackIcon label="Git" icon={SiGit} color="#F05033" />
+                                <StackIcon label="GitHub" icon={GitBranch} color="black" />
+                                <StackIcon label="Git" icon={GitBranch} color="#F05033" />
                             </div>
                         </div>
 

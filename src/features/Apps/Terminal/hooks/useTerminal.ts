@@ -13,6 +13,11 @@ export function useTerminal({ fontSize = 14, onInput }: UseTerminalProps = {}) {
     const fitAddonInstance = useRef<FitAddon | null>(null);
     const resizeObserver = useRef<ResizeObserver | null>(null);
     const fitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const onInputRef = useRef(onInput);
+
+    useEffect(() => {
+        onInputRef.current = onInput;
+    }, [onInput]);
 
     useEffect(() => {
         if (!terminalRef.current) return;
@@ -63,7 +68,7 @@ export function useTerminal({ fontSize = 14, onInput }: UseTerminalProps = {}) {
 
             // Handle Input
             onDataDisposable = nextTerm.onData((data) => {
-                if (onInput) onInput(data, nextTerm);
+                onInputRef.current?.(data, nextTerm);
             });
 
             // Resize observer for dynamic container sizing
@@ -94,7 +99,7 @@ export function useTerminal({ fontSize = 14, onInput }: UseTerminalProps = {}) {
             termInstance.current = null;
             fitAddonInstance.current = null;
         };
-    }, [fontSize, onInput]);
+    }, [fontSize]);
 
     const write = (text: string) => {
         termInstance.current?.write(text);
