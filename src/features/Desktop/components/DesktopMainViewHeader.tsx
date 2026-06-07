@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Calendar from "react-calendar";
 import DesktopHeaderAppMenu from "./DesktopHeaderAppMenu";
-import LanguageSelector from "@/features/Apps/Settings/LanguageSelector";
+import LanguageSelector from "@/features/applications/components/settings/LanguageSelector";
 import { useDesktopStore } from "@/features/Desktop/store/useDesktopStore";
 import { useLanguageStore } from "@/shared/lib/i18n/useLanguageStore";
 import "@/shared/styles/calender.css";

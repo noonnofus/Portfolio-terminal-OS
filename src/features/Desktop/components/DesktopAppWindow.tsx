@@ -2,15 +2,8 @@
 
 import React from "react";
 import { motion, useDragControls } from "framer-motion";
-import { useDesktopStore } from "@/features/Desktop/store/useDesktopStore";
+import type { AppDefinition } from "@/features/applications/types/appDefinition";
 import AppDesktopHeader from "./AppDesktopHeader";
-
-interface AppDefinition {
-    iconSrc: string;
-    appName: string;
-    title: string;
-    render: () => React.ReactNode;
-}
 
 interface DesktopAppWindowProps {
     app: AppDefinition;
@@ -20,7 +13,7 @@ interface DesktopAppWindowProps {
     toggleFullscreen: (appName: string) => void;
     width?: string;
     height?: string;
-    onPointerDown?: (e: React.PointerEvent) => void;
+    dragConstraintRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export const DesktopAppWindow: React.FC<DesktopAppWindowProps> = ({
@@ -31,10 +24,9 @@ export const DesktopAppWindow: React.FC<DesktopAppWindowProps> = ({
     toggleFullscreen,
     width,
     height,
-    onPointerDown
+    dragConstraintRef,
 }) => {
     const dragControls = useDragControls();
-    const setFocusApp = useDesktopStore((state) => state.setFocusApp);
 
     return (
         <motion.div
@@ -43,7 +35,7 @@ export const DesktopAppWindow: React.FC<DesktopAppWindowProps> = ({
             dragControls={dragControls}
             dragElastic={0}
             dragTransition={{ power: 0 }}
-            dragConstraints={{ top: 0 }}
+            dragConstraints={dragConstraintRef}
             dragListener={false}
             animate={{
                 x: isFullScreen ? 0 : openAppPosition.left,
@@ -53,15 +45,10 @@ export const DesktopAppWindow: React.FC<DesktopAppWindowProps> = ({
             style={{
                 position: "absolute",
                 zIndex: isFocused ? 10 : 1,
-                borderRadius: "9px",
                 width: isFullScreen ? "100vw" : width,
                 height: isFullScreen ? "100vh" : height,
             }}
-            className="flex flex-col overflow-hidden border border-window-border bg-window-surface text-window-foreground"
-            onPointerDown={(e) => {
-                setFocusApp(app.appName);
-                if (onPointerDown) onPointerDown(e);
-            }}
+            className="flex flex-col overflow-hidden rounded-os-window border border-window-border bg-window-surface text-window-foreground shadow-os-window"
         >
             <div onPointerDown={(e) => dragControls.start(e)}>
                 <AppDesktopHeader

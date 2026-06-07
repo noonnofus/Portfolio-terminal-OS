@@ -35,8 +35,11 @@
   --color-glass-border: #0000001A;
   --color-os-scrim: rgb(15 23 42 / 72%);
   --color-os-scrim-strong: rgb(0 0 0 / 82%);
-  --color-os-window-surface: rgb(255 255 255 / 95%);
-  --color-os-window-border: rgb(17 24 39 / 12%);
+  --color-os-window-surface: #27272A;
+  --color-os-window-header-surface: #202023;
+  --color-os-window-foreground: #F4F4F5;
+  --color-os-window-border: #52525B;
+  --shadow-os-window: 0 18px 50px rgb(0 0 0 / 35%), 0 2px 8px rgb(0 0 0 / 28%);
   --color-os-panel-surface: rgb(24 24 27 / 94%);
   --color-os-panel-border: rgb(255 255 255 / 12%);
   --color-os-bar-surface: rgb(75 85 99 / 24%);
@@ -46,6 +49,7 @@
   --radius-pen-sm: 4px;
   --radius-pen-md: 10px;
   --radius-pen-lg: 12px;
+  --radius-os-window: 9px;
 
   /* Spacing */
   --spacing-pen-xs: 4px;

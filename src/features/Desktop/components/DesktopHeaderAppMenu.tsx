@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Power, RotateCcw } from "lucide-react";
-import DesktopApps from "@/features/Apps/Config/apps";
+import getRootApplicationDefinitions from "@/features/applications/lib/getRootApplicationDefinitions";
 import { useDesktopStore } from "@/features/Desktop/store/useDesktopStore";
 import { useLanguageStore } from "@/shared/lib/i18n/useLanguageStore";
 
@@ -32,7 +32,7 @@ export default function DesktopHeaderAppMenu() {
                     Applications
                 </div>
                 <div className="w-[60%] flex flex-col pl-2">
-                    {DesktopApps(language).map((app, i) => {
+                    {getRootApplicationDefinitions(language).map((app, i) => {
                         return (
                             <button
                                 type="button"
