@@ -18,7 +18,7 @@ export default function AppDesktopHeader({
 
     return (
         <div className="relative w-full overflow-hidden">
-            <div className="flex justify-between gap-3 bg-window-surface px-4 py-2 text-window-foreground">
+            <div className="flex justify-between gap-3 bg-window-header-surface px-4 py-2 text-window-foreground">
                 <div className="flex-1 flex items-center justify-start relative">
                     <button
                         type="button"

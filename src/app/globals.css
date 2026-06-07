@@ -49,6 +49,7 @@
   --color-desktop-bar-foreground: var(--desktop-bar-foreground);
   --color-desktop-bar-border: var(--desktop-bar-border);
   --color-window-surface: var(--window-surface);
+  --color-window-header-surface: var(--window-header-surface);
   --color-window-foreground: var(--window-foreground);
   --color-window-border: var(--window-border);
 
@@ -98,7 +99,8 @@
     --desktop-bar-foreground: var(--color-pen-white);
     --desktop-bar-border: var(--color-os-bar-border);
     --window-surface: var(--color-os-window-surface);
-    --window-foreground: var(--color-pen-gray-900);
+    --window-header-surface: var(--color-os-window-header-surface);
+    --window-foreground: var(--color-os-window-foreground);
     --window-border: var(--color-os-window-border);
     --radius: 0.5rem;
   }
@@ -134,9 +136,10 @@
     --desktop-bar: rgb(15 23 42 / 48%);
     --desktop-bar-foreground: #f8fafc;
     --desktop-bar-border: rgb(255 255 255 / 14%);
-    --window-surface: rgb(15 23 42 / 94%);
-    --window-foreground: #f8fafc;
-    --window-border: rgb(255 255 255 / 10%);
+    --window-surface: var(--color-os-window-surface);
+    --window-header-surface: var(--color-os-window-header-surface);
+    --window-foreground: var(--color-os-window-foreground);
+    --window-border: var(--color-os-window-border);
   }
 }
 

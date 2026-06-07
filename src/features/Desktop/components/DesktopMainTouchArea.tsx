@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
-import DesktopApps from "@/features/Apps/Config/apps";
-import allApps from "@/features/Apps/Config/allApps";
+import React, { useMemo, useRef, useState } from "react";
+import getRootApplicationDefinitions from "@/features/applications/lib/getRootApplicationDefinitions";
+import getProjectApplicationDefinitions from "@/features/applications/lib/getProjectApplicationDefinitions";
 import { DesktopIcon } from "./DesktopIcon";
 import { motion } from "framer-motion";
 import GuidePopOver from "./GuidePopOver";
@@ -18,8 +18,12 @@ export default function DesktopMainTouchArea() {
     const setFocusApp = useDesktopStore((state) => state.setFocusApp);
     const setActiveApp = useDesktopStore((state) => state.setActiveApp);
     const language = useLanguageStore((state) => state.currentLanguage);
+    const desktopAreaRef = useRef<HTMLDivElement>(null);
     
-    const allAppList = allApps(language);
+    const allAppList = [
+        ...getRootApplicationDefinitions(language),
+        ...getProjectApplicationDefinitions(language),
+    ];
 
     const [fullscreenStates, setFullscreenStates] = useState<
         Record<string, boolean>
@@ -42,29 +46,28 @@ export default function DesktopMainTouchArea() {
     };
 
     return (
-        <div className="grow relative bg-no-repeat bg-center">
-            <div className="flex flex-wrap h-[30%]">
-                {DesktopApps(language).map((app, i) => (
-                    <motion.div
-                        key={`icon-${app.appName}`}
-                        drag
-                        dragElastic={0}
-                        dragTransition={{ power: 0 }}
-                        style={{ position: "absolute", cursor: "grab" }}
-                        className={`app-initial-position app-${i + 1}`}
-                    >
-                        <DesktopIcon
-                            iconSrc={app.iconSrc}
-                            isFocused={focusApp === app.appName}
-                            onClick={() => {
-                                setFocusApp(app.appName);
-                                setActiveApp(app.appName);
-                            }}
-                            title={app.title}
-                        />
-                    </motion.div>
-                ))}
-            </div>
+        <div ref={desktopAreaRef} className="grow relative bg-no-repeat bg-center">
+            {getRootApplicationDefinitions(language).map((app, i) => (
+                <motion.div
+                    key={`icon-${app.appName}`}
+                    drag
+                    dragConstraints={desktopAreaRef}
+                    dragElastic={0}
+                    dragTransition={{ power: 0 }}
+                    style={{ position: "absolute", cursor: "grab" }}
+                    className={`app-initial-position app-${i + 1}`}
+                >
+                    <DesktopIcon
+                        iconSrc={app.iconSrc}
+                        isFocused={focusApp === app.appName}
+                        onClick={() => {
+                            setFocusApp(app.appName);
+                            setActiveApp(app.appName);
+                        }}
+                        title={app.title}
+                    />
+                </motion.div>
+            ))}
             {allAppList.map(
                 (app) =>
                     openApps.includes(app.appName) &&
@@ -78,11 +81,7 @@ export default function DesktopMainTouchArea() {
                             toggleFullscreen={toggleFullscreen}
                             width="85vw"
                             height="75vh"
-                            onPointerDown={(e) => {
-                                if (e.target === e.currentTarget) {
-                                    setFocusApp(app.appName);
-                                }
-                            }}
+                            dragConstraintRef={desktopAreaRef}
                         />
                     )
             )}
