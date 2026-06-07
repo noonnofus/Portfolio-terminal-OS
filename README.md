@@ -4,8 +4,8 @@
 ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white)
-![Chakra](https://img.shields.io/badge/chakra-%234ED1C5.svg?style=for-the-badge&logo=chakraui&logoColor=white)
+![Zustand](https://img.shields.io/badge/zustand-443E38?style=for-the-badge)
+![Framer Motion](https://img.shields.io/badge/framer%20motion-black?style=for-the-badge&logo=framer&logoColor=blue)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
 
@@ -13,7 +13,7 @@
 🔗 **Live Website:** [Go to Website](https://hyunho.vercel.app/)
 
 ## 📜 Description  
-This project is a portfolio website designed with a terminal and OS-style interface. It was developed using **Next.js, React, React-Redux, and Tailwind CSS**, along with libraries such as **xterm.js, Chakra UI, and Framer Motion**.  
+This project is a portfolio website designed with a terminal and OS-style interface. It is built with **Next.js 16, React 19, TypeScript, Zustand, and Tailwind CSS**, with **xterm.js** powering the terminal experience and a bilingual desktop shell rendered from an app registry.
 
 ### 🚀 **Planned Features**  
 - Add OS-like built-in applications (e.g., web browser, file manager)  
@@ -26,9 +26,34 @@ This project is a portfolio website designed with a terminal and OS-style interf
 
 ## 🛠️ Tech Stack  
 - **Frontend:** Next.js, React, TypeScript, Tailwind CSS
-- **State Management:** Redux Toolkit
-- **UI Libraries:** Chakra UI, framer-motion
+- **State Management:** Zustand
+- **UI Libraries:** Framer Motion, Radix UI primitives, next-themes
 - **Terminal Emulator:** xterm.js
+
+## ✅ Verification Gates
+
+Run these commands before treating a refactor as complete:
+
+```bash
+npm test
+npm run lint
+npx tsc --noEmit --pretty false
+npm run build
+```
+
+Recommended order:
+
+1. `npm test`
+2. `npm run lint`
+3. `npx tsc --noEmit --pretty false`
+4. `npm run build`
+
+Current meaning of each gate:
+
+- `npm test`: runs core unit tests with Vitest
+- `npm run lint`: runs ESLint with the Next.js 16 flat config baseline
+- `npx tsc --noEmit --pretty false`: runs standalone TypeScript validation
+- `npm run build`: runs the production build including Next.js TypeScript validation
 
 ## 📦 Installation  
 ```bash
@@ -45,10 +70,18 @@ npm install
 npm run dev
 ```
 
+## 🧪 Local Commands
+
+```bash
+npm run dev
+npm test
+npm run lint
+npx tsc --noEmit --pretty false
+npm run build
+```
+
 ## License
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-
-
 
 
 

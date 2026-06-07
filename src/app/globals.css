@@ -1,31 +1,155 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "./tokens.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme inline {
+  --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-scrim: var(--scrim);
+  --color-panel: var(--panel);
+  --color-panel-foreground: var(--panel-foreground);
+  --color-panel-border: var(--panel-border);
+  --color-desktop-bar: var(--desktop-bar);
+  --color-desktop-bar-foreground: var(--desktop-bar-foreground);
+  --color-desktop-bar-border: var(--desktop-bar-border);
+  --color-window-surface: var(--window-surface);
+  --color-window-header-surface: var(--window-header-surface);
+  --color-window-foreground: var(--window-foreground);
+  --color-window-border: var(--window-border);
+
+  /* Custom Z-Indexes */
+  --z-index-10: 10;
+  --z-index-20: 20;
+  --z-index-30: 30;
+  --z-index-40: 40;
+  --z-index-50: 50;
+  --z-index-navbar: 1000;
+  --z-index-modal: 2000;
+  --z-index-popover: 3000;
+  --z-index-tooltip: 4000;
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--color-pen-white);
+    --foreground: var(--color-pen-gray-900);
+    --card: var(--color-pen-white);
+    --card-foreground: var(--color-pen-gray-900);
+    --popover: var(--color-pen-white);
+    --popover-foreground: var(--color-pen-gray-900);
+    --primary: var(--color-pen-primary);
+    --primary-foreground: var(--color-pen-white);
+    --secondary: var(--color-pen-gray-200);
+    --secondary-foreground: var(--color-pen-gray-900);
+    --muted: var(--color-pen-gray-100);
+    --muted-foreground: var(--color-pen-gray-600);
+    --accent: color-mix(in srgb, var(--color-pen-primary) 12%, var(--color-pen-white));
+    --accent-foreground: var(--color-pen-gray-900);
+    --destructive: #dc2626;
+    --destructive-foreground: var(--color-pen-white);
+    --border: color-mix(in srgb, var(--color-pen-gray-900) 10%, transparent);
+    --input: color-mix(in srgb, var(--color-pen-gray-900) 10%, transparent);
+    --ring: color-mix(in srgb, var(--color-pen-primary) 65%, var(--color-pen-white));
+    --chart-1: var(--color-pen-primary);
+    --chart-2: #0f766e;
+    --chart-3: #1d4ed8;
+    --chart-4: #d97706;
+    --chart-5: #ea580c;
+    --scrim: var(--color-os-scrim);
+    --panel: var(--color-os-panel-surface);
+    --panel-foreground: var(--color-pen-white);
+    --panel-border: var(--color-os-panel-border);
+    --desktop-bar: var(--color-os-bar-surface);
+    --desktop-bar-foreground: var(--color-pen-white);
+    --desktop-bar-border: var(--color-os-bar-border);
+    --window-surface: var(--color-os-window-surface);
+    --window-header-surface: var(--color-os-window-header-surface);
+    --window-foreground: var(--color-os-window-foreground);
+    --window-border: var(--color-os-window-border);
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: var(--color-pen-gray-900);
+    --foreground: #f8fafc;
+    --card: #111827;
+    --card-foreground: #f8fafc;
+    --popover: #111827;
+    --popover-foreground: #f8fafc;
+    --primary: var(--color-pen-primary-light);
+    --primary-foreground: var(--color-pen-gray-900);
+    --secondary: #1f2937;
+    --secondary-foreground: #f8fafc;
+    --muted: #111827;
+    --muted-foreground: #cbd5e1;
+    --accent: color-mix(in srgb, var(--color-pen-primary-light) 18%, #020617);
+    --accent-foreground: #f8fafc;
+    --destructive: #f87171;
+    --destructive-foreground: var(--color-pen-gray-900);
+    --border: rgb(255 255 255 / 12%);
+    --input: rgb(255 255 255 / 14%);
+    --ring: color-mix(in srgb, var(--color-pen-primary-light) 75%, white);
+    --chart-1: var(--color-pen-primary-light);
+    --chart-2: #2dd4bf;
+    --chart-3: #f59e0b;
+    --chart-4: #a78bfa;
+    --chart-5: #fb7185;
+    --scrim: var(--color-os-scrim-strong);
+    --panel: rgb(9 13 22 / 94%);
+    --panel-foreground: #f8fafc;
+    --panel-border: rgb(255 255 255 / 10%);
+    --desktop-bar: rgb(15 23 42 / 48%);
+    --desktop-bar-foreground: #f8fafc;
+    --desktop-bar-border: rgb(255 255 255 / 14%);
+    --window-surface: var(--color-os-window-surface);
+    --window-header-surface: var(--color-os-window-header-surface);
+    --window-foreground: var(--color-os-window-foreground);
+    --window-border: var(--color-os-window-border);
   }
 }
 
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
 html,
@@ -34,6 +158,7 @@ body,
   height: 100%;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 div {
@@ -52,4 +177,23 @@ div {
 
 .xterm .xterm-viewport {
   overflow-y: hidden !important;
+}
+
+/* Custom Animations for OS feel */
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+.animate-slideOut {
+  animation: slideOut 0.3s ease-in forwards;
 }

@@ -1,11 +1,9 @@
-'use client';
-
-import dynamic from 'next/dynamic';
-
-const TerminalPage = dynamic(() => import("./terminal/TerminalPage"), { ssr: false });
+import TerminalRouteClient from "@/features/applications/components/terminal/TerminalRouteClient";
 
 export default function Page() {
   return (
-    <TerminalPage />
-  )
+    <main className="h-dvh w-dvw overflow-hidden bg-black">
+      <TerminalRouteClient />
+    </main>
+  );
 }
