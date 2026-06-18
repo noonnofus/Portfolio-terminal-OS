@@ -1,46 +1,59 @@
 import getProjectApplicationDefinitions from "@/features/applications/lib/getProjectApplicationDefinitions";
 import React from "react";
-import { motion } from "framer-motion";
 import { useDesktopStore } from "@/features/Desktop/store/useDesktopStore";
 import { DesktopIcon } from "@/features/Desktop/components/DesktopIcon";
-import "@/shared/styles/touchFolderLayout.css";
 import { useRef } from "react";
 import { useLanguageStore } from "@/shared/lib/i18n/useLanguageStore";
 
 export default function AppFolder() {
     const focusApp = useDesktopStore((state) => state.focusApp);
+    const desktopIconPositions = useDesktopStore((state) => state.desktopIconPositions);
     const isTouchDevice = useDesktopStore((state) => state.isTouchDevice);
     const setFocusApp = useDesktopStore((state) => state.setFocusApp);
     const setActiveApp = useDesktopStore((state) => state.setActiveApp);
+    const setDesktopIconPosition = useDesktopStore((state) => state.setDesktopIconPosition);
     const language = useLanguageStore((state) => state.currentLanguage);
 
     const dragAreaRef = useRef<HTMLDivElement>(null);
+    const getDefaultFolderIconPosition = (index: number) => ({
+        left: 5 + (index % 4) * 80,
+        top: Math.floor(index / 4) * 130,
+    });
 
     return (
         <div
             className="w-full h-full grow overflow-scroll text-black rounded-pen-lg relative"
             ref={dragAreaRef}
         >
-            <div className="flex flex-wrap h-full">
+            <div className="h-full relative">
                 {getProjectApplicationDefinitions(language).map((app, i) => (
-                    <motion.div
-                        key={`touchview-${app.appName}`}
-                        drag
-                        dragElastic={0}
-                        dragTransition={{ power: 0 }}
-                        dragConstraints={dragAreaRef}
+                    <div
+                        key={`folder-icon-${app.appName}-${
+                            (desktopIconPositions[app.appName] ?? getDefaultFolderIconPosition(i)).left
+                        }-${
+                            (desktopIconPositions[app.appName] ?? getDefaultFolderIconPosition(i)).top
+                        }`}
                         style={{
                             position: "absolute",
-                            zIndex: focusApp === app.appName ? 10 : 1,
-                            cursor: "grab",
+                            left: (desktopIconPositions[app.appName] ?? getDefaultFolderIconPosition(i)).left,
+                            top: (desktopIconPositions[app.appName] ?? getDefaultFolderIconPosition(i)).top,
                         }}
-                        className={`app-initial-position ${isTouchDevice ? `folder-app-${i + 1}` : `app-${i + 1}`}`}
-
                     >
                         {isTouchDevice ? (
                             <DesktopIcon
+                                dragConstraintRef={dragAreaRef}
                                 iconSrc={app.iconSrc}
                                 isFocused={focusApp === app.appName}
+                                onDragEnd={(info) => {
+                                    const currentPosition =
+                                        desktopIconPositions[app.appName] ??
+                                        getDefaultFolderIconPosition(i);
+
+                                    setDesktopIconPosition(app.appName, {
+                                        left: Math.round(currentPosition.left + info.offset.x),
+                                        top: Math.round(currentPosition.top + info.offset.y),
+                                    });
+                                }}
                                 onClick={() => {
                                     setFocusApp(app.appName);
                                     setActiveApp(app.appName);
@@ -50,8 +63,19 @@ export default function AppFolder() {
 
                         ) : (
                             <DesktopIcon
+                                dragConstraintRef={dragAreaRef}
                                 iconSrc={app.iconSrc}
                                 isFocused={focusApp === app.appName}
+                                onDragEnd={(info) => {
+                                    const currentPosition =
+                                        desktopIconPositions[app.appName] ??
+                                        getDefaultFolderIconPosition(i);
+
+                                    setDesktopIconPosition(app.appName, {
+                                        left: Math.round(currentPosition.left + info.offset.x),
+                                        top: Math.round(currentPosition.top + info.offset.y),
+                                    });
+                                }}
                                 onClick={() => {
                                     setFocusApp(app.appName);
                                 }}
@@ -62,7 +86,7 @@ export default function AppFolder() {
                                 title={app.title}
                             />
                         )}
-                    </motion.div>
+                    </div>
                 ))}
             </div>
         </div>
