@@ -1,25 +1,9 @@
-export interface TerminalCommand {
-    name: string;
-    description: string;
-}
-
-const commands: TerminalCommand[] = [
-    {
-      name: 'startx',
-      description: 'access to GUI'
-    },
-    {
-      name: 'reboot',
-      description: 'restart the system'
-    },
-    {
-      name: 'shutdown',
-      description: 'shut the system down'
-    },
-    {
-      name: 'clear',
-      description: 'clear the terminal'
-    }
-];
-
-export default commands;
+export const TERMINAL_COMMANDS = [
+  { name: "help", descriptionKey: "commands.help" },
+  { name: "startx", descriptionKey: "commands.startx" },
+  { name: "ko", descriptionKey: "commands.ko" },
+  { name: "en", descriptionKey: "commands.en" },
+  { name: "reboot", descriptionKey: "commands.reboot" },
+  { name: "shutdown", descriptionKey: "commands.shutdown" },
+  { name: "clear", descriptionKey: "commands.clear" },
+] as const;

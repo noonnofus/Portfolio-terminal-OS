@@ -38,4 +38,14 @@ describe("useDesktopStore", () => {
         expect(state.activeApp).toBe("");
         expect(state.focusApp).toBe("");
     });
+
+    it("stores desktop icon positions by app name", () => {
+        const store = useDesktopStore.getState();
+
+        store.setDesktopIconPosition("Terminal", { left: 120, top: 48 });
+
+        expect(useDesktopStore.getState().desktopIconPositions).toEqual({
+            Terminal: { left: 120, top: 48 },
+        });
+    });
 });

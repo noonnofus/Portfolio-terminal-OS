@@ -1,0 +1,34 @@
+{
+  "boot": {
+    "introduction": "안녕하세요, Node.js 기반 주니어 풀스택 웹 개발자 김현호입니다.",
+    "experience": "AI 에이전트 플랫폼의 프론트엔드를 스크래치부터 구축하고, AICC 솔루션의 실시간 음성 처리를 담당하는 Voice Gateway를 설계·구축했습니다.",
+    "aiApproach": "AI를 단순히 활용하는 것을 넘어, 직접 검증하고 여러 에이전트를 조합해 더 나은 결과를 만들어냅니다.",
+    "helpHint": "사용 가능한 명령어를 확인하려면 \"help\"를 입력하세요.",
+    "portfolioPrefix": "포트폴리오를 둘러보려면 ",
+    "portfolioLink": "여기",
+    "portfolioSuffix": "를 클릭하세요. 또는 \"startx\"를 입력하세요.",
+    "languagePrefix": "영어로 보려면 ",
+    "languageLink": "English",
+    "languageSuffix": "를 클릭하세요. 또는 \"en\"을 입력하세요."
+  },
+  "help": {
+    "title": "사용 가능한 명령어:"
+  },
+  "commands": {
+    "help": "사용 가능한 명령어 보기",
+    "startx": "포트폴리오 화면 열기",
+    "ko": "한국어로 변경",
+    "en": "영어로 변경",
+    "reboot": "시스템 다시 시작",
+    "shutdown": "시스템 종료",
+    "clear": "터미널 화면 지우기"
+  },
+  "messages": {
+    "alreadyInPortfolio": "이미 포트폴리오 화면에 있습니다.",
+    "restarting": "시스템을 다시 시작합니다...",
+    "shuttingDown": "시스템을 종료합니다.",
+    "goodbye": "안녕히 가세요.",
+    "welcomeBack": "다시 만나 반갑습니다.",
+    "commandNotFound": "명령어를 찾을 수 없습니다: {{command}}"
+  }
+}

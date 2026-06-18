@@ -4,9 +4,7 @@ import React, { useMemo, useRef, useState } from "react";
 import getRootApplicationDefinitions from "@/features/applications/lib/getRootApplicationDefinitions";
 import getProjectApplicationDefinitions from "@/features/applications/lib/getProjectApplicationDefinitions";
 import { DesktopIcon } from "./DesktopIcon";
-import { motion } from "framer-motion";
 import GuidePopOver from "./GuidePopOver";
-import "@/shared/styles/dragAreaLayout.css";
 import { DesktopAppWindow } from "./DesktopAppWindow";
 import { useDesktopStore } from "@/features/Desktop/store/useDesktopStore";
 import { useLanguageStore } from "@/shared/lib/i18n/useLanguageStore";
@@ -17,6 +15,8 @@ export default function DesktopMainTouchArea() {
     const focusApp = useDesktopStore((state) => state.focusApp);
     const setFocusApp = useDesktopStore((state) => state.setFocusApp);
     const setActiveApp = useDesktopStore((state) => state.setActiveApp);
+    const desktopIconPositions = useDesktopStore((state) => state.desktopIconPositions);
+    const setDesktopIconPosition = useDesktopStore((state) => state.setDesktopIconPosition);
     const language = useLanguageStore((state) => state.currentLanguage);
     const desktopAreaRef = useRef<HTMLDivElement>(null);
     
@@ -45,29 +45,53 @@ export default function DesktopMainTouchArea() {
         }));
     };
 
+    const getDefaultDesktopIconPosition = (index: number): Position => ({
+        left: 5 + index * 80,
+        top: 0,
+    });
+
+    const handleDesktopIconDragEnd = (
+        appName: string,
+        currentPosition: Position,
+        info: { offset: { x: number; y: number } }
+    ) => {
+        setDesktopIconPosition(appName, {
+            left: Math.round(currentPosition.left + info.offset.x),
+            top: Math.round(currentPosition.top + info.offset.y),
+        });
+    };
+
     return (
         <div ref={desktopAreaRef} className="grow relative bg-no-repeat bg-center">
-            {getRootApplicationDefinitions(language).map((app, i) => (
-                <motion.div
-                    key={`icon-${app.appName}`}
-                    drag
-                    dragConstraints={desktopAreaRef}
-                    dragElastic={0}
-                    dragTransition={{ power: 0 }}
-                    style={{ position: "absolute", cursor: "grab" }}
-                    className={`app-initial-position app-${i + 1}`}
+            {getRootApplicationDefinitions(language).map((app, index) => {
+                const iconPosition =
+                    desktopIconPositions[app.appName] ??
+                    getDefaultDesktopIconPosition(index);
+
+                return (
+                <div
+                    key={`icon-${app.appName}-${iconPosition.left}-${iconPosition.top}`}
+                    style={{
+                        position: "absolute",
+                        left: iconPosition.left,
+                        top: iconPosition.top,
+                    }}
                 >
                     <DesktopIcon
+                        dragConstraintRef={desktopAreaRef}
                         iconSrc={app.iconSrc}
                         isFocused={focusApp === app.appName}
+                        onDragEnd={(info) =>
+                            handleDesktopIconDragEnd(app.appName, iconPosition, info)
+                        }
                         onClick={() => {
                             setFocusApp(app.appName);
                             setActiveApp(app.appName);
                         }}
                         title={app.title}
                     />
-                </motion.div>
-            ))}
+                </div>
+            )})}
             {allAppList.map(
                 (app) =>
                     openApps.includes(app.appName) &&
