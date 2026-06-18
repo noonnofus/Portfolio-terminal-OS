@@ -1,5 +1,10 @@
 import { create } from 'zustand';
 
+interface DesktopIconPosition {
+    left: number;
+    top: number;
+}
+
 interface DesktopState {
     isTouchDevice: boolean;
     activeApp: string;
@@ -8,6 +13,7 @@ interface DesktopState {
     showModal: boolean;
     userRole: string;
     openApps: string[];
+    desktopIconPositions: Record<string, DesktopIconPosition>;
     setIsTouchDevice: (val: boolean) => void;
     setActiveApp: (app: string) => void;
     setFocusApp: (app: string) => void;
@@ -15,6 +21,7 @@ interface DesktopState {
     setShowAppMenu: (val: boolean) => void;
     setShowModal: (val: boolean) => void;
     setUserRole: (role: string) => void;
+    setDesktopIconPosition: (app: string, position: DesktopIconPosition) => void;
 }
 
 export const useDesktopStore = create<DesktopState>((set) => ({
@@ -25,6 +32,7 @@ export const useDesktopStore = create<DesktopState>((set) => ({
     showModal: true,
     userRole: "",
     openApps: [],
+    desktopIconPositions: {},
     setIsTouchDevice: (val) => set({ isTouchDevice: val }),
     setActiveApp: (app) => set((state) => ({
         activeApp: app,
@@ -41,4 +49,10 @@ export const useDesktopStore = create<DesktopState>((set) => ({
     setShowAppMenu: (val) => set({ showAppMenu: val }),
     setShowModal: (val) => set({ showModal: val }),
     setUserRole: (role) => set({ userRole: role }),
+    setDesktopIconPosition: (app, position) => set((state) => ({
+        desktopIconPositions: {
+            ...state.desktopIconPositions,
+            [app]: position,
+        },
+    })),
 }));

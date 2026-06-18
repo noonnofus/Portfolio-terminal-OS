@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion, useDragControls } from "framer-motion";
 import type { AppDefinition } from "@/features/applications/types/appDefinition";
 import AppDesktopHeader from "./AppDesktopHeader";
@@ -16,6 +16,30 @@ interface DesktopAppWindowProps {
     dragConstraintRef: React.RefObject<HTMLDivElement | null>;
 }
 
+function resolveWindowDimension(
+    value: string | undefined,
+    axis: "width" | "height"
+) {
+    if (!value || typeof window === "undefined") {
+        return value;
+    }
+
+    const viewportSize =
+        axis === "width" ? window.innerWidth : window.innerHeight;
+
+    if (value.endsWith("vw")) {
+        const percentage = Number.parseFloat(value.slice(0, -2));
+        return `${Math.round((viewportSize * percentage) / 100)}px`;
+    }
+
+    if (value.endsWith("vh")) {
+        const percentage = Number.parseFloat(value.slice(0, -2));
+        return `${Math.round((viewportSize * percentage) / 100)}px`;
+    }
+
+    return value;
+}
+
 export const DesktopAppWindow: React.FC<DesktopAppWindowProps> = ({
     app,
     openAppPosition,
@@ -27,10 +51,13 @@ export const DesktopAppWindow: React.FC<DesktopAppWindowProps> = ({
     dragConstraintRef,
 }) => {
     const dragControls = useDragControls();
+    const [initialWindowSize] = useState(() => ({
+        width: resolveWindowDimension(width, "width"),
+        height: resolveWindowDimension(height, "height"),
+    }));
 
     return (
         <motion.div
-            key={`opened-${app.appName}-${isFullScreen ? "fs" : "normal"}`}
             drag
             dragControls={dragControls}
             dragElastic={0}
@@ -45,8 +72,8 @@ export const DesktopAppWindow: React.FC<DesktopAppWindowProps> = ({
             style={{
                 position: "absolute",
                 zIndex: isFocused ? 10 : 1,
-                width: isFullScreen ? "100vw" : width,
-                height: isFullScreen ? "100vh" : height,
+                width: isFullScreen ? "100vw" : initialWindowSize.width,
+                height: isFullScreen ? "100vh" : initialWindowSize.height,
             }}
             className="flex flex-col overflow-hidden rounded-os-window border border-window-border bg-window-surface text-window-foreground shadow-os-window"
         >

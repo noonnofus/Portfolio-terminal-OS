@@ -1,66 +1,98 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useTerminal } from "./hooks/useTerminal";
 import { useTerminalBootSequence } from "./hooks/useTerminalBootSequence";
+import { useTerminalSequenceController } from "./hooks/useTerminalSequenceController";
+import { useTerminalSession } from "./hooks/useTerminalSession";
 import { executeCommand } from "./lib/commandParser";
 import useIsTouchDevice from "@/features/Desktop/hooks/useIsTouchDevice";
-import DefaultModal from "@/features/Desktop/components/defaultModal";
-import { useDesktopStore } from "@/features/Desktop/store/useDesktopStore";
 import { TERMINAL_PROMPT } from "./lib/bootSequence";
+import { useLanguageStore } from "@/shared/lib/i18n/useLanguageStore";
+import type { TerminalAction } from "./lib/terminalActions";
 
 export default function TerminalPage() {
   const router = useRouter();
   const pathname = usePathname();
   const isTouchDevice = useIsTouchDevice();
-  const isModalOpen = useDesktopStore((state) => state.showModal);
+  const currentLanguage = useLanguageStore((state) => state.currentLanguage);
+  const setLanguage = useLanguageStore((state) => state.setLanguage);
 
   const inputRef = useRef("");
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const bootSequence = useTerminalBootSequence(isTouchDevice);
+  const sequence = useTerminalSequenceController();
+  const bootSequence = useTerminalBootSequence({
+    isTouchDevice,
+    language: currentLanguage,
+    sequence,
+  });
+  const session = useTerminalSession({
+    language: currentLanguage,
+    sequence,
+    startBoot: bootSequence.start,
+  });
 
-  const clearPendingCommandTimeout = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
+  const handleTerminalAction = (action: TerminalAction) => {
+    inputRef.current = "";
+
+    if (action.type === "open-portfolio") {
+      router.push("/gui");
+      return;
     }
+
+    setLanguage(action.language);
   };
 
   const { terminalRef } = useTerminal({
     fontSize: isTouchDevice ? 12 : 14,
-    onReady: bootSequence.start,
+    onReady: session.onReady,
+    onAction: handleTerminalAction,
     onInput: (data, term) => {
+      if (session.consumeInput(data, term)) return;
       if (bootSequence.consumeInput(data)) return;
 
       const char = data.charCodeAt(0);
 
       if (char === 13) {
         const cmd = inputRef.current;
-        const result = executeCommand(cmd, pathname);
+        const result = executeCommand(cmd, {
+          pathname,
+          language: currentLanguage,
+        });
 
         term.writeln("");
+        inputRef.current = "";
 
-        if (result.action === "clear") {
-          term.clear();
-        } else if (result.action === "startx") {
-          router.push("/gui");
+        if (result.type === "open-portfolio") {
+          handleTerminalAction(result);
           return;
-        } else if (result.action === "shutdown" || result.action === "reboot") {
-          term.clear();
-          term.writeln(" Restarting system...");
-          clearPendingCommandTimeout();
-          timeoutRef.current = setTimeout(() => {
-            term.clear();
-            timeoutRef.current = null;
-          }, 1000);
-        } else if (result.lines) {
-          result.lines.forEach((line) => term.writeln(line));
-        } else if (result.output) {
-          term.writeln(result.output);
         }
 
-        inputRef.current = "";
+        if (result.type === "change-language") {
+          handleTerminalAction(result);
+          if (result.language === currentLanguage) {
+            term.write(TERMINAL_PROMPT);
+          }
+          return;
+        }
+
+        switch (result.type) {
+          case "clear":
+            term.clear();
+            break;
+          case "reboot":
+            session.reboot(term, result.message);
+            return;
+          case "shutdown":
+            session.shutdown(term, result.lines);
+            return;
+          case "write-lines":
+            result.lines.forEach((line) => term.writeln(line));
+            break;
+          case "noop":
+            break;
+        }
+
         term.write(TERMINAL_PROMPT);
       } else if (char === 127) {
         if (inputRef.current.length > 0) {
@@ -74,16 +106,9 @@ export default function TerminalPage() {
     },
   });
 
-  useEffect(() => {
-    return () => {
-      clearPendingCommandTimeout();
-    };
-  }, []);
-
   return (
     <div className="h-full w-full p-4 bg-black box-border">
       <div ref={terminalRef} className="h-full w-full" />
-      {isModalOpen && pathname !== "/gui" && <DefaultModal />}
     </div>
   );
 }

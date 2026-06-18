@@ -24,6 +24,8 @@ import koAbout from '../../../public/locales/ko/About.json';
 import enAbout from '../../../public/locales/en/About.json';
 import koContact from '../../../public/locales/ko/Contact.json';
 import enContact from '../../../public/locales/en/Contact.json';
+import koTerminal from '../../../public/locales/ko/Terminal.json';
+import enTerminal from '../../../public/locales/en/Terminal.json';
 
 const resources = {
   ko: {
@@ -38,6 +40,7 @@ const resources = {
     AboutSite: koAboutSite,
     About: koAbout,
     Contact: koContact,
+    Terminal: koTerminal,
   },
   en: {
     common: enCommon,
@@ -51,6 +54,7 @@ const resources = {
     AboutSite: enAboutSite,
     About: enAbout,
     Contact: enContact,
+    Terminal: enTerminal,
   },
 };
 

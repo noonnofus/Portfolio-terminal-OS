@@ -1,48 +1,73 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import type { Terminal } from "@xterm/xterm";
 import chooseASCII from "../lib/ascii";
 import {
-  TERMINAL_BOOT_LINES,
   TERMINAL_BOOT_TIMING,
   TERMINAL_PROMPT,
 } from "../lib/bootSequence";
+import type { Language } from "@/shared/lib/i18n/useLanguageStore";
+import {
+  getTerminalContent,
+  type TerminalSegment,
+} from "../lib/terminalContent";
+import { formatTerminalLink } from "../lib/terminalFormatting";
+import { toTerminalActionUri } from "../lib/terminalActions";
+import type {
+  TerminalSequenceController,
+  TerminalSequenceStep,
+} from "../lib/terminalSequence";
 
-export function useTerminalBootSequence(isTouchDevice: boolean) {
+interface UseTerminalBootSequenceOptions {
+  isTouchDevice: boolean;
+  language: Language;
+  sequence: TerminalSequenceController;
+}
+
+export function useTerminalBootSequence({
+  isTouchDevice,
+  language,
+  sequence,
+}: UseTerminalBootSequenceOptions) {
   const isAnimatingRef = useRef(false);
   const terminalRef = useRef<Terminal | null>(null);
-  const timersRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
-
-  const clearTimers = useCallback(() => {
-    timersRef.current.forEach(clearTimeout);
-    timersRef.current.clear();
-  }, []);
-
-  const schedule = useCallback((callback: () => void, delay: number) => {
-    const timer = setTimeout(() => {
-      timersRef.current.delete(timer);
-      callback();
-    }, delay);
-    timersRef.current.add(timer);
-  }, []);
+  const animationGenerationRef = useRef(0);
 
   const writeCompleteBoot = useCallback(
     (terminal: Terminal) => {
-      clearTimers();
+      const content = getTerminalContent(language);
+      animationGenerationRef.current += 1;
+      sequence.cancel();
       terminal.reset();
       terminal.clear();
       terminal.writeln("");
       terminal.writeln("");
       chooseASCII(isTouchDevice).forEach((line) => terminal.writeln(line));
-      TERMINAL_BOOT_LINES.forEach((line) => terminal.writeln(line));
+      content.bootLines.forEach((line) => {
+        line.forEach((segment) => {
+          if (segment.type === "link") {
+            terminal.write(
+              formatTerminalLink(
+                segment.label,
+                toTerminalActionUri(segment.action),
+              ),
+            );
+          } else {
+            terminal.write(segment.value);
+          }
+        });
+        terminal.write("\r\n");
+      });
       terminal.write(TERMINAL_PROMPT);
       isAnimatingRef.current = false;
     },
-    [clearTimers, isTouchDevice],
+    [isTouchDevice, language, sequence],
   );
 
   const start = useCallback(
     (terminal: Terminal) => {
-      clearTimers();
+      const content = getTerminalContent(language);
+      const runGeneration = animationGenerationRef.current + 1;
+      animationGenerationRef.current = runGeneration;
       terminalRef.current = terminal;
       isAnimatingRef.current = true;
       terminal.reset();
@@ -51,55 +76,46 @@ export function useTerminalBootSequence(isTouchDevice: boolean) {
       terminal.writeln("");
 
       const ascii = chooseASCII(isTouchDevice);
-      let asciiIndex = 0;
-      let lineIndex = 0;
+      const steps: TerminalSequenceStep[] = [];
 
-      const writeLine = () => {
-        if (!isAnimatingRef.current) return;
+      ascii.forEach((line) => {
+        steps.push({ type: "write", value: line });
+        steps.push({ type: "line-break" });
+        steps.push({ type: "wait", delayMs: TERMINAL_BOOT_TIMING.asciiLine });
+      });
 
-        if (lineIndex >= TERMINAL_BOOT_LINES.length) {
-          terminal.write(TERMINAL_PROMPT);
-          isAnimatingRef.current = false;
-          return;
-        }
-
-        const line = TERMINAL_BOOT_LINES[lineIndex];
-        let characterIndex = 0;
-
-        const writeCharacter = () => {
-          if (!isAnimatingRef.current) return;
-
-          if (characterIndex >= line.length) {
-            terminal.write("\r\n");
-            lineIndex += 1;
-            writeLine();
+      content.bootLines.forEach((line) => {
+        line.forEach((segment: TerminalSegment) => {
+          if (segment.type === "link") {
+            steps.push({
+              type: "write",
+              value: formatTerminalLink(
+                segment.label,
+                toTerminalActionUri(segment.action),
+              ),
+            });
             return;
           }
 
-          terminal.write(line[characterIndex]);
-          characterIndex += 1;
-          schedule(writeCharacter, TERMINAL_BOOT_TIMING.character);
-        };
+          steps.push({
+            type: "type",
+            value: segment.value,
+            delayMs: TERMINAL_BOOT_TIMING.character,
+          });
+        });
 
-        writeCharacter();
-      };
+        steps.push({ type: "line-break" });
+      });
 
-      const writeAsciiLine = () => {
-        if (!isAnimatingRef.current) return;
+      void sequence.run(terminal, steps).then((completed) => {
+        if (animationGenerationRef.current !== runGeneration) return;
+        if (!completed) return;
 
-        if (asciiIndex >= ascii.length) {
-          writeLine();
-          return;
-        }
-
-        terminal.writeln(ascii[asciiIndex]);
-        asciiIndex += 1;
-        schedule(writeAsciiLine, TERMINAL_BOOT_TIMING.asciiLine);
-      };
-
-      writeAsciiLine();
+        terminal.write(TERMINAL_PROMPT);
+        isAnimatingRef.current = false;
+      });
     },
-    [clearTimers, isTouchDevice, schedule],
+    [isTouchDevice, language, sequence],
   );
 
   const consumeInput = useCallback(
@@ -115,13 +131,12 @@ export function useTerminalBootSequence(isTouchDevice: boolean) {
     [writeCompleteBoot],
   );
 
-  useEffect(() => {
-    return () => {
-      clearTimers();
-      terminalRef.current = null;
-      isAnimatingRef.current = false;
-    };
-  }, [clearTimers]);
+  const cancel = useCallback(() => {
+    animationGenerationRef.current += 1;
+    sequence.cancel();
+    terminalRef.current = null;
+    isAnimatingRef.current = false;
+  }, [sequence]);
 
-  return { start, consumeInput };
+  return { start, consumeInput, cancel };
 }
