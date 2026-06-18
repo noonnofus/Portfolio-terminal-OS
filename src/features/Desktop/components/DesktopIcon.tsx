@@ -1,13 +1,14 @@
-import { motion } from "framer-motion";
-import { KeyboardEvent, MutableRefObject } from "react";
+import { motion, type PanInfo } from "framer-motion";
+import { KeyboardEvent, RefObject } from "react";
 
 type Props = {
     iconSrc: string;
-    dragConstraintRef?: MutableRefObject<HTMLDivElement>;
+    dragConstraintRef?: RefObject<HTMLDivElement | null>;
     onClick?: () => void;
     onDoubleClick?: () => void;
     isFocused?: boolean;
     title: string;
+    onDragEnd?: (info: PanInfo) => void;
 };
 
 export function DesktopIcon({
@@ -17,6 +18,7 @@ export function DesktopIcon({
     onDoubleClick,
     isFocused = false,
     title,
+    onDragEnd,
 }: Props) {
     const isDraggable = dragConstraintRef ? true : false;
     const isMobileIcon = !isDraggable;
@@ -48,13 +50,14 @@ export function DesktopIcon({
             onDoubleClick={onDoubleClick}
             onClick={onClick}
             onDragStart={onClick}
+            onDragEnd={(_event, info) => onDragEnd?.(info)}
             onKeyDown={handleKeyDown}
             aria-label={title}
             style={{
                 cursor: 'pointer',
                 backgroundColor: `${bgColor}`
             }}
-            className="rounded-[8px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+            className="flex w-[72px] flex-col items-center rounded-[8px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         >
             <div
                 className={`w-[55px] h-[55px] p-[5px] ${isMobileIcon ? 'm-[5px]' : 'm-0'}`}
@@ -66,7 +69,7 @@ export function DesktopIcon({
                 }}
             />
             <p
-                className="text-[12px] font-semibold text-center text-white w-full"
+                className="w-full max-w-[72px] text-center text-[12px] font-semibold leading-[1.15] text-white [overflow-wrap:anywhere]"
                 style={{
                     textShadow: '1px 1px 1px black',
                 }}

@@ -1,0 +1,34 @@
+{
+  "boot": {
+    "introduction": "Hello, I'm HyunHo Kim, a Node.js-based junior full-stack web developer.",
+    "experience": "I've built the frontend of an AI agent platform from scratch and implemented the Voice Gateway responsible for real-time voice processing in an AICC solution.",
+    "aiApproach": "Beyond simply using AI, I validate it firsthand and combine multiple agents to produce better results.",
+    "helpHint": "To see available commands, type \"help\" and press Enter.",
+    "portfolioPrefix": "",
+    "portfolioLink": "Click here",
+    "portfolioSuffix": " to explore my portfolio. Or type \"startx\".",
+    "languagePrefix": "To view in Korean, click ",
+    "languageLink": "한국어",
+    "languageSuffix": ". Or type \"ko\"."
+  },
+  "help": {
+    "title": "Available commands:"
+  },
+  "commands": {
+    "help": "show available commands",
+    "startx": "open the portfolio",
+    "ko": "change language to Korean",
+    "en": "change language to English",
+    "reboot": "restart the system",
+    "shutdown": "shut the system down",
+    "clear": "clear the terminal"
+  },
+  "messages": {
+    "alreadyInPortfolio": "You are already viewing the portfolio.",
+    "restarting": "Restarting the system...",
+    "shuttingDown": "Shutting down the system.",
+    "goodbye": "Goodbye.",
+    "welcomeBack": "Welcome back. It's good to see you again.",
+    "commandNotFound": "Command not found: {{command}}"
+  }
+}

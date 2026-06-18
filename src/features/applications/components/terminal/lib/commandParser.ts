@@ -1,34 +1,56 @@
-import commands from "../command";
-import type { TerminalCommand } from "../command";
+import type { Language } from "@/shared/lib/i18n/useLanguageStore";
+import { getTerminalContent } from "./terminalContent";
 
-export type CommandAction = 'clear' | 'reboot' | 'shutdown' | 'startx' | 'none';
+export type TerminalCommandResult =
+  | { type: "noop" }
+  | { type: "write-lines"; lines: string[] }
+  | { type: "clear" }
+  | { type: "open-portfolio" }
+  | { type: "change-language"; language: Language }
+  | { type: "reboot"; message: string }
+  | { type: "shutdown"; lines: string[] };
 
-export interface ParseResult {
-  action: CommandAction;
-  output?: string;
-  lines?: string[];
+export interface CommandContext {
+  pathname: string;
+  language: Language;
 }
 
-export const executeCommand = (cmd: string, pathname: string): ParseResult => {
+export const executeCommand = (
+  cmd: string,
+  context: CommandContext,
+): TerminalCommandResult => {
   const trimmed = cmd.trim().toLowerCase();
-  
-  if (trimmed === "help") {
-    const lines = commands.map((command: TerminalCommand) => `   ${command.name.padEnd(15)} ${command.description}`);
-    return { action: 'none', lines: [" Available commands:", ...lines] };
-  } 
-  
-  if (trimmed === "clear") return { action: 'clear' };
-  if (trimmed === "reboot") return { action: 'reboot' };
-  if (trimmed === "shutdown") return { action: 'shutdown' };
-  
-  if (trimmed === "startx") {
-    if (pathname.includes("gui")) {
-      return { action: 'none', output: " You are already accessed to gui" };
-    }
-    return { action: 'startx' };
-  }
-  
-  if (trimmed === "") return { action: 'none' };
+  const content = getTerminalContent(context.language);
 
-  return { action: 'none', output: ` command not found: ${trimmed}` };
+  if (trimmed === "help") {
+    return { type: "write-lines", lines: content.helpLines };
+  }
+
+  if (trimmed === "clear") return { type: "clear" };
+  if (trimmed === "reboot") {
+    return { type: "reboot", message: content.messages.restarting };
+  }
+  if (trimmed === "shutdown") {
+    return { type: "shutdown", lines: content.messages.shutdown };
+  }
+  if (trimmed === "ko" || trimmed === "en") {
+    return { type: "change-language", language: trimmed };
+  }
+
+  if (trimmed === "startx") {
+    if (context.pathname.includes("gui")) {
+      return {
+        type: "write-lines",
+        lines: [content.messages.alreadyInPortfolio],
+      };
+    }
+    return { type: "open-portfolio" };
+  }
+
+  if (trimmed === "") return { type: "noop" };
+
+  return {
+    type: "write-lines",
+    lines: [content.messages.commandNotFound(trimmed)],
+  };
 };
