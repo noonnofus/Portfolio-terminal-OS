@@ -16,7 +16,7 @@ import {
 describe("GUI V2 app boundaries", () => {
     it("keeps catalog and client loader keys identical", () => {
         expect(appLoaderRegistryKeys).toEqual(appCatalogKeys);
-        expect(Object.keys(appCatalog)).toHaveLength(12);
+        expect(Object.keys(appCatalog)).toHaveLength(13);
     });
 
     it("canonicalizes supported GUI URLs", () => {

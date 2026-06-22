@@ -11,10 +11,11 @@ import "@/features/gui-v2/styles/gui-v2.css";
 
 export function GuiShellV2() {
     const urlReady = useGuiV2Store((state) => state.urlReady);
+    const wallpaper = useGuiV2Store((state) => state.wallpaper);
 
     return (
         <MotionConfig reducedMotion="user">
-            <div className="gui-v2-shell">
+            <div className="gui-v2-shell" data-wallpaper={wallpaper}>
                 <PageVisibilityController />
                 <div aria-hidden className="gui-v2-background-type">
                     HYUNHO

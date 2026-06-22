@@ -49,6 +49,7 @@ export type GuiAppId =
     | "resume"
     | "terminal"
     | "contact"
+    | "settings"
     | ProjectAppId;
 
 export type EmptyParams = {
@@ -64,6 +65,7 @@ export type GuiAppParamsMap = {
     resume: EmptyParams;
     terminal: EmptyParams;
     contact: EmptyParams;
+    settings: EmptyParams;
 } & {
     [K in ProjectAppId]: {
         slug: ProjectSlugFromId<K>;
@@ -84,6 +86,7 @@ type GuiAppUrlTargetMap = {
     resume: { app: "resume" };
     terminal: { app: "terminal" };
     contact: { app: "contact" };
+    settings: { app: "settings" };
 } & {
     [K in ProjectAppId]: {
         app: "project";
@@ -117,6 +120,7 @@ export type GuiUrlState =
     | { app: "resume"; lang: Language }
     | { app: "terminal"; lang: Language }
     | { app: "contact"; lang: Language }
+    | { app: "settings"; lang: Language }
     | { app: "desktop"; lang: Language }
     | { app: "project"; slug: ProjectSlug; lang: Language };
 
@@ -135,6 +139,7 @@ export function createOpenAppCommand(appId: GuiAppId): OpenAppCommand {
         case "resume":
         case "terminal":
         case "contact":
+        case "settings":
             return { type: "open-app", appId, params: {} };
         case "project:wchms":
             return {
