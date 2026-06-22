@@ -39,6 +39,13 @@ export const appCatalog = {
         icon: publicAssetPath("/icons/contact.png"),
         order: 50,
     },
+    settings: {
+        appId: "settings",
+        url: { app: "settings" },
+        titles: { ko: "설정", en: "Settings" },
+        icon: publicAssetPath("/icons/settings.png"),
+        order: 60,
+    },
     "project:wchms": {
         appId: "project:wchms",
         url: { app: "project", slug: "wchms" },

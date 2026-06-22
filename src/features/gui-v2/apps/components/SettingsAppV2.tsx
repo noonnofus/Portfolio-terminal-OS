@@ -1,0 +1,199 @@
+"use client";
+
+import { useColorMode } from "@/shared/ui/color-mode";
+import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
+import type { GuiAppComponentProps } from "@/features/gui-v2/apps/appTypes";
+
+export default function SettingsAppV2({
+    language,
+}: GuiAppComponentProps<"settings">) {
+    const dispatch = useGuiV2Store((state) => state.dispatch);
+    const wallpaper = useGuiV2Store((state) => state.wallpaper);
+    const { colorMode, setColorMode } = useColorMode();
+
+    const t = {
+        ko: {
+            title: "시스템 설정",
+            general: "일반",
+            appearance: "화면 스타일",
+            languageLabel: "언어 설정",
+            languageDesc: "시스템 언어를 변경합니다.",
+            themeLabel: "테마 설정",
+            themeDesc: "시스템 테마를 다크 모드 또는 라이트 모드로 전환합니다.",
+            themeLight: "라이트 모드",
+            themeDark: "다크 모드",
+            wallpaperLabel: "배경화면 선택",
+            wallpaperDesc: "데스크톱 배경 무드를 선택하세요.",
+            wallpapers: {
+                aurora: "오로라 (기본)",
+                sunset: "노을빛",
+                forest: "숲속",
+                dark: "다크 카본",
+            },
+        },
+        en: {
+            title: "System Settings",
+            general: "General",
+            appearance: "Appearance",
+            languageLabel: "Language Settings",
+            languageDesc: "Change the system language.",
+            themeLabel: "Theme Settings",
+            themeDesc: "Toggle system theme between light and dark mode.",
+            themeLight: "Light Mode",
+            themeDark: "Dark Mode",
+            wallpaperLabel: "Choose Wallpaper",
+            wallpaperDesc: "Choose a mood for your desktop background.",
+            wallpapers: {
+                aurora: "Aurora (Default)",
+                sunset: "Sunset Glow",
+                forest: "Deep Forest",
+                dark: "Dark Carbon",
+            },
+        },
+    }[language];
+
+    return (
+        <div className="w-full h-full p-6 text-slate-800 dark:text-slate-100 bg-white dark:bg-[#1e1e24] select-none transition-colors duration-200">
+            <h3 className="text-xl font-bold border-b pb-3 mb-6 border-slate-200 dark:border-slate-700">
+                {t.title}
+            </h3>
+
+            <div className="space-y-8">
+                {/* ── Language settings ── */}
+                <section className="space-y-2">
+                    <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+                        {t.general}
+                    </h4>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-50 dark:bg-[#272730] border border-slate-200/60 dark:border-slate-800 rounded-xl gap-4">
+                        <div>
+                            <p className="font-semibold text-sm">{t.languageLabel}</p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                {t.languageDesc}
+                            </p>
+                        </div>
+                        <div className="flex gap-2">
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    dispatch({
+                                        type: "change-language",
+                                        language: "ko",
+                                    })
+                                }
+                                className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+                                    language === "ko"
+                                        ? "bg-blue-600 text-white shadow-sm"
+                                        : "bg-slate-200/70 hover:bg-slate-300/80 dark:bg-slate-800 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300"
+                                }`}
+                            >
+                                한국어
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    dispatch({
+                                        type: "change-language",
+                                        language: "en",
+                                    })
+                                }
+                                className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+                                    language === "en"
+                                        ? "bg-blue-600 text-white shadow-sm"
+                                        : "bg-slate-200/70 hover:bg-slate-300/80 dark:bg-slate-800 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300"
+                                }`}
+                            >
+                                English
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ── Theme settings (Dark mode) ── */}
+                <section className="space-y-2">
+                    <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+                        {t.appearance}
+                    </h4>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-50 dark:bg-[#272730] border border-slate-200/60 dark:border-slate-800 rounded-xl gap-4">
+                        <div>
+                            <p className="font-semibold text-sm">{t.themeLabel}</p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                {t.themeDesc}
+                            </p>
+                        </div>
+                        <div className="flex gap-2">
+                            <button
+                                type="button"
+                                onClick={() => setColorMode("light")}
+                                className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+                                    colorMode === "light"
+                                        ? "bg-blue-600 text-white shadow-sm"
+                                        : "bg-slate-200/70 hover:bg-slate-300/80 dark:bg-slate-800 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300"
+                                }`}
+                            >
+                                {t.themeLight}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setColorMode("dark")}
+                                className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+                                    colorMode === "dark"
+                                        ? "bg-blue-600 text-white shadow-sm"
+                                        : "bg-slate-200/70 hover:bg-slate-300/80 dark:bg-slate-800 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300"
+                                }`}
+                            >
+                                {t.themeDark}
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ── Wallpaper settings ── */}
+                <section className="space-y-2">
+                    <div>
+                        <p className="font-semibold text-sm">{t.wallpaperLabel}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                            {t.wallpaperDesc}
+                        </p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 mt-3 sm:grid-cols-4">
+                        {(["aurora", "sunset", "forest", "dark"] as const).map(
+                            (type) => {
+                                const bgPreviewClass = {
+                                    aurora: "bg-gradient-to-tr from-blue-300 via-sky-200 to-indigo-300 dark:from-indigo-950 dark:via-zinc-900 dark:to-blue-950",
+                                    sunset: "bg-gradient-to-tr from-orange-400 via-pink-400 to-indigo-500 dark:from-orange-950 dark:via-pink-950 dark:to-indigo-950",
+                                    forest: "bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-500 dark:from-emerald-950 dark:via-teal-950 dark:to-cyan-950",
+                                    dark: "bg-gradient-to-tr from-neutral-800 via-neutral-700 to-zinc-900 dark:from-black dark:via-neutral-900 dark:to-neutral-950",
+                                }[type];
+
+                                return (
+                                    <button
+                                        key={type}
+                                        type="button"
+                                        onClick={() =>
+                                            dispatch({
+                                                type: "change-wallpaper",
+                                                wallpaper: type,
+                                            })
+                                        }
+                                        className={`group relative flex flex-col items-center p-2 rounded-xl border-2 transition-all duration-200 ${
+                                            wallpaper === type
+                                                ? "border-blue-600 bg-blue-50/50 dark:bg-blue-950/20"
+                                                : "border-transparent bg-slate-50 dark:bg-[#272730] hover:border-slate-300 dark:hover:border-slate-700"
+                                        }`}
+                                    >
+                                        <div
+                                            className={`w-full aspect-[16/10] rounded-lg shadow-inner ${bgPreviewClass} transition-transform duration-300 group-hover:scale-[1.02]`}
+                                        />
+                                        <span className="text-[11px] font-medium mt-2 text-slate-700 dark:text-slate-300">
+                                            {t.wallpapers[type]}
+                                        </span>
+                                    </button>
+                                );
+                            },
+                        )}
+                    </div>
+                </section>
+            </div>
+        </div>
+    );
+}

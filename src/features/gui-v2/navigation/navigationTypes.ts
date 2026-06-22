@@ -57,6 +57,7 @@ export type StoreCommand =
     | { type: "minimize-window"; windowId: WindowId }
     | { type: "show-desktop" }
     | { type: "change-language"; language: Language }
+    | { type: "change-wallpaper"; wallpaper: "aurora" | "sunset" | "forest" | "dark" }
     | { type: "apply-url-state"; view: GuiUrlState }
     | { type: "advance-entry-sequence" };
 

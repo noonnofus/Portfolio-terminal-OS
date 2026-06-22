@@ -32,6 +32,8 @@ export function parseGuiUrl(searchParams: URLSearchParams): GuiUrlState {
             return { app: "terminal", lang };
         case "contact":
             return { app: "contact", lang };
+        case "settings":
+            return { app: "settings", lang };
         case "project": {
             const slug = searchParams.get("slug");
             return slug !== null && isProjectSlug(slug)

@@ -69,6 +69,11 @@ const ContactApp = dynamic<GuiAppComponentProps<"contact">>(
     { loading: WindowLoadingState },
 );
 
+const SettingsApp = dynamic<GuiAppComponentProps<"settings">>(
+    () => import("@/features/gui-v2/apps/components/SettingsAppV2"),
+    { loading: WindowLoadingState },
+);
+
 const WchmsApp = dynamic<GuiAppComponentProps<"project:wchms">>(
     async () => {
         await ensureProjectNamespace("WCHMS");
@@ -166,6 +171,7 @@ export const appLoaderRegistry = {
     resume: ResumeApp,
     terminal: TerminalApp,
     contact: ContactApp,
+    settings: SettingsApp,
     "project:wchms": WchmsApp,
     "project:flare": FlareApp,
     "project:weconnect": WeConnectApp,

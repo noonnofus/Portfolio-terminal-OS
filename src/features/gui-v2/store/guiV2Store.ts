@@ -14,6 +14,7 @@ export type GuiV2State = GuiWorkspaceState & {
     pageVisibility: PageVisibility;
     resumeEpoch: number;
     urlReady: boolean;
+    wallpaper: "aurora" | "sunset" | "forest" | "dark";
 };
 
 export type GuiV2Actions = {
@@ -33,7 +34,7 @@ function appIdFromView(view: GuiUrlState): GuiAppId | null {
         case "project":
             return `project:${view.slug}`;
         default:
-            return view.app;
+            return view.app as GuiAppId;
     }
 }
 
@@ -100,6 +101,7 @@ export function createGuiV2Store(
         pageVisibility: "visible",
         resumeEpoch: 0,
         urlReady: false,
+        wallpaper: "aurora",
         dispatch: (command) =>
             set((state) => {
                 switch (command.type) {
@@ -143,6 +145,8 @@ export function createGuiV2Store(
                         };
                     case "change-language":
                         return { language: command.language };
+                    case "change-wallpaper":
+                        return { wallpaper: command.wallpaper };
                     case "apply-url-state": {
                         const appId = appIdFromView(command.view);
                         if (appId === null) {
