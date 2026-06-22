@@ -1,7 +1,88 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
 import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
+
+/* ── Icons (dineshd.dev style — Lucide-like stroked SVGs) ─── */
+
+function WifiIcon() {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+            className="gui-v2-system-icon"
+        >
+            <path d="M12 20h.01" />
+            <path d="M2 8.82a15 15 0 0 1 20 0" />
+            <path d="M5 12.859a10 10 0 0 1 14 0" />
+            <path d="M8.5 16.429a5 5 0 0 1 7 0" />
+        </svg>
+    );
+}
+
+function BatteryIcon() {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+            className="gui-v2-system-icon gui-v2-system-icon-battery"
+        >
+            <rect x="2" y="7" width="16" height="10" rx="2" />
+            <path d="M22 11v2" />
+            {/* Fill bar */}
+            <rect
+                x="4"
+                y="9"
+                width="12"
+                height="6"
+                rx="1"
+                fill="currentColor"
+                stroke="none"
+                opacity="0.35"
+            />
+        </svg>
+    );
+}
+
+/* ── Clock (dineshd.dev style — compact monospace HH:MM) ──── */
+
+function SystemClock() {
+    const [time, setTime] = useState<string>("--:--");
+
+    useEffect(() => {
+        function tick() {
+            const now = new Date();
+            const h = now.getHours().toString().padStart(2, "0");
+            const m = now.getMinutes().toString().padStart(2, "0");
+            setTime(`${h}:${m}`);
+        }
+        tick();
+        const id = setInterval(tick, 10_000);
+        return () => clearInterval(id);
+    }, []);
+
+    return (
+        <time
+            className="gui-v2-system-clock"
+            aria-label="Current time"
+        >
+            {time}
+        </time>
+    );
+}
+
+/* ── System bar ───────────────────────────────────────────── */
 
 export function GuiSystemBarV2() {
     const language = useGuiV2Store((state) => state.language);
@@ -9,8 +90,12 @@ export function GuiSystemBarV2() {
 
     return (
         <header className="gui-v2-system-bar">
-            <strong>Hyunho Kim</strong>
-            <nav aria-label="System controls" className="flex items-center gap-1">
+            <strong className="gui-v2-system-name">Hyunho Kim</strong>
+
+            <nav
+                aria-label="System controls"
+                className="gui-v2-system-controls"
+            >
                 {(["ko", "en"] as const).map((option) => (
                     <button
                         key={option}
@@ -23,11 +108,33 @@ export function GuiSystemBarV2() {
                                 language: option,
                             })
                         }
-                        className="rounded px-2 py-1 text-xs uppercase aria-pressed:bg-black aria-pressed:text-white"
+                        className="gui-v2-lang-button"
                     >
                         {option}
                     </button>
                 ))}
+
+                <div
+                    className="gui-v2-system-divider"
+                    aria-hidden="true"
+                />
+
+                {/* dineshd.dev style: status icons + clock */}
+                <output
+                    className="gui-v2-system-status"
+                    aria-label="Wifi connected"
+                >
+                    <WifiIcon />
+                </output>
+
+                <output
+                    className="gui-v2-system-status"
+                    aria-label="Battery full"
+                >
+                    <BatteryIcon />
+                </output>
+
+                <SystemClock />
             </nav>
         </header>
     );
