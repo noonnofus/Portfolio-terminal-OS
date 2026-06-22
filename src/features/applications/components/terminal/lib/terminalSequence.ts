@@ -8,6 +8,8 @@ export type TerminalSequenceStep =
 
 export interface TerminalSequenceController {
   run(terminal: Terminal, steps: TerminalSequenceStep[]): Promise<boolean>;
+  pause(): void;
+  resume(): void;
   cancel(): void;
 }
 
@@ -18,13 +20,26 @@ interface ActiveRun {
 }
 
 export function createTerminalSequenceController(): TerminalSequenceController {
+  type ScheduledTask = {
+    callback: () => void;
+    dueAt: number;
+  };
+
+  type PausedTask = {
+    callback: () => void;
+    remainingMs: number;
+  };
+
   let generation = 0;
   let activeRun: ActiveRun | null = null;
-  const timers = new Set<ReturnType<typeof setTimeout>>();
+  let paused = false;
+  const timers = new Map<ReturnType<typeof setTimeout>, ScheduledTask>();
+  let pausedTasks: PausedTask[] = [];
 
-  const clearTimers = () => {
-    timers.forEach(clearTimeout);
+  const clearScheduledTasks = () => {
+    timers.forEach((_task, timer) => clearTimeout(timer));
     timers.clear();
+    pausedTasks = [];
   };
 
   const settleActiveRun = (completed: boolean) => {
@@ -38,8 +53,49 @@ export function createTerminalSequenceController(): TerminalSequenceController {
 
   const cancel = () => {
     generation += 1;
-    clearTimers();
+    clearScheduledTasks();
     settleActiveRun(false);
+  };
+
+  const schedule = (callback: () => void, delayMs: number) => {
+    if (paused) {
+      pausedTasks.push({ callback, remainingMs: delayMs });
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      timers.delete(timer);
+      callback();
+    }, delayMs);
+
+    timers.set(timer, {
+      callback,
+      dueAt: Date.now() + delayMs,
+    });
+  };
+
+  const pause = () => {
+    if (paused) return;
+
+    paused = true;
+    const now = Date.now();
+    timers.forEach((task, timer) => {
+      clearTimeout(timer);
+      pausedTasks.push({
+        callback: task.callback,
+        remainingMs: Math.max(0, task.dueAt - now),
+      });
+    });
+    timers.clear();
+  };
+
+  const resume = () => {
+    if (!paused) return;
+
+    paused = false;
+    const tasks = pausedTasks;
+    pausedTasks = [];
+    tasks.forEach((task) => schedule(task.callback, task.remainingMs));
   };
 
   const run = (terminal: Terminal, steps: TerminalSequenceStep[]) => {
@@ -60,16 +116,6 @@ export function createTerminalSequenceController(): TerminalSequenceController {
       const finish = (completed: boolean) => {
         if (!isCurrentRun()) return;
         settleActiveRun(completed);
-      };
-
-      const schedule = (callback: () => void, delayMs: number) => {
-        const timer = setTimeout(() => {
-          timers.delete(timer);
-          if (!isCurrentRun()) return;
-          callback();
-        }, delayMs);
-
-        timers.add(timer);
       };
 
       const runStep = (stepIndex: number): void => {
@@ -116,9 +162,13 @@ export function createTerminalSequenceController(): TerminalSequenceController {
         }
       };
 
-      runStep(0);
+      if (paused) {
+        schedule(() => runStep(0), 0);
+      } else {
+        runStep(0);
+      }
     });
   };
 
-  return { run, cancel };
+  return { run, pause, resume, cancel };
 }

@@ -135,4 +135,31 @@ describe("terminalSequence", () => {
     expect(secondResolved).toHaveBeenCalledTimes(1);
     expect(secondResolved).toHaveBeenCalledWith(true);
   });
+
+
+  it("pauses pending timers and resumes from the remaining delay", async () => {
+    const controller = createTerminalSequenceController();
+    const terminal = createTerminalMock();
+    const resultPromise = controller.run(terminal as never, [
+      { type: "type", value: "ABC", delayMs: 20 },
+    ]);
+
+    expect(terminal.write.mock.calls).toEqual([["A"]]);
+
+    await vi.advanceTimersByTimeAsync(10);
+    controller.pause();
+    await vi.advanceTimersByTimeAsync(100);
+    expect(terminal.write.mock.calls).toEqual([["A"]]);
+
+    controller.resume();
+    await vi.advanceTimersByTimeAsync(9);
+    expect(terminal.write.mock.calls).toEqual([["A"]]);
+
+    await vi.advanceTimersByTimeAsync(1);
+    expect(terminal.write.mock.calls).toEqual([["A"], ["B"]]);
+
+    await vi.advanceTimersByTimeAsync(40);
+    await expect(resultPromise).resolves.toBe(true);
+    expect(terminal.write.mock.calls).toEqual([["A"], ["B"], ["C"]]);
+  });
 });

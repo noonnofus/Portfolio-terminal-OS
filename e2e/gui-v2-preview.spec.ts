@@ -124,4 +124,105 @@ test.describe("GUI V2 preview", () => {
         ).toHaveCount(1);
         await expect(page).toHaveURL(/app=project&slug=wchms/);
     });
+
+    test("preserves Terminal while lifecycle visibility suspends work", async ({
+        page,
+    }) => {
+        await page.goto("/gui-v2?app=terminal");
+
+        const terminalWindow = page.locator(
+            '[data-window-id="terminal"]',
+        );
+        const terminalRuntime = terminalWindow.locator(
+            "[data-effective-visibility]",
+        );
+        const xterm = terminalWindow.locator(".xterm").first();
+
+        await expect(xterm).toBeVisible();
+        await expect(terminalRuntime).toHaveAttribute(
+            "data-effective-visibility",
+            "active",
+        );
+        await xterm.evaluate((element) => {
+            element.setAttribute("data-runtime-id", "terminal-preserved");
+        });
+        await terminalRuntime.evaluate((element) => {
+            const media = document.createElement("video");
+            media.setAttribute("data-runtime-media", "true");
+            media.setAttribute("data-pause-called", "false");
+            media.pause = () => {
+                media.setAttribute("data-pause-called", "true");
+            };
+            element.append(media);
+        });
+
+        const dock = page.getByRole("navigation", {
+            name: "Applications",
+        });
+        await dock.getByRole("button", { name: "나에 대해서" }).click();
+
+        await expect(terminalRuntime).toHaveAttribute(
+            "data-effective-visibility",
+            "inactive",
+        );
+        await expect(
+            terminalRuntime.locator("[data-runtime-media]"),
+        ).toHaveAttribute("data-pause-called", "true");
+
+        await dock.getByRole("button", { name: "터미널" }).click();
+        await expect(
+            terminalWindow.locator('[data-runtime-id="terminal-preserved"]'),
+        ).toHaveCount(1);
+
+        await page.evaluate(() => {
+            Object.defineProperty(document, "visibilityState", {
+                configurable: true,
+                value: "hidden",
+            });
+            document.dispatchEvent(new Event("visibilitychange"));
+        });
+        await expect(terminalRuntime).toHaveAttribute(
+            "data-effective-visibility",
+            "page-suspended",
+        );
+
+        await page.evaluate(() => {
+            Object.defineProperty(document, "visibilityState", {
+                configurable: true,
+                value: "visible",
+            });
+            document.dispatchEvent(new Event("visibilitychange"));
+        });
+        await expect(terminalRuntime).toHaveAttribute(
+            "data-effective-visibility",
+            "active",
+        );
+        await expect(xterm).toBeVisible();
+
+        const resumeEpoch = Number(
+            await terminalRuntime.getAttribute("data-resume-epoch"),
+        );
+        await page.evaluate(() => {
+            window.history.replaceState(
+                null,
+                "",
+                "/gui-v2?app=terminal&lang=en",
+            );
+            window.dispatchEvent(
+                new PageTransitionEvent("pageshow", {
+                    persisted: true,
+                }),
+            );
+        });
+
+        await expect(page.locator("html")).toHaveAttribute("lang", "en");
+        await expect(terminalRuntime).toHaveAttribute(
+            "data-resume-epoch",
+            String(resumeEpoch + 1),
+        );
+        await expect(terminalRuntime).toHaveAttribute(
+            "data-effective-visibility",
+            "active",
+        );
+    });
 });
