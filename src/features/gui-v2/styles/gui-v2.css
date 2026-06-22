@@ -1,0 +1,195 @@
+.gui-v2-shell {
+    position: relative;
+    min-height: 100dvh;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 20% 20%, rgb(219 234 254 / 70%), transparent 35%),
+        linear-gradient(135deg, #f8fafc, #e2e8f0);
+    color: #111827;
+}
+
+.gui-v2-system-bar {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 100;
+    display: flex;
+    height: 36px;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgb(15 23 42 / 12%);
+    background: rgb(248 250 252 / 88%);
+    padding: 0 max(12px, env(safe-area-inset-right, 0px)) 0
+        max(12px, env(safe-area-inset-left, 0px));
+    backdrop-filter: blur(16px);
+}
+
+.gui-v2-background-type {
+    pointer-events: none;
+    position: absolute;
+    inset: 20% auto auto 8%;
+    color: #0f172a;
+    font-size: clamp(7rem, 22vw, 22rem);
+    font-weight: 800;
+    letter-spacing: -0.08em;
+    line-height: 0.8;
+    opacity: 0.045;
+    user-select: none;
+}
+
+.gui-v2-shortcuts {
+    position: fixed;
+    top: 72px;
+    right: max(18px, env(safe-area-inset-right, 0px));
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.gui-v2-shortcut {
+    display: flex;
+    width: 88px;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    border-radius: 12px;
+    padding: 8px;
+    font-size: 12px;
+}
+
+.gui-v2-shortcut:hover,
+.gui-v2-shortcut:focus-visible {
+    background: rgb(255 255 255 / 72%);
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+.gui-v2-window-layer {
+    position: absolute;
+    inset: 36px 0 0;
+}
+
+.gui-v2-window {
+    position: absolute;
+    display: flex;
+    width: min(760px, 72vw);
+    height: min(620px, 72vh);
+    min-width: 360px;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgb(15 23 42 / 18%);
+    border-radius: 14px;
+    background: rgb(255 255 255 / 96%);
+    box-shadow: 0 24px 70px rgb(15 23 42 / 24%);
+}
+
+.gui-v2-window[data-active="false"] {
+    filter: saturate(0.82) brightness(0.96);
+}
+
+.gui-v2-title-bar {
+    display: flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgb(15 23 42 / 12%);
+    background: rgb(241 245 249 / 92%);
+    padding: 0 10px 0 14px;
+}
+
+.gui-v2-window-control {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    border-radius: 999px;
+    font-size: 18px;
+}
+
+.gui-v2-window-control:hover,
+.gui-v2-window-control:focus-visible {
+    background: #dbeafe;
+    outline: 2px solid #2563eb;
+}
+
+.gui-v2-window-content {
+    min-height: 0;
+    flex: 1;
+    overflow: auto;
+}
+
+.gui-v2-dock {
+    position: fixed;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    z-index: 100;
+    display: flex;
+    min-height: 64px;
+    transform: translateX(-50%);
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgb(255 255 255 / 70%);
+    border-radius: 22px;
+    background: rgb(248 250 252 / 78%);
+    padding: 8px 10px;
+    box-shadow: 0 14px 36px rgb(15 23 42 / 22%);
+    backdrop-filter: blur(20px);
+}
+
+.gui-v2-dock-button {
+    position: relative;
+    display: grid;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    border-radius: 14px;
+}
+
+.gui-v2-dock-button:hover,
+.gui-v2-dock-button:focus-visible,
+.gui-v2-dock-button[aria-pressed="true"] {
+    background: rgb(219 234 254 / 86%);
+    outline: 2px solid transparent;
+}
+
+.gui-v2-dock-button:focus-visible {
+    outline-color: #2563eb;
+}
+
+@media (width < 1024px) {
+    .gui-v2-shortcuts {
+        display: none;
+    }
+
+    .gui-v2-window {
+        left: 5vw !important;
+        top: 8vh !important;
+        width: 90vw;
+        height: calc(100dvh - 144px);
+    }
+}
+
+@media (width < 768px) {
+    .gui-v2-background-type {
+        display: none;
+    }
+
+    .gui-v2-window-layer {
+        position: fixed;
+        inset: 36px 0 0;
+    }
+
+    .gui-v2-window {
+        position: fixed;
+        inset: 44px 8px
+            calc(84px + env(safe-area-inset-bottom, 0px)) 8px !important;
+        width: auto;
+        height: auto;
+        min-width: 0;
+        border-radius: 12px;
+    }
+
+    .gui-v2-window[data-active="false"] {
+        display: none;
+    }
+}

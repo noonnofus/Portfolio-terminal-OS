@@ -123,9 +123,16 @@ describe("planNavigation", () => {
             projectsEntry,
         );
 
-        expect(plan.historyEffect).toEqual({
+        expect(plan.historyEffect).toMatchObject({
             type: "back",
             expectedEntryId: null,
+            fallbackEntry: {
+                gui: {
+                    entryId: "gui-1",
+                    view: { app: "about", lang: "ko" },
+                },
+            },
+            fallbackUrl: "/gui",
         });
     });
 

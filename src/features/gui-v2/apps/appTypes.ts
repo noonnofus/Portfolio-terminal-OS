@@ -51,7 +51,9 @@ export type GuiAppId =
     | "contact"
     | ProjectAppId;
 
-export type EmptyParams = Record<string, never>;
+export type EmptyParams = {
+    readonly __emptyParams?: never;
+};
 
 type ProjectSlugFromId<K extends ProjectAppId> =
     K extends `project:${infer Slug extends ProjectSlug}` ? Slug : never;
@@ -124,4 +126,57 @@ export function isProjectSlug(value: string): value is ProjectSlug {
 
 export function isProjectAppId(appId: GuiAppId): appId is ProjectAppId {
     return appId.startsWith("project:");
+}
+
+export function createOpenAppCommand(appId: GuiAppId): OpenAppCommand {
+    switch (appId) {
+        case "about":
+        case "projects":
+        case "resume":
+        case "terminal":
+        case "contact":
+            return { type: "open-app", appId, params: {} };
+        case "project:wchms":
+            return {
+                type: "open-app",
+                appId,
+                params: { slug: "wchms" },
+            };
+        case "project:flare":
+            return {
+                type: "open-app",
+                appId,
+                params: { slug: "flare" },
+            };
+        case "project:weconnect":
+            return {
+                type: "open-app",
+                appId,
+                params: { slug: "weconnect" },
+            };
+        case "project:pagessence":
+            return {
+                type: "open-app",
+                appId,
+                params: { slug: "pagessence" },
+            };
+        case "project:diceroller":
+            return {
+                type: "open-app",
+                appId,
+                params: { slug: "diceroller" },
+            };
+        case "project:mejubot":
+            return {
+                type: "open-app",
+                appId,
+                params: { slug: "mejubot" },
+            };
+        case "project:webpiano":
+            return {
+                type: "open-app",
+                appId,
+                params: { slug: "webpiano" },
+            };
+    }
 }

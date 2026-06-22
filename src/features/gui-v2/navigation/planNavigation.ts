@@ -110,9 +110,23 @@ function planDerivedWindowChange(
         historyState?.gui.from !== undefined &&
         isSameGuiUrlState(historyState.gui.from, targetView)
     ) {
+        const fallbackEntry: GuiHistoryState = {
+            gui: {
+                ...historyState.gui,
+                view: targetView,
+            },
+        };
         return {
             storeCommands: [storeCommand],
-            historyEffect: { type: "back", expectedEntryId: null },
+            historyEffect: {
+                type: "back",
+                expectedEntryId: null,
+                fallbackEntry,
+                fallbackUrl: serializeGuiUrl(
+                    targetView,
+                    state.urlBasePath,
+                ),
+            },
         };
     }
 

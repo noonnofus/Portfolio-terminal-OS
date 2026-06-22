@@ -64,7 +64,12 @@ export type HistoryEffect =
     | { type: "none" }
     | { type: "push"; entry: GuiHistoryState; url: string }
     | { type: "replace"; entry: GuiHistoryState; url: string }
-    | { type: "back"; expectedEntryId: string | null };
+    | {
+          type: "back";
+          expectedEntryId: string | null;
+          fallbackEntry: GuiHistoryState;
+          fallbackUrl: string;
+      };
 
 export type NavigationPlan = {
     storeCommands: readonly StoreCommand[];
