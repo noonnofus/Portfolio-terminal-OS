@@ -1,0 +1,75 @@
+import { describe, expect, it } from "vitest";
+import {
+    appCatalog,
+    appCatalogKeys,
+} from "@/features/gui-v2/apps/appCatalog";
+import { appLoaderRegistryKeys } from "@/features/gui-v2/apps/appLoaderRegistry";
+import {
+    externalUrl,
+    publicAssetPath,
+} from "@/features/gui-v2/apps/appTypes";
+import {
+    parseGuiUrl,
+    serializeGuiUrl,
+} from "@/features/gui-v2/apps/parseGuiAppTarget";
+
+describe("GUI V2 app boundaries", () => {
+    it("keeps catalog and client loader keys identical", () => {
+        expect(appLoaderRegistryKeys).toEqual(appCatalogKeys);
+        expect(Object.keys(appCatalog)).toHaveLength(12);
+    });
+
+    it("canonicalizes supported GUI URLs", () => {
+        expect(parseGuiUrl(new URLSearchParams())).toEqual({
+            app: "about",
+            lang: "ko",
+        });
+        expect(
+            parseGuiUrl(
+                new URLSearchParams("app=project&slug=wchms&lang=en"),
+            ),
+        ).toEqual({
+            app: "project",
+            slug: "wchms",
+            lang: "en",
+        });
+        expect(
+            serializeGuiUrl({
+                app: "project",
+                slug: "wchms",
+                lang: "en",
+            }),
+        ).toBe("/gui?app=project&slug=wchms&lang=en");
+        expect(serializeGuiUrl({ app: "about", lang: "ko" })).toBe("/gui");
+        expect(
+            serializeGuiUrl(
+                { app: "projects", lang: "ko" },
+                "/gui-v2",
+            ),
+        ).toBe("/gui-v2?app=projects");
+    });
+
+    it("falls back through the allowlist for invalid values", () => {
+        expect(
+            parseGuiUrl(new URLSearchParams("app=project&slug=unknown")),
+        ).toEqual({
+            app: "projects",
+            lang: "ko",
+        });
+        expect(
+            parseGuiUrl(new URLSearchParams("app=../../payload&lang=fr")),
+        ).toEqual({
+            app: "about",
+            lang: "ko",
+        });
+    });
+
+    it("validates external and public asset paths", () => {
+        expect(externalUrl("https://example.com")).toBe(
+            "https://example.com",
+        );
+        expect(publicAssetPath("/icons/main.png")).toBe("/icons/main.png");
+        expect(() => externalUrl("http://example.com")).toThrow();
+        expect(() => publicAssetPath("../secret")).toThrow();
+    });
+});
