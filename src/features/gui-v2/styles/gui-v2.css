@@ -174,6 +174,65 @@
     background: #f1f5f9;
 }
 
+.gui-v2-resume {
+    min-height: 100%;
+    background: white;
+    padding: 34px;
+}
+
+.gui-v2-resume-hero {
+    position: relative;
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 24px;
+}
+
+.gui-v2-resume-print-action {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 9px;
+    background: #0f172a;
+    padding: 9px 13px;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.gui-v2-resume-print-action:hover,
+.gui-v2-resume-print-action:focus-visible {
+    background: #1d4ed8;
+    outline: 3px solid rgb(37 99 235 / 28%);
+    outline-offset: 2px;
+}
+
+.gui-v2-resume-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(220px, 0.8fr);
+    gap: 36px;
+    margin-top: 28px;
+}
+
+.gui-v2-resume-section-title {
+    border-bottom: 1px solid rgb(15 23 42 / 18%);
+    padding-bottom: 7px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.gui-v2-resume-block {
+    break-inside: avoid;
+}
+
+.gui-v2-resume-link {
+    display: block;
+    overflow-wrap: anywhere;
+    color: #1d4ed8;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
 .gui-v2-dock {
     position: fixed;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px));
@@ -265,5 +324,83 @@
     .gui-v2-project-icon {
         width: 60px;
         height: 60px;
+    }
+
+    .gui-v2-resume {
+        padding: 22px 18px;
+    }
+
+    .gui-v2-resume-print-action {
+        position: static;
+        margin-top: 16px;
+    }
+
+    .gui-v2-resume-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 30px;
+    }
+}
+
+@media print {
+    @page {
+        margin: 14mm;
+        size: auto;
+    }
+
+    html,
+    body {
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        background: white !important;
+    }
+
+    .gui-v2-system-bar,
+    .gui-v2-dock,
+    .gui-v2-shortcuts,
+    .gui-v2-background-type,
+    .gui-v2-title-bar,
+    .gui-v2-resume-print-action,
+    [data-window-id]:not([data-window-id="resume"]) {
+        display: none !important;
+    }
+
+    .gui-v2-shell,
+    .gui-v2-window-layer,
+    [data-window-id="resume"],
+    [data-window-id="resume"] .gui-v2-window-content,
+    [data-window-id="resume"] [data-effective-visibility] {
+        position: static !important;
+        display: block !important;
+        width: auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: white !important;
+        box-shadow: none !important;
+        filter: none !important;
+    }
+
+    .gui-v2-resume {
+        padding: 0 !important;
+        color: black !important;
+    }
+
+    .gui-v2-resume-layout {
+        display: block !important;
+    }
+
+    .gui-v2-resume-layout > aside {
+        margin-top: 28px;
+    }
+
+    .gui-v2-resume a[href^="http"]::after,
+    .gui-v2-resume a[href^="mailto"]::after {
+        content: " (" attr(href) ")";
+        color: #334155;
+        font-size: 9pt;
+        text-decoration: none;
     }
 }

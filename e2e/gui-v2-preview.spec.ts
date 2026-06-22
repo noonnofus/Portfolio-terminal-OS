@@ -225,4 +225,64 @@ test.describe("GUI V2 preview", () => {
             "active",
         );
     });
+
+    test("renders a bilingual HTML Resume with print isolation", async ({
+        page,
+    }) => {
+        await page.goto("/gui-v2?lang=en");
+        await page
+            .getByRole("navigation", { name: "Applications" })
+            .getByRole("button", { name: "Resume" })
+            .click();
+
+        const resumeWindow = page.locator(
+            '[data-window-id="resume"]',
+        );
+        const aboutWindow = page.locator('[data-window-id="about"]');
+
+        await expect(
+            resumeWindow.getByRole("heading", {
+                name: "HyunHo Kim",
+            }),
+        ).toBeVisible();
+        await expect(
+            resumeWindow.getByRole("heading", {
+                name: "Experience",
+            }),
+        ).toBeVisible();
+        await expect(resumeWindow.getByText("WebPiano")).toBeVisible();
+        await expect(
+            resumeWindow.getByRole("link", {
+                name: "github.com/noonnofus",
+            }),
+        ).toHaveAttribute(
+            "href",
+            "https://github.com/noonnofus",
+        );
+        await expect(
+            resumeWindow.getByRole("button", {
+                name: "Print / Save PDF",
+            }),
+        ).toBeVisible();
+
+        await page.emulateMedia({ media: "print" });
+
+        await expect(page.locator(".gui-v2-system-bar")).toBeHidden();
+        await expect(page.locator(".gui-v2-dock")).toBeHidden();
+        await expect(aboutWindow).toBeHidden();
+        await expect(
+            resumeWindow.locator(".gui-v2-title-bar"),
+        ).toBeHidden();
+        await expect(
+            resumeWindow.getByRole("button", {
+                name: "Print / Save PDF",
+            }),
+        ).toBeHidden();
+        await expect(resumeWindow).toHaveCSS("position", "static");
+        await expect(resumeWindow).toHaveCSS("box-shadow", "none");
+        await expect(page.locator("body")).toHaveCSS(
+            "overflow",
+            "visible",
+        );
+    });
 });
