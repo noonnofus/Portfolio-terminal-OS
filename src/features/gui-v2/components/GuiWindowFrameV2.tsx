@@ -263,7 +263,7 @@ export function GuiWindowFrameV2({
                         <div className="gui-v2-traffic-lights">
                             <button
                                 type="button"
-                                aria-label={`Close ${title}`}
+                                aria-label={`${title} close`}
                                 disabled={navigationBusy}
                                 onClick={() =>
                                     navigate({
@@ -277,7 +277,7 @@ export function GuiWindowFrameV2({
                             </button>
                             <button
                                 type="button"
-                                aria-label={`Minimize ${title}`}
+                                aria-label={`${title} minimize`}
                                 disabled={navigationBusy || minimizing}
                                 onClick={handleMinimize}
                                 className="gui-v2-traffic-light gui-v2-traffic-minimize"
@@ -288,8 +288,8 @@ export function GuiWindowFrameV2({
                                 type="button"
                                 aria-label={
                                     maximized
-                                        ? `Restore ${title}`
-                                        : `Maximize ${title}`
+                                        ? `${title} restore`
+                                        : `${title} maximize`
                                 }
                                 onClick={() => setMaximized((v) => !v)}
                                 className="gui-v2-traffic-light gui-v2-traffic-maximize"
