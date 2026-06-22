@@ -7,14 +7,19 @@ import type {
     WorkspaceFocus,
 } from "@/features/gui-v2/navigation/navigationTypes";
 import type { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { PageVisibility } from "@/features/gui-v2/runtime/appVisibility";
 
 export type GuiV2State = GuiWorkspaceState & {
     activationSequence: number;
+    pageVisibility: PageVisibility;
+    resumeEpoch: number;
     urlReady: boolean;
 };
 
 export type GuiV2Actions = {
     dispatch: (command: StoreCommand) => void;
+    setPageVisibility: (visibility: PageVisibility) => void;
+    signalPageRestore: () => void;
     setUrlReady: (ready: boolean) => void;
 };
 
@@ -92,6 +97,8 @@ export function createGuiV2Store(
         nextEntrySequence: 1,
         urlBasePath,
         activationSequence: 0,
+        pageVisibility: "visible",
+        resumeEpoch: 0,
         urlReady: false,
         dispatch: (command) =>
             set((state) => {
@@ -160,6 +167,12 @@ export function createGuiV2Store(
                         };
                 }
             }),
+        setPageVisibility: (visibility) =>
+            set({ pageVisibility: visibility }),
+        signalPageRestore: () =>
+            set((state) => ({
+                resumeEpoch: state.resumeEpoch + 1,
+            })),
         setUrlReady: (ready) => set({ urlReady: ready }),
     }));
 }

@@ -9,14 +9,17 @@ import { GuiAppRenderer } from "@/features/gui-v2/components/GuiAppRenderer";
 import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
 import type { GuiWindowSnapshot } from "@/features/gui-v2/navigation/navigationTypes";
 import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
+import { AppRuntimeBoundary } from "@/features/gui-v2/runtime/AppRuntimeContext";
 
 export function GuiWindowFrameV2({
     window,
     active,
+    workspaceDesktop,
     index,
 }: {
     window: GuiWindowSnapshot;
     active: boolean;
+    workspaceDesktop: boolean;
     index: number;
 }) {
     const language = useGuiV2Store((state) => state.language);
@@ -24,6 +27,11 @@ export function GuiWindowFrameV2({
     const appId: GuiAppId = window.appId;
     const title = appCatalog[appId].titles[language];
     const headingId = `gui-v2-window-${appId.replace(":", "-")}`;
+    const windowVisibility = window.minimized
+        ? "minimized"
+        : active
+          ? "active"
+          : "inactive";
 
     return (
         <section
@@ -31,6 +39,9 @@ export function GuiWindowFrameV2({
             aria-labelledby={headingId}
             className="gui-v2-window"
             data-active={active}
+            data-window-id={appId}
+            data-window-visibility={windowVisibility}
+            hidden={window.minimized || workspaceDesktop}
             style={{
                 left: `${64 + index * 44}px`,
                 top: `${68 + index * 36}px`,
@@ -81,7 +92,14 @@ export function GuiWindowFrameV2({
                 className="gui-v2-window-content"
                 inert={!active ? true : undefined}
             >
-                <GuiAppRenderer appId={appId} language={language} />
+                <AppRuntimeBoundary
+                    windowVisibility={windowVisibility}
+                >
+                    <GuiAppRenderer
+                        appId={appId}
+                        language={language}
+                    />
+                </AppRuntimeBoundary>
             </div>
         </section>
     );

@@ -57,4 +57,32 @@ describe("GUI V2 store", () => {
             activeWindowId: null,
         });
     });
+
+    it("stores page visibility independently from window focus", () => {
+        const store = createGuiV2Store();
+        store.getState().dispatch({
+            type: "open-app",
+            appId: "terminal",
+            params: {},
+        });
+
+        store.getState().setPageVisibility("hidden");
+
+        expect(store.getState().pageVisibility).toBe("hidden");
+        expect(store.getState().focus).toEqual({
+            mode: "windows",
+            activeWindowId: "terminal",
+        });
+
+        store.getState().setPageVisibility("visible");
+
+        expect(store.getState().pageVisibility).toBe("visible");
+        expect(store.getState().focus).toEqual({
+            mode: "windows",
+            activeWindowId: "terminal",
+        });
+
+        store.getState().signalPageRestore();
+        expect(store.getState().resumeEpoch).toBe(1);
+    });
 });

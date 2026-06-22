@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useTerminal } from "./hooks/useTerminal";
 import { useTerminalBootSequence } from "./hooks/useTerminalBootSequence";
@@ -12,7 +12,13 @@ import { TERMINAL_PROMPT } from "./lib/bootSequence";
 import { useLanguageStore } from "@/shared/lib/i18n/useLanguageStore";
 import type { TerminalAction } from "./lib/terminalActions";
 
-export default function TerminalPage() {
+export default function TerminalPage({
+  active = true,
+  resumeSignal = 0,
+}: {
+  active?: boolean;
+  resumeSignal?: number;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const isTouchDevice = useIsTouchDevice();
@@ -32,6 +38,15 @@ export default function TerminalPage() {
     startBoot: bootSequence.start,
   });
 
+  useEffect(() => {
+    if (active) {
+      sequence.resume();
+      return;
+    }
+
+    sequence.pause();
+  }, [active, resumeSignal, sequence]);
+
   const handleTerminalAction = (action: TerminalAction) => {
     inputRef.current = "";
 
@@ -44,6 +59,8 @@ export default function TerminalPage() {
   };
 
   const { terminalRef } = useTerminal({
+    active,
+    fitSignal: resumeSignal,
     fontSize: isTouchDevice ? 12 : 14,
     onReady: session.onReady,
     onAction: handleTerminalAction,

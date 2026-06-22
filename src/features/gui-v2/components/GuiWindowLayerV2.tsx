@@ -7,19 +7,20 @@ export function GuiWindowLayerV2() {
     const windows = useGuiV2Store((state) => state.windows);
     const focus = useGuiV2Store((state) => state.focus);
 
-    if (focus.mode === "desktop") {
-        return null;
-    }
-
     return (
-        <main className="gui-v2-window-layer">
-            {windows
-                .filter((window) => !window.minimized)
-                .map((window, index) => (
+        <main
+            className="gui-v2-window-layer"
+            data-workspace-mode={focus.mode}
+        >
+            {windows.map((window, index) => (
                     <GuiWindowFrameV2
                         key={window.windowId}
                         window={window}
-                        active={focus.activeWindowId === window.windowId}
+                        active={
+                            focus.mode === "windows" &&
+                            focus.activeWindowId === window.windowId
+                        }
+                        workspaceDesktop={focus.mode === "desktop"}
                         index={index}
                     />
                 ))}

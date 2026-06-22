@@ -410,12 +410,57 @@ export function GuiNavigationProvider({
             clearExpiredGuard();
         };
 
+        const handlePageShow = (event: PageTransitionEvent) => {
+            if (!event.persisted) {
+                return;
+            }
+
+            const restoredView = parseGuiUrl(
+                new URLSearchParams(window.location.search),
+            );
+            const historyEntry = readGuiHistoryState(
+                window.history.state,
+            );
+            const restoredEntry: GuiHistoryState = {
+                gui: {
+                    entryId:
+                        historyEntry?.gui.entryId ??
+                        `gui-bfcache-${sequenceRef.current}`,
+                    view: restoredView,
+                    from: historyEntry?.gui.from ?? null,
+                },
+            };
+            const canonicalUrl = serializeGuiUrl(
+                restoredView,
+                store.getState().urlBasePath,
+            );
+            const currentUrl = `${window.location.pathname}${window.location.search}`;
+
+            if (currentUrl !== canonicalUrl) {
+                window.history.replaceState(
+                    mergeHistoryState(restoredEntry),
+                    "",
+                    canonicalUrl,
+                );
+            }
+
+            executeStoreCommands([
+                {
+                    type: "apply-url-state",
+                    view: restoredView,
+                },
+            ]);
+            latestEntryRef.current = restoredEntry;
+        };
+
         window.addEventListener("popstate", handlePopState);
         window.addEventListener("pagehide", handlePageHide);
+        window.addEventListener("pageshow", handlePageShow);
 
         return () => {
             window.removeEventListener("popstate", handlePopState);
             window.removeEventListener("pagehide", handlePageHide);
+            window.removeEventListener("pageshow", handlePageShow);
             clearPending();
             clearExpiredGuard();
         };

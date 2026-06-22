@@ -6,6 +6,7 @@ import type {
     GuiAppLoaderMap,
 } from "@/features/gui-v2/apps/appTypes";
 import { ensureProjectNamespace } from "@/shared/lib/i18n/loadProjectNamespace";
+import { useAppRuntime } from "@/features/gui-v2/runtime/AppRuntimeContext";
 
 function WindowLoadingState() {
     return (
@@ -43,7 +44,14 @@ const TerminalApp = dynamic<GuiAppComponentProps<"terminal">>(
             "@/features/applications/components/terminal/AppTerminal"
         );
         return function TerminalAdapter() {
-            return <App />;
+            const { effectiveVisibility, resumeEpoch } =
+                useAppRuntime();
+            return (
+                <App
+                    active={effectiveVisibility === "active"}
+                    resumeSignal={resumeEpoch}
+                />
+            );
         };
     },
     { loading: WindowLoadingState, ssr: false },

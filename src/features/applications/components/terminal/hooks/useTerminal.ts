@@ -7,6 +7,8 @@ import {
 } from "../lib/terminalActions";
 
 interface UseTerminalProps {
+  active?: boolean;
+  fitSignal?: number;
   fontSize?: number;
   onInput?: (data: string, term: Terminal) => void;
   onReady?: (term: Terminal) => void;
@@ -14,6 +16,8 @@ interface UseTerminalProps {
 }
 
 export function useTerminal({
+  active = true,
+  fitSignal = 0,
   fontSize = 14,
   onInput,
   onReady,
@@ -24,15 +28,17 @@ export function useTerminal({
   const fitAddonInstance = useRef<FitAddon | null>(null);
   const resizeObserver = useRef<ResizeObserver | null>(null);
   const fitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const activeRef = useRef(active);
   const onInputRef = useRef(onInput);
   const onReadyRef = useRef(onReady);
   const onActionRef = useRef(onAction);
 
   useEffect(() => {
+    activeRef.current = active;
     onInputRef.current = onInput;
     onReadyRef.current = onReady;
     onActionRef.current = onAction;
-  }, [onAction, onInput, onReady]);
+  }, [active, onAction, onInput, onReady]);
 
   useEffect(() => {
     if (!terminalRef.current) return;
@@ -105,7 +111,9 @@ export function useTerminal({
           }
         }
       });
-      resizeObserver.current.observe(targetElement);
+      if (activeRef.current) {
+        resizeObserver.current.observe(targetElement);
+      }
     };
 
     init();
@@ -124,6 +132,36 @@ export function useTerminal({
       fitAddonInstance.current = null;
     };
   }, [fontSize]);
+
+  useEffect(() => {
+    const targetElement = terminalRef.current;
+    const observer = resizeObserver.current;
+
+    if (!active) {
+      observer?.disconnect();
+      return;
+    }
+
+    if (targetElement && observer) {
+      observer.observe(targetElement);
+    }
+
+    const fitTimer = setTimeout(() => {
+      if (
+        targetElement &&
+        targetElement.clientWidth > 0 &&
+        targetElement.clientHeight > 0
+      ) {
+        try {
+          fitAddonInstance.current?.fit();
+        } catch {
+          // Layout may still be settling after a hidden window is restored.
+        }
+      }
+    }, 0);
+
+    return () => clearTimeout(fitTimer);
+  }, [active, fitSignal]);
 
   const write = (text: string) => {
     termInstance.current?.write(text);
