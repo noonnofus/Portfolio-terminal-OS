@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("GUI V2 Slice 1", () => {
+test.describe("GUI V2 preview", () => {
     test("opens About by default and preserves user-selected history", async ({
         page,
     }) => {
@@ -67,5 +67,61 @@ test.describe("GUI V2 Slice 1", () => {
         expect(box?.width).toBe(374);
         expect(box?.y).toBe(44);
         expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThan(770);
+    });
+
+    test("opens independent project windows without eager media", async ({
+        page,
+    }) => {
+        const mediaRequests: string[] = [];
+        page.on("request", (request) => {
+            if (request.resourceType() === "media") {
+                mediaRequests.push(request.url());
+            }
+        });
+
+        await page.goto("/gui-v2?app=projects");
+        await expect(
+            page.getByRole("dialog", { name: "프로젝트" }),
+        ).toBeVisible();
+        await expect(
+            page.getByRole("button", {
+                name: "WCHMS 프로젝트 열기",
+            }),
+        ).toBeVisible();
+        expect(mediaRequests).toEqual([]);
+
+        await page
+            .getByRole("button", { name: "WCHMS 프로젝트 열기" })
+            .click();
+        await expect(page).toHaveURL(/app=project&slug=wchms/);
+        await expect(
+            page.getByRole("dialog", { name: "WCHMS" }),
+        ).toBeVisible();
+
+        const dock = page.getByRole("navigation", {
+            name: "Applications",
+        });
+        await dock.getByRole("button", { name: "프로젝트" }).click();
+        await page
+            .getByRole("button", { name: "Flare 프로젝트 열기" })
+            .click();
+
+        await expect(page).toHaveURL(/app=project&slug=flare/);
+        await expect(
+            page.getByRole("dialog", { name: "WCHMS" }),
+        ).toBeVisible();
+        await expect(
+            page.getByRole("dialog", { name: "Flare" }),
+        ).toBeVisible();
+
+        await dock.getByRole("button", { name: "프로젝트" }).click();
+        await page
+            .getByRole("button", { name: "WCHMS 프로젝트 열기" })
+            .click();
+
+        await expect(
+            page.getByRole("dialog", { name: "WCHMS" }),
+        ).toHaveCount(1);
+        await expect(page).toHaveURL(/app=project&slug=wchms/);
     });
 });

@@ -86,19 +86,12 @@ export function createGuiV2Store(
     urlBasePath: "/gui" | "/gui-v2" = "/gui-v2",
 ) {
     return createStore<GuiV2Store>()((set) => ({
-        windows: [
-            {
-                windowId: "about",
-                appId: "about",
-                minimized: false,
-                activationOrder: 1,
-            },
-        ],
-        focus: { mode: "windows", activeWindowId: "about" },
+        windows: [],
+        focus: { mode: "desktop", activeWindowId: null },
         language: "ko",
         nextEntrySequence: 1,
         urlBasePath,
-        activationSequence: 1,
+        activationSequence: 0,
         urlReady: false,
         dispatch: (command) =>
             set((state) => {

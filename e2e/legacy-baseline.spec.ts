@@ -11,4 +11,20 @@ test.describe("legacy route baseline", () => {
         await expect(page.locator("body")).toBeVisible();
         await expect(page).toHaveURL(/\/gui$/);
     });
+
+    test("legacy project loaders register their namespace on demand", async ({
+        page,
+    }) => {
+        await page.goto("/gui");
+        await page
+            .getByRole("button", { name: "프로젝트_폴더" })
+            .dblclick();
+        await page.getByRole("button", { name: "WCHMS" }).dblclick();
+
+        await expect(
+            page.getByRole("heading", {
+                name: "WCHMS - 클라이언트 프로젝트",
+            }),
+        ).toBeVisible();
+    });
 });
