@@ -2,10 +2,32 @@
     position: relative;
     min-height: 100dvh;
     overflow: hidden;
+    color: #111827;
+    transition: background 0.5s ease;
+}
+
+.gui-v2-shell[data-wallpaper="aurora"] {
     background:
         radial-gradient(circle at 20% 20%, rgb(219 234 254 / 70%), transparent 35%),
         linear-gradient(135deg, #f8fafc, #e2e8f0);
-    color: #111827;
+}
+
+.gui-v2-shell[data-wallpaper="sunset"] {
+    background:
+        radial-gradient(circle at 80% 20%, rgb(254 186 116 / 70%), transparent 45%),
+        linear-gradient(135deg, #ea580c, #4a0e4e);
+}
+
+.gui-v2-shell[data-wallpaper="forest"] {
+    background:
+        radial-gradient(circle at 20% 80%, rgb(167 243 208 / 50%), transparent 45%),
+        linear-gradient(135deg, #064e3b, #022c22);
+}
+
+.gui-v2-shell[data-wallpaper="dark"] {
+    background:
+        radial-gradient(circle at 50% 50%, rgb(63 63 70 / 30%), transparent 70%),
+        linear-gradient(135deg, #09090b, #27272a);
 }
 
 .gui-v2-system-bar {
@@ -21,6 +43,74 @@
     padding: 0 max(12px, env(safe-area-inset-right, 0px)) 0
         max(12px, env(safe-area-inset-left, 0px));
     backdrop-filter: blur(16px);
+}
+
+.gui-v2-system-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.gui-v2-lang-button {
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #64748b;
+    transition: background 100ms ease, color 100ms ease;
+}
+
+.gui-v2-lang-button:hover {
+    background: rgb(15 23 42 / 8%);
+}
+
+.gui-v2-lang-button[aria-pressed="true"] {
+    background: #0f172a;
+    color: white;
+}
+
+.gui-v2-system-divider {
+    width: 1px;
+    height: 16px;
+    margin: 0 6px;
+    background: rgb(15 23 42 / 15%);
+}
+
+.gui-v2-system-clock {
+    font-family: "SF Mono", "Menlo", "Monaco", "Cascadia Code", monospace;
+    font-size: 12px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: #334155;
+    letter-spacing: 0.02em;
+    padding: 0 4px;
+}
+
+/* ── System status icons (dineshd.dev style) ─────────── */
+
+.gui-v2-system-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px;
+}
+
+.gui-v2-system-icon {
+    width: 15px;
+    height: 15px;
+    color: #64748b;
+}
+
+.gui-v2-system-icon-battery {
+    width: 17px;
+    height: 17px;
+}
+
+.gui-v2-system-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0f172a;
 }
 
 .gui-v2-background-type {
@@ -87,35 +177,121 @@
     filter: saturate(0.82) brightness(0.96);
 }
 
+/* ── macOS-style title bar ───────────────────────────────── */
+
 .gui-v2-title-bar {
-    display: flex;
+    display: grid;
+    grid-template-columns: 72px 1fr 72px;
     min-height: 42px;
     align-items: center;
-    justify-content: space-between;
     border-bottom: 1px solid rgb(15 23 42 / 12%);
     background: rgb(241 245 249 / 92%);
-    padding: 0 10px 0 14px;
+    padding: 0 10px;
+    cursor: grab;
+    user-select: none;
 }
 
-.gui-v2-window-control {
+.gui-v2-title-bar:active {
+    cursor: grabbing;
+}
+
+/* Traffic lights container */
+.gui-v2-traffic-lights {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Individual traffic light button */
+.gui-v2-traffic-light {
     display: grid;
-    width: 28px;
-    height: 28px;
+    width: 13px;
+    height: 13px;
     place-items: center;
     border-radius: 999px;
-    font-size: 18px;
+    border: 0.5px solid rgb(0 0 0 / 12%);
+    cursor: pointer;
+    transition: filter 120ms ease;
 }
 
-.gui-v2-window-control:hover,
-.gui-v2-window-control:focus-visible {
-    background: #dbeafe;
+.gui-v2-traffic-light:focus-visible {
     outline: 2px solid #2563eb;
+    outline-offset: 2px;
 }
+
+/* Close button — red */
+.gui-v2-traffic-close {
+    background: #ff5f57;
+}
+
+.gui-v2-traffic-close:hover {
+    filter: brightness(0.88);
+}
+
+/* Minimize button — yellow */
+.gui-v2-traffic-minimize {
+    background: #febc2e;
+}
+
+.gui-v2-traffic-minimize:hover {
+    filter: brightness(0.88);
+}
+
+/* Maximize button — green */
+.gui-v2-traffic-maximize {
+    background: #28c840;
+}
+
+.gui-v2-traffic-maximize:hover {
+    filter: brightness(0.88);
+}
+
+/* Traffic light inner icon — hidden until hover on group */
+.gui-v2-traffic-icon {
+    width: 8px;
+    height: 8px;
+    color: rgb(0 0 0 / 0);
+    transition: color 100ms ease;
+}
+
+.gui-v2-traffic-lights:hover .gui-v2-traffic-icon {
+    color: rgb(0 0 0 / 55%);
+}
+
+/* Centered title text */
+.gui-v2-title-text {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Spacer for grid symmetry */
+.gui-v2-title-spacer {
+    width: 72px;
+}
+
+/* ── Maximized window override ────────────────────────── */
+
+.gui-v2-window-maximized {
+    border-radius: 0 !important;
+    border: none !important;
+}
+
+.gui-v2-window-maximized .gui-v2-title-bar {
+    cursor: default;
+}
+
+/* ── Window content ─────────────────────────────────────── */
 
 .gui-v2-window-content {
     min-height: 0;
     flex: 1;
     overflow: auto;
+    background: #f8fafc;
 }
 
 .gui-v2-projects {
@@ -403,4 +579,156 @@
         font-size: 9pt;
         text-decoration: none;
     }
+}
+
+/* ── Sleek scrollbars for windows ── */
+.gui-v2-window-content::-webkit-scrollbar,
+.gui-v2-window-content *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.gui-v2-window-content::-webkit-scrollbar-track,
+.gui-v2-window-content *::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.gui-v2-window-content::-webkit-scrollbar-thumb,
+.gui-v2-window-content *::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.18);
+    border-radius: 99px;
+}
+
+.gui-v2-window-content::-webkit-scrollbar-thumb:hover,
+.gui-v2-window-content *::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.dark .gui-v2-window-content::-webkit-scrollbar-thumb,
+.dark .gui-v2-window-content *::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.dark .gui-v2-window-content::-webkit-scrollbar-thumb:hover,
+.dark .gui-v2-window-content *::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Dark Mode styling override for GUI V2 ── */
+.dark.gui-v2-shell,
+.dark .gui-v2-shell {
+    color: #f8fafc;
+}
+
+.dark .gui-v2-window {
+    background: rgba(30, 41, 59, 0.94);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+}
+
+.dark .gui-v2-title-bar {
+    background: rgba(15, 23, 42, 0.9);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .gui-v2-title-text {
+    color: #cbd5e1;
+}
+
+.dark .gui-v2-window-content {
+    background: #0f172a;
+}
+
+.dark .gui-v2-projects {
+    background: #0f172a;
+}
+
+.dark .gui-v2-projects-header h3 {
+    color: #f8fafc;
+}
+
+.dark .gui-v2-project-card {
+    background: #1e293b;
+    border-color: rgba(255, 255, 255, 0.08);
+    color: #cbd5e1;
+}
+
+.dark .gui-v2-project-card strong {
+    color: #f8fafc;
+}
+
+.dark .gui-v2-project-card:hover {
+    border-color: rgba(59, 130, 246, 0.45);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.dark .gui-v2-project-icon {
+    background: #334155;
+}
+
+.dark .gui-v2-resume {
+    background: #0f172a;
+    color: #cbd5e1;
+}
+
+.dark .gui-v2-resume h3,
+.dark .gui-v2-resume h4,
+.dark .gui-v2-resume h5,
+.dark .gui-v2-resume dt {
+    color: #f8fafc;
+}
+
+.dark .gui-v2-resume-section-title {
+    border-bottom-color: rgba(255, 255, 255, 0.15);
+    color: #f8fafc;
+}
+
+.dark .gui-v2-resume-hero {
+    border-bottom-color: #334155;
+}
+
+.dark .gui-v2-resume-hero p {
+    color: #94a3b8;
+}
+
+.dark .gui-v2-dock {
+    background: rgba(15, 23, 42, 0.72);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+}
+
+.dark .gui-v2-dock-button:hover,
+.dark .gui-v2-dock-button:focus-visible,
+.dark .gui-v2-dock-button[aria-pressed="true"] {
+    background: rgba(30, 41, 59, 0.86);
+}
+
+.dark .gui-v2-system-bar {
+    background: rgba(15, 23, 42, 0.78);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .gui-v2-system-name {
+    color: #f8fafc;
+}
+
+.dark .gui-v2-system-clock {
+    color: #cbd5e1;
+}
+
+.dark .gui-v2-system-icon {
+    color: #cbd5e1;
+}
+
+.dark .gui-v2-lang-button:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .gui-v2-lang-button[aria-pressed="true"] {
+    background: #f8fafc;
+    color: #0f172a;
+}
+
+.dark .gui-v2-system-divider {
+    background: rgba(255, 255, 255, 0.15);
 }
