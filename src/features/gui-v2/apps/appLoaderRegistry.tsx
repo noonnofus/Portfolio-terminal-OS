@@ -5,6 +5,7 @@ import type {
     GuiAppComponentProps,
     GuiAppLoaderMap,
 } from "@/features/gui-v2/apps/appTypes";
+import { ensureProjectNamespace } from "@/shared/lib/i18n/loadProjectNamespace";
 
 function WindowLoadingState() {
     return (
@@ -27,14 +28,7 @@ const AboutApp = dynamic<GuiAppComponentProps<"about">>(
 );
 
 const ProjectsApp = dynamic<GuiAppComponentProps<"projects">>(
-    async () => {
-        const { default: App } = await import(
-            "@/features/applications/components/folder/AppFolder"
-        );
-        return function ProjectsAdapter() {
-            return <App />;
-        };
-    },
+    () => import("@/features/gui-v2/apps/components/ProjectsAppV2"),
     { loading: WindowLoadingState },
 );
 
@@ -69,6 +63,7 @@ const ContactApp = dynamic<GuiAppComponentProps<"contact">>(
 
 const WchmsApp = dynamic<GuiAppComponentProps<"project:wchms">>(
     async () => {
+        await ensureProjectNamespace("WCHMS");
         const { default: App } = await import(
             "@/features/applications/components/wchms/AppWCHMS"
         );
@@ -81,6 +76,7 @@ const WchmsApp = dynamic<GuiAppComponentProps<"project:wchms">>(
 
 const FlareApp = dynamic<GuiAppComponentProps<"project:flare">>(
     async () => {
+        await ensureProjectNamespace("Flare");
         const { default: App } = await import(
             "@/features/applications/components/flare/AppFlare"
         );
@@ -93,6 +89,7 @@ const FlareApp = dynamic<GuiAppComponentProps<"project:flare">>(
 
 const WeConnectApp = dynamic<GuiAppComponentProps<"project:weconnect">>(
     async () => {
+        await ensureProjectNamespace("WeConnect");
         const { default: App } = await import(
             "@/features/applications/components/we-connect/AppWeConnect"
         );
@@ -105,6 +102,7 @@ const WeConnectApp = dynamic<GuiAppComponentProps<"project:weconnect">>(
 
 const PageSsenceApp = dynamic<GuiAppComponentProps<"project:pagessence">>(
     async () => {
+        await ensureProjectNamespace("PageSsence");
         const { default: App } = await import(
             "@/features/applications/components/page-ssence/AppPageSsence"
         );
@@ -117,6 +115,7 @@ const PageSsenceApp = dynamic<GuiAppComponentProps<"project:pagessence">>(
 
 const DiceRollerApp = dynamic<GuiAppComponentProps<"project:diceroller">>(
     async () => {
+        await ensureProjectNamespace("DiceRoller");
         const { default: App } = await import(
             "@/features/applications/components/dice-roller/AppDiceRoller"
         );
@@ -129,6 +128,7 @@ const DiceRollerApp = dynamic<GuiAppComponentProps<"project:diceroller">>(
 
 const MejuBotApp = dynamic<GuiAppComponentProps<"project:mejubot">>(
     async () => {
+        await ensureProjectNamespace("Mejubot");
         const { default: App } = await import(
             "@/features/applications/components/mejubot/AppMejubot"
         );
@@ -141,6 +141,7 @@ const MejuBotApp = dynamic<GuiAppComponentProps<"project:mejubot">>(
 
 const WebPianoApp = dynamic<GuiAppComponentProps<"project:webpiano">>(
     async () => {
+        await ensureProjectNamespace("WebPiano");
         const { default: App } = await import(
             "@/features/applications/components/web-piano/AppWebPiano"
         );

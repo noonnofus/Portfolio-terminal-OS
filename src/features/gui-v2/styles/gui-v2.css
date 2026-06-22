@@ -118,6 +118,62 @@
     overflow: auto;
 }
 
+.gui-v2-projects {
+    min-height: 100%;
+    background: #f8fafc;
+    padding: 28px;
+}
+
+.gui-v2-projects-header {
+    border-bottom: 1px solid rgb(15 23 42 / 10%);
+    padding-bottom: 20px;
+}
+
+.gui-v2-project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.gui-v2-project-card {
+    display: flex;
+    width: 100%;
+    min-height: 170px;
+    gap: 16px;
+    border: 1px solid rgb(15 23 42 / 10%);
+    border-radius: 14px;
+    background: white;
+    padding: 18px;
+    text-align: left;
+    transition:
+        border-color 140ms ease,
+        box-shadow 140ms ease,
+        transform 140ms ease;
+}
+
+.gui-v2-project-card:hover {
+    border-color: rgb(37 99 235 / 38%);
+    box-shadow: 0 12px 30px rgb(15 23 42 / 10%);
+    transform: translateY(-2px);
+}
+
+.gui-v2-project-card:focus-visible {
+    border-color: #2563eb;
+    outline: 3px solid rgb(37 99 235 / 30%);
+    outline-offset: 2px;
+}
+
+.gui-v2-project-icon {
+    display: grid;
+    width: 76px;
+    height: 76px;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 16px;
+    background: #f1f5f9;
+}
+
 .gui-v2-dock {
     position: fixed;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px));
@@ -191,5 +247,23 @@
 
     .gui-v2-window[data-active="false"] {
         display: none;
+    }
+
+    .gui-v2-projects {
+        padding: 18px;
+    }
+
+    .gui-v2-project-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .gui-v2-project-card {
+        min-height: 0;
+        padding: 14px;
+    }
+
+    .gui-v2-project-icon {
+        width: 60px;
+        height: 60px;
     }
 }
