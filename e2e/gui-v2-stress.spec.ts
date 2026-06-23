@@ -49,7 +49,7 @@ test("all project windows stay bounded and release DOM after close", async ({
         "Heap diagnostics use the Chromium DevTools Protocol.",
     );
 
-    await page.goto("/gui-v2?app=projects");
+    await page.goto("/gui?app=projects");
     const dock = page.getByRole("navigation", {
         name: "Applications",
     });

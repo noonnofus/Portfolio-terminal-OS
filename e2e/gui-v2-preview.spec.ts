@@ -4,12 +4,12 @@ test.describe("GUI V2 preview", () => {
     test("opens About by default and preserves user-selected history", async ({
         page,
     }) => {
-        await page.goto("/gui-v2");
+        await page.goto("/gui");
 
         await expect(
             page.getByRole("dialog", { name: "나에 대해서" }),
         ).toBeVisible();
-        await expect(page).toHaveURL(/\/gui-v2$/);
+        await expect(page).toHaveURL(/\/gui$/);
 
         const dock = page.getByRole("navigation", {
             name: "Applications",
@@ -21,7 +21,7 @@ test.describe("GUI V2 preview", () => {
         ).toBeVisible();
 
         await dock.getByRole("button", { name: "나에 대해서" }).click();
-        await expect(page).toHaveURL(/\/gui-v2$/);
+        await expect(page).toHaveURL(/\/gui$/);
 
         await page.goBack();
         await expect(page).toHaveURL(/app=projects/);
@@ -30,14 +30,14 @@ test.describe("GUI V2 preview", () => {
             .getByRole("dialog", { name: "프로젝트" })
             .getByRole("button", { name: "프로젝트 close" })
             .click();
-        await expect(page).toHaveURL(/\/gui-v2$/);
+        await expect(page).toHaveURL(/\/gui$/);
         await expect(
             page.getByRole("dialog", { name: "프로젝트" }),
         ).toHaveCount(0);
     });
 
     test("keeps language in the canonical shared URL", async ({ page }) => {
-        await page.goto("/gui-v2");
+        await page.goto("/gui");
 
         const systemControls = page.getByRole("navigation", {
             name: "System controls",
@@ -55,7 +55,7 @@ test.describe("GUI V2 preview", () => {
         page,
     }) => {
         await page.setViewportSize({ width: 390, height: 844 });
-        await page.goto("/gui-v2");
+        await page.goto("/gui");
 
         const window = page.getByRole("dialog", {
             name: "나에 대해서",
@@ -73,7 +73,7 @@ test.describe("GUI V2 preview", () => {
         page,
     }) => {
         await page.setViewportSize({ width: 900, height: 900 });
-        await page.goto("/gui-v2");
+        await page.goto("/gui");
 
         await expect(
             page.getByRole("navigation", {
@@ -116,7 +116,7 @@ test.describe("GUI V2 preview", () => {
             }
         });
 
-        await page.goto("/gui-v2?app=projects");
+        await page.goto("/gui?app=projects");
         await expect(
             page.getByRole("dialog", { name: "프로젝트" }),
         ).toBeVisible();
@@ -165,7 +165,7 @@ test.describe("GUI V2 preview", () => {
     test("preserves Terminal while lifecycle visibility suspends work", async ({
         page,
     }) => {
-        await page.goto("/gui-v2?app=terminal");
+        await page.goto("/gui?app=terminal");
 
         const terminalWindow = page.locator(
             '[data-window-id="terminal"]',
@@ -243,7 +243,7 @@ test.describe("GUI V2 preview", () => {
             window.history.replaceState(
                 null,
                 "",
-                "/gui-v2?app=terminal&lang=en",
+                "/gui?app=terminal&lang=en",
             );
             window.dispatchEvent(
                 new PageTransitionEvent("pageshow", {
@@ -266,7 +266,7 @@ test.describe("GUI V2 preview", () => {
     test("renders a bilingual HTML Resume with print isolation", async ({
         page,
     }) => {
-        await page.goto("/gui-v2?lang=en");
+        await page.goto("/gui?lang=en");
         await page
             .getByRole("navigation", { name: "Applications" })
             .getByRole("button", { name: "Resume" })
@@ -326,7 +326,7 @@ test.describe("GUI V2 preview", () => {
     test("restores Settings from the URL and keeps language canonical", async ({
         page,
     }) => {
-        await page.goto("/gui-v2?app=settings&lang=en");
+        await page.goto("/gui?app=settings&lang=en");
 
         const settingsWindow = page.getByRole("dialog", {
             name: "Settings",
@@ -341,7 +341,7 @@ test.describe("GUI V2 preview", () => {
         await settingsWindow
             .getByRole("button", { name: "한국어" })
             .click();
-        await expect(page).toHaveURL(/\/gui-v2\?app=settings$/);
+        await expect(page).toHaveURL(/\/gui\?app=settings$/);
         await expect(
             page.getByRole("dialog", { name: "설정" }),
         ).toBeVisible();
@@ -365,7 +365,7 @@ test.describe("GUI V2 preview", () => {
     test("provides global keyboard switching and excludes inactive content from Tab", async ({
         page,
     }) => {
-        await page.goto("/gui-v2");
+        await page.goto("/gui");
         const dock = page.getByRole("navigation", {
             name: "Applications",
         });
@@ -384,7 +384,7 @@ test.describe("GUI V2 preview", () => {
         ).not.toHaveAttribute("inert", "");
 
         await page.keyboard.press("Control+F6");
-        await expect(page).toHaveURL(/\/gui-v2$/);
+        await expect(page).toHaveURL(/\/gui$/);
         await expect(aboutWindow).toHaveAttribute(
             "data-active",
             "true",
@@ -413,7 +413,7 @@ test.describe("GUI V2 preview", () => {
         page,
     }) => {
         await page.emulateMedia({ reducedMotion: "reduce" });
-        await page.goto("/gui-v2");
+        await page.goto("/gui");
 
         const aboutWindow = page.locator('[data-window-id="about"]');
         await aboutWindow
