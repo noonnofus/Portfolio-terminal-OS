@@ -1,13 +1,23 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
+import {
+    motion,
+    AnimatePresence,
+    useReducedMotion,
+} from "framer-motion";
 import { appCatalog } from "@/features/gui-v2/apps/appCatalog";
 import {
     createOpenAppCommand,
     type GuiAppId,
 } from "@/features/gui-v2/apps/appTypes";
 import { GuiAppRenderer } from "@/features/gui-v2/components/GuiAppRenderer";
+import { WindowErrorBoundary } from "@/features/gui-v2/components/WindowErrorBoundary";
 import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
 import type { GuiWindowSnapshot } from "@/features/gui-v2/navigation/navigationTypes";
 import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
@@ -98,14 +108,17 @@ export function GuiWindowFrameV2({
     active,
     workspaceDesktop,
     index,
+    clampEpoch,
 }: {
     window: GuiWindowSnapshot;
     active: boolean;
     workspaceDesktop: boolean;
     index: number;
+    clampEpoch: number;
 }) {
     const language = useGuiV2Store((state) => state.language);
     const { navigate, navigationBusy } = useGuiNavigation();
+    const shouldReduceMotion = useReducedMotion();
     const appId: GuiAppId = win.appId;
     const title = appCatalog[appId].titles[language];
     const headingId = `gui-v2-window-${appId.replace(":", "-")}`;
@@ -118,23 +131,17 @@ export function GuiWindowFrameV2({
     /* ── Maximize state ─────────────────────────────────── */
     const [maximized, setMaximized] = useState(false);
 
-    /* ── Minimize animation state ───────────────────────── */
-    const [minimizing, setMinimizing] = useState(false);
-
     const handleMinimize = useCallback(() => {
-        setMinimizing(true);
-        // Let animation run, then dispatch actual minimize
-        setTimeout(() => {
-            setMinimizing(false);
-            navigate({
-                type: "minimize-window",
-                windowId: appId,
-            });
-        }, 350);
+        navigate({
+            type: "minimize-window",
+            windowId: appId,
+        });
     }, [appId, navigate]);
 
     /* ── Drag state (desktop ≥1024px only) ──────────────── */
     const sectionRef = useRef<HTMLElement>(null);
+    const headingRef = useRef<HTMLHeadingElement>(null);
+    const wasActiveRef = useRef(false);
     const dragState = useRef<{
         startX: number;
         startY: number;
@@ -201,6 +208,94 @@ export function GuiWindowFrameV2({
         dragState.current = null;
     }, []);
 
+    const applyPositionPreset = useCallback(
+        (preset: "center" | "left" | "right" | "maximize") => {
+            if (preset === "maximize") {
+                setMaximized(true);
+                return;
+            }
+
+            setMaximized(false);
+            const width = Math.min(760, globalThis.innerWidth * 0.72);
+            const height = Math.min(620, globalThis.innerHeight * 0.72);
+            const top = Math.max(
+                44,
+                (globalThis.innerHeight - 80 - height) / 2,
+            );
+            const horizontalPadding = 24;
+
+            setPos({
+                left:
+                    preset === "left"
+                        ? horizontalPadding
+                        : preset === "right"
+                          ? Math.max(
+                                horizontalPadding,
+                                globalThis.innerWidth -
+                                    width -
+                                    horizontalPadding,
+                            )
+                          : Math.max(
+                                horizontalPadding,
+                                (globalThis.innerWidth - width) / 2,
+                            ),
+                top,
+            });
+        },
+        [],
+    );
+
+    useEffect(() => {
+        if (active && !wasActiveRef.current) {
+            requestAnimationFrame(() => headingRef.current?.focus());
+        }
+        wasActiveRef.current = active;
+    }, [active]);
+
+    useEffect(() => {
+        if (globalThis.innerWidth < 1024 || maximized) {
+            return;
+        }
+
+        const element = sectionRef.current;
+        if (element === null) {
+            return;
+        }
+
+        const rect = element.getBoundingClientRect();
+        const maxLeft = Math.max(0, globalThis.innerWidth - rect.width);
+        const maxTop = Math.max(
+            36,
+            globalThis.innerHeight - 80 - rect.height,
+        );
+
+        setPos((current) => {
+            const nextLeft = Math.min(
+                maxLeft,
+                Math.max(0, current?.left ?? defaultLeft),
+            );
+            const nextTop = Math.min(
+                maxTop,
+                Math.max(36, current?.top ?? defaultTop),
+            );
+
+            if (
+                current?.left === nextLeft &&
+                current.top === nextTop
+            ) {
+                return current;
+            }
+
+            return { left: nextLeft, top: nextTop };
+        });
+    }, [
+        active,
+        clampEpoch,
+        defaultLeft,
+        defaultTop,
+        maximized,
+    ]);
+
     const isHidden = win.minimized || workspaceDesktop;
 
     /* ── Compute style for normal vs maximized ──────────── */
@@ -219,6 +314,36 @@ export function GuiWindowFrameV2({
               zIndex: active ? 40 : 10 + index,
           };
 
+    // Calculate dynamic minimize transition offsets to the specific Dock icon
+    const dockAppIds = [
+        "about",
+        "projects",
+        "resume",
+        "terminal",
+        "contact",
+        "settings",
+    ];
+    const dockIndex = dockAppIds.indexOf(appId);
+    const screenWidth =
+        typeof window !== "undefined" ? window.innerWidth : 1024;
+    const screenHeight =
+        typeof window !== "undefined" ? window.innerHeight : 768;
+    const targetX =
+        screenWidth / 2 +
+        (dockIndex !== -1 ? dockIndex - 2.5 : 0) * 54;
+    const windowWidth = maximized
+        ? screenWidth
+        : Math.min(760, screenWidth * 0.72);
+    const windowHeight = maximized
+        ? screenHeight - 36
+        : Math.min(620, screenHeight * 0.72);
+    const minimizeX = shouldReduceMotion
+        ? 0
+        : targetX - (currentLeft + windowWidth / 2);
+    const minimizeY = shouldReduceMotion
+        ? 0
+        : screenHeight - 34 - (currentTop + windowHeight / 2);
+
     return (
         <AnimatePresence>
             {!isHidden && (
@@ -234,24 +359,22 @@ export function GuiWindowFrameV2({
                     onPointerUp={handlePointerUp}
                     onLostPointerCapture={handlePointerUp}
                     style={windowStyle}
-                    // Minimize-to-dock animation
                     initial={false}
-                    animate={
-                        minimizing
-                            ? {
-                                  scale: 0.15,
-                                  y: "80vh",
-                                  opacity: 0,
-                              }
-                            : {
-                                  scale: 1,
-                                  y: 0,
-                                  opacity: 1,
-                              }
-                    }
+                    animate={{
+                        scale: 1,
+                        x: 0,
+                        y: 0,
+                        opacity: 1,
+                    }}
+                    exit={{
+                        scale: shouldReduceMotion ? 1 : 0.15,
+                        x: minimizeX,
+                        y: minimizeY,
+                        opacity: 0,
+                    }}
                     transition={{
-                        duration: 0.35,
-                        ease: [0.32, 0, 0.67, 0],
+                        duration: shouldReduceMotion ? 0 : 0.38,
+                        ease: [0.16, 1, 0.3, 1], // easeOutExpo for ultra smooth experience
                     }}
                 >
                     {/* ── macOS-style title bar ──────────── */}
@@ -278,7 +401,7 @@ export function GuiWindowFrameV2({
                             <button
                                 type="button"
                                 aria-label={`${title} minimize`}
-                                disabled={navigationBusy || minimizing}
+                                disabled={navigationBusy}
                                 onClick={handleMinimize}
                                 className="gui-v2-traffic-light gui-v2-traffic-minimize"
                             >
@@ -304,6 +427,7 @@ export function GuiWindowFrameV2({
 
                         {/* Centered title */}
                         <h2
+                            ref={headingRef}
                             id={headingId}
                             tabIndex={-1}
                             className="gui-v2-title-text"
@@ -311,11 +435,28 @@ export function GuiWindowFrameV2({
                             {title}
                         </h2>
 
-                        {/* Spacer for grid balance */}
-                        <div
-                            className="gui-v2-title-spacer"
-                            aria-hidden="true"
-                        />
+                        <select
+                            aria-label={`${title} position`}
+                            className="gui-v2-position-select"
+                            value={maximized ? "maximize" : ""}
+                            onChange={(event) => {
+                                const preset = event.currentTarget.value;
+                                if (
+                                    preset === "center" ||
+                                    preset === "left" ||
+                                    preset === "right" ||
+                                    preset === "maximize"
+                                ) {
+                                    applyPositionPreset(preset);
+                                }
+                            }}
+                        >
+                            <option value="">Position</option>
+                            <option value="center">Center</option>
+                            <option value="left">Left</option>
+                            <option value="right">Right</option>
+                            <option value="maximize">Maximize</option>
+                        </select>
                     </div>
 
                     {/* ── Window content ─────────────────── */}
@@ -326,10 +467,12 @@ export function GuiWindowFrameV2({
                         <AppRuntimeBoundary
                             windowVisibility={windowVisibility}
                         >
-                            <GuiAppRenderer
-                                appId={appId}
-                                language={language}
-                            />
+                            <WindowErrorBoundary appId={appId}>
+                                <GuiAppRenderer
+                                    appId={appId}
+                                    language={language}
+                                />
+                            </WindowErrorBoundary>
                         </AppRuntimeBoundary>
                     </div>
                 </motion.section>

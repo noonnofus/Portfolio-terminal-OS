@@ -71,6 +71,7 @@ function isGuiUrlState(value: unknown): value is GuiUrlState {
         app === "resume" ||
         app === "terminal" ||
         app === "contact" ||
+        app === "settings" ||
         app === "desktop"
     );
 }

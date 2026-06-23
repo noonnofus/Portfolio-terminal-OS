@@ -69,6 +69,43 @@ test.describe("GUI V2 preview", () => {
         expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThan(770);
     });
 
+    test("keeps tablet chrome usable and desktop decoration non-interactive", async ({
+        page,
+    }) => {
+        await page.setViewportSize({ width: 900, height: 900 });
+        await page.goto("/gui-v2");
+
+        await expect(
+            page.getByRole("navigation", {
+                name: "Desktop shortcuts",
+            }),
+        ).toBeHidden();
+        await expect(
+            page.getByRole("navigation", {
+                name: "Applications",
+            }),
+        ).toBeVisible();
+
+        const windowBox = await page
+            .getByRole("dialog", { name: "나에 대해서" })
+            .boundingBox();
+        expect(windowBox).not.toBeNull();
+        expect(windowBox?.x).toBe(45);
+        expect(windowBox?.width).toBe(810);
+
+        const backgroundType = page.locator(
+            ".gui-v2-background-type",
+        );
+        await expect(backgroundType).toHaveAttribute(
+            "aria-hidden",
+            "true",
+        );
+        await expect(backgroundType).toHaveCSS(
+            "pointer-events",
+            "none",
+        );
+    });
+
     test("opens independent project windows without eager media", async ({
         page,
     }) => {
@@ -284,5 +321,125 @@ test.describe("GUI V2 preview", () => {
             "overflow",
             "visible",
         );
+    });
+
+    test("restores Settings from the URL and keeps language canonical", async ({
+        page,
+    }) => {
+        await page.goto("/gui-v2?app=settings&lang=en");
+
+        const settingsWindow = page.getByRole("dialog", {
+            name: "Settings",
+        });
+        await expect(settingsWindow).toBeVisible();
+        await expect(
+            settingsWindow.getByRole("heading", {
+                name: "System Settings",
+            }),
+        ).toBeVisible();
+
+        await settingsWindow
+            .getByRole("button", { name: "한국어" })
+            .click();
+        await expect(page).toHaveURL(/\/gui-v2\?app=settings$/);
+        await expect(
+            page.getByRole("dialog", { name: "설정" }),
+        ).toBeVisible();
+
+        await page
+            .getByRole("dialog", { name: "설정" })
+            .getByRole("button", { name: "다크 모드" })
+            .click();
+        await expect(page.locator("html")).toHaveClass(/dark/);
+
+        await page
+            .getByRole("dialog", { name: "설정" })
+            .getByRole("button", { name: /숲속/ })
+            .click();
+        await expect(page.locator(".gui-v2-shell")).toHaveAttribute(
+            "data-wallpaper",
+            "forest",
+        );
+    });
+
+    test("provides global keyboard switching and excludes inactive content from Tab", async ({
+        page,
+    }) => {
+        await page.goto("/gui-v2");
+        const dock = page.getByRole("navigation", {
+            name: "Applications",
+        });
+        await dock.getByRole("button", { name: "프로젝트" }).click();
+
+        const aboutWindow = page.locator('[data-window-id="about"]');
+        const projectsWindow = page.locator(
+            '[data-window-id="projects"]',
+        );
+
+        await expect(
+            aboutWindow.locator(".gui-v2-window-content"),
+        ).toHaveAttribute("inert", "");
+        await expect(
+            projectsWindow.locator(".gui-v2-window-content"),
+        ).not.toHaveAttribute("inert", "");
+
+        await page.keyboard.press("Control+F6");
+        await expect(page).toHaveURL(/\/gui-v2$/);
+        await expect(aboutWindow).toHaveAttribute(
+            "data-active",
+            "true",
+        );
+        await expect(
+            aboutWindow.getByRole("heading", {
+                name: "나에 대해서",
+            }),
+        ).toBeFocused();
+
+        await page
+            .getByRole("button", { name: "Show desktop" })
+            .click();
+        await expect(page).toHaveURL(/app=desktop/);
+        await expect(aboutWindow).toBeHidden();
+        await expect(projectsWindow).toBeHidden();
+
+        await page
+            .getByRole("combobox", { name: "Open windows" })
+            .selectOption("projects");
+        await expect(page).toHaveURL(/app=projects/);
+        await expect(projectsWindow).toBeVisible();
+    });
+
+    test("offers non-drag position presets and respects reduced motion", async ({
+        page,
+    }) => {
+        await page.emulateMedia({ reducedMotion: "reduce" });
+        await page.goto("/gui-v2");
+
+        const aboutWindow = page.locator('[data-window-id="about"]');
+        await aboutWindow
+            .getByRole("combobox", {
+                name: "나에 대해서 position",
+            })
+            .selectOption("right");
+
+        const rightAlignedBox = await aboutWindow.boundingBox();
+        expect(rightAlignedBox).not.toBeNull();
+        expect(
+            Math.abs(
+                24 -
+                    (1280 -
+                        ((rightAlignedBox?.x ?? 0) +
+                            (rightAlignedBox?.width ?? 0))),
+            ),
+        ).toBeLessThanOrEqual(1);
+
+        const startedAt = Date.now();
+        await aboutWindow
+            .getByRole("button", {
+                name: "나에 대해서 minimize",
+            })
+            .click();
+        await expect(aboutWindow).toBeHidden();
+        expect(Date.now() - startedAt).toBeLessThan(300);
     });
 });

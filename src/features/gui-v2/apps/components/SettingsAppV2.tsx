@@ -3,11 +3,13 @@
 import { useColorMode } from "@/shared/ui/color-mode";
 import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
 import type { GuiAppComponentProps } from "@/features/gui-v2/apps/appTypes";
+import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
 
 export default function SettingsAppV2({
     language,
 }: GuiAppComponentProps<"settings">) {
     const dispatch = useGuiV2Store((state) => state.dispatch);
+    const { navigate, navigationBusy } = useGuiNavigation();
     const wallpaper = useGuiV2Store((state) => state.wallpaper);
     const { colorMode, setColorMode } = useColorMode();
 
@@ -75,11 +77,12 @@ export default function SettingsAppV2({
                             <button
                                 type="button"
                                 onClick={() =>
-                                    dispatch({
+                                    navigate({
                                         type: "change-language",
                                         language: "ko",
                                     })
                                 }
+                                disabled={navigationBusy}
                                 className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
                                     language === "ko"
                                         ? "bg-blue-600 text-white shadow-sm"
@@ -91,11 +94,12 @@ export default function SettingsAppV2({
                             <button
                                 type="button"
                                 onClick={() =>
-                                    dispatch({
+                                    navigate({
                                         type: "change-language",
                                         language: "en",
                                     })
                                 }
+                                disabled={navigationBusy}
                                 className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
                                     language === "en"
                                         ? "bg-blue-600 text-white shadow-sm"
