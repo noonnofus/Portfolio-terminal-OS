@@ -19,6 +19,10 @@ navigation and waits for About primary content. Route-specific entry size
 subtracts chunks shared with the root route; startup transfer uses actual
 encoded response body sizes.
 
+The V2 values were captured on the preview route before the isolated entry
+switch. The same component graph is now served from `/gui`; `/gui-v2` has been
+removed.
+
 ## Release verification
 
 - ESLint, TypeScript, Vitest, and production build pass.
