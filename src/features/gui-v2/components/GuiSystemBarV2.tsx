@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { appCatalog } from "@/features/gui-v2/apps/appCatalog";
+import { createOpenAppCommand } from "@/features/gui-v2/apps/appTypes";
 import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
 import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
 
@@ -86,7 +88,57 @@ function SystemClock() {
 
 export function GuiSystemBarV2() {
     const language = useGuiV2Store((state) => state.language);
+    const windows = useGuiV2Store((state) => state.windows);
+    const focus = useGuiV2Store((state) => state.focus);
     const { navigate, navigationBusy } = useGuiNavigation();
+    const visibleWindows = windows
+        .filter((window) => !window.minimized)
+        .toSorted(
+            (left, right) =>
+                right.activationOrder - left.activationOrder,
+        );
+    const activeWindowId =
+        focus.mode === "windows" ? focus.activeWindowId : "";
+
+    useEffect(() => {
+        const handleWindowCycle = (event: KeyboardEvent) => {
+            if (!event.ctrlKey || event.key !== "F6") {
+                return;
+            }
+
+            const candidates = windows
+                .filter((window) => !window.minimized)
+                .toSorted(
+                    (left, right) =>
+                        right.activationOrder - left.activationOrder,
+                );
+
+            if (candidates.length === 0) {
+                return;
+            }
+
+            event.preventDefault();
+            const currentIndex = candidates.findIndex(
+                (window) =>
+                    focus.mode === "windows" &&
+                    window.windowId === focus.activeWindowId,
+            );
+            const direction = event.shiftKey ? -1 : 1;
+            const nextIndex =
+                currentIndex === -1
+                    ? 0
+                    : (currentIndex + direction + candidates.length) %
+                      candidates.length;
+            navigate(createOpenAppCommand(candidates[nextIndex].appId));
+        };
+
+        globalThis.addEventListener("keydown", handleWindowCycle);
+        return () =>
+            globalThis.removeEventListener(
+                "keydown",
+                handleWindowCycle,
+            );
+    }, [focus, navigate, windows]);
 
     return (
         <header className="gui-v2-system-bar">
@@ -113,6 +165,70 @@ export function GuiSystemBarV2() {
                         {option}
                     </button>
                 ))}
+
+                <select
+                    aria-label="Open windows"
+                    disabled={navigationBusy}
+                    value={activeWindowId}
+                    onChange={(event) => {
+                        const target = event.currentTarget.value;
+                        if (target === "desktop") {
+                            navigate({ type: "show-desktop" });
+                            return;
+                        }
+
+                        const selectedWindow = windows.find(
+                            (window) => window.windowId === target,
+                        );
+                        if (selectedWindow !== undefined) {
+                            navigate(
+                                createOpenAppCommand(
+                                    selectedWindow.appId,
+                                ),
+                            );
+                        }
+                    }}
+                    className="gui-v2-window-menu"
+                >
+                    <option value="desktop">Desktop</option>
+                    {visibleWindows.map((window) => (
+                        <option
+                            key={window.windowId}
+                            value={window.windowId}
+                        >
+                            {appCatalog[window.appId].titles[language]}
+                        </option>
+                    ))}
+                </select>
+
+                <button
+                    type="button"
+                    aria-label="Show desktop"
+                    disabled={navigationBusy}
+                    onClick={() => navigate({ type: "show-desktop" })}
+                    className="gui-v2-system-action"
+                >
+                    Desktop
+                </button>
+
+                <button
+                    type="button"
+                    aria-label="Close active window"
+                    disabled={
+                        navigationBusy || focus.mode !== "windows"
+                    }
+                    onClick={() => {
+                        if (focus.mode === "windows") {
+                            navigate({
+                                type: "close-window",
+                                windowId: focus.activeWindowId,
+                            });
+                        }
+                    }}
+                    className="gui-v2-system-action"
+                >
+                    Close
+                </button>
 
                 <div
                     className="gui-v2-system-divider"

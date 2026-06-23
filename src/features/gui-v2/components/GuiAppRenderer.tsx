@@ -32,6 +32,10 @@ export function GuiAppRenderer({
             const App = appLoaderRegistry.contact;
             return <App language={language} />;
         }
+        case "settings": {
+            const App = appLoaderRegistry.settings;
+            return <App language={language} />;
+        }
         case "project:wchms": {
             const App = appLoaderRegistry["project:wchms"];
             return <App language={language} slug="wchms" />;

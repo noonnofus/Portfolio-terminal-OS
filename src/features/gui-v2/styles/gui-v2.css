@@ -51,6 +51,29 @@
     gap: 4px;
 }
 
+.gui-v2-window-menu,
+.gui-v2-system-action {
+    border-radius: 6px;
+    background: transparent;
+    padding: 3px 6px;
+    color: #475569;
+    font-size: 11px;
+}
+
+.gui-v2-window-menu:focus-visible,
+.gui-v2-system-action:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 1px;
+}
+
+.gui-v2-system-action:hover {
+    background: rgb(15 23 42 / 8%);
+}
+
+.gui-v2-system-action:disabled {
+    opacity: 0.45;
+}
+
 .gui-v2-lang-button {
     border-radius: 6px;
     padding: 2px 8px;
@@ -274,6 +297,21 @@
     width: 72px;
 }
 
+.gui-v2-position-select {
+    width: 72px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    padding: 3px;
+    color: #475569;
+    font-size: 10px;
+}
+
+.gui-v2-position-select:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
 /* ── Maximized window override ────────────────────────── */
 
 .gui-v2-window-maximized {
@@ -292,6 +330,25 @@
     flex: 1;
     overflow: auto;
     background: #f8fafc;
+}
+
+.gui-v2-window-error {
+    display: grid;
+    gap: 12px;
+    padding: 28px;
+}
+
+.gui-v2-window-error > div {
+    display: flex;
+    gap: 8px;
+}
+
+.gui-v2-window-error button {
+    border-radius: 8px;
+    background: #0f172a;
+    padding: 8px 12px;
+    color: white;
+    font-size: 12px;
 }
 
 .gui-v2-projects {
@@ -465,6 +522,11 @@
         display: none;
     }
 
+    .gui-v2-window-menu,
+    .gui-v2-system-action {
+        display: none;
+    }
+
     .gui-v2-window-layer {
         position: fixed;
         inset: 36px 0 0;
@@ -482,6 +544,10 @@
 
     .gui-v2-window[data-active="false"] {
         display: none;
+    }
+
+    .gui-v2-position-select {
+        visibility: hidden;
     }
 
     .gui-v2-projects {
@@ -635,6 +701,10 @@
     color: #cbd5e1;
 }
 
+.dark .gui-v2-position-select {
+    color: #cbd5e1;
+}
+
 .dark .gui-v2-window-content {
     background: #0f172a;
 }
@@ -718,6 +788,15 @@
 
 .dark .gui-v2-system-icon {
     color: #cbd5e1;
+}
+
+.dark .gui-v2-window-menu,
+.dark .gui-v2-system-action {
+    color: #cbd5e1;
+}
+
+.dark .gui-v2-system-action:hover {
+    background: rgb(255 255 255 / 8%);
 }
 
 .dark .gui-v2-lang-button:hover {
