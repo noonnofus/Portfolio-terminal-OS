@@ -6,7 +6,7 @@ import { GuiV2StoreProvider } from "@/features/gui-v2/store/GuiV2StoreProvider";
 
 export function GuiV2Entry() {
     return (
-        <GuiV2StoreProvider urlBasePath="/gui-v2">
+        <GuiV2StoreProvider urlBasePath="/gui">
             <GuiNavigationProvider>
                 <GuiShellV2 />
             </GuiNavigationProvider>
