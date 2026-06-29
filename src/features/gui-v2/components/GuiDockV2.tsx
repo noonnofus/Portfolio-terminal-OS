@@ -26,6 +26,7 @@ export function GuiDockV2() {
         state.focus.mode === "windows" ? state.focus.activeWindowId : null,
     );
     const windows = useGuiV2Store((state) => state.windows);
+    const dockAutoHide = useGuiV2Store((state) => state.dockAutoHide);
     const { navigate, navigationBusy } = useGuiNavigation();
 
     // Hover state for tooltips
@@ -41,7 +42,11 @@ export function GuiDockV2() {
     };
 
     return (
-        <nav aria-label="Applications" className="gui-v2-dock">
+        <nav
+            aria-label="Applications"
+            className="gui-v2-dock"
+            data-auto-hide={dockAutoHide}
+        >
             {dockAppIds.map((appId) => {
                 const app = appCatalog[appId];
                 const isOpen = windows.some((w) => w.appId === appId);

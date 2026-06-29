@@ -11,6 +11,7 @@ export default function SettingsAppV2({
     const dispatch = useGuiV2Store((state) => state.dispatch);
     const { navigate, navigationBusy } = useGuiNavigation();
     const wallpaper = useGuiV2Store((state) => state.wallpaper);
+    const dockAutoHide = useGuiV2Store((state) => state.dockAutoHide);
     const { colorMode, setColorMode } = useColorMode();
 
     const t = {
@@ -24,6 +25,10 @@ export default function SettingsAppV2({
             themeDesc: "시스템 테마를 다크 모드 또는 라이트 모드로 전환합니다.",
             themeLight: "라이트 모드",
             themeDark: "다크 모드",
+            dockLabel: "Dock 자동 숨김",
+            dockDesc: "마우스가 화면 하단에 접근할 때 Dock을 표시합니다.",
+            dockAuto: "자동 숨김",
+            dockAlways: "항상 표시",
             wallpaperLabel: "배경화면 선택",
             wallpaperDesc: "데스크톱 배경 무드를 선택하세요.",
             wallpapers: {
@@ -43,6 +48,10 @@ export default function SettingsAppV2({
             themeDesc: "Toggle system theme between light and dark mode.",
             themeLight: "Light Mode",
             themeDark: "Dark Mode",
+            dockLabel: "Automatically hide Dock",
+            dockDesc: "Reveal the Dock when the pointer approaches the bottom edge.",
+            dockAuto: "Auto hide",
+            dockAlways: "Always show",
             wallpaperLabel: "Choose Wallpaper",
             wallpaperDesc: "Choose a mood for your desktop background.",
             wallpapers: {
@@ -146,6 +155,50 @@ export default function SettingsAppV2({
                                 }`}
                             >
                                 {t.themeDark}
+                            </button>
+                        </div>
+                    </div>
+                    <div className="gui-v2-settings-panel flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-xl gap-4">
+                        <div>
+                            <p className="font-semibold text-sm">{t.dockLabel}</p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                {t.dockDesc}
+                            </p>
+                        </div>
+                        <div className="flex gap-2">
+                            <button
+                                type="button"
+                                aria-pressed={dockAutoHide}
+                                onClick={() =>
+                                    dispatch({
+                                        type: "change-dock-auto-hide",
+                                        enabled: true,
+                                    })
+                                }
+                                className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+                                    dockAutoHide
+                                        ? "bg-blue-600 text-white shadow-sm"
+                                        : "bg-slate-200/70 hover:bg-slate-300/80 dark:bg-slate-800 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300"
+                                }`}
+                            >
+                                {t.dockAuto}
+                            </button>
+                            <button
+                                type="button"
+                                aria-pressed={!dockAutoHide}
+                                onClick={() =>
+                                    dispatch({
+                                        type: "change-dock-auto-hide",
+                                        enabled: false,
+                                    })
+                                }
+                                className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+                                    !dockAutoHide
+                                        ? "bg-blue-600 text-white shadow-sm"
+                                        : "bg-slate-200/70 hover:bg-slate-300/80 dark:bg-slate-800 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300"
+                                }`}
+                            >
+                                {t.dockAlways}
                             </button>
                         </div>
                     </div>

@@ -58,6 +58,7 @@ export type StoreCommand =
     | { type: "show-desktop" }
     | { type: "change-language"; language: Language }
     | { type: "change-wallpaper"; wallpaper: "aurora" | "sunset" | "forest" | "dark" }
+    | { type: "change-dock-auto-hide"; enabled: boolean }
     | { type: "apply-url-state"; view: GuiUrlState }
     | { type: "advance-entry-sequence" };
 
