@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import Image from "next/image";
 import { appCatalog } from "@/features/gui-v2/apps/appCatalog";
 import {
     createOpenAppCommand,
@@ -9,6 +8,7 @@ import {
 } from "@/features/gui-v2/apps/appTypes";
 import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
 import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
+import { GuiAppIcon } from "@/features/gui-v2/components/GuiAppIcon";
 
 const shortcutIds = [
     "projects",
@@ -110,18 +110,11 @@ function DraggableShortcut({
                 transform: offset
                     ? `translate(${offset.x}px, ${offset.y}px)`
                     : undefined,
-                cursor: isDragging ? "grabbing" : "grab",
+                cursor: isDragging ? "grabbing" : "pointer",
                 touchAction: "none",
             }}
         >
-            <Image
-                src={app.icon}
-                alt=""
-                width={48}
-                height={48}
-                className="h-12 w-12 object-contain pointer-events-none"
-                draggable={false}
-            />
+            <GuiAppIcon appId={appId} size="desktop" />
             <span className="pointer-events-none">
                 {app.titles[language]}
             </span>

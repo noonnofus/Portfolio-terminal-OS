@@ -811,3 +811,589 @@
 .dark .gui-v2-system-divider {
     background: rgba(255, 255, 255, 0.15);
 }
+
+/* ── 2026 macOS-inspired adaptive material system ───────── */
+
+.gui-v2-shell {
+    --gui-accent: #0a84ff;
+    --gui-text: #182230;
+    --gui-text-secondary: #5d6878;
+    --gui-border: rgb(255 255 255 / 58%);
+    --gui-window: rgb(250 252 255 / 88%);
+    --gui-window-solid: #f7f9fc;
+    --gui-titlebar: rgb(245 248 252 / 76%);
+    --gui-glass: rgb(249 251 255 / 66%);
+    --gui-glass-strong: rgb(248 250 254 / 82%);
+    --gui-control: rgb(255 255 255 / 52%);
+    --gui-control-hover: rgb(255 255 255 / 82%);
+    --gui-shadow: 0 28px 80px rgb(31 43 68 / 22%);
+    isolation: isolate;
+    color: var(--gui-text);
+    background-color: #dfe7f2;
+}
+
+.gui-v2-shell[data-theme="dark"] {
+    --gui-accent: #5aaeff;
+    --gui-text: #f4f7fb;
+    --gui-text-secondary: #aeb8c8;
+    --gui-border: rgb(255 255 255 / 14%);
+    --gui-window: rgb(25 29 38 / 88%);
+    --gui-window-solid: #191d26;
+    --gui-titlebar: rgb(35 40 51 / 76%);
+    --gui-glass: rgb(22 27 36 / 62%);
+    --gui-glass-strong: rgb(27 32 42 / 82%);
+    --gui-control: rgb(255 255 255 / 8%);
+    --gui-control-hover: rgb(255 255 255 / 15%);
+    --gui-shadow: 0 34px 90px rgb(0 0 0 / 48%);
+    background-color: #11141b;
+}
+
+.gui-v2-shell[data-theme="light"][data-wallpaper="aurora"] {
+    background:
+        radial-gradient(circle at 18% 18%, #d9f1ff 0, transparent 34%),
+        radial-gradient(circle at 78% 24%, #e5ddff 0, transparent 32%),
+        linear-gradient(145deg, #f8fbff 0%, #dce8f5 54%, #cad8e9 100%);
+}
+
+.gui-v2-shell[data-theme="light"][data-wallpaper="sunset"] {
+    background:
+        radial-gradient(circle at 70% 18%, #ffd8c4 0, transparent 34%),
+        radial-gradient(circle at 18% 72%, #e7d8ff 0, transparent 38%),
+        linear-gradient(145deg, #fff7f0 0%, #efdce8 52%, #d8d9f1 100%);
+}
+
+.gui-v2-shell[data-theme="light"][data-wallpaper="forest"] {
+    background:
+        radial-gradient(circle at 26% 22%, #d7f7ea 0, transparent 36%),
+        radial-gradient(circle at 78% 74%, #c9e8ec 0, transparent 34%),
+        linear-gradient(145deg, #f2fbf7 0%, #d7ebe2 52%, #bfd8d4 100%);
+}
+
+.gui-v2-shell[data-theme="light"][data-wallpaper="dark"] {
+    background:
+        radial-gradient(circle at 72% 22%, #e1e4ed 0, transparent 36%),
+        linear-gradient(145deg, #f8f9fc 0%, #d9dde7 52%, #c5cad5 100%);
+}
+
+.gui-v2-shell[data-theme="dark"][data-wallpaper="aurora"] {
+    background:
+        radial-gradient(circle at 18% 20%, #17395a 0, transparent 38%),
+        radial-gradient(circle at 78% 18%, #322b59 0, transparent 34%),
+        linear-gradient(145deg, #121824 0%, #151b28 48%, #0d1119 100%);
+}
+
+.gui-v2-shell[data-theme="dark"][data-wallpaper="sunset"] {
+    background:
+        radial-gradient(circle at 72% 18%, #633626 0, transparent 36%),
+        radial-gradient(circle at 20% 72%, #38264f 0, transparent 38%),
+        linear-gradient(145deg, #21151a 0%, #211827 48%, #101219 100%);
+}
+
+.gui-v2-shell[data-theme="dark"][data-wallpaper="forest"] {
+    background:
+        radial-gradient(circle at 24% 20%, #174738 0, transparent 38%),
+        radial-gradient(circle at 78% 74%, #153747 0, transparent 34%),
+        linear-gradient(145deg, #101d19 0%, #10211f 48%, #0c1315 100%);
+}
+
+.gui-v2-shell[data-theme="dark"][data-wallpaper="dark"] {
+    background:
+        radial-gradient(circle at 72% 20%, #2b3040 0, transparent 34%),
+        linear-gradient(145deg, #151820 0%, #0f1218 58%, #090b10 100%);
+}
+
+.gui-v2-wallpaper-art {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    filter: saturate(112%);
+}
+
+.gui-v2-wallpaper-art span {
+    position: absolute;
+    width: min(48vw, 700px);
+    aspect-ratio: 1;
+    border-radius: 42% 58% 62% 38% / 44% 42% 58% 56%;
+    background: linear-gradient(
+        145deg,
+        rgb(255 255 255 / 34%),
+        rgb(255 255 255 / 3%)
+    );
+    opacity: 0.72;
+    filter: blur(1px);
+    transform: rotate(-18deg);
+}
+
+.gui-v2-wallpaper-art span:nth-child(1) {
+    top: -24%;
+    right: -8%;
+}
+
+.gui-v2-wallpaper-art span:nth-child(2) {
+    bottom: -38%;
+    left: 8%;
+    width: min(58vw, 820px);
+    transform: rotate(24deg);
+}
+
+.gui-v2-wallpaper-art span:nth-child(3) {
+    top: 34%;
+    left: 42%;
+    width: min(24vw, 340px);
+    opacity: 0.38;
+}
+
+.gui-v2-shell[data-theme="dark"] .gui-v2-wallpaper-art span {
+    background: linear-gradient(
+        145deg,
+        rgb(255 255 255 / 8%),
+        rgb(255 255 255 / 1%)
+    );
+}
+
+.gui-v2-shell button:not(:disabled),
+.gui-v2-shell a[href],
+.gui-v2-shell select,
+.gui-v2-project-card {
+    cursor: pointer;
+}
+
+.gui-v2-system-bar {
+    border-bottom-color: var(--gui-border);
+    background: var(--gui-glass);
+    color: var(--gui-text);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 22%);
+    backdrop-filter: blur(24px) saturate(145%);
+}
+
+.gui-v2-system-identity {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 8px;
+}
+
+.gui-v2-portfolio-mark {
+    display: grid;
+    width: 24px;
+    height: 24px;
+    flex: 0 0 auto;
+    place-items: center;
+    border: 1px solid rgb(255 255 255 / 54%);
+    border-radius: 8px;
+    background: linear-gradient(145deg, #70b7ff, #5575ff 55%, #7760ff);
+    box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 58%),
+        0 4px 12px rgb(46 86 180 / 26%);
+    color: white;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.gui-v2-portfolio-brand {
+    display: grid;
+    min-width: 0;
+    line-height: 1;
+}
+
+.gui-v2-portfolio-brand strong {
+    overflow: hidden;
+    color: var(--gui-text);
+    font-size: 11px;
+    font-weight: 650;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gui-v2-portfolio-brand span {
+    margin-top: 2px;
+    color: var(--gui-text-secondary);
+    font-size: 8px;
+    letter-spacing: 0.02em;
+}
+
+.gui-v2-viewer-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid var(--gui-border);
+    border-radius: 999px;
+    background: var(--gui-control);
+    padding: 2px 7px 2px 3px;
+    color: var(--gui-text-secondary);
+    font-size: 10px;
+}
+
+.gui-v2-viewer-avatar {
+    display: grid;
+    width: 18px;
+    height: 18px;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #8e9aac, #566275);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.gui-v2-window-menu,
+.gui-v2-system-action,
+.gui-v2-lang-button {
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--gui-text-secondary);
+}
+
+.gui-v2-window-menu:hover,
+.gui-v2-system-action:hover,
+.gui-v2-lang-button:hover {
+    border-color: var(--gui-border);
+    background: var(--gui-control-hover);
+}
+
+.gui-v2-system-action {
+    display: grid;
+    width: 24px;
+    height: 24px;
+    place-items: center;
+    padding: 0;
+}
+
+.gui-v2-system-action svg {
+    width: 13px;
+    height: 13px;
+}
+
+.gui-v2-lang-button[aria-pressed="true"] {
+    border-color: var(--gui-border);
+    background: var(--gui-glass-strong);
+    color: var(--gui-text);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 32%);
+}
+
+.gui-v2-system-clock,
+.gui-v2-system-icon,
+.gui-v2-system-name {
+    color: var(--gui-text-secondary);
+}
+
+.gui-v2-system-divider {
+    background: color-mix(in srgb, var(--gui-text-secondary) 24%, transparent);
+}
+
+.gui-v2-window {
+    border-color: var(--gui-border);
+    border-radius: 18px;
+    background: var(--gui-window);
+    box-shadow: var(--gui-shadow);
+    backdrop-filter: blur(30px) saturate(132%);
+}
+
+.gui-v2-window[data-active="false"] {
+    filter: saturate(0.78) brightness(0.96);
+    box-shadow: 0 20px 58px rgb(22 31 48 / 16%);
+}
+
+.gui-v2-title-bar {
+    border-bottom-color: color-mix(
+        in srgb,
+        var(--gui-text-secondary) 13%,
+        transparent
+    );
+    background: var(--gui-titlebar);
+    backdrop-filter: blur(24px) saturate(145%);
+}
+
+.gui-v2-title-text,
+.gui-v2-position-select {
+    color: var(--gui-text-secondary);
+}
+
+.gui-v2-position-select {
+    background: var(--gui-control);
+}
+
+.gui-v2-window-content,
+.gui-v2-projects,
+.gui-v2-resume,
+.gui-v2-legacy-surface,
+.gui-v2-shell[data-theme="dark"] .gui-v2-legacy-surface {
+    background: var(--gui-window-solid);
+    color: var(--gui-text);
+}
+
+.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .bg-white,
+.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .bg-slate-50 {
+    background-color: #202631 !important;
+}
+
+.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-black,
+.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-pen-gray-800,
+.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-slate-800 {
+    color: #f4f7fb !important;
+}
+
+.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-pen-gray-700,
+.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-pen-gray-600,
+.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-slate-700,
+.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-slate-600,
+.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-slate-500 {
+    color: #b7c1d0 !important;
+}
+
+.gui-v2-project-card {
+    border-color: color-mix(
+        in srgb,
+        var(--gui-text-secondary) 13%,
+        transparent
+    );
+    border-radius: 16px;
+    background: var(--gui-control);
+    color: var(--gui-text);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 32%);
+}
+
+.gui-v2-project-card:hover {
+    border-color: color-mix(in srgb, var(--gui-accent) 42%, transparent);
+    background: var(--gui-control-hover);
+    box-shadow: 0 16px 36px rgb(20 42 76 / 12%);
+}
+
+.gui-v2-project-card strong,
+.gui-v2-projects-header h3,
+.gui-v2-resume h3,
+.gui-v2-resume h4,
+.gui-v2-resume h5,
+.gui-v2-resume dt {
+    color: var(--gui-text);
+}
+
+.gui-v2-project-card span,
+.gui-v2-projects-header p,
+.gui-v2-resume p,
+.gui-v2-resume dd {
+    color: var(--gui-text-secondary);
+}
+
+.gui-v2-dock {
+    border-color: var(--gui-border);
+    border-radius: 24px;
+    background: var(--gui-glass);
+    box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 42%),
+        0 18px 46px rgb(17 30 54 / 24%);
+    backdrop-filter: blur(28px) saturate(155%);
+}
+
+.gui-v2-dock-button {
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+.gui-v2-dock-button:hover,
+.gui-v2-dock-button:focus-visible,
+.gui-v2-dock-button[aria-pressed="true"] {
+    background: var(--gui-control-hover);
+}
+
+.gui-v2-app-icon {
+    position: relative;
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid rgb(255 255 255 / 48%);
+    border-radius: 10px;
+    background: linear-gradient(145deg, #8e9aac, #566275);
+    box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 58%),
+        0 7px 14px rgb(20 32 58 / 24%);
+    color: white;
+}
+
+.gui-v2-app-icon::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        155deg,
+        rgb(255 255 255 / 42%),
+        transparent 46%
+    );
+    content: "";
+    pointer-events: none;
+}
+
+.gui-v2-app-icon[data-size="desktop"] {
+    width: 54px;
+    height: 54px;
+    border-radius: 15px;
+}
+
+.gui-v2-app-icon[data-size="project"] {
+    width: 70px;
+    height: 70px;
+    border-radius: 19px;
+}
+
+.gui-v2-app-icon[data-app-icon="about"] {
+    background: linear-gradient(145deg, #65c8ff, #3478f6 58%, #5056d8);
+}
+
+.gui-v2-app-icon[data-app-icon="projects"] {
+    background: linear-gradient(145deg, #ffd976, #ff9f0a 58%, #f05b35);
+}
+
+.gui-v2-app-icon[data-app-icon="resume"] {
+    background: linear-gradient(145deg, #78dfb1, #30b780 58%, #168f72);
+}
+
+.gui-v2-app-icon[data-app-icon="terminal"] {
+    background: linear-gradient(145deg, #59677b, #202734 58%, #10141b);
+}
+
+.gui-v2-app-icon[data-app-icon="contact"] {
+    background: linear-gradient(145deg, #ff91b5, #ff375f 58%, #d91c43);
+}
+
+.gui-v2-app-icon[data-app-icon="settings"] {
+    background: linear-gradient(145deg, #b4bdc9, #778292 58%, #4d5664);
+}
+
+.gui-v2-app-icon-image {
+    position: relative;
+    z-index: 1;
+    width: 72%;
+    height: 72%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 3px rgb(0 0 0 / 18%));
+}
+
+.gui-v2-shortcut {
+    cursor: pointer;
+    color: var(--gui-text);
+    text-shadow: 0 1px 4px rgb(255 255 255 / 46%);
+}
+
+.gui-v2-shell[data-theme="dark"] .gui-v2-shortcut {
+    text-shadow: 0 1px 4px rgb(0 0 0 / 72%);
+}
+
+.gui-v2-shortcut:hover,
+.gui-v2-shortcut:focus-visible {
+    background: var(--gui-control);
+}
+
+.gui-v2-background-type {
+    color: var(--gui-text);
+}
+
+@media (width < 1024px) {
+    .gui-v2-window {
+        width: 90vw !important;
+        height: calc(100dvh - 144px) !important;
+        max-width: none !important;
+        max-height: none !important;
+    }
+}
+
+@media (width < 768px) {
+    .gui-v2-window {
+        width: auto !important;
+        height: auto !important;
+        max-width: none !important;
+        max-height: none !important;
+    }
+
+    .gui-v2-portfolio-brand span,
+    .gui-v2-viewer-chip > span:last-child {
+        display: none;
+    }
+
+    .gui-v2-viewer-chip {
+        padding-right: 3px;
+    }
+
+    .gui-v2-system-controls {
+        gap: 2px;
+    }
+
+    .gui-v2-wallpaper-art span {
+        opacity: 0.38;
+    }
+}
+
+.gui-v2-shell[data-theme] .gui-v2-system-bar {
+    border-bottom-color: var(--gui-border);
+    background: var(--gui-glass);
+    color: var(--gui-text);
+}
+
+.gui-v2-shell[data-theme] .gui-v2-window {
+    border-color: var(--gui-border);
+    background: var(--gui-window);
+    box-shadow: var(--gui-shadow);
+}
+
+.gui-v2-shell[data-theme] .gui-v2-title-bar {
+    border-bottom-color: color-mix(
+        in srgb,
+        var(--gui-text-secondary) 13%,
+        transparent
+    );
+    background: var(--gui-titlebar);
+}
+
+.gui-v2-shell[data-theme] .gui-v2-title-text,
+.gui-v2-shell[data-theme] .gui-v2-position-select,
+.gui-v2-shell[data-theme] .gui-v2-system-clock,
+.gui-v2-shell[data-theme] .gui-v2-system-icon,
+.gui-v2-shell[data-theme] .gui-v2-window-menu,
+.gui-v2-shell[data-theme] .gui-v2-system-action {
+    color: var(--gui-text-secondary);
+}
+
+.gui-v2-shell[data-theme] .gui-v2-window-content,
+.gui-v2-shell[data-theme] .gui-v2-projects,
+.gui-v2-shell[data-theme] .gui-v2-resume,
+.gui-v2-shell[data-theme] .gui-v2-legacy-surface,
+.gui-v2-shell[data-theme] .gui-v2-settings-surface {
+    background: var(--gui-window-solid);
+    color: var(--gui-text);
+}
+
+.gui-v2-shell[data-theme] .gui-v2-project-card {
+    border-color: color-mix(
+        in srgb,
+        var(--gui-text-secondary) 13%,
+        transparent
+    );
+    background: var(--gui-control);
+    color: var(--gui-text);
+}
+
+.gui-v2-shell[data-theme] .gui-v2-project-icon {
+    background: transparent;
+}
+
+.gui-v2-shell[data-theme] .gui-v2-dock {
+    border-color: var(--gui-border);
+    background: var(--gui-glass);
+    box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 42%),
+        0 18px 46px rgb(17 30 54 / 24%);
+}
+
+.gui-v2-shell[data-theme] .gui-v2-dock-button:hover,
+.gui-v2-shell[data-theme] .gui-v2-dock-button:focus-visible,
+.gui-v2-shell[data-theme] .gui-v2-dock-button[aria-pressed="true"] {
+    background: var(--gui-control-hover);
+}
+
+.gui-v2-shell[data-theme] .gui-v2-lang-button[aria-pressed="true"] {
+    border-color: var(--gui-border);
+    background: var(--gui-glass-strong);
+    color: var(--gui-text);
+}

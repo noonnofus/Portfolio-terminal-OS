@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { appCatalog } from "@/features/gui-v2/apps/appCatalog";
 import {
@@ -10,6 +9,7 @@ import {
 } from "@/features/gui-v2/apps/appTypes";
 import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
 import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
+import { GuiAppIcon } from "@/features/gui-v2/components/GuiAppIcon";
 
 const dockAppIds = [
     "about",
@@ -106,13 +106,7 @@ export function GuiDockV2() {
                                 }}
                                 className="flex items-center justify-center w-full h-full"
                             >
-                                <Image
-                                    src={app.icon}
-                                    alt=""
-                                    width={34}
-                                    height={34}
-                                    className="h-8 w-8 object-contain"
-                                />
+                                <GuiAppIcon appId={appId} />
                             </motion.div>
 
                             <span className="sr-only">

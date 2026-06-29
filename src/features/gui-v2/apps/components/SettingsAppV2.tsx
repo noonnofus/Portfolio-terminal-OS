@@ -55,7 +55,7 @@ export default function SettingsAppV2({
     }[language];
 
     return (
-        <div className="w-full h-full p-6 text-slate-800 dark:text-slate-100 bg-white dark:bg-[#1e1e24] select-none transition-colors duration-200">
+        <div className="gui-v2-settings-surface min-h-full w-full select-none p-6 transition-colors duration-200">
             <h3 className="text-xl font-bold border-b pb-3 mb-6 border-slate-200 dark:border-slate-700">
                 {t.title}
             </h3>

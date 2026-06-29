@@ -1,10 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { PanelsTopLeft, X } from "lucide-react";
 import { appCatalog } from "@/features/gui-v2/apps/appCatalog";
 import { createOpenAppCommand } from "@/features/gui-v2/apps/appTypes";
 import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
 import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
+
+export type GuiViewer =
+    | { kind: "guest" }
+    | { kind: "authenticated"; displayName: string };
 
 /* ── Icons (dineshd.dev style — Lucide-like stroked SVGs) ─── */
 
@@ -86,7 +91,11 @@ function SystemClock() {
 
 /* ── System bar ───────────────────────────────────────────── */
 
-export function GuiSystemBarV2() {
+export function GuiSystemBarV2({
+    viewer,
+}: {
+    viewer: GuiViewer;
+}) {
     const language = useGuiV2Store((state) => state.language);
     const windows = useGuiV2Store((state) => state.windows);
     const focus = useGuiV2Store((state) => state.focus);
@@ -99,6 +108,12 @@ export function GuiSystemBarV2() {
         );
     const activeWindowId =
         focus.mode === "windows" ? focus.activeWindowId : "";
+    const viewerName =
+        viewer.kind === "authenticated"
+            ? viewer.displayName
+            : language === "ko"
+              ? "게스트"
+              : "Guest";
 
     useEffect(() => {
         const handleWindowCycle = (event: KeyboardEvent) => {
@@ -142,7 +157,27 @@ export function GuiSystemBarV2() {
 
     return (
         <header className="gui-v2-system-bar">
-            <strong className="gui-v2-system-name">Hyunho Kim</strong>
+            <div className="gui-v2-system-identity">
+                <span
+                    className="gui-v2-portfolio-mark"
+                    aria-hidden="true"
+                >
+                    H
+                </span>
+                <div className="gui-v2-portfolio-brand">
+                    <strong>Hyunho&apos;s Portfolio</strong>
+                    <span>Full-stack developer</span>
+                </div>
+                <span className="gui-v2-viewer-chip">
+                    <span
+                        className="gui-v2-viewer-avatar"
+                        aria-hidden="true"
+                    >
+                        {viewerName.slice(0, 1).toUpperCase()}
+                    </span>
+                    <span>{viewerName}</span>
+                </span>
+            </div>
 
             <nav
                 aria-label="System controls"
@@ -208,7 +243,7 @@ export function GuiSystemBarV2() {
                     onClick={() => navigate({ type: "show-desktop" })}
                     className="gui-v2-system-action"
                 >
-                    Desktop
+                    <PanelsTopLeft aria-hidden="true" />
                 </button>
 
                 <button
@@ -227,7 +262,7 @@ export function GuiSystemBarV2() {
                     }}
                     className="gui-v2-system-action"
                 >
-                    Close
+                    <X aria-hidden="true" />
                 </button>
 
                 <div

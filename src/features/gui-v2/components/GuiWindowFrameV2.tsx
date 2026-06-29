@@ -120,7 +120,8 @@ export function GuiWindowFrameV2({
     const { navigate, navigationBusy } = useGuiNavigation();
     const shouldReduceMotion = useReducedMotion();
     const appId: GuiAppId = win.appId;
-    const title = appCatalog[appId].titles[language];
+    const app = appCatalog[appId];
+    const title = app.titles[language];
     const headingId = `gui-v2-window-${appId.replace(":", "-")}`;
     const windowVisibility = win.minimized
         ? "minimized"
@@ -216,8 +217,14 @@ export function GuiWindowFrameV2({
             }
 
             setMaximized(false);
-            const width = Math.min(760, globalThis.innerWidth * 0.72);
-            const height = Math.min(620, globalThis.innerHeight * 0.72);
+            const width = Math.min(
+                app.window.width,
+                globalThis.innerWidth - 48,
+            );
+            const height = Math.min(
+                app.window.height,
+                globalThis.innerHeight - 116,
+            );
             const top = Math.max(
                 44,
                 (globalThis.innerHeight - 80 - height) / 2,
@@ -242,7 +249,7 @@ export function GuiWindowFrameV2({
                 top,
             });
         },
-        [],
+        [app.window.height, app.window.width],
     );
 
     useEffect(() => {
@@ -311,6 +318,10 @@ export function GuiWindowFrameV2({
         : {
               left: `${currentLeft}px`,
               top: `${currentTop}px`,
+              width: `${app.window.width}px`,
+              height: `${app.window.height}px`,
+              maxWidth: "calc(100vw - 48px)",
+              maxHeight: "calc(100dvh - 116px)",
               zIndex: active ? 40 : 10 + index,
           };
 
@@ -333,10 +344,10 @@ export function GuiWindowFrameV2({
         (dockIndex !== -1 ? dockIndex - 2.5 : 0) * 54;
     const windowWidth = maximized
         ? screenWidth
-        : Math.min(760, screenWidth * 0.72);
+        : Math.min(app.window.width, screenWidth - 48);
     const windowHeight = maximized
         ? screenHeight - 36
-        : Math.min(620, screenHeight * 0.72);
+        : Math.min(app.window.height, screenHeight - 116);
     const minimizeX = shouldReduceMotion
         ? 0
         : targetX - (currentLeft + windowWidth / 2);
@@ -354,6 +365,7 @@ export function GuiWindowFrameV2({
                     className={`gui-v2-window${maximized ? " gui-v2-window-maximized" : ""}`}
                     data-active={active}
                     data-window-id={appId}
+                    data-app-type={appId.startsWith("project:") ? "project" : appId}
                     data-window-visibility={windowVisibility}
                     onPointerMove={handlePointerMove}
                     onPointerUp={handlePointerUp}

@@ -100,6 +100,10 @@ export type GuiAppCatalogEntry<K extends GuiAppId> = {
     titles: Record<Language, string>;
     icon: PublicAssetPath;
     order: number;
+    window: {
+        width: number;
+        height: number;
+    };
 };
 
 export type GuiAppCatalog = {
