@@ -269,8 +269,8 @@ export function GuiWindowFrameV2({
               left: "0px",
               top: "36px",
               width: "100vw",
-              height: "calc(100dvh - 36px - 80px)",
-              zIndex: active ? 40 : 10 + index,
+              height: "calc(100dvh - 36px)",
+              zIndex: active ? 80 : 40 + index,
               borderRadius: "0px",
           }
         : {
@@ -280,7 +280,7 @@ export function GuiWindowFrameV2({
               height: `${app.window.height}px`,
               maxWidth: "calc(100vw - 48px)",
               maxHeight: "calc(100dvh - 116px)",
-              zIndex: active ? 40 : 10 + index,
+              zIndex: active ? 80 : 40 + index,
           };
 
     // Calculate dynamic minimize transition offsets to the specific Dock icon
