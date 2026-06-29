@@ -17,6 +17,10 @@ describe("GUI V2 app boundaries", () => {
     it("keeps catalog and client loader keys identical", () => {
         expect(appLoaderRegistryKeys).toEqual(appCatalogKeys);
         expect(Object.keys(appCatalog)).toHaveLength(13);
+        expect(appCatalog.contact.window).toEqual({
+            width: 620,
+            height: 390,
+        });
     });
 
     it("canonicalizes supported GUI URLs", () => {

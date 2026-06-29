@@ -10,7 +10,7 @@ export default function AppContact({}: AppContactProps) {
     const { t } = useTranslation(["Contact", "common"]);
     return (
         <div
-            className="w-full h-[95%] overflow-scroll bg-white rounded-b-pen-lg text-black"
+            className="gui-v2-legacy-surface min-h-full w-full overflow-y-auto"
         >
             <div className="my-8 mx-4 md:mx-36">
                 <div className="px-6 py-4">
@@ -18,7 +18,7 @@ export default function AppContact({}: AppContactProps) {
                         {t("title")}
                     </h2>
 
-                    <p className="mt-2 mb-4 text-md text-pen-gray-700">
+                    <p className="mt-2 mb-4 text-md text-pen-gray-700 dark:text-slate-300">
                         {t("description")}
                     </p>
 
@@ -27,7 +27,7 @@ export default function AppContact({}: AppContactProps) {
                             <Mail className="w-5 h-5" />
                             <a
                                 href="mailto:kevinvancouver02@gmail.com"
-                                className="underline flex items-center gap-1"
+                                className="flex cursor-pointer items-center gap-1 underline underline-offset-4"
                             >
                                 kevinvancouver02@gmail.com <ExternalLink />
                             </a>
@@ -37,7 +37,7 @@ export default function AppContact({}: AppContactProps) {
                             <GitBranch className="w-5 h-5" />
                             <a
                                 href="https://github.com/noonnofus"
-                                className="underline flex items-center gap-1"
+                                className="flex cursor-pointer items-center gap-1 underline underline-offset-4"
                             >
                                 github.com/noonnofus <ExternalLink />
                             </a>
@@ -47,7 +47,7 @@ export default function AppContact({}: AppContactProps) {
                             <Contact className="w-5 h-5" />
                             <a
                                 href="https://www.linkedin.com/in/kevin-hyun-ho-kim/"
-                                className="underline flex items-center gap-1"
+                                className="flex cursor-pointer items-center gap-1 underline underline-offset-4"
                             >
                                 linkedin.com/in/kevin-hyun-ho-kim{" "}
                                 <ExternalLink />

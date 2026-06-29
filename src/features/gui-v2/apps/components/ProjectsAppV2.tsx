@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { createOpenAppCommand } from "@/features/gui-v2/apps/appTypes";
+import { GuiAppIcon } from "@/features/gui-v2/components/GuiAppIcon";
 import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
 import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
 import { orderedProjectSummaries } from "@/shared/content/portfolio/projectSummaries";
@@ -55,13 +55,9 @@ export default function ProjectsAppV2() {
                                 }`}
                             >
                                 <span className="gui-v2-project-icon">
-                                    <Image
-                                        src={project.icon}
-                                        alt=""
-                                        width={64}
-                                        height={64}
-                                        sizes="64px"
-                                        className="h-16 w-16 object-contain"
+                                    <GuiAppIcon
+                                        appId={appId}
+                                        size="project"
                                     />
                                 </span>
                                 <span className="min-w-0 flex-1">

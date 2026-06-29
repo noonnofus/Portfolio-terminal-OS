@@ -44,7 +44,7 @@ interface AppAboutProps {
 export default function AppAbout({}: AppAboutProps) {
     const { t } = useTranslation(['About', 'common']);
     return (
-        <div className="w-full h-[95%] overflow-y-auto bg-white rounded-b-pen-lg text-black">
+        <div className="gui-v2-legacy-surface min-h-full w-full overflow-y-auto">
             <div className="my-8 mx-4 md:mx-36">
                 <div className="mb-8">
                     <h2 className="font-bold text-3xl text-pen-gray-800">

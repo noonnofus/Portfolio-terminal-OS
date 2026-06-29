@@ -351,6 +351,10 @@ test.describe("GUI V2 preview", () => {
             .getByRole("button", { name: "다크 모드" })
             .click();
         await expect(page.locator("html")).toHaveClass(/dark/);
+        await expect(page.locator(".gui-v2-shell")).toHaveAttribute(
+            "data-theme",
+            "dark",
+        );
 
         await page
             .getByRole("dialog", { name: "설정" })
@@ -359,6 +363,84 @@ test.describe("GUI V2 preview", () => {
         await expect(page.locator(".gui-v2-shell")).toHaveAttribute(
             "data-wallpaper",
             "forest",
+        );
+
+        await page
+            .getByRole("dialog", { name: "설정" })
+            .getByRole("button", { name: "라이트 모드" })
+            .click();
+        await expect(page.locator("html")).toHaveClass(/light/);
+        await expect(page.locator(".gui-v2-shell")).toHaveAttribute(
+            "data-theme",
+            "light",
+        );
+    });
+
+    test("uses adaptive app surfaces, content-sized windows, and pointer affordances", async ({
+        page,
+    }) => {
+        await page.goto("/gui");
+
+        await expect(
+            page.locator(".gui-v2-portfolio-brand strong"),
+        ).toHaveText("Hyunho's Portfolio");
+        await expect(page.locator(".gui-v2-viewer-chip")).toContainText(
+            "게스트",
+        );
+
+        const dockButtons = page.locator(".gui-v2-dock-button");
+        await expect(dockButtons.first()).toHaveCSS("cursor", "pointer");
+        await expect(page.locator(".gui-v2-shortcut").first()).toHaveCSS(
+            "cursor",
+            "pointer",
+        );
+
+        const aboutWindow = page.locator('[data-window-id="about"]');
+        const aboutBox = await aboutWindow.boundingBox();
+
+        await page
+            .getByRole("navigation", { name: "Applications" })
+            .getByRole("button", { name: "연락처" })
+            .click();
+
+        const contactWindow = page.locator(
+            '[data-window-id="contact"]',
+        );
+        const contactSurface = contactWindow.locator(
+            ".gui-v2-legacy-surface",
+        );
+        const contactBox = await contactWindow.boundingBox();
+
+        expect(contactBox?.width).toBe(620);
+        expect(contactBox?.height).toBe(390);
+        expect(contactBox?.height ?? 0).toBeLessThan(
+            aboutBox?.height ?? 0,
+        );
+        await expect(contactSurface).toHaveCSS(
+            "background-color",
+            "rgb(247, 249, 252)",
+        );
+
+        await page
+            .getByRole("navigation", { name: "Applications" })
+            .getByRole("button", { name: "설정" })
+            .click();
+        await page
+            .getByRole("dialog", { name: "설정" })
+            .getByRole("button", { name: "다크 모드" })
+            .click();
+        await page
+            .getByRole("navigation", { name: "Applications" })
+            .getByRole("button", { name: "연락처" })
+            .click();
+
+        await expect(contactSurface).toHaveCSS(
+            "background-color",
+            "rgb(25, 29, 38)",
+        );
+        await expect(contactSurface).toHaveCSS(
+            "color",
+            "rgb(244, 247, 251)",
         );
     });
 
