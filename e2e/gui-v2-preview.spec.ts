@@ -1,6 +1,26 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("GUI V2 preview", () => {
+    test("hydrates a persisted dark theme without a server mismatch", async ({ page }) => {
+        const hydrationErrors: string[] = [];
+        page.on("console", (message) => {
+            if (
+                message.type() === "error" &&
+                /hydration|did not match|server rendered/i.test(message.text())
+            ) {
+                hydrationErrors.push(message.text());
+            }
+        });
+        await page.addInitScript(() => localStorage.setItem("theme", "dark"));
+
+        await page.goto("/gui");
+        await expect(page.locator(".gui-v2-shell")).toHaveAttribute(
+            "data-theme",
+            "dark",
+        );
+        expect(hydrationErrors).toEqual([]);
+    });
+
     test("opens About by default and preserves user-selected history", async ({
         page,
     }) => {
@@ -79,7 +99,7 @@ test.describe("GUI V2 preview", () => {
             page.getByRole("navigation", {
                 name: "Desktop shortcuts",
             }),
-        ).toBeHidden();
+        ).toBeVisible();
         await expect(
             page.getByRole("navigation", {
                 name: "Applications",
@@ -358,7 +378,7 @@ test.describe("GUI V2 preview", () => {
 
         await page
             .getByRole("dialog", { name: "설정" })
-            .getByRole("button", { name: /숲속/ })
+            .getByRole("button", { name: /포레스트 레이크/ })
             .click();
         await expect(page.locator(".gui-v2-shell")).toHaveAttribute(
             "data-wallpaper",
@@ -382,7 +402,7 @@ test.describe("GUI V2 preview", () => {
         await page.goto("/gui");
 
         await expect(
-            page.locator(".gui-v2-portfolio-brand strong"),
+            page.locator(".gui-v2-system-title"),
         ).toHaveText("Hyunho's Portfolio");
         await expect(page.locator(".gui-v2-viewer-chip")).toContainText(
             "게스트",
@@ -484,36 +504,26 @@ test.describe("GUI V2 preview", () => {
         await expect(aboutWindow).toBeHidden();
         await expect(projectsWindow).toBeHidden();
 
-        await page
-            .getByRole("combobox", { name: "Open windows" })
-            .selectOption("projects");
+        await dock.getByRole("button", { name: "프로젝트" }).click();
         await expect(page).toHaveURL(/app=projects/);
         await expect(projectsWindow).toBeVisible();
     });
 
-    test("offers non-drag position presets and respects reduced motion", async ({
-        page,
-    }) => {
+    test("keeps title bars clean and respects reduced motion", async ({ page }) => {
         await page.emulateMedia({ reducedMotion: "reduce" });
         await page.goto("/gui");
 
         const aboutWindow = page.locator('[data-window-id="about"]');
-        await aboutWindow
-            .getByRole("combobox", {
+        await expect(
+            aboutWindow.getByRole("combobox", {
                 name: "나에 대해서 position",
-            })
-            .selectOption("right");
-
-        const rightAlignedBox = await aboutWindow.boundingBox();
-        expect(rightAlignedBox).not.toBeNull();
-        expect(
-            Math.abs(
-                24 -
-                    (1280 -
-                        ((rightAlignedBox?.x ?? 0) +
-                            (rightAlignedBox?.width ?? 0))),
-            ),
-        ).toBeLessThanOrEqual(1);
+            }),
+        ).toHaveCount(0);
+        await expect(
+            aboutWindow.getByRole("button", {
+                name: "나에 대해서 maximize",
+            }),
+        ).toBeVisible();
 
         const startedAt = Date.now();
         await aboutWindow

@@ -13,26 +13,26 @@ export default function ProjectsAppV2() {
     return (
         <section
             aria-labelledby="projects-v2-heading"
-            className="gui-v2-projects"
+            aria-label={language === "ko" ? "프로젝트 폴더" : "Projects folder"}
+            className="gui-v2-projects gui-v2-folder-view"
         >
             <header className="gui-v2-projects-header">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                    Portfolio
+                <p className="gui-v2-folder-path">
+                    <GuiAppIcon appId="projects" size="dock" />
+                    <span>Portfolio</span>
+                    <span aria-hidden="true">/</span>
+                    <strong id="projects-v2-heading">
+                        {language === "ko" ? "프로젝트" : "Projects"}
+                    </strong>
                 </p>
-                <h3
-                    id="projects-v2-heading"
-                    className="mt-1 text-2xl font-semibold"
-                >
-                    {language === "ko" ? "프로젝트" : "Projects"}
-                </h3>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+                <p className="gui-v2-folder-description">
                     {language === "ko"
-                        ? "각 프로젝트는 독립된 창으로 열립니다. 여러 프로젝트를 나란히 열어 비교할 수 있습니다."
-                        : "Each project opens in an independent window, so multiple projects can remain available for comparison."}
+                        ? "프로젝트 파일을 선택하면 각각 독립된 창으로 열립니다."
+                        : "Select a project file to open it in an independent window."}
                 </p>
             </header>
 
-            <ul className="gui-v2-project-grid">
+            <ul className="gui-v2-project-grid" role="list">
                 {orderedProjectSummaries.map((project) => {
                     const content = project.content[language];
                     const appId = `project:${project.slug}` as const;
@@ -42,54 +42,18 @@ export default function ProjectsAppV2() {
                             <button
                                 type="button"
                                 disabled={navigationBusy}
-                                onClick={() =>
-                                    navigate(
-                                        createOpenAppCommand(appId),
-                                    )
-                                }
+                                onClick={() => navigate(createOpenAppCommand(appId))}
                                 className="gui-v2-project-card"
                                 aria-label={`${content.title} ${
-                                    language === "ko"
-                                        ? "프로젝트 열기"
-                                        : "open project"
+                                    language === "ko" ? "프로젝트 열기" : "open project"
                                 }`}
                             >
                                 <span className="gui-v2-project-icon">
-                                    <GuiAppIcon
-                                        appId={appId}
-                                        size="project"
-                                    />
+                                    <GuiAppIcon appId={appId} size="project" />
                                 </span>
-                                <span className="min-w-0 flex-1">
-                                    <span className="flex flex-wrap items-center gap-2">
-                                        <strong className="text-base">
-                                            {content.title}
-                                        </strong>
-                                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-slate-600">
-                                            {content.kind}
-                                        </span>
-                                    </span>
-                                    <span className="mt-2 block text-sm leading-6 text-slate-600">
-                                        {content.summary}
-                                    </span>
-                                    <span
-                                        aria-label={
-                                            language === "ko"
-                                                ? "기술 스택"
-                                                : "Technology stack"
-                                        }
-                                        className="mt-3 flex flex-wrap gap-1.5"
-                                    >
-                                        {project.stack.map((technology) => (
-                                            <span
-                                                key={technology}
-                                                className="rounded bg-slate-900 px-2 py-1 text-[11px] text-white"
-                                            >
-                                                {technology}
-                                            </span>
-                                        ))}
-                                    </span>
-                                </span>
+                                <strong>{content.title}</strong>
+                                <span className="gui-v2-project-kind">{content.kind}</span>
+                                <span className="gui-v2-project-summary">{content.summary}</span>
                             </button>
                         </li>
                     );
