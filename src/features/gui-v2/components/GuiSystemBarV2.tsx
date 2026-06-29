@@ -149,12 +149,7 @@ export function GuiSystemBarV2({
     return (
         <header className="gui-v2-system-bar">
             <div className="gui-v2-system-identity">
-                <span className="gui-v2-viewer-chip">
-                    <span className="gui-v2-viewer-avatar" aria-hidden="true">
-                        {viewerName.slice(0, 1).toUpperCase()}
-                    </span>
-                    <span>{viewerName}</span>
-                </span>
+                <span className="gui-v2-viewer-name">{viewerName}</span>
             </div>
 
             <strong className="gui-v2-system-title">

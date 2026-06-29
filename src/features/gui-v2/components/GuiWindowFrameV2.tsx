@@ -159,7 +159,7 @@ export function GuiWindowFrameV2({
     const handlePointerDown = useCallback(
         (e: React.PointerEvent<HTMLDivElement>) => {
             // Only primary button, desktop viewport, not maximized
-            if (e.button !== 0 || globalThis.innerWidth < 1024 || maximized)
+            if (e.button !== 0 || globalThis.innerWidth < 768 || maximized)
                 return;
             // Don't drag if clicking on a button
             if ((e.target as HTMLElement).closest("button")) return;
@@ -218,7 +218,7 @@ export function GuiWindowFrameV2({
     }, [active]);
 
     useEffect(() => {
-        if (globalThis.innerWidth < 1024 || maximized) {
+        if (globalThis.innerWidth < 768 || maximized) {
             return;
         }
 
@@ -325,6 +325,11 @@ export function GuiWindowFrameV2({
                     data-window-id={appId}
                     data-app-type={appId.startsWith("project:") ? "project" : appId}
                     data-window-visibility={windowVisibility}
+                    onPointerDownCapture={(event) => {
+                        if (event.button === 0 && !active && !navigationBusy) {
+                            navigate(createOpenAppCommand(appId));
+                        }
+                    }}
                     onPointerMove={handlePointerMove}
                     onPointerUp={handlePointerUp}
                     onLostPointerCapture={handlePointerUp}

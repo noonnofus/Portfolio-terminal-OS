@@ -10,7 +10,7 @@ export const appCatalog = {
         titles: { ko: "나에 대해서", en: "About" },
         icon: publicAssetPath("/icons/main.png"),
         order: 10,
-        window: { width: 780, height: 680 },
+        window: { width: 740, height: 640 },
     },
     projects: {
         appId: "projects",
@@ -18,7 +18,7 @@ export const appCatalog = {
         titles: { ko: "프로젝트", en: "Projects" },
         icon: publicAssetPath("/icons/projects.png"),
         order: 20,
-        window: { width: 860, height: 650 },
+        window: { width: 700, height: 450 },
     },
     resume: {
         appId: "resume",
@@ -26,7 +26,7 @@ export const appCatalog = {
         titles: { ko: "이력서", en: "Resume" },
         icon: publicAssetPath("/icons/info.png"),
         order: 30,
-        window: { width: 900, height: 720 },
+        window: { width: 850, height: 680 },
     },
     terminal: {
         appId: "terminal",
@@ -34,7 +34,7 @@ export const appCatalog = {
         titles: { ko: "터미널", en: "Terminal" },
         icon: publicAssetPath("/icons/terminal.png"),
         order: 40,
-        window: { width: 840, height: 560 },
+        window: { width: 800, height: 530 },
     },
     contact: {
         appId: "contact",
@@ -42,7 +42,7 @@ export const appCatalog = {
         titles: { ko: "연락처", en: "Contact" },
         icon: publicAssetPath("/icons/contact.png"),
         order: 50,
-        window: { width: 620, height: 390 },
+        window: { width: 600, height: 370 },
     },
     settings: {
         appId: "settings",
@@ -50,7 +50,7 @@ export const appCatalog = {
         titles: { ko: "설정", en: "Settings" },
         icon: publicAssetPath("/icons/settings.png"),
         order: 60,
-        window: { width: 780, height: 650 },
+        window: { width: 740, height: 610 },
     },
     "project:wchms": {
         appId: "project:wchms",
@@ -58,7 +58,7 @@ export const appCatalog = {
         titles: { ko: "WCHMS", en: "WCHMS" },
         icon: publicAssetPath("/icons/wchms.png"),
         order: 110,
-        window: { width: 880, height: 680 },
+        window: { width: 840, height: 640 },
     },
     "project:flare": {
         appId: "project:flare",
@@ -66,7 +66,7 @@ export const appCatalog = {
         titles: { ko: "Flare", en: "Flare" },
         icon: publicAssetPath("/icons/flare.png"),
         order: 120,
-        window: { width: 880, height: 680 },
+        window: { width: 840, height: 640 },
     },
     "project:weconnect": {
         appId: "project:weconnect",
@@ -74,7 +74,7 @@ export const appCatalog = {
         titles: { ko: "WeConnect", en: "WeConnect" },
         icon: publicAssetPath("/icons/weconnect.svg"),
         order: 130,
-        window: { width: 880, height: 680 },
+        window: { width: 840, height: 640 },
     },
     "project:pagessence": {
         appId: "project:pagessence",
@@ -82,7 +82,7 @@ export const appCatalog = {
         titles: { ko: "pageSsence", en: "PageSsence" },
         icon: publicAssetPath("/icons/pagessence.png"),
         order: 140,
-        window: { width: 880, height: 680 },
+        window: { width: 840, height: 640 },
     },
     "project:diceroller": {
         appId: "project:diceroller",
@@ -90,7 +90,7 @@ export const appCatalog = {
         titles: { ko: "다이스롤러", en: "DiceRoller" },
         icon: publicAssetPath("/icons/diceroller.png"),
         order: 150,
-        window: { width: 880, height: 680 },
+        window: { width: 840, height: 640 },
     },
     "project:mejubot": {
         appId: "project:mejubot",
@@ -98,7 +98,7 @@ export const appCatalog = {
         titles: { ko: "디스코드 봇", en: "Discord Bot" },
         icon: publicAssetPath("/icons/mejubot.png"),
         order: 160,
-        window: { width: 880, height: 680 },
+        window: { width: 840, height: 640 },
     },
     "project:webpiano": {
         appId: "project:webpiano",
@@ -106,7 +106,7 @@ export const appCatalog = {
         titles: { ko: "웹 피아노", en: "WebPiano" },
         icon: publicAssetPath("/icons/webpiano.png"),
         order: 170,
-        window: { width: 880, height: 680 },
+        window: { width: 840, height: 640 },
     },
 } satisfies GuiAppCatalog;
 
