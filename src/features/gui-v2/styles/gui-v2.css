@@ -1731,3 +1731,99 @@
     line-height: 16px;
     backdrop-filter: blur(4px);
 }
+
+/* GUI theme is the single styling authority for V2 surfaces. */
+.gui-v2-folder-view,
+.gui-v2-shell[data-theme] .gui-v2-folder-view {
+    height: 100%;
+    min-height: 0;
+}
+
+.gui-v2-shell[data-theme="light"] .gui-v2-folder-view {
+    background-color: #f7f9fc;
+    background-image:
+        linear-gradient(rgb(24 34 48 / 3%) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(24 34 48 / 3%) 1px, transparent 1px);
+    color: #182230;
+}
+
+.gui-v2-shell[data-theme="light"] .gui-v2-folder-view .gui-v2-project-card {
+    color: rgb(24 34 48 / 72%);
+}
+
+.gui-v2-shell[data-theme="light"] .gui-v2-folder-view .gui-v2-project-card:hover,
+.gui-v2-shell[data-theme="light"] .gui-v2-folder-view .gui-v2-project-card:focus-visible {
+    background: rgb(24 34 48 / 6%) !important;
+    color: #182230;
+}
+
+.gui-v2-shell[data-theme="light"] .gui-v2-folder-view .gui-v2-project-icon {
+    background: rgb(24 34 48 / 4%);
+    color: #2563eb;
+}
+
+.gui-v2-shell[data-theme="light"] .gui-v2-folder-footer {
+    border-top-color: rgb(24 34 48 / 9%);
+    background: rgb(247 249 252 / 78%);
+    color: rgb(24 34 48 / 52%);
+}
+
+.gui-v2-shell[data-theme="light"] .gui-v2-settings-panel,
+.gui-v2-shell[data-theme="light"] .gui-v2-wallpaper-option {
+    border-color: rgb(24 34 48 / 10%);
+    background: #f8fafc;
+    color: #182230;
+}
+
+.gui-v2-shell[data-theme="dark"] .gui-v2-settings-panel,
+.gui-v2-shell[data-theme="dark"] .gui-v2-wallpaper-option {
+    border-color: rgb(255 255 255 / 8%);
+    background: #272730;
+    color: #f4f7fb;
+}
+
+.gui-v2-shell[data-theme="light"] .gui-v2-wallpaper-option:hover {
+    border-color: rgb(24 34 48 / 22%);
+    background: #eef2f7;
+}
+
+.gui-v2-shell[data-theme="dark"] .gui-v2-wallpaper-option:hover {
+    border-color: rgb(255 255 255 / 16%);
+    background: #30303a;
+}
+
+.gui-v2-shell[data-theme] .gui-v2-wallpaper-option[aria-pressed="true"] {
+    border-color: #2563eb;
+}
+
+.gui-v2-shell[data-theme="light"] .gui-v2-wallpaper-option[aria-pressed="true"] {
+    background: rgb(239 246 255 / 86%);
+}
+
+.gui-v2-shell[data-theme="dark"] .gui-v2-wallpaper-option[aria-pressed="true"] {
+    background: rgb(30 58 138 / 22%);
+}
+
+.gui-v2-shell[data-theme][data-wallpaper="aurora"] {
+    background-image:
+        linear-gradient(rgb(9 18 34 / 8%), rgb(9 18 34 / 24%)),
+        url("/wallpapers/alpine-twilight.jpg");
+}
+
+.gui-v2-shell[data-theme][data-wallpaper="sunset"] {
+    background-image:
+        linear-gradient(rgb(30 18 60 / 6%), rgb(20 12 42 / 18%)),
+        url("/wallpapers/soft-spectrum.jpg");
+}
+
+.gui-v2-shell[data-theme][data-wallpaper="forest"] {
+    background-image:
+        linear-gradient(rgb(5 28 24 / 4%), rgb(5 28 24 / 20%)),
+        url("/wallpapers/forest-lake.jpg");
+}
+
+.gui-v2-shell[data-theme][data-wallpaper="dark"] {
+    background-image:
+        linear-gradient(rgb(34 5 8 / 8%), rgb(28 4 8 / 22%)),
+        url("/wallpapers/red-landscape.jpg");
+}

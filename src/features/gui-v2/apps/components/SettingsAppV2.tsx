@@ -66,7 +66,7 @@ export default function SettingsAppV2({
                     <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
                         {t.general}
                     </h4>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-50 dark:bg-[#272730] border border-slate-200/60 dark:border-slate-800 rounded-xl gap-4">
+                    <div className="gui-v2-settings-panel flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-xl gap-4">
                         <div>
                             <p className="font-semibold text-sm">{t.languageLabel}</p>
                             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -117,7 +117,7 @@ export default function SettingsAppV2({
                     <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
                         {t.appearance}
                     </h4>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-50 dark:bg-[#272730] border border-slate-200/60 dark:border-slate-800 rounded-xl gap-4">
+                    <div className="gui-v2-settings-panel flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-xl gap-4">
                         <div>
                             <p className="font-semibold text-sm">{t.themeLabel}</p>
                             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -166,13 +166,14 @@ export default function SettingsAppV2({
                                     <button
                                         key={type}
                                         type="button"
+                                        aria-pressed={wallpaper === type}
                                         onClick={() =>
                                             dispatch({
                                                 type: "change-wallpaper",
                                                 wallpaper: type,
                                             })
                                         }
-                                        className={`group relative flex flex-col items-center p-2 rounded-xl border-2 transition-all duration-200 ${
+                                        className={`gui-v2-wallpaper-option group relative flex flex-col items-center p-2 rounded-xl border-2 transition-all duration-200 ${
                                             wallpaper === type
                                                 ? "border-blue-600 bg-blue-50/50 dark:bg-blue-950/20"
                                                 : "border-transparent bg-slate-50 dark:bg-[#272730] hover:border-slate-300 dark:hover:border-slate-700"

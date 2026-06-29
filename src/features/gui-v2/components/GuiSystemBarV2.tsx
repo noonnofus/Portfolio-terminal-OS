@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PanelsTopLeft, X } from "lucide-react";
+import { X } from "lucide-react";
 import { createOpenAppCommand } from "@/features/gui-v2/apps/appTypes";
 import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
 import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
@@ -95,16 +95,11 @@ export function GuiSystemBarV2({
 }: {
     viewer: GuiViewer;
 }) {
-    const language = useGuiV2Store((state) => state.language);
     const windows = useGuiV2Store((state) => state.windows);
     const focus = useGuiV2Store((state) => state.focus);
     const { navigate, navigationBusy } = useGuiNavigation();
     const viewerName =
-        viewer.kind === "authenticated"
-            ? viewer.displayName
-            : language === "ko"
-              ? "게스트"
-              : "Guest";
+        viewer.kind === "authenticated" ? viewer.displayName : "Guest";
 
     useEffect(() => {
         const handleWindowCycle = (event: KeyboardEvent) => {
@@ -160,34 +155,6 @@ export function GuiSystemBarV2({
                 aria-label="System controls"
                 className="gui-v2-system-controls"
             >
-                {(["ko", "en"] as const).map((option) => (
-                    <button
-                        key={option}
-                        type="button"
-                        aria-pressed={language === option}
-                        disabled={navigationBusy}
-                        onClick={() =>
-                            navigate({
-                                type: "change-language",
-                                language: option,
-                            })
-                        }
-                        className="gui-v2-lang-button"
-                    >
-                        {option}
-                    </button>
-                ))}
-
-
-                <button
-                    type="button"
-                    aria-label="Show desktop"
-                    disabled={navigationBusy}
-                    onClick={() => navigate({ type: "show-desktop" })}
-                    className="gui-v2-system-action"
-                >
-                    <PanelsTopLeft aria-hidden="true" />
-                </button>
 
                 <button
                     type="button"

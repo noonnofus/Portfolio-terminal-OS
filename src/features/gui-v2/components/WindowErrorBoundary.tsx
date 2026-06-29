@@ -104,7 +104,7 @@ export class WindowErrorBoundary extends Component<
         }
 
         return (
-            <div key={this.state.retrySequence}>
+            <div key={this.state.retrySequence} className="h-full">
                 {this.props.children}
             </div>
         );
