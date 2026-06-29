@@ -18,8 +18,8 @@ describe("GUI V2 app boundaries", () => {
         expect(appLoaderRegistryKeys).toEqual(appCatalogKeys);
         expect(Object.keys(appCatalog)).toHaveLength(13);
         expect(appCatalog.contact.window).toEqual({
-            width: 620,
-            height: 390,
+            width: 600,
+            height: 370,
         });
     });
 

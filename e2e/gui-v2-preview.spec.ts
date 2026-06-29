@@ -110,8 +110,8 @@ test.describe("GUI V2 preview", () => {
             .getByRole("dialog", { name: "나에 대해서" })
             .boundingBox();
         expect(windowBox).not.toBeNull();
-        expect(windowBox?.x).toBe(45);
-        expect(windowBox?.width).toBe(810);
+        expect(windowBox?.x).toBe(64);
+        expect(windowBox?.width).toBe(740);
 
         const backgroundType = page.locator(
             ".gui-v2-background-type",
@@ -124,6 +124,29 @@ test.describe("GUI V2 preview", () => {
             "pointer-events",
             "none",
         );
+
+        const dock = page.getByRole("navigation", { name: "Applications" });
+        await dock.getByRole("button", { name: "프로젝트" }).click();
+        const aboutWindow = page.locator('[data-window-id="about"]');
+        await page.mouse.click(72, 260);
+        await expect(aboutWindow).toHaveAttribute("data-active", "true");
+
+        const beforeDrag = await aboutWindow.boundingBox();
+        const titleBar = aboutWindow.locator(".gui-v2-title-bar");
+        const titleBarBox = await titleBar.boundingBox();
+        expect(titleBarBox).not.toBeNull();
+        await page.mouse.move(
+            (titleBarBox?.x ?? 0) + (titleBarBox?.width ?? 0) / 2,
+            (titleBarBox?.y ?? 0) + 18,
+        );
+        await page.mouse.down();
+        await page.mouse.move(
+            (titleBarBox?.x ?? 0) + (titleBarBox?.width ?? 0) / 2 + 36,
+            (titleBarBox?.y ?? 0) + 34,
+        );
+        await page.mouse.up();
+        const afterDrag = await aboutWindow.boundingBox();
+        expect((afterDrag?.x ?? 0) - (beforeDrag?.x ?? 0)).toBeGreaterThan(20);
     });
 
     test("opens independent project windows without eager media", async ({
@@ -137,9 +160,15 @@ test.describe("GUI V2 preview", () => {
         });
 
         await page.goto("/gui?app=projects");
-        await expect(
-            page.getByRole("dialog", { name: "프로젝트" }),
-        ).toBeVisible();
+        const projectsWindow = page.getByRole("dialog", { name: "프로젝트" });
+        await expect(projectsWindow).toBeVisible();
+        const projectsBox = await projectsWindow.boundingBox();
+        expect(projectsBox?.width).toBe(700);
+        expect(projectsBox?.height).toBe(450);
+        await expect(projectsWindow.locator(".gui-v2-project-icon").first()).toHaveCSS(
+            "width",
+            "56px",
+        );
         await expect(
             page.getByRole("button", {
                 name: "WCHMS 프로젝트 열기",
@@ -149,7 +178,7 @@ test.describe("GUI V2 preview", () => {
 
         await page
             .getByRole("button", { name: "WCHMS 프로젝트 열기" })
-            .click();
+            .dblclick();
         await expect(page).toHaveURL(/app=project&slug=wchms/);
         await expect(
             page.getByRole("dialog", { name: "WCHMS" }),
@@ -161,7 +190,7 @@ test.describe("GUI V2 preview", () => {
         await dock.getByRole("button", { name: "프로젝트" }).click();
         await page
             .getByRole("button", { name: "Flare 프로젝트 열기" })
-            .click();
+            .dblclick();
 
         await expect(page).toHaveURL(/app=project&slug=flare/);
         await expect(
@@ -174,7 +203,7 @@ test.describe("GUI V2 preview", () => {
         await dock.getByRole("button", { name: "프로젝트" }).click();
         await page
             .getByRole("button", { name: "WCHMS 프로젝트 열기" })
-            .click();
+            .dblclick();
 
         await expect(
             page.getByRole("dialog", { name: "WCHMS" }),
@@ -404,7 +433,7 @@ test.describe("GUI V2 preview", () => {
         await expect(
             page.locator(".gui-v2-system-title"),
         ).toHaveText("Hyunho's Portfolio");
-        await expect(page.locator(".gui-v2-viewer-chip")).toContainText(
+        await expect(page.locator(".gui-v2-viewer-name")).toContainText(
             "게스트",
         );
 
@@ -431,8 +460,8 @@ test.describe("GUI V2 preview", () => {
         );
         const contactBox = await contactWindow.boundingBox();
 
-        expect(contactBox?.width).toBe(620);
-        expect(contactBox?.height).toBe(390);
+        expect(contactBox?.width).toBe(600);
+        expect(contactBox?.height).toBe(370);
         expect(contactBox?.height ?? 0).toBeLessThan(
             aboutBox?.height ?? 0,
         );

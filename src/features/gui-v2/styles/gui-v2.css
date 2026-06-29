@@ -509,12 +509,6 @@
         display: none;
     }
 
-    .gui-v2-window {
-        left: 5vw !important;
-        top: 8vh !important;
-        width: 90vw;
-        height: calc(100dvh - 144px);
-    }
 }
 
 @media (width < 768px) {
@@ -1290,15 +1284,6 @@
     color: var(--gui-text);
 }
 
-@media (width < 1024px) {
-    .gui-v2-window {
-        width: 90vw !important;
-        height: calc(100dvh - 144px) !important;
-        max-width: none !important;
-        max-height: none !important;
-    }
-}
-
 @media (width < 768px) {
     .gui-v2-window {
         width: auto !important;
@@ -1613,4 +1598,136 @@
     .gui-v2-shortcut {
         width: 68px;
     }
+}
+
+.gui-v2-viewer-name {
+    color: var(--gui-text);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+}
+
+.gui-v2-folder-view,
+.gui-v2-shell[data-theme] .gui-v2-folder-view {
+    position: relative;
+    display: block;
+    min-height: 100%;
+    overflow-y: auto;
+    background-color: #09090b;
+    background-image:
+        linear-gradient(rgb(255 255 255 / 2%) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(255 255 255 / 2%) 1px, transparent 1px);
+    background-size: 24px 24px;
+    color: white;
+    padding: 16px 16px 42px;
+}
+
+.gui-v2-folder-view .gui-v2-project-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    align-content: start;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+}
+
+.gui-v2-folder-view .gui-v2-project-card {
+    display: flex;
+    min-height: 0;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    border: 0 !important;
+    border-radius: 8px;
+    background: transparent !important;
+    padding: 12px;
+    color: rgb(255 255 255 / 70%);
+    box-shadow: none !important;
+    text-align: center;
+    transition: background-color 140ms ease, color 140ms ease;
+}
+
+.gui-v2-folder-view .gui-v2-project-card:hover,
+.gui-v2-folder-view .gui-v2-project-card:focus-visible {
+    background: rgb(255 255 255 / 4%) !important;
+    color: rgb(255 255 255 / 90%);
+    outline: 2px solid transparent;
+    transform: none;
+}
+
+.gui-v2-folder-view .gui-v2-project-card:focus-visible {
+    box-shadow: 0 0 0 2px rgb(59 130 246 / 50%) !important;
+}
+
+.gui-v2-folder-view .gui-v2-project-icon {
+    position: relative;
+    display: flex;
+    width: 56px;
+    height: 56px;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    border-radius: 8px;
+    background: rgb(255 255 255 / 3%);
+    color: rgb(96 165 250 / 80%);
+    transition: background-color 140ms ease, color 140ms ease;
+}
+
+.gui-v2-folder-view .gui-v2-project-card:hover .gui-v2-project-icon {
+    background: rgb(255 255 255 / 6%);
+    color: #60a5fa;
+}
+
+.gui-v2-folder-view .gui-v2-project-icon > svg {
+    width: 32px;
+    height: 32px;
+    stroke-width: 1.5;
+}
+
+.gui-v2-folder-view .gui-v2-project-icon > span {
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 3px;
+    background: rgb(59 130 246 / 90%);
+    padding: 2px 4px;
+    color: white;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 24%);
+}
+
+.gui-v2-folder-view .gui-v2-project-card strong {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    padding-inline: 4px;
+    color: inherit;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gui-v2-folder-footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-top: 1px solid rgb(255 255 255 / 6%);
+    background: rgb(0 0 0 / 40%);
+    padding: 8px 16px;
+    color: rgb(255 255 255 / 40%);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    line-height: 16px;
+    backdrop-filter: blur(4px);
 }
