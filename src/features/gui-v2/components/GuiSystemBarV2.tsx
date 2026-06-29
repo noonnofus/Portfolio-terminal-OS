@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X } from "lucide-react";
 import { createOpenAppCommand } from "@/features/gui-v2/apps/appTypes";
 import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
 import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
@@ -97,7 +96,7 @@ export function GuiSystemBarV2({
 }) {
     const windows = useGuiV2Store((state) => state.windows);
     const focus = useGuiV2Store((state) => state.focus);
-    const { navigate, navigationBusy } = useGuiNavigation();
+    const { navigate } = useGuiNavigation();
     const viewerName =
         viewer.kind === "authenticated" ? viewer.displayName : "Guest";
 
@@ -156,24 +155,6 @@ export function GuiSystemBarV2({
                 className="gui-v2-system-controls"
             >
 
-                <button
-                    type="button"
-                    aria-label="Close active window"
-                    disabled={
-                        navigationBusy || focus.mode !== "windows"
-                    }
-                    onClick={() => {
-                        if (focus.mode === "windows") {
-                            navigate({
-                                type: "close-window",
-                                windowId: focus.activeWindowId,
-                            });
-                        }
-                    }}
-                    className="gui-v2-system-action"
-                >
-                    <X aria-hidden="true" />
-                </button>
 
                 <div
                     className="gui-v2-system-divider"

@@ -136,6 +136,10 @@ test.describe("GUI V2 preview", () => {
         const dock = page.getByRole("navigation", { name: "Applications" });
         await dock.getByRole("button", { name: "프로젝트" }).click();
         const aboutWindow = page.locator('[data-window-id="about"]');
+        const shortcutLayer = page.locator(".gui-v2-shortcuts");
+        const inactiveZ = Number(await aboutWindow.evaluate((element) => getComputedStyle(element).zIndex));
+        const shortcutsZ = Number(await shortcutLayer.evaluate((element) => getComputedStyle(element).zIndex));
+        expect(inactiveZ).toBeGreaterThan(shortcutsZ);
         await page.mouse.click(72, 260);
         await expect(aboutWindow).toHaveAttribute("data-active", "true");
 
@@ -561,6 +565,7 @@ test.describe("GUI V2 preview", () => {
 
     test("keeps title bars clean and respects reduced motion", async ({ page }) => {
         await page.emulateMedia({ reducedMotion: "reduce" });
+        await page.setViewportSize({ width: 756, height: 801 });
         await page.goto("/gui");
 
         const aboutWindow = page.locator('[data-window-id="about"]');
@@ -570,11 +575,20 @@ test.describe("GUI V2 preview", () => {
             }),
         ).toHaveCount(0);
         await expect(
-            aboutWindow.getByRole("button", {
-                name: "나에 대해서 maximize",
-            }),
-        ).toBeVisible();
+            page.getByRole("button", { name: "Close active window" }),
+        ).toHaveCount(0);
 
+        const maximizeButton = aboutWindow.getByRole("button", {
+            name: "나에 대해서 maximize",
+        });
+        await maximizeButton.click();
+        await expect(aboutWindow).toHaveClass(/gui-v2-window-maximized/);
+        const maximizedBox = await aboutWindow.boundingBox();
+        expect(maximizedBox).toEqual({ x: 0, y: 36, width: 756, height: 765 });
+
+        await aboutWindow
+            .getByRole("button", { name: "나에 대해서 restore" })
+            .click();
         const startedAt = Date.now();
         await aboutWindow
             .getByRole("button", {
