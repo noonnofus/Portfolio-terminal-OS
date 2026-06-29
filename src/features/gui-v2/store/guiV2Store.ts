@@ -15,6 +15,7 @@ export type GuiV2State = GuiWorkspaceState & {
     resumeEpoch: number;
     urlReady: boolean;
     wallpaper: "aurora" | "sunset" | "forest" | "dark";
+    dockAutoHide: boolean;
 };
 
 export type GuiV2Actions = {
@@ -102,6 +103,7 @@ export function createGuiV2Store(
         resumeEpoch: 0,
         urlReady: false,
         wallpaper: "aurora",
+        dockAutoHide: false,
         dispatch: (command) =>
             set((state) => {
                 switch (command.type) {
@@ -147,6 +149,8 @@ export function createGuiV2Store(
                         return { language: command.language };
                     case "change-wallpaper":
                         return { wallpaper: command.wallpaper };
+                    case "change-dock-auto-hide":
+                        return { dockAutoHide: command.enabled };
                     case "apply-url-state": {
                         const appId = appIdFromView(command.view);
                         if (appId === null) {

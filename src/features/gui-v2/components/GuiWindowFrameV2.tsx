@@ -152,7 +152,7 @@ export function GuiWindowFrameV2({
     const [pos, setPos] = useState<{ left: number; top: number } | null>(null);
 
     const defaultLeft = 64 + index * 44;
-    const defaultTop = 68 + index * 36;
+    const defaultTop = 32 + index * 36;
     const currentLeft = pos?.left ?? defaultLeft;
     const currentTop = pos?.top ?? defaultTop;
 
@@ -190,14 +190,14 @@ export function GuiWindowFrameV2({
             const dy = e.clientY - dragState.current.startY;
 
             const maxLeft = globalThis.innerWidth - 200;
-            const maxTop = globalThis.innerHeight - 100;
+            const maxTop = globalThis.innerHeight - 116;
             setPos({
                 left: Math.max(
                     0,
                     Math.min(maxLeft, dragState.current.origLeft + dx),
                 ),
                 top: Math.max(
-                    36,
+                    0,
                     Math.min(maxTop, dragState.current.origTop + dy),
                 ),
             });
@@ -230,8 +230,8 @@ export function GuiWindowFrameV2({
         const rect = element.getBoundingClientRect();
         const maxLeft = Math.max(0, globalThis.innerWidth - rect.width);
         const maxTop = Math.max(
-            36,
-            globalThis.innerHeight - 80 - rect.height,
+            0,
+            globalThis.innerHeight - 116 - rect.height,
         );
 
         setPos((current) => {
@@ -241,7 +241,7 @@ export function GuiWindowFrameV2({
             );
             const nextTop = Math.min(
                 maxTop,
-                Math.max(36, current?.top ?? defaultTop),
+                Math.max(0, current?.top ?? defaultTop),
             );
 
             if (

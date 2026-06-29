@@ -95,6 +95,18 @@ test.describe("GUI V2 preview", () => {
         expect(box?.width).toBe(374);
         expect(box?.y).toBe(44);
         expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThan(770);
+
+        const windowLayerZ = Number(
+            await page.locator(".gui-v2-window-layer").evaluate((element) =>
+                getComputedStyle(element).zIndex,
+            ),
+        );
+        const shortcutsZ = Number(
+            await page.locator(".gui-v2-shortcuts").evaluate((element) =>
+                getComputedStyle(element).zIndex,
+            ),
+        );
+        expect(windowLayerZ).toBeGreaterThan(shortcutsZ);
     });
 
     test("keeps tablet chrome usable and desktop decoration non-interactive", async ({
@@ -159,6 +171,20 @@ test.describe("GUI V2 preview", () => {
         await page.mouse.up();
         const afterDrag = await aboutWindow.boundingBox();
         expect((afterDrag?.x ?? 0) - (beforeDrag?.x ?? 0)).toBeGreaterThan(20);
+
+        const movedTitleBar = await titleBar.boundingBox();
+        await page.mouse.move(
+            (movedTitleBar?.x ?? 0) + (movedTitleBar?.width ?? 0) / 2,
+            (movedTitleBar?.y ?? 0) + 18,
+        );
+        await page.mouse.down();
+        await page.mouse.move(
+            (movedTitleBar?.x ?? 0) + (movedTitleBar?.width ?? 0) / 2,
+            36,
+        );
+        await page.mouse.up();
+        await expect(aboutWindow).toHaveCSS("top", "0px");
+        expect((await aboutWindow.boundingBox())?.y).toBe(36);
     });
 
     test("opens independent project windows without eager media", async ({
@@ -437,9 +463,21 @@ test.describe("GUI V2 preview", () => {
             "background-image",
             /forest-lake\.jpg/,
         );
+        const settings = page.getByRole("dialog", { name: "설정" });
         await expect(
-            page.getByRole("dialog", { name: "설정" }).locator(".gui-v2-settings-panel").first(),
+            settings.locator(".gui-v2-settings-panel").first(),
         ).toHaveCSS("background-color", "rgb(248, 250, 252)");
+
+        const dock = page.getByRole("navigation", { name: "Applications" });
+        await settings.getByRole("button", { name: "자동 숨김" }).click();
+        await expect(dock).toHaveAttribute("data-auto-hide", "true");
+        await expect
+            .poll(async () => (await dock.boundingBox())?.y ?? 0)
+            .toBeGreaterThan(700);
+        await page.mouse.move(640, 719);
+        await expect.poll(async () => (await dock.boundingBox())?.y ?? 720).toBeLessThan(700);
+        await settings.getByRole("button", { name: "항상 표시" }).click();
+        await expect(dock).toHaveAttribute("data-auto-hide", "false");
 
         await page
             .getByRole("navigation", { name: "Applications" })
