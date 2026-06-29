@@ -62,12 +62,20 @@ test.describe("GUI V2 preview", () => {
         const systemControls = page.getByRole("navigation", {
             name: "System controls",
         });
-        await systemControls.getByRole("button", { name: "en" }).click();
+        await expect(systemControls.getByRole("button", { name: "en" })).toHaveCount(0);
+        await expect(page.getByRole("button", { name: "Show desktop" })).toHaveCount(0);
+        await expect(page.locator(".gui-v2-viewer-name")).toHaveText("Guest");
+
+        await page
+            .getByRole("navigation", { name: "Applications" })
+            .getByRole("button", { name: "설정" })
+            .click();
+        await page
+            .getByRole("dialog", { name: "설정" })
+            .getByRole("button", { name: "English" })
+            .click();
 
         await expect(page).toHaveURL(/lang=en/);
-        await expect(
-            page.getByRole("dialog", { name: "About" }),
-        ).toBeVisible();
         await expect(page.locator("html")).toHaveAttribute("lang", "en");
     });
 
@@ -419,10 +427,27 @@ test.describe("GUI V2 preview", () => {
             .getByRole("button", { name: "라이트 모드" })
             .click();
         await expect(page.locator("html")).toHaveClass(/light/);
-        await expect(page.locator(".gui-v2-shell")).toHaveAttribute(
-            "data-theme",
-            "light",
+        const shell = page.locator(".gui-v2-shell");
+        await expect(shell).toHaveAttribute("data-theme", "light");
+        await expect(shell).toHaveCSS(
+            "background-image",
+            /forest-lake\.jpg/,
         );
+        await expect(
+            page.getByRole("dialog", { name: "설정" }).locator(".gui-v2-settings-panel").first(),
+        ).toHaveCSS("background-color", "rgb(248, 250, 252)");
+
+        await page
+            .getByRole("navigation", { name: "Applications" })
+            .getByRole("button", { name: "프로젝트" })
+            .click();
+        const projectsWindow = page.getByRole("dialog", { name: "프로젝트" });
+        const projectsContent = projectsWindow.locator(".gui-v2-window-content");
+        const folder = projectsWindow.locator(".gui-v2-folder-view");
+        await expect(folder).toHaveCSS("background-color", "rgb(247, 249, 252)");
+        const contentBox = await projectsContent.boundingBox();
+        const folderBox = await folder.boundingBox();
+        expect(folderBox?.height).toBe(contentBox?.height);
     });
 
     test("uses adaptive app surfaces, content-sized windows, and pointer affordances", async ({
@@ -434,7 +459,7 @@ test.describe("GUI V2 preview", () => {
             page.locator(".gui-v2-system-title"),
         ).toHaveText("Hyunho's Portfolio");
         await expect(page.locator(".gui-v2-viewer-name")).toContainText(
-            "게스트",
+            "Guest",
         );
 
         const dockButtons = page.locator(".gui-v2-dock-button");
@@ -526,13 +551,9 @@ test.describe("GUI V2 preview", () => {
             }),
         ).toBeFocused();
 
-        await page
-            .getByRole("button", { name: "Show desktop" })
-            .click();
-        await expect(page).toHaveURL(/app=desktop/);
-        await expect(aboutWindow).toBeHidden();
-        await expect(projectsWindow).toBeHidden();
-
+        await expect(
+            page.getByRole("button", { name: "Show desktop" }),
+        ).toHaveCount(0);
         await dock.getByRole("button", { name: "프로젝트" }).click();
         await expect(page).toHaveURL(/app=projects/);
         await expect(projectsWindow).toBeVisible();
