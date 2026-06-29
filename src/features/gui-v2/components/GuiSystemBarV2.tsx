@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { PanelsTopLeft, X } from "lucide-react";
-import { appCatalog } from "@/features/gui-v2/apps/appCatalog";
 import { createOpenAppCommand } from "@/features/gui-v2/apps/appTypes";
 import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
 import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
@@ -100,14 +99,6 @@ export function GuiSystemBarV2({
     const windows = useGuiV2Store((state) => state.windows);
     const focus = useGuiV2Store((state) => state.focus);
     const { navigate, navigationBusy } = useGuiNavigation();
-    const visibleWindows = windows
-        .filter((window) => !window.minimized)
-        .toSorted(
-            (left, right) =>
-                right.activationOrder - left.activationOrder,
-        );
-    const activeWindowId =
-        focus.mode === "windows" ? focus.activeWindowId : "";
     const viewerName =
         viewer.kind === "authenticated"
             ? viewer.displayName
@@ -158,26 +149,17 @@ export function GuiSystemBarV2({
     return (
         <header className="gui-v2-system-bar">
             <div className="gui-v2-system-identity">
-                <span
-                    className="gui-v2-portfolio-mark"
-                    aria-hidden="true"
-                >
-                    H
-                </span>
-                <div className="gui-v2-portfolio-brand">
-                    <strong>Hyunho&apos;s Portfolio</strong>
-                    <span>Full-stack developer</span>
-                </div>
                 <span className="gui-v2-viewer-chip">
-                    <span
-                        className="gui-v2-viewer-avatar"
-                        aria-hidden="true"
-                    >
+                    <span className="gui-v2-viewer-avatar" aria-hidden="true">
                         {viewerName.slice(0, 1).toUpperCase()}
                     </span>
                     <span>{viewerName}</span>
                 </span>
             </div>
+
+            <strong className="gui-v2-system-title">
+                Hyunho&apos;s Portfolio
+            </strong>
 
             <nav
                 aria-label="System controls"
@@ -201,40 +183,6 @@ export function GuiSystemBarV2({
                     </button>
                 ))}
 
-                <select
-                    aria-label="Open windows"
-                    disabled={navigationBusy}
-                    value={activeWindowId}
-                    onChange={(event) => {
-                        const target = event.currentTarget.value;
-                        if (target === "desktop") {
-                            navigate({ type: "show-desktop" });
-                            return;
-                        }
-
-                        const selectedWindow = windows.find(
-                            (window) => window.windowId === target,
-                        );
-                        if (selectedWindow !== undefined) {
-                            navigate(
-                                createOpenAppCommand(
-                                    selectedWindow.appId,
-                                ),
-                            );
-                        }
-                    }}
-                    className="gui-v2-window-menu"
-                >
-                    <option value="desktop">Desktop</option>
-                    {visibleWindows.map((window) => (
-                        <option
-                            key={window.windowId}
-                            value={window.windowId}
-                        >
-                            {appCatalog[window.appId].titles[language]}
-                        </option>
-                    ))}
-                </select>
 
                 <button
                     type="button"

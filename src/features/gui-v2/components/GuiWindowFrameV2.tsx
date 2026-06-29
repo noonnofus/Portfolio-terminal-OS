@@ -209,48 +209,6 @@ export function GuiWindowFrameV2({
         dragState.current = null;
     }, []);
 
-    const applyPositionPreset = useCallback(
-        (preset: "center" | "left" | "right" | "maximize") => {
-            if (preset === "maximize") {
-                setMaximized(true);
-                return;
-            }
-
-            setMaximized(false);
-            const width = Math.min(
-                app.window.width,
-                globalThis.innerWidth - 48,
-            );
-            const height = Math.min(
-                app.window.height,
-                globalThis.innerHeight - 116,
-            );
-            const top = Math.max(
-                44,
-                (globalThis.innerHeight - 80 - height) / 2,
-            );
-            const horizontalPadding = 24;
-
-            setPos({
-                left:
-                    preset === "left"
-                        ? horizontalPadding
-                        : preset === "right"
-                          ? Math.max(
-                                horizontalPadding,
-                                globalThis.innerWidth -
-                                    width -
-                                    horizontalPadding,
-                            )
-                          : Math.max(
-                                horizontalPadding,
-                                (globalThis.innerWidth - width) / 2,
-                            ),
-                top,
-            });
-        },
-        [app.window.height, app.window.width],
-    );
 
     useEffect(() => {
         if (active && !wasActiveRef.current) {
@@ -447,28 +405,7 @@ export function GuiWindowFrameV2({
                             {title}
                         </h2>
 
-                        <select
-                            aria-label={`${title} position`}
-                            className="gui-v2-position-select"
-                            value={maximized ? "maximize" : ""}
-                            onChange={(event) => {
-                                const preset = event.currentTarget.value;
-                                if (
-                                    preset === "center" ||
-                                    preset === "left" ||
-                                    preset === "right" ||
-                                    preset === "maximize"
-                                ) {
-                                    applyPositionPreset(preset);
-                                }
-                            }}
-                        >
-                            <option value="">Position</option>
-                            <option value="center">Center</option>
-                            <option value="left">Left</option>
-                            <option value="right">Right</option>
-                            <option value="maximize">Maximize</option>
-                        </select>
+                        <div className="gui-v2-title-spacer" aria-hidden="true" />
                     </div>
 
                     {/* ── Window content ─────────────────── */}

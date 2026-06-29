@@ -104,6 +104,11 @@ function DraggableShortcut({
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onLostPointerCapture={handlePointerUp}
+            onClick={() => {
+                if (globalThis.innerWidth < 1024) {
+                    navigate(createOpenAppCommand(appId));
+                }
+            }}
             onDoubleClick={() => navigate(createOpenAppCommand(appId))}
             className="gui-v2-shortcut"
             style={{

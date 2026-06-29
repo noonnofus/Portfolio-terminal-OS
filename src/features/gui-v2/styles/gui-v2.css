@@ -1397,3 +1397,220 @@
     background: var(--gui-glass-strong);
     color: var(--gui-text);
 }
+
+/* 2026 macOS-inspired desktop: calm photography, translucent chrome, clear folders. */
+.gui-v2-shell[data-wallpaper="aurora"] {
+    background-image:
+        linear-gradient(rgb(9 18 34 / 8%), rgb(9 18 34 / 24%)),
+        url("/wallpapers/alpine-twilight.jpg");
+}
+
+.gui-v2-shell[data-wallpaper="sunset"] {
+    background-image:
+        linear-gradient(rgb(30 18 60 / 6%), rgb(20 12 42 / 18%)),
+        url("/wallpapers/soft-spectrum.jpg");
+}
+
+.gui-v2-shell[data-wallpaper="forest"] {
+    background-image:
+        linear-gradient(rgb(5 28 24 / 4%), rgb(5 28 24 / 20%)),
+        url("/wallpapers/forest-lake.jpg");
+}
+
+.gui-v2-shell[data-wallpaper="dark"] {
+    background-image:
+        linear-gradient(rgb(34 5 8 / 8%), rgb(28 4 8 / 22%)),
+        url("/wallpapers/red-landscape.jpg");
+}
+
+.gui-v2-shell[data-wallpaper] {
+    background-position: center;
+    background-size: cover;
+}
+
+.gui-v2-wallpaper-art {
+    display: none;
+}
+
+.gui-v2-system-bar {
+    justify-content: space-between;
+    font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+}
+
+.gui-v2-system-title {
+    position: absolute;
+    left: 50%;
+    max-width: 40vw;
+    overflow: hidden;
+    color: var(--gui-text);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-overflow: ellipsis;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.gui-v2-system-identity {
+    min-width: 84px;
+}
+
+.gui-v2-viewer-chip {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.gui-v2-folder-view {
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    padding: 0;
+}
+
+.gui-v2-projects-header {
+    padding: 14px 18px 12px;
+    background: color-mix(in srgb, var(--gui-window-solid) 94%, transparent);
+}
+
+.gui-v2-folder-path {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--gui-text-secondary);
+    font-size: 13px;
+}
+
+.gui-v2-folder-path .gui-v2-app-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.gui-v2-folder-path strong {
+    color: var(--gui-text);
+}
+
+.gui-v2-folder-description {
+    margin-top: 5px;
+    color: var(--gui-text-secondary);
+    font-size: 12px;
+}
+
+.gui-v2-project-grid {
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+    align-content: start;
+    gap: 14px;
+    margin: 0;
+    padding: 20px;
+}
+
+.gui-v2-project-card {
+    min-height: 170px;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    border-color: transparent !important;
+    background: transparent !important;
+    padding: 12px 8px;
+    text-align: center;
+    box-shadow: none !important;
+}
+
+.gui-v2-project-card:hover,
+.gui-v2-project-card:focus-visible {
+    background: var(--gui-control-hover) !important;
+    transform: none;
+}
+
+.gui-v2-project-icon {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 4px;
+}
+
+.gui-v2-project-card strong {
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gui-v2-project-kind {
+    color: var(--gui-text-secondary);
+    font-size: 10px;
+}
+
+.gui-v2-project-summary {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--gui-text-secondary);
+    font-size: 11px;
+    line-height: 1.4;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.gui-v2-wallpaper-preview {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: 8px;
+    background-position: center;
+    background-size: cover;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 18%);
+    transition: transform 180ms ease;
+}
+
+.group:hover .gui-v2-wallpaper-preview {
+    transform: scale(1.02);
+}
+
+.gui-v2-wallpaper-preview[data-wallpaper="aurora"] {
+    background-image: url("/wallpapers/alpine-twilight.jpg");
+}
+
+.gui-v2-wallpaper-preview[data-wallpaper="sunset"] {
+    background-image: url("/wallpapers/soft-spectrum.jpg");
+}
+
+.gui-v2-wallpaper-preview[data-wallpaper="forest"] {
+    background-image: url("/wallpapers/forest-lake.jpg");
+}
+
+.gui-v2-wallpaper-preview[data-wallpaper="dark"] {
+    background-image: url("/wallpapers/red-landscape.jpg");
+}
+
+@media (width < 1024px) {
+    .gui-v2-shortcuts {
+        display: grid;
+        top: 54px;
+        right: max(10px, env(safe-area-inset-right, 0px));
+        gap: 10px;
+    }
+}
+
+@media (width < 640px) {
+    .gui-v2-system-title {
+        max-width: 42vw;
+        font-size: 11px;
+    }
+
+    .gui-v2-system-identity {
+        min-width: 34px;
+    }
+
+    .gui-v2-viewer-chip > span:last-child,
+    .gui-v2-system-status,
+    .gui-v2-system-divider {
+        display: none;
+    }
+
+    .gui-v2-shortcuts {
+        grid-template-columns: repeat(2, 68px);
+    }
+
+    .gui-v2-shortcut {
+        width: 68px;
+    }
+}

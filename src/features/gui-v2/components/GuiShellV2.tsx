@@ -1,5 +1,6 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { MotionConfig } from "framer-motion";
 import { GuiDesktopShortcutsV2 } from "@/features/gui-v2/components/GuiDesktopShortcutsV2";
 import { GuiDockV2 } from "@/features/gui-v2/components/GuiDockV2";
@@ -19,13 +20,18 @@ export function GuiShellV2({
     const urlReady = useGuiV2Store((state) => state.urlReady);
     const wallpaper = useGuiV2Store((state) => state.wallpaper);
     const { colorMode } = useColorMode();
+    const themeMounted = useSyncExternalStore(
+        () => () => undefined,
+        () => true,
+        () => false,
+    );
 
     return (
         <MotionConfig reducedMotion="user">
             <div
                 className="gui-v2-shell"
                 data-wallpaper={wallpaper}
-                data-theme={colorMode ?? "light"}
+                data-theme={themeMounted ? colorMode : undefined}
             >
                 <PageVisibilityController />
                 <div

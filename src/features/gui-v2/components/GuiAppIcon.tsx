@@ -3,7 +3,7 @@
 import Image from "next/image";
 import {
     FileText,
-    FolderKanban,
+    FolderOpen,
     Mail,
     Settings,
     SquareTerminal,
@@ -17,7 +17,7 @@ import {
 
 const coreIcons = {
     about: UserRound,
-    projects: FolderKanban,
+    projects: FolderOpen,
     resume: FileText,
     terminal: SquareTerminal,
     contact: Mail,
