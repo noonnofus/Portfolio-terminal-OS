@@ -127,7 +127,7 @@ function DraggableShortcut({
             onDoubleClick={() => {
                 navigate(createOpenAppCommand(appId));
             }}
-            className="gui-shortcut"
+            className="desktop-app"
             data-selected={isSelected}
             style={{
                 transform: offset
@@ -155,7 +155,7 @@ export function GuiDesktopShortcuts() {
         const handleGlobalClick = (e: PointerEvent) => {
             const target = e.target as HTMLElement;
             // 만약 클릭된 요소가 바탕화면 단축아이콘 내부가 아니라면 선택을 해제합니다.
-            if (!target.closest(".gui-shortcut")) {
+            if (!target.closest(".desktop-app")) {
                 setSelectedShortcutId(null);
             }
         };
@@ -167,7 +167,7 @@ export function GuiDesktopShortcuts() {
     }, []);
 
     return (
-        <nav aria-label="Desktop shortcuts" className="gui-shortcuts">
+        <nav aria-label="Desktop shortcuts" className="desktop-apps">
             {shortcutIds.map((appId) => (
                 <DraggableShortcut
                     key={appId}

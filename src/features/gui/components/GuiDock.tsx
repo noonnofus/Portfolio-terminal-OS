@@ -81,7 +81,7 @@ export function GuiDock() {
                             aria-label={app.titles[language]}
                             aria-pressed={isActive}
                             onClick={() => handleButtonClick(appId)}
-                            className="gui-dock-button relative"
+                            className="dock-app relative"
                             // macOS-style hover scale + float lift effect
                             whileHover={{
                                 scale: 1.2,
