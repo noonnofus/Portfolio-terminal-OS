@@ -72,7 +72,7 @@ describe("GUI V2 app boundaries", () => {
         expect(externalUrl("https://example.com")).toBe(
             "https://example.com",
         );
-        expect(publicAssetPath("/icons/main.png")).toBe("/icons/main.png");
+        expect(publicAssetPath("/icons/about.png")).toBe("/icons/about.png");
         expect(() => externalUrl("http://example.com")).toThrow();
         expect(() => publicAssetPath("../secret")).toThrow();
     });

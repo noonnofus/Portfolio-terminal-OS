@@ -46,19 +46,19 @@ export default function getRootApplicationDefinitions(language: Language): AppDe
             render: () => <FolderApp />,
         },
         {
-            iconSrc: "/icons/site.png",
+            iconSrc: "/icons/about.png",
             appName: "App About Site",
             title: texts.aboutSite,
             render: () => <AboutSiteApp language={language} />,
         },
         {
-            iconSrc: "/icons/terminal.png",
+            iconSrc: "/icons/iterm2.png",
             appName: "App Terminal",
             title: texts.terminal,
             render: () => <TerminalApp />,
         },
         {
-            iconSrc: "/icons/main.png",
+            iconSrc: "/icons/about.png",
             appName: "App About Me",
             title: texts.aboutMe,
             render: () => <AboutApp language={language} />,
