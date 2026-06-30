@@ -353,12 +353,6 @@
     transform 140ms ease;
 }
 
-.gui-project-card:hover {
-  border-color: rgb(37 99 235 / 38%);
-  box-shadow: 0 12px 30px rgb(15 23 42 / 10%);
-  transform: translateY(-2px);
-}
-
 .gui-project-card:focus-visible {
   border-color: #2563eb;
   outline: 3px solid rgb(37 99 235 / 30%);
@@ -692,11 +686,6 @@
   color: #f8fafc;
 }
 
-.dark .gui-project-card:hover {
-  border-color: rgba(59, 130, 246, 0.45);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-}
-
 .dark .gui-project-icon {
   background: #334155;
 }
@@ -990,12 +979,6 @@
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 32%);
 }
 
-.gui-project-card:hover {
-  border-color: color-mix(in srgb, var(--gui-accent) 42%, transparent);
-  background: var(--gui-control-hover);
-  box-shadow: 0 16px 36px rgb(20 42 76 / 12%);
-}
-
 .gui-project-card strong,
 .gui-resume h3,
 .gui-resume h4,
@@ -1152,8 +1135,12 @@
   text-shadow: 0 1px 4px rgb(0 0 0 / 72%);
 }
 
-.gui-shell[data-theme="dark"] .desktop-app:focus-visible .desktop-app-icon-wrapper,
-.gui-shell[data-theme="dark"] .desktop-app[data-selected="true"] .desktop-app-icon-wrapper {
+.gui-shell[data-theme="dark"]
+  .desktop-app:focus-visible
+  .desktop-app-icon-wrapper,
+.gui-shell[data-theme="dark"]
+  .desktop-app[data-selected="true"]
+  .desktop-app-icon-wrapper {
   background: rgba(255, 255, 255, 0.16);
   border-color: rgba(255, 255, 255, 0.25);
   box-shadow: 0 4px 10px rgb(0 0 0 / 25%);
@@ -1346,14 +1333,13 @@
   flex-direction: column;
   align-items: center;
   gap: 5px;
-  border-color: transparent !important;
-  background: transparent !important;
+  /*border-color: transparent !important;*/
+  /*background: transparent !important;*/
   padding: 12px 8px;
   text-align: center;
   box-shadow: none !important;
 }
 
-.gui-project-card:hover,
 .gui-project-card:focus-visible {
   background: var(--gui-control-hover) !important;
   transform: none;
@@ -1463,8 +1449,9 @@
 .gui-folder-view,
 .gui-shell[data-theme] .gui-folder-view {
   position: relative;
-  display: block;
+  display: flex;
   min-height: 100%;
+  flex-direction: column;
   overflow-y: auto;
   background-color: #09090b;
   background-image:
@@ -1478,6 +1465,8 @@
 .gui-folder-view .gui-project-grid {
   position: relative;
   display: grid;
+  flex: 1;
+  min-height: 0;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   align-content: start;
   gap: 8px;
@@ -1504,7 +1493,6 @@
     color 140ms ease;
 }
 
-.gui-folder-view .gui-project-card:hover,
 .gui-folder-view .gui-project-card:focus-visible {
   background: rgb(255 255 255 / 4%) !important;
   color: rgb(255 255 255 / 90%);
@@ -1532,11 +1520,6 @@
     color 140ms ease;
 }
 
-.gui-folder-view .gui-project-card:hover .gui-project-icon {
-  background: rgb(255 255 255 / 6%);
-  color: #60a5fa;
-}
-
 .gui-folder-view .gui-project-icon > img {
   width: 100%;
   height: 100%;
@@ -1556,7 +1539,7 @@
   font-weight: 700;
   line-height: 1;
   text-transform: uppercase;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 24%);
+  /*box-shadow: 0 1px 2px rgb(0 0 0 / 24%);*/
 }
 
 .gui-folder-view .gui-project-card strong {
@@ -1580,9 +1563,7 @@
 }
 
 .gui-folder-view .gui-project-card:focus-visible .gui-project-icon,
-.gui-folder-view
-  .gui-project-card[data-selected="true"]
-  .gui-project-icon {
+.gui-folder-view .gui-project-card[data-selected="true"] .gui-project-icon {
   border-color: rgba(255, 255, 255, 0.15);
   background: rgba(0, 0, 0, 0.22);
   box-shadow: 0 4px 10px rgb(0 0 0 / 12%);
@@ -1643,7 +1624,6 @@
   color: rgb(24 34 48 / 72%);
 }
 
-.gui-shell[data-theme="light"] .gui-folder-view .gui-project-card:hover,
 .gui-shell[data-theme="light"]
   .gui-folder-view
   .gui-project-card:focus-visible {
