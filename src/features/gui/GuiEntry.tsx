@@ -1,15 +1,15 @@
 "use client";
 
-import { GuiShellV2 } from "@/features/gui-v2/components/GuiShellV2";
-import { GuiNavigationProvider } from "@/features/gui-v2/navigation/GuiNavigationProvider";
-import { GuiV2StoreProvider } from "@/features/gui-v2/store/GuiV2StoreProvider";
+import { GuiShell } from "@/features/gui/components/GuiShell";
+import { GuiNavigationProvider } from "@/features/gui/navigation/GuiNavigationProvider";
+import { GuiStoreProvider } from "@/features/gui/store/GuiStoreProvider";
 
-export function GuiV2Entry() {
+export function GuiEntry() {
     return (
-        <GuiV2StoreProvider urlBasePath="/gui">
+        <GuiStoreProvider urlBasePath="/gui">
             <GuiNavigationProvider>
-                <GuiShellV2 />
+                <GuiShell />
             </GuiNavigationProvider>
-        </GuiV2StoreProvider>
+        </GuiStoreProvider>
     );
 }

@@ -3,8 +3,8 @@ import {
     getGuiUrlStateForCommand,
     isSameGuiUrlState,
     serializeGuiUrl,
-} from "@/features/gui-v2/apps/parseGuiAppTarget";
-import type { GuiUrlState } from "@/features/gui-v2/apps/appTypes";
+} from "@/features/gui/registry/parseGuiAppTarget";
+import type { GuiUrlState } from "@/features/gui/registry/appTypes";
 import type {
     GuiHistoryState,
     GuiWindowSnapshot,
@@ -13,7 +13,7 @@ import type {
     NavigationEvent,
     NavigationPlan,
     StoreCommand,
-} from "@/features/gui-v2/navigation/navigationTypes";
+} from "@/features/gui/navigation/navigationTypes";
 
 function createHistoryEntry(
     state: GuiWorkspaceState,

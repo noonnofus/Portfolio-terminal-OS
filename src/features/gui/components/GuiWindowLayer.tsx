@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { GuiWindowFrameV2 } from "@/features/gui-v2/components/GuiWindowFrameV2";
-import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
+import { GuiWindowFrame } from "@/features/gui/components/GuiWindowFrame";
+import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 
-export function GuiWindowLayerV2() {
-    const windows = useGuiV2Store((state) => state.windows);
-    const focus = useGuiV2Store((state) => state.focus);
+export function GuiWindowLayer() {
+    const windows = useGuiStore((state) => state.windows);
+    const focus = useGuiStore((state) => state.focus);
     const [clampEpoch, setClampEpoch] = useState(0);
 
     useEffect(() => {
@@ -27,11 +27,11 @@ export function GuiWindowLayerV2() {
 
     return (
         <main
-            className="gui-v2-window-layer"
+            className="gui-window-layer"
             data-workspace-mode={focus.mode}
         >
             {windows.map((window, index) => (
-                    <GuiWindowFrameV2
+                    <GuiWindowFrame
                         key={window.windowId}
                         window={window}
                         active={

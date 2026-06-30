@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { appCatalog } from "@/features/gui-v2/apps/appCatalog";
+import { appCatalog } from "@/features/gui/registry/appCatalog";
 import {
     createOpenAppCommand,
     type GuiAppId,
-} from "@/features/gui-v2/apps/appTypes";
-import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
-import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
-import { GuiAppIcon } from "@/features/gui-v2/components/GuiAppIcon";
+} from "@/features/gui/registry/appTypes";
+import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
+import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
+import { GuiAppIcon } from "@/features/gui/components/GuiAppIcon";
 
 const dockAppIds = [
     "about",
@@ -20,13 +20,13 @@ const dockAppIds = [
     "settings",
 ] as const satisfies readonly GuiAppId[];
 
-export function GuiDockV2() {
-    const language = useGuiV2Store((state) => state.language);
-    const activeWindowId = useGuiV2Store((state) =>
+export function GuiDock() {
+    const language = useGuiStore((state) => state.language);
+    const activeWindowId = useGuiStore((state) =>
         state.focus.mode === "windows" ? state.focus.activeWindowId : null,
     );
-    const windows = useGuiV2Store((state) => state.windows);
-    const dockAutoHide = useGuiV2Store((state) => state.dockAutoHide);
+    const windows = useGuiStore((state) => state.windows);
+    const dockAutoHide = useGuiStore((state) => state.dockAutoHide);
     const { navigate, navigationBusy } = useGuiNavigation();
 
     // Hover state for tooltips
@@ -44,7 +44,7 @@ export function GuiDockV2() {
     return (
         <nav
             aria-label="Applications"
-            className="gui-v2-dock"
+            className="gui-dock"
             data-auto-hide={dockAutoHide}
         >
             {dockAppIds.map((appId) => {
@@ -81,7 +81,7 @@ export function GuiDockV2() {
                             aria-label={app.titles[language]}
                             aria-pressed={isActive}
                             onClick={() => handleButtonClick(appId)}
-                            className="gui-v2-dock-button relative"
+                            className="gui-dock-button relative"
                             // macOS-style hover scale + float lift effect
                             whileHover={{
                                 scale: 1.2,

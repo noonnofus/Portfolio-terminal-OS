@@ -11,17 +11,17 @@ import {
     AnimatePresence,
     useReducedMotion,
 } from "framer-motion";
-import { appCatalog } from "@/features/gui-v2/apps/appCatalog";
+import { appCatalog } from "@/features/gui/registry/appCatalog";
 import {
     createOpenAppCommand,
     type GuiAppId,
-} from "@/features/gui-v2/apps/appTypes";
-import { GuiAppRenderer } from "@/features/gui-v2/components/GuiAppRenderer";
-import { WindowErrorBoundary } from "@/features/gui-v2/components/WindowErrorBoundary";
-import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
-import type { GuiWindowSnapshot } from "@/features/gui-v2/navigation/navigationTypes";
-import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
-import { AppRuntimeBoundary } from "@/features/gui-v2/runtime/AppRuntimeContext";
+} from "@/features/gui/registry/appTypes";
+import { GuiAppRenderer } from "@/features/gui/components/GuiAppRenderer";
+import { WindowErrorBoundary } from "@/features/gui/components/WindowErrorBoundary";
+import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
+import type { GuiWindowSnapshot } from "@/features/gui/navigation/navigationTypes";
+import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
+import { AppRuntimeBoundary } from "@/features/gui/runtime/AppRuntimeContext";
 
 /* ── macOS-style traffic-light SVG icons ────────────────── */
 
@@ -103,7 +103,7 @@ function MacRestoreIcon({ className }: { className?: string }) {
 
 /* ── Window frame component ─────────────────────────────── */
 
-export function GuiWindowFrameV2({
+export function GuiWindowFrame({
     window: win,
     active,
     workspaceDesktop,
@@ -116,13 +116,13 @@ export function GuiWindowFrameV2({
     index: number;
     clampEpoch: number;
 }) {
-    const language = useGuiV2Store((state) => state.language);
+    const language = useGuiStore((state) => state.language);
     const { navigate, navigationBusy } = useGuiNavigation();
     const shouldReduceMotion = useReducedMotion();
     const appId: GuiAppId = win.appId;
     const app = appCatalog[appId];
     const title = app.titles[language];
-    const headingId = `gui-v2-window-${appId.replace(":", "-")}`;
+    const headingId = `gui-window-${appId.replace(":", "-")}`;
     const windowVisibility = win.minimized
         ? "minimized"
         : active
@@ -159,8 +159,10 @@ export function GuiWindowFrameV2({
     const handlePointerDown = useCallback(
         (e: React.PointerEvent<HTMLDivElement>) => {
             // Only primary button, desktop viewport, not maximized
-            if (e.button !== 0 || globalThis.innerWidth < 768 || maximized)
-                return;
+            const usesTouchWindowLayout = globalThis.matchMedia(
+                "(pointer: coarse)",
+            ).matches;
+            if (e.button !== 0 || usesTouchWindowLayout || maximized) return;
             // Don't drag if clicking on a button
             if ((e.target as HTMLElement).closest("button")) return;
 
@@ -189,8 +191,18 @@ export function GuiWindowFrameV2({
             const dx = e.clientX - dragState.current.startX;
             const dy = e.clientY - dragState.current.startY;
 
-            const maxLeft = globalThis.innerWidth - 200;
-            const maxTop = globalThis.innerHeight - 116;
+            const element = sectionRef.current;
+            if (element === null) return;
+
+            const rect = element.getBoundingClientRect();
+            const maxLeft = Math.max(
+                0,
+                globalThis.innerWidth - rect.width,
+            );
+            const maxTop = Math.max(
+                0,
+                globalThis.innerHeight - 116 - rect.height,
+            );
             setPos({
                 left: Math.max(
                     0,
@@ -218,7 +230,10 @@ export function GuiWindowFrameV2({
     }, [active]);
 
     useEffect(() => {
-        if (globalThis.innerWidth < 768 || maximized) {
+        const usesTouchWindowLayout = globalThis.matchMedia(
+            "(pointer: coarse)",
+        ).matches;
+        if (usesTouchWindowLayout || maximized) {
             return;
         }
 
@@ -320,7 +335,7 @@ export function GuiWindowFrameV2({
                     ref={sectionRef as React.Ref<HTMLElement>}
                     role="dialog"
                     aria-labelledby={headingId}
-                    className={`gui-v2-window${maximized ? " gui-v2-window-maximized" : ""}`}
+                    className={`gui-window${maximized ? " gui-window-maximized" : ""}`}
                     data-active={active}
                     data-window-id={appId}
                     data-app-type={appId.startsWith("project:") ? "project" : appId}
@@ -354,11 +369,11 @@ export function GuiWindowFrameV2({
                 >
                     {/* ── macOS-style title bar ──────────── */}
                     <div
-                        className="gui-v2-title-bar"
+                        className="gui-title-bar"
                         onPointerDown={handlePointerDown}
                     >
                         {/* Traffic lights (left side) */}
-                        <div className="gui-v2-traffic-lights">
+                        <div className="gui-traffic-lights">
                             <button
                                 type="button"
                                 aria-label={`${title} close`}
@@ -369,18 +384,18 @@ export function GuiWindowFrameV2({
                                         windowId: appId,
                                     })
                                 }
-                                className="gui-v2-traffic-light gui-v2-traffic-close"
+                                className="gui-traffic-light gui-traffic-close"
                             >
-                                <MacCloseIcon className="gui-v2-traffic-icon" />
+                                <MacCloseIcon className="gui-traffic-icon" />
                             </button>
                             <button
                                 type="button"
                                 aria-label={`${title} minimize`}
                                 disabled={navigationBusy}
                                 onClick={handleMinimize}
-                                className="gui-v2-traffic-light gui-v2-traffic-minimize"
+                                className="gui-traffic-light gui-traffic-minimize"
                             >
-                                <MacMinimizeIcon className="gui-v2-traffic-icon" />
+                                <MacMinimizeIcon className="gui-traffic-icon" />
                             </button>
                             <button
                                 type="button"
@@ -390,12 +405,12 @@ export function GuiWindowFrameV2({
                                         : `${title} maximize`
                                 }
                                 onClick={() => setMaximized((v) => !v)}
-                                className="gui-v2-traffic-light gui-v2-traffic-maximize"
+                                className="gui-traffic-light gui-traffic-maximize"
                             >
                                 {maximized ? (
-                                    <MacRestoreIcon className="gui-v2-traffic-icon" />
+                                    <MacRestoreIcon className="gui-traffic-icon" />
                                 ) : (
-                                    <MacMaximizeIcon className="gui-v2-traffic-icon" />
+                                    <MacMaximizeIcon className="gui-traffic-icon" />
                                 )}
                             </button>
                         </div>
@@ -405,17 +420,17 @@ export function GuiWindowFrameV2({
                             ref={headingRef}
                             id={headingId}
                             tabIndex={-1}
-                            className="gui-v2-title-text"
+                            className="gui-title-text"
                         >
                             {title}
                         </h2>
 
-                        <div className="gui-v2-title-spacer" aria-hidden="true" />
+                        <div className="gui-title-spacer" aria-hidden="true" />
                     </div>
 
                     {/* ── Window content ─────────────────── */}
                     <div
-                        className="gui-v2-window-content"
+                        className="gui-window-content"
                         inert={!active ? true : undefined}
                     >
                         <AppRuntimeBoundary

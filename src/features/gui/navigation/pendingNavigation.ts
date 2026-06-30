@@ -1,7 +1,7 @@
 import type {
     PendingNavigation,
     QueuedNavigationEvent,
-} from "@/features/gui-v2/navigation/navigationTypes";
+} from "@/features/gui/navigation/navigationTypes";
 
 export const HISTORY_TRAVERSAL_TIMEOUT_MS = 1_000;
 export const MAX_PENDING_NAVIGATION_EVENTS = 16;

@@ -1,10 +1,10 @@
-import { appCatalog } from "@/features/gui-v2/apps/appCatalog";
+import { appCatalog } from "@/features/gui/registry/appCatalog";
 import {
     isProjectSlug,
     type GuiAppId,
     type GuiUrlState,
     type OpenAppCommand,
-} from "@/features/gui-v2/apps/appTypes";
+} from "@/features/gui/registry/appTypes";
 import type { Language } from "@/shared/lib/i18n/useLanguageStore";
 
 const MAX_QUERY_LENGTH = 256;
@@ -47,7 +47,7 @@ export function parseGuiUrl(searchParams: URLSearchParams): GuiUrlState {
 
 export function serializeGuiUrl(
     state: GuiUrlState,
-    basePath: "/gui" | "/gui-v2" = "/gui",
+    basePath: "/gui" = "/gui",
 ): string {
     const searchParams = new URLSearchParams();
 

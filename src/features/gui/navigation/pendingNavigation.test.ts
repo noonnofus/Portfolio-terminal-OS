@@ -4,8 +4,8 @@ import {
     hasPendingNavigationTimedOut,
     HISTORY_TRAVERSAL_TIMEOUT_MS,
     MAX_PENDING_NAVIGATION_EVENTS,
-} from "@/features/gui-v2/navigation/pendingNavigation";
-import type { PendingNavigation } from "@/features/gui-v2/navigation/navigationTypes";
+} from "@/features/gui/navigation/pendingNavigation";
+import type { PendingNavigation } from "@/features/gui/navigation/navigationTypes";
 
 function createPending(): PendingNavigation {
     return {

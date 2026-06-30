@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createOpenAppCommand } from "@/features/gui-v2/apps/appTypes";
-import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
-import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
+import { createOpenAppCommand } from "@/features/gui/registry/appTypes";
+import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
+import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 
 export type GuiViewer =
     | { kind: "guest" }
@@ -21,7 +21,7 @@ function WifiIcon() {
             strokeLinecap="round"
             strokeLinejoin="round"
             aria-hidden="true"
-            className="gui-v2-system-icon"
+            className="gui-system-icon"
         >
             <path d="M12 20h.01" />
             <path d="M2 8.82a15 15 0 0 1 20 0" />
@@ -41,7 +41,7 @@ function BatteryIcon() {
             strokeLinecap="round"
             strokeLinejoin="round"
             aria-hidden="true"
-            className="gui-v2-system-icon gui-v2-system-icon-battery"
+            className="gui-system-icon gui-system-icon-battery"
         >
             <rect x="2" y="7" width="16" height="10" rx="2" />
             <path d="M22 11v2" />
@@ -79,7 +79,7 @@ function SystemClock() {
 
     return (
         <time
-            className="gui-v2-system-clock"
+            className="gui-system-clock"
             aria-label="Current time"
         >
             {time}
@@ -89,13 +89,13 @@ function SystemClock() {
 
 /* ── System bar ───────────────────────────────────────────── */
 
-export function GuiSystemBarV2({
+export function GuiSystemBar({
     viewer,
 }: {
     viewer: GuiViewer;
 }) {
-    const windows = useGuiV2Store((state) => state.windows);
-    const focus = useGuiV2Store((state) => state.focus);
+    const windows = useGuiStore((state) => state.windows);
+    const focus = useGuiStore((state) => state.focus);
     const { navigate } = useGuiNavigation();
     const viewerName =
         viewer.kind === "authenticated" ? viewer.displayName : "Guest";
@@ -141,36 +141,36 @@ export function GuiSystemBarV2({
     }, [focus, navigate, windows]);
 
     return (
-        <header className="gui-v2-system-bar">
-            <div className="gui-v2-system-identity">
-                <span className="gui-v2-viewer-name">{viewerName}</span>
+        <header className="gui-system-bar">
+            <div className="gui-system-identity">
+                <span className="gui-viewer-name">{viewerName}</span>
             </div>
 
-            <strong className="gui-v2-system-title">
+            <strong className="gui-system-title">
                 Hyunho&apos;s Portfolio
             </strong>
 
             <nav
                 aria-label="System controls"
-                className="gui-v2-system-controls"
+                className="gui-system-controls"
             >
 
 
                 <div
-                    className="gui-v2-system-divider"
+                    className="gui-system-divider"
                     aria-hidden="true"
                 />
 
                 {/* dineshd.dev style: status icons + clock */}
                 <output
-                    className="gui-v2-system-status"
+                    className="gui-system-status"
                     aria-label="Wifi connected"
                 >
                     <WifiIcon />
                 </output>
 
                 <output
-                    className="gui-v2-system-status"
+                    className="gui-system-status"
                     aria-label="Battery full"
                 >
                     <BatteryIcon />

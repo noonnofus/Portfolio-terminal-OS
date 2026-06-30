@@ -4,7 +4,7 @@ import {
     Component,
     type ReactNode,
 } from "react";
-import type { GuiAppId } from "@/features/gui-v2/apps/appTypes";
+import type { GuiAppId } from "@/features/gui/registry/appTypes";
 
 const buildId =
     process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ?? "local";
@@ -23,7 +23,7 @@ export function getChunkRetryKey(
     appId: GuiAppId,
     canonicalUrl: string,
 ): string {
-    return `gui-v2:chunk-retry:${buildId}:${appId}:${canonicalUrl}`;
+    return `gui:chunk-retry:${buildId}:${appId}:${canonicalUrl}`;
 }
 
 type WindowErrorBoundaryProps = {
@@ -85,7 +85,7 @@ export class WindowErrorBoundary extends Component<
     render() {
         if (this.state.error !== null) {
             return (
-                <div role="alert" className="gui-v2-window-error">
+                <div role="alert" className="gui-window-error">
                     <strong>Unable to open this window.</strong>
                     <p>{this.state.error.message}</p>
                     <div>

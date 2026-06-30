@@ -8,43 +8,43 @@ import {
 } from "react";
 import { useStore } from "zustand";
 import {
-    createGuiV2Store,
-    type GuiV2Store,
-    type GuiV2StoreApi,
-} from "@/features/gui-v2/store/guiV2Store";
+    createGuiStore,
+    type GuiStore,
+    type GuiStoreApi,
+} from "@/features/gui/store/guiStore";
 
-const GuiV2StoreContext = createContext<GuiV2StoreApi | null>(null);
+const GuiStoreContext = createContext<GuiStoreApi | null>(null);
 
-export function GuiV2StoreProvider({
+export function GuiStoreProvider({
     children,
-    urlBasePath = "/gui-v2",
+    urlBasePath = "/gui",
 }: {
     children: ReactNode;
-    urlBasePath?: "/gui" | "/gui-v2";
+    urlBasePath?: "/gui";
 }) {
-    const [store] = useState<GuiV2StoreApi>(() =>
-        createGuiV2Store(urlBasePath),
+    const [store] = useState<GuiStoreApi>(() =>
+        createGuiStore(urlBasePath),
     );
 
     return (
-        <GuiV2StoreContext.Provider value={store}>
+        <GuiStoreContext.Provider value={store}>
             {children}
-        </GuiV2StoreContext.Provider>
+        </GuiStoreContext.Provider>
     );
 }
 
-export function useGuiV2StoreApi(): GuiV2StoreApi {
-    const store = useContext(GuiV2StoreContext);
+export function useGuiStoreApi(): GuiStoreApi {
+    const store = useContext(GuiStoreContext);
 
     if (store === null) {
-        throw new Error("GuiV2StoreProvider is missing.");
+        throw new Error("GuiStoreProvider is missing.");
     }
 
     return store;
 }
 
-export function useGuiV2Store<T>(
-    selector: (store: GuiV2Store) => T,
+export function useGuiStore<T>(
+    selector: (store: GuiStore) => T,
 ): T {
-    return useStore(useGuiV2StoreApi(), selector);
+    return useStore(useGuiStoreApi(), selector);
 }

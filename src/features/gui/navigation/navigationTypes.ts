@@ -2,7 +2,7 @@ import type {
     GuiAppId,
     GuiUrlState,
     OpenAppCommand,
-} from "@/features/gui-v2/apps/appTypes";
+} from "@/features/gui/registry/appTypes";
 import type { Language } from "@/shared/lib/i18n/useLanguageStore";
 
 export type WindowId = GuiAppId;
@@ -23,7 +23,7 @@ export type GuiWorkspaceState = {
     focus: WorkspaceFocus;
     language: Language;
     nextEntrySequence: number;
-    urlBasePath: "/gui" | "/gui-v2";
+    urlBasePath: "/gui";
 };
 
 export type GuiHistoryState = {

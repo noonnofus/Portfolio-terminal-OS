@@ -12,8 +12,8 @@ import {
     deriveVisibility,
     type EffectiveVisibility,
     type WindowVisibility,
-} from "@/features/gui-v2/runtime/appVisibility";
-import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
+} from "@/features/gui/runtime/appVisibility";
+import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 
 type AppRuntimeContextValue = {
     windowVisibility: WindowVisibility;
@@ -32,10 +32,10 @@ export function AppRuntimeBoundary({
     children: ReactNode;
     windowVisibility: WindowVisibility;
 }) {
-    const pageVisibility = useGuiV2Store(
+    const pageVisibility = useGuiStore(
         (state) => state.pageVisibility,
     );
-    const resumeEpoch = useGuiV2Store((state) => state.resumeEpoch);
+    const resumeEpoch = useGuiStore((state) => state.resumeEpoch);
     const containerRef = useRef<HTMLDivElement>(null);
     const effectiveVisibility = deriveVisibility(
         windowVisibility,

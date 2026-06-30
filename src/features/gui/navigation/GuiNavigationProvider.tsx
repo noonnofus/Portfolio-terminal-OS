@@ -12,27 +12,31 @@ import {
 import {
     isProjectSlug,
     type GuiUrlState,
-} from "@/features/gui-v2/apps/appTypes";
+} from "@/features/gui/registry/appTypes";
 import {
     parseGuiUrl,
     serializeGuiUrl,
-} from "@/features/gui-v2/apps/parseGuiAppTarget";
+} from "@/features/gui/registry/parseGuiAppTarget";
 import {
     enqueuePendingNavigationEvent,
     hasPendingNavigationTimedOut,
     HISTORY_TRAVERSAL_TIMEOUT_MS,
-} from "@/features/gui-v2/navigation/pendingNavigation";
-import { planNavigation } from "@/features/gui-v2/navigation/planNavigation";
+} from "@/features/gui/navigation/pendingNavigation";
+import { planNavigation } from "@/features/gui/navigation/planNavigation";
 import type {
     GuiHistoryState,
     PendingNavigation,
     QueuedNavigationEvent,
     StoreCommand,
-} from "@/features/gui-v2/navigation/navigationTypes";
+} from "@/features/gui/navigation/navigationTypes";
 import {
     selectWorkspaceState,
-} from "@/features/gui-v2/store/guiV2Store";
-import { useGuiV2StoreApi } from "@/features/gui-v2/store/GuiV2StoreProvider";
+} from "@/features/gui/store/guiStore";
+import { useGuiStoreApi } from "@/features/gui/store/GuiStoreProvider";
+import {
+    readGuiPreferences,
+    writeGuiPreferences,
+} from "@/features/gui/store/guiPreferences";
 import { useLanguageStore } from "@/shared/lib/i18n/useLanguageStore";
 
 type GuiNavigationContextValue = {
@@ -122,7 +126,7 @@ export function GuiNavigationProvider({
 }: {
     children: ReactNode;
 }) {
-    const store = useGuiV2StoreApi();
+    const store = useGuiStoreApi();
     const setGlobalLanguage = useLanguageStore(
         (state) => state.setLanguage,
     );
@@ -327,9 +331,23 @@ export function GuiNavigationProvider({
 
     useEffect(() => {
         const urlBasePath = store.getState().urlBasePath;
-        const view = parseGuiUrl(
-            new URLSearchParams(window.location.search),
-        );
+        const preferences = readGuiPreferences(window.localStorage);
+        if (preferences !== null) {
+            store.getState().dispatch({
+                type: "change-wallpaper",
+                wallpaper: preferences.wallpaper,
+            });
+            store.getState().dispatch({
+                type: "change-dock-auto-hide",
+                enabled: preferences.dockAutoHide,
+            });
+        }
+
+        const searchParams = new URLSearchParams(window.location.search);
+        if (!searchParams.has("lang") && preferences !== null) {
+            searchParams.set("lang", preferences.language);
+        }
+        const view = parseGuiUrl(searchParams);
         const existingEntry = readGuiHistoryState(window.history.state);
         const entry: GuiHistoryState = {
             gui: {
@@ -348,6 +366,17 @@ export function GuiNavigationProvider({
         latestEntryRef.current = entry;
         executeStoreCommands([{ type: "apply-url-state", view }]);
         store.getState().setUrlReady(true);
+
+        const persistPreferences = () => {
+            const state = store.getState();
+            writeGuiPreferences(window.localStorage, {
+                language: state.language,
+                wallpaper: state.wallpaper,
+                dockAutoHide: state.dockAutoHide,
+            });
+        };
+        persistPreferences();
+        const unsubscribePreferences = store.subscribe(persistPreferences);
 
         const handlePopState = (popStateEvent: PopStateEvent) => {
             const expiredGuard = expiredIntentRef.current;
@@ -462,6 +491,7 @@ export function GuiNavigationProvider({
             window.removeEventListener("popstate", handlePopState);
             window.removeEventListener("pagehide", handlePageHide);
             window.removeEventListener("pageshow", handlePageShow);
+            unsubscribePreferences();
             clearPending();
             clearExpiredGuard();
         };
