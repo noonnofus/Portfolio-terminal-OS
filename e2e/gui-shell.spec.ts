@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("GUI V2 preview", () => {
+test.describe("GUI shell", () => {
     test("hydrates a persisted dark theme without a server mismatch", async ({ page }) => {
         const hydrationErrors: string[] = [];
         page.on("console", (message) => {
@@ -14,7 +14,7 @@ test.describe("GUI V2 preview", () => {
         await page.addInitScript(() => localStorage.setItem("theme", "dark"));
 
         await page.goto("/gui");
-        await expect(page.locator(".gui-v2-shell")).toHaveAttribute(
+        await expect(page.locator(".gui-shell")).toHaveAttribute(
             "data-theme",
             "dark",
         );
@@ -64,7 +64,7 @@ test.describe("GUI V2 preview", () => {
         });
         await expect(systemControls.getByRole("button", { name: "en" })).toHaveCount(0);
         await expect(page.getByRole("button", { name: "Show desktop" })).toHaveCount(0);
-        await expect(page.locator(".gui-v2-viewer-name")).toHaveText("Guest");
+        await expect(page.locator(".gui-viewer-name")).toHaveText("Guest");
 
         await page
             .getByRole("navigation", { name: "Applications" })
@@ -79,10 +79,66 @@ test.describe("GUI V2 preview", () => {
         await expect(page.locator("html")).toHaveAttribute("lang", "en");
     });
 
-    test("uses the near-fullscreen mobile window contract", async ({
+    test("focuses a desktop shortcut on one click and opens it on double click", async ({
         page,
     }) => {
-        await page.setViewportSize({ width: 390, height: 844 });
+        await page.goto("/gui?app=desktop");
+        const projectsShortcut = page
+            .getByRole("navigation", { name: "Desktop shortcuts" })
+            .getByRole("button", { name: "프로젝트" });
+
+        await projectsShortcut.click();
+        await expect(projectsShortcut).toBeFocused();
+        await expect(projectsShortcut).toHaveAttribute("data-selected", "true");
+        await expect(page).toHaveURL(/app=desktop/);
+
+        await projectsShortcut.dblclick();
+        await expect(page).toHaveURL(/app=projects/);
+        await expect(page.getByRole("dialog", { name: "프로젝트" })).toBeVisible();
+    });
+
+    test("keeps a floating window bounded when a desktop browser becomes narrow", async ({
+        page,
+    }) => {
+        await page.setViewportSize({ width: 1200, height: 800 });
+        await page.goto("/gui?app=projects");
+        const projectsWindow = page.getByRole("dialog", { name: "프로젝트" });
+        await expect(projectsWindow).toBeVisible();
+
+        await page.setViewportSize({ width: 700, height: 700 });
+        const initialBox = await projectsWindow.boundingBox();
+
+        expect(initialBox).not.toBeNull();
+        expect(initialBox?.x).toBeGreaterThanOrEqual(24);
+        expect(initialBox?.width).toBeLessThanOrEqual(652);
+        expect(initialBox?.height).toBeLessThanOrEqual(450);
+
+        const titleBar = projectsWindow.locator(".gui-title-bar");
+        const titleBox = await titleBar.boundingBox();
+        expect(titleBox).not.toBeNull();
+        await page.mouse.move(
+            (titleBox?.x ?? 0) + (titleBox?.width ?? 0) / 2,
+            (titleBox?.y ?? 0) + (titleBox?.height ?? 0) / 2,
+        );
+        await page.mouse.down();
+        await page.mouse.move(690, 690);
+        await page.mouse.up();
+
+        const draggedBox = await projectsWindow.boundingBox();
+        expect(draggedBox).not.toBeNull();
+        expect(draggedBox?.x).toBeGreaterThanOrEqual(0);
+        expect(draggedBox?.y).toBeGreaterThanOrEqual(36);
+        expect((draggedBox?.x ?? 0) + (draggedBox?.width ?? 0)).toBeLessThanOrEqual(700);
+        expect((draggedBox?.y ?? 0) + (draggedBox?.height ?? 0)).toBeLessThanOrEqual(700);
+    });
+
+    test("uses the near-fullscreen mobile window contract", async ({ browser }) => {
+        const mobileContext = await browser.newContext({
+            hasTouch: true,
+            isMobile: true,
+            viewport: { width: 390, height: 844 },
+        });
+        const page = await mobileContext.newPage();
         await page.goto("/gui");
 
         const window = page.getByRole("dialog", {
@@ -97,16 +153,17 @@ test.describe("GUI V2 preview", () => {
         expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThan(770);
 
         const windowLayerZ = Number(
-            await page.locator(".gui-v2-window-layer").evaluate((element) =>
+            await page.locator(".gui-window-layer").evaluate((element) =>
                 getComputedStyle(element).zIndex,
             ),
         );
         const shortcutsZ = Number(
-            await page.locator(".gui-v2-shortcuts").evaluate((element) =>
+            await page.locator(".gui-shortcuts").evaluate((element) =>
                 getComputedStyle(element).zIndex,
             ),
         );
         expect(windowLayerZ).toBeGreaterThan(shortcutsZ);
+        await mobileContext.close();
     });
 
     test("drags desktop shortcuts at narrow viewport widths", async ({ page }) => {
@@ -165,7 +222,7 @@ test.describe("GUI V2 preview", () => {
         expect(windowBox?.width).toBe(740);
 
         const backgroundType = page.locator(
-            ".gui-v2-background-type",
+            ".gui-background-type",
         );
         await expect(backgroundType).toHaveAttribute(
             "aria-hidden",
@@ -179,7 +236,7 @@ test.describe("GUI V2 preview", () => {
         const dock = page.getByRole("navigation", { name: "Applications" });
         await dock.getByRole("button", { name: "프로젝트" }).click();
         const aboutWindow = page.locator('[data-window-id="about"]');
-        const shortcutLayer = page.locator(".gui-v2-shortcuts");
+        const shortcutLayer = page.locator(".gui-shortcuts");
         const inactiveZ = Number(await aboutWindow.evaluate((element) => getComputedStyle(element).zIndex));
         const shortcutsZ = Number(await shortcutLayer.evaluate((element) => getComputedStyle(element).zIndex));
         expect(inactiveZ).toBeGreaterThan(shortcutsZ);
@@ -187,7 +244,7 @@ test.describe("GUI V2 preview", () => {
         await expect(aboutWindow).toHaveAttribute("data-active", "true");
 
         const beforeDrag = await aboutWindow.boundingBox();
-        const titleBar = aboutWindow.locator(".gui-v2-title-bar");
+        const titleBar = aboutWindow.locator(".gui-title-bar");
         const titleBarBox = await titleBar.boundingBox();
         expect(titleBarBox).not.toBeNull();
         await page.mouse.move(
@@ -234,7 +291,7 @@ test.describe("GUI V2 preview", () => {
         const projectsBox = await projectsWindow.boundingBox();
         expect(projectsBox?.width).toBe(700);
         expect(projectsBox?.height).toBe(450);
-        await expect(projectsWindow.locator(".gui-v2-project-icon").first()).toHaveCSS(
+        await expect(projectsWindow.locator(".gui-project-icon").first()).toHaveCSS(
             "width",
             "56px",
         );
@@ -278,6 +335,24 @@ test.describe("GUI V2 preview", () => {
             page.getByRole("dialog", { name: "WCHMS" }),
         ).toHaveCount(1);
         await expect(page).toHaveURL(/app=project&slug=wchms/);
+    });
+
+    test("keeps the Terminal boot animation running behind the active window", async ({
+        page,
+    }) => {
+        await page.goto("/gui?app=terminal");
+        const terminalWindow = page.locator('[data-window-id="terminal"]');
+        const terminalRows = terminalWindow.locator(".xterm-rows");
+        await expect(terminalRows).toBeVisible();
+
+        const dock = page.getByRole("navigation", { name: "Applications" });
+        await dock.getByRole("button", { name: "나에 대해서" }).click();
+        await expect(terminalWindow).toHaveAttribute("data-active", "false");
+
+        const before = await terminalRows.textContent();
+        await page.waitForTimeout(600);
+        const after = await terminalRows.textContent();
+        expect(after).not.toBe(before);
     });
 
     test("preserves Terminal while lifecycle visibility suspends work", async ({
@@ -422,11 +497,11 @@ test.describe("GUI V2 preview", () => {
 
         await page.emulateMedia({ media: "print" });
 
-        await expect(page.locator(".gui-v2-system-bar")).toBeHidden();
-        await expect(page.locator(".gui-v2-dock")).toBeHidden();
+        await expect(page.locator(".gui-system-bar")).toBeHidden();
+        await expect(page.locator(".gui-dock")).toBeHidden();
         await expect(aboutWindow).toBeHidden();
         await expect(
-            resumeWindow.locator(".gui-v2-title-bar"),
+            resumeWindow.locator(".gui-title-bar"),
         ).toBeHidden();
         await expect(
             resumeWindow.getByRole("button", {
@@ -439,6 +514,30 @@ test.describe("GUI V2 preview", () => {
             "overflow",
             "visible",
         );
+    });
+
+    test("restores saved GUI preferences after a reload", async ({ page }) => {
+        await page.goto("/gui?app=settings");
+
+        await page.getByRole("button", { name: "English" }).click();
+        await page.getByRole("button", { name: "Dark Mode" }).click();
+        await page.getByRole("button", { name: "Auto hide" }).click();
+        await page.getByRole("button", { name: /Forest Lake/ }).click();
+
+        await page.goto("/gui?app=settings");
+
+        await expect(page.locator("html")).toHaveAttribute("lang", "en");
+        await expect(page.locator(".gui-shell")).toHaveAttribute(
+            "data-theme",
+            "dark",
+        );
+        await expect(page.locator(".gui-shell")).toHaveAttribute(
+            "data-wallpaper",
+            "forest",
+        );
+        await expect(
+            page.getByRole("navigation", { name: "Applications" }),
+        ).toHaveAttribute("data-auto-hide", "true");
     });
 
     test("restores Settings from the URL and keeps language canonical", async ({
@@ -469,7 +568,7 @@ test.describe("GUI V2 preview", () => {
             .getByRole("button", { name: "다크 모드" })
             .click();
         await expect(page.locator("html")).toHaveClass(/dark/);
-        await expect(page.locator(".gui-v2-shell")).toHaveAttribute(
+        await expect(page.locator(".gui-shell")).toHaveAttribute(
             "data-theme",
             "dark",
         );
@@ -478,7 +577,7 @@ test.describe("GUI V2 preview", () => {
             .getByRole("dialog", { name: "설정" })
             .getByRole("button", { name: /포레스트 레이크/ })
             .click();
-        await expect(page.locator(".gui-v2-shell")).toHaveAttribute(
+        await expect(page.locator(".gui-shell")).toHaveAttribute(
             "data-wallpaper",
             "forest",
         );
@@ -488,7 +587,7 @@ test.describe("GUI V2 preview", () => {
             .getByRole("button", { name: "라이트 모드" })
             .click();
         await expect(page.locator("html")).toHaveClass(/light/);
-        const shell = page.locator(".gui-v2-shell");
+        const shell = page.locator(".gui-shell");
         await expect(shell).toHaveAttribute("data-theme", "light");
         await expect(shell).toHaveCSS(
             "background-image",
@@ -496,7 +595,7 @@ test.describe("GUI V2 preview", () => {
         );
         const settings = page.getByRole("dialog", { name: "설정" });
         await expect(
-            settings.locator(".gui-v2-settings-panel").first(),
+            settings.locator(".gui-settings-panel").first(),
         ).toHaveCSS("background-color", "rgb(248, 250, 252)");
 
         const dock = page.getByRole("navigation", { name: "Applications" });
@@ -515,8 +614,8 @@ test.describe("GUI V2 preview", () => {
             .getByRole("button", { name: "프로젝트" })
             .click();
         const projectsWindow = page.getByRole("dialog", { name: "프로젝트" });
-        const projectsContent = projectsWindow.locator(".gui-v2-window-content");
-        const folder = projectsWindow.locator(".gui-v2-folder-view");
+        const projectsContent = projectsWindow.locator(".gui-window-content");
+        const folder = projectsWindow.locator(".gui-folder-view");
         await expect(folder).toHaveCSS("background-color", "rgb(247, 249, 252)");
         const contentBox = await projectsContent.boundingBox();
         const folderBox = await folder.boundingBox();
@@ -529,15 +628,15 @@ test.describe("GUI V2 preview", () => {
         await page.goto("/gui");
 
         await expect(
-            page.locator(".gui-v2-system-title"),
+            page.locator(".gui-system-title"),
         ).toHaveText("Hyunho's Portfolio");
-        await expect(page.locator(".gui-v2-viewer-name")).toContainText(
+        await expect(page.locator(".gui-viewer-name")).toContainText(
             "Guest",
         );
 
-        const dockButtons = page.locator(".gui-v2-dock-button");
+        const dockButtons = page.locator(".gui-dock-button");
         await expect(dockButtons.first()).toHaveCSS("cursor", "pointer");
-        await expect(page.locator(".gui-v2-shortcut").first()).toHaveCSS(
+        await expect(page.locator(".gui-shortcut").first()).toHaveCSS(
             "cursor",
             "pointer",
         );
@@ -554,7 +653,7 @@ test.describe("GUI V2 preview", () => {
             '[data-window-id="contact"]',
         );
         const contactSurface = contactWindow.locator(
-            ".gui-v2-legacy-surface",
+            ".gui-app-surface",
         );
         const contactBox = await contactWindow.boundingBox();
 
@@ -606,10 +705,10 @@ test.describe("GUI V2 preview", () => {
         );
 
         await expect(
-            aboutWindow.locator(".gui-v2-window-content"),
+            aboutWindow.locator(".gui-window-content"),
         ).toHaveAttribute("inert", "");
         await expect(
-            projectsWindow.locator(".gui-v2-window-content"),
+            projectsWindow.locator(".gui-window-content"),
         ).not.toHaveAttribute("inert", "");
 
         await page.keyboard.press("Control+F6");
@@ -651,7 +750,7 @@ test.describe("GUI V2 preview", () => {
             name: "나에 대해서 maximize",
         });
         await maximizeButton.click();
-        await expect(aboutWindow).toHaveClass(/gui-v2-window-maximized/);
+        await expect(aboutWindow).toHaveClass(/gui-window-maximized/);
         const maximizedBox = await aboutWindow.boundingBox();
         expect(maximizedBox).toEqual({ x: 0, y: 36, width: 756, height: 765 });
 

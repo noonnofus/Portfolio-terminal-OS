@@ -1,4 +1,4 @@
-import { externalUrl } from "@/features/gui-v2/apps/appTypes";
+import { externalUrl } from "@/features/gui/registry/appTypes";
 import { orderedProjectSummaries } from "@/shared/content/portfolio/projectSummaries";
 import type { PortfolioContent } from "@/shared/content/portfolio/types";
 

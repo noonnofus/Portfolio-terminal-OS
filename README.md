@@ -22,7 +22,6 @@ resource-aware terminal/media lifecycle management.
 ### 🚀 **Planned Features**
 - Add OS-like built-in applications (e.g., web browser, file manager)  
 - Add SEO-focused project and résumé routes
-- Migrate rollback-only legacy content consumers to the portfolio content model
 
 ## 📸 Screenshots  
 ![Website Screenshot](./public/images/Terminal-view.png)
@@ -92,7 +91,6 @@ npm run test:e2e:release
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-
 
 
 

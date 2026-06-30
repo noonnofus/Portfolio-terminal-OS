@@ -2,7 +2,7 @@ import type {
     ExternalUrl,
     ProjectSlug,
     PublicAssetPath,
-} from "@/features/gui-v2/apps/appTypes";
+} from "@/features/gui/registry/appTypes";
 import type { Language } from "@/shared/lib/i18n/useLanguageStore";
 
 export type ProjectStatus = "live" | "archived" | "private";

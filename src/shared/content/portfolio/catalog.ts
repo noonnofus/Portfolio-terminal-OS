@@ -2,7 +2,7 @@ import {
     externalUrl,
     publicAssetPath,
     type ProjectSlug,
-} from "@/features/gui-v2/apps/appTypes";
+} from "@/features/gui/registry/appTypes";
 import type { ProjectCatalogEntry } from "@/shared/content/portfolio/types";
 
 export const projectCatalog = {

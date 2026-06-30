@@ -59,7 +59,7 @@ test("all project windows stay bounded and release DOM after close", async ({
             .getByRole("button", {
                 name: `${project.listTitle} 프로젝트 열기`,
             })
-            .click();
+            .dblclick();
         await expect(
             page.getByRole("dialog", {
                 name: project.windowTitle,
@@ -86,11 +86,8 @@ test("all project windows stay bounded and release DOM after close", async ({
         if ((await dialog.count()) === 0) {
             continue;
         }
-        await page
-            .getByRole("combobox", { name: "Open windows" })
-            .selectOption(project.appId);
-        await page
-            .getByRole("button", { name: "Close active window" })
+        await dialog
+            .getByRole("button", { name: `${project.windowTitle} close` })
             .click();
         await expect(dialog).toHaveCount(0);
     }
