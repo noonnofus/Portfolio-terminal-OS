@@ -1,4 +1,4 @@
-.gui-v2-shell {
+.gui-shell {
     position: relative;
     min-height: 100dvh;
     overflow: hidden;
@@ -6,31 +6,31 @@
     transition: background 0.5s ease;
 }
 
-.gui-v2-shell[data-wallpaper="aurora"] {
+.gui-shell[data-wallpaper="aurora"] {
     background:
         radial-gradient(circle at 20% 20%, rgb(219 234 254 / 70%), transparent 35%),
         linear-gradient(135deg, #f8fafc, #e2e8f0);
 }
 
-.gui-v2-shell[data-wallpaper="sunset"] {
+.gui-shell[data-wallpaper="sunset"] {
     background:
         radial-gradient(circle at 80% 20%, rgb(254 186 116 / 70%), transparent 45%),
         linear-gradient(135deg, #ea580c, #4a0e4e);
 }
 
-.gui-v2-shell[data-wallpaper="forest"] {
+.gui-shell[data-wallpaper="forest"] {
     background:
         radial-gradient(circle at 20% 80%, rgb(167 243 208 / 50%), transparent 45%),
         linear-gradient(135deg, #064e3b, #022c22);
 }
 
-.gui-v2-shell[data-wallpaper="dark"] {
+.gui-shell[data-wallpaper="dark"] {
     background:
         radial-gradient(circle at 50% 50%, rgb(63 63 70 / 30%), transparent 70%),
         linear-gradient(135deg, #09090b, #27272a);
 }
 
-.gui-v2-system-bar {
+.gui-system-bar {
     position: fixed;
     inset: 0 0 auto;
     z-index: 100;
@@ -45,62 +45,20 @@
     backdrop-filter: blur(16px);
 }
 
-.gui-v2-system-controls {
+.gui-system-controls {
     display: flex;
     align-items: center;
     gap: 4px;
 }
 
-.gui-v2-window-menu,
-.gui-v2-system-action {
-    border-radius: 6px;
-    background: transparent;
-    padding: 3px 6px;
-    color: #475569;
-    font-size: 11px;
-}
-
-.gui-v2-window-menu:focus-visible,
-.gui-v2-system-action:focus-visible {
-    outline: 2px solid #2563eb;
-    outline-offset: 1px;
-}
-
-.gui-v2-system-action:hover {
-    background: rgb(15 23 42 / 8%);
-}
-
-.gui-v2-system-action:disabled {
-    opacity: 0.45;
-}
-
-.gui-v2-lang-button {
-    border-radius: 6px;
-    padding: 2px 8px;
-    font-size: 12px;
-    font-weight: 500;
-    text-transform: uppercase;
-    color: #64748b;
-    transition: background 100ms ease, color 100ms ease;
-}
-
-.gui-v2-lang-button:hover {
-    background: rgb(15 23 42 / 8%);
-}
-
-.gui-v2-lang-button[aria-pressed="true"] {
-    background: #0f172a;
-    color: white;
-}
-
-.gui-v2-system-divider {
+.gui-system-divider {
     width: 1px;
     height: 16px;
     margin: 0 6px;
     background: rgb(15 23 42 / 15%);
 }
 
-.gui-v2-system-clock {
+.gui-system-clock {
     font-family: "SF Mono", "Menlo", "Monaco", "Cascadia Code", monospace;
     font-size: 12px;
     font-weight: 500;
@@ -112,31 +70,25 @@
 
 /* ── System status icons (dineshd.dev style) ─────────── */
 
-.gui-v2-system-status {
+.gui-system-status {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 1px;
 }
 
-.gui-v2-system-icon {
+.gui-system-icon {
     width: 15px;
     height: 15px;
     color: #64748b;
 }
 
-.gui-v2-system-icon-battery {
+.gui-system-icon-battery {
     width: 17px;
     height: 17px;
 }
 
-.gui-v2-system-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: #0f172a;
-}
-
-.gui-v2-background-type {
+.gui-background-type {
     pointer-events: none;
     position: absolute;
     inset: 20% auto auto 8%;
@@ -149,7 +101,7 @@
     user-select: none;
 }
 
-.gui-v2-shortcuts {
+.gui-shortcuts {
     position: fixed;
     top: 72px;
     right: max(18px, env(safe-area-inset-right, 0px));
@@ -159,7 +111,7 @@
     gap: 20px;
 }
 
-.gui-v2-shortcut {
+.gui-shortcut {
     display: flex;
     width: 88px;
     flex-direction: column;
@@ -170,21 +122,21 @@
     font-size: 12px;
 }
 
-.gui-v2-shortcut:hover,
-.gui-v2-shortcut:focus-visible {
+.gui-shortcut:hover,
+.gui-shortcut:focus-visible {
     background: rgb(255 255 255 / 72%);
     outline: 2px solid #2563eb;
     outline-offset: 2px;
 }
 
-.gui-v2-window-layer {
+.gui-window-layer {
     position: absolute;
     inset: 36px 0 0;
     z-index: 35;
     pointer-events: none;
 }
 
-.gui-v2-window {
+.gui-window {
     position: absolute;
     pointer-events: auto;
     display: flex;
@@ -199,13 +151,13 @@
     box-shadow: 0 24px 70px rgb(15 23 42 / 24%);
 }
 
-.gui-v2-window[data-active="false"] {
+.gui-window[data-active="false"] {
     filter: saturate(0.82) brightness(0.96);
 }
 
 /* ── macOS-style title bar ───────────────────────────────── */
 
-.gui-v2-title-bar {
+.gui-title-bar {
     display: grid;
     grid-template-columns: 72px 1fr 72px;
     min-height: 42px;
@@ -217,19 +169,19 @@
     user-select: none;
 }
 
-.gui-v2-title-bar:active {
+.gui-title-bar:active {
     cursor: grabbing;
 }
 
 /* Traffic lights container */
-.gui-v2-traffic-lights {
+.gui-traffic-lights {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
 /* Individual traffic light button */
-.gui-v2-traffic-light {
+.gui-traffic-light {
     display: grid;
     width: 13px;
     height: 13px;
@@ -240,52 +192,52 @@
     transition: filter 120ms ease;
 }
 
-.gui-v2-traffic-light:focus-visible {
+.gui-traffic-light:focus-visible {
     outline: 2px solid #2563eb;
     outline-offset: 2px;
 }
 
 /* Close button — red */
-.gui-v2-traffic-close {
+.gui-traffic-close {
     background: #ff5f57;
 }
 
-.gui-v2-traffic-close:hover {
+.gui-traffic-close:hover {
     filter: brightness(0.88);
 }
 
 /* Minimize button — yellow */
-.gui-v2-traffic-minimize {
+.gui-traffic-minimize {
     background: #febc2e;
 }
 
-.gui-v2-traffic-minimize:hover {
+.gui-traffic-minimize:hover {
     filter: brightness(0.88);
 }
 
 /* Maximize button — green */
-.gui-v2-traffic-maximize {
+.gui-traffic-maximize {
     background: #28c840;
 }
 
-.gui-v2-traffic-maximize:hover {
+.gui-traffic-maximize:hover {
     filter: brightness(0.88);
 }
 
 /* Traffic light inner icon — hidden until hover on group */
-.gui-v2-traffic-icon {
+.gui-traffic-icon {
     width: 8px;
     height: 8px;
     color: rgb(0 0 0 / 0);
     transition: color 100ms ease;
 }
 
-.gui-v2-traffic-lights:hover .gui-v2-traffic-icon {
+.gui-traffic-lights:hover .gui-traffic-icon {
     color: rgb(0 0 0 / 55%);
 }
 
 /* Centered title text */
-.gui-v2-title-text {
+.gui-title-text {
     text-align: center;
     font-size: 13px;
     font-weight: 500;
@@ -296,58 +248,43 @@
 }
 
 /* Spacer for grid symmetry */
-.gui-v2-title-spacer {
+.gui-title-spacer {
     width: 72px;
-}
-
-.gui-v2-position-select {
-    width: 72px;
-    border: 0;
-    border-radius: 6px;
-    background: transparent;
-    padding: 3px;
-    color: #475569;
-    font-size: 10px;
-}
-
-.gui-v2-position-select:focus-visible {
-    outline: 2px solid #2563eb;
-    outline-offset: 2px;
 }
 
 /* ── Maximized window override ────────────────────────── */
 
-.gui-v2-window-maximized {
+.gui-window-maximized {
     position: fixed !important;
     border-radius: 0 !important;
     border: none !important;
 }
 
-.gui-v2-window-maximized .gui-v2-title-bar {
+.gui-window-maximized .gui-title-bar {
     cursor: default;
 }
 
 /* ── Window content ─────────────────────────────────────── */
 
-.gui-v2-window-content {
+.gui-window-content {
     min-height: 0;
     flex: 1;
     overflow: auto;
     background: #f8fafc;
 }
 
-.gui-v2-window-error {
+.gui-window-error {
     display: grid;
     gap: 12px;
     padding: 28px;
 }
 
-.gui-v2-window-error > div {
+.gui-window-error > div {
     display: flex;
     gap: 8px;
 }
 
-.gui-v2-window-error button {
+.gui-window-error button {
     border-radius: 8px;
     background: #0f172a;
     padding: 8px 12px;
@@ -355,25 +292,20 @@
     font-size: 12px;
 }
 
-.gui-v2-projects {
+.gui-projects {
     min-height: 100%;
     background: #f8fafc;
     padding: 28px;
 }
 
-.gui-v2-projects-header {
-    border-bottom: 1px solid rgb(15 23 42 / 10%);
-    padding-bottom: 20px;
-}
-
-.gui-v2-project-grid {
+.gui-project-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
     margin-top: 20px;
 }
 
-.gui-v2-project-card {
+.gui-project-card {
     display: flex;
     width: 100%;
     min-height: 170px;
@@ -389,19 +321,19 @@
         transform 140ms ease;
 }
 
-.gui-v2-project-card:hover {
+.gui-project-card:hover {
     border-color: rgb(37 99 235 / 38%);
     box-shadow: 0 12px 30px rgb(15 23 42 / 10%);
     transform: translateY(-2px);
 }
 
-.gui-v2-project-card:focus-visible {
+.gui-project-card:focus-visible {
     border-color: #2563eb;
     outline: 3px solid rgb(37 99 235 / 30%);
     outline-offset: 2px;
 }
 
-.gui-v2-project-icon {
+.gui-project-icon {
     display: grid;
     width: 76px;
     height: 76px;
@@ -411,19 +343,19 @@
     background: #f1f5f9;
 }
 
-.gui-v2-resume {
+.gui-resume {
     min-height: 100%;
     background: white;
     padding: 34px;
 }
 
-.gui-v2-resume-hero {
+.gui-resume-hero {
     position: relative;
     border-bottom: 2px solid #0f172a;
     padding-bottom: 24px;
 }
 
-.gui-v2-resume-print-action {
+.gui-resume-print-action {
     position: absolute;
     top: 0;
     right: 0;
@@ -435,21 +367,21 @@
     font-weight: 600;
 }
 
-.gui-v2-resume-print-action:hover,
-.gui-v2-resume-print-action:focus-visible {
+.gui-resume-print-action:hover,
+.gui-resume-print-action:focus-visible {
     background: #1d4ed8;
     outline: 3px solid rgb(37 99 235 / 28%);
     outline-offset: 2px;
 }
 
-.gui-v2-resume-layout {
+.gui-resume-layout {
     display: grid;
     grid-template-columns: minmax(0, 1.7fr) minmax(220px, 0.8fr);
     gap: 36px;
     margin-top: 28px;
 }
 
-.gui-v2-resume-section-title {
+.gui-resume-section-title {
     border-bottom: 1px solid rgb(15 23 42 / 18%);
     padding-bottom: 7px;
     font-size: 13px;
@@ -458,11 +390,11 @@
     text-transform: uppercase;
 }
 
-.gui-v2-resume-block {
+.gui-resume-block {
     break-inside: avoid;
 }
 
-.gui-v2-resume-link {
+.gui-resume-link {
     display: block;
     overflow-wrap: anywhere;
     color: #1d4ed8;
@@ -470,7 +402,7 @@
     text-underline-offset: 3px;
 }
 
-.gui-v2-dock {
+.gui-dock {
     position: fixed;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     left: 50%;
@@ -490,11 +422,11 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .gui-v2-dock[data-auto-hide="true"] {
+    .gui-dock[data-auto-hide="true"] {
         transform: translate(-50%, calc(100% + 4px));
     }
 
-    .gui-v2-dock[data-auto-hide="true"]::before {
+    .gui-dock[data-auto-hide="true"]::before {
         position: absolute;
         right: 50%;
         bottom: 100%;
@@ -504,13 +436,13 @@
         content: "";
     }
 
-    .gui-v2-dock[data-auto-hide="true"]:hover,
-    .gui-v2-dock[data-auto-hide="true"]:focus-within {
+    .gui-dock[data-auto-hide="true"]:hover,
+    .gui-dock[data-auto-hide="true"]:focus-within {
         transform: translateX(-50%);
     }
 }
 
-.gui-v2-dock-button {
+.gui-dock-button {
     position: relative;
     display: grid;
     width: 48px;
@@ -519,40 +451,35 @@
     border-radius: 14px;
 }
 
-.gui-v2-dock-button:hover,
-.gui-v2-dock-button:focus-visible,
-.gui-v2-dock-button[aria-pressed="true"] {
+.gui-dock-button:hover,
+.gui-dock-button:focus-visible,
+.gui-dock-button[aria-pressed="true"] {
     background: rgb(219 234 254 / 86%);
     outline: 2px solid transparent;
 }
 
-.gui-v2-dock-button:focus-visible {
+.gui-dock-button:focus-visible {
     outline-color: #2563eb;
 }
 
 @media (width < 1024px) {
-    .gui-v2-shortcuts {
+    .gui-shortcuts {
         display: none;
     }
 
 }
 
-@media (width < 768px) {
-    .gui-v2-background-type {
+@media (width < 768px) and (pointer: coarse) {
+    .gui-background-type {
         display: none;
     }
 
-    .gui-v2-window-menu,
-    .gui-v2-system-action {
-        display: none;
-    }
-
-    .gui-v2-window-layer {
+    .gui-window-layer {
         position: fixed;
         inset: 36px 0 0;
     }
 
-    .gui-v2-window:not(.gui-v2-window-maximized) {
+    .gui-window:not(.gui-window-maximized) {
         position: fixed;
         inset: 44px 8px
             calc(84px + env(safe-area-inset-bottom, 0px)) 8px !important;
@@ -562,42 +489,38 @@
         border-radius: 12px;
     }
 
-    .gui-v2-window[data-active="false"] {
+    .gui-window[data-active="false"] {
         display: none;
     }
 
-    .gui-v2-position-select {
-        visibility: hidden;
-    }
-
-    .gui-v2-projects {
+    .gui-projects {
         padding: 18px;
     }
 
-    .gui-v2-project-grid {
+    .gui-project-grid {
         grid-template-columns: minmax(0, 1fr);
     }
 
-    .gui-v2-project-card {
+    .gui-project-card {
         min-height: 0;
         padding: 14px;
     }
 
-    .gui-v2-project-icon {
+    .gui-project-icon {
         width: 60px;
         height: 60px;
     }
 
-    .gui-v2-resume {
+    .gui-resume {
         padding: 22px 18px;
     }
 
-    .gui-v2-resume-print-action {
+    .gui-resume-print-action {
         position: static;
         margin-top: 16px;
     }
 
-    .gui-v2-resume-layout {
+    .gui-resume-layout {
         grid-template-columns: minmax(0, 1fr);
         gap: 30px;
     }
@@ -617,20 +540,20 @@
         background: white !important;
     }
 
-    .gui-v2-system-bar,
-    .gui-v2-dock,
-    .gui-v2-shortcuts,
-    .gui-v2-background-type,
-    .gui-v2-title-bar,
-    .gui-v2-resume-print-action,
+    .gui-system-bar,
+    .gui-dock,
+    .gui-shortcuts,
+    .gui-background-type,
+    .gui-title-bar,
+    .gui-resume-print-action,
     [data-window-id]:not([data-window-id="resume"]) {
         display: none !important;
     }
 
-    .gui-v2-shell,
-    .gui-v2-window-layer,
+    .gui-shell,
+    .gui-window-layer,
     [data-window-id="resume"],
-    [data-window-id="resume"] .gui-v2-window-content,
+    [data-window-id="resume"] .gui-window-content,
     [data-window-id="resume"] [data-effective-visibility] {
         position: static !important;
         display: block !important;
@@ -645,21 +568,21 @@
         filter: none !important;
     }
 
-    .gui-v2-resume {
+    .gui-resume {
         padding: 0 !important;
         color: black !important;
     }
 
-    .gui-v2-resume-layout {
+    .gui-resume-layout {
         display: block !important;
     }
 
-    .gui-v2-resume-layout > aside {
+    .gui-resume-layout > aside {
         margin-top: 28px;
     }
 
-    .gui-v2-resume a[href^="http"]::after,
-    .gui-v2-resume a[href^="mailto"]::after {
+    .gui-resume a[href^="http"]::after,
+    .gui-resume a[href^="mailto"]::after {
         content: " (" attr(href) ")";
         color: #334155;
         font-size: 9pt;
@@ -668,173 +591,143 @@
 }
 
 /* ── Sleek scrollbars for windows ── */
-.gui-v2-window-content::-webkit-scrollbar,
-.gui-v2-window-content *::-webkit-scrollbar {
+.gui-window-content::-webkit-scrollbar,
+.gui-window-content *::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 
-.gui-v2-window-content::-webkit-scrollbar-track,
-.gui-v2-window-content *::-webkit-scrollbar-track {
+.gui-window-content::-webkit-scrollbar-track,
+.gui-window-content *::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.gui-v2-window-content::-webkit-scrollbar-thumb,
-.gui-v2-window-content *::-webkit-scrollbar-thumb {
+.gui-window-content::-webkit-scrollbar-thumb,
+.gui-window-content *::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.18);
     border-radius: 99px;
 }
 
-.gui-v2-window-content::-webkit-scrollbar-thumb:hover,
-.gui-v2-window-content *::-webkit-scrollbar-thumb:hover {
+.gui-window-content::-webkit-scrollbar-thumb:hover,
+.gui-window-content *::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, 0.35);
 }
 
-.dark .gui-v2-window-content::-webkit-scrollbar-thumb,
-.dark .gui-v2-window-content *::-webkit-scrollbar-thumb {
+.dark .gui-window-content::-webkit-scrollbar-thumb,
+.dark .gui-window-content *::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.2);
 }
 
-.dark .gui-v2-window-content::-webkit-scrollbar-thumb:hover,
-.dark .gui-v2-window-content *::-webkit-scrollbar-thumb:hover {
+.dark .gui-window-content::-webkit-scrollbar-thumb:hover,
+.dark .gui-window-content *::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.35);
 }
 
-/* ── Dark Mode styling override for GUI V2 ── */
-.dark.gui-v2-shell,
-.dark .gui-v2-shell {
+/* ── Dark mode styling override for GUI ── */
+.dark.gui-shell,
+.dark .gui-shell {
     color: #f8fafc;
 }
 
-.dark .gui-v2-window {
+.dark .gui-window {
     background: rgba(30, 41, 59, 0.94);
     border-color: rgba(255, 255, 255, 0.12);
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
 }
 
-.dark .gui-v2-title-bar {
+.dark .gui-title-bar {
     background: rgba(15, 23, 42, 0.9);
     border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
-.dark .gui-v2-title-text {
+.dark .gui-title-text {
     color: #cbd5e1;
 }
 
-.dark .gui-v2-position-select {
-    color: #cbd5e1;
-}
-
-.dark .gui-v2-window-content {
+.dark .gui-window-content {
     background: #0f172a;
 }
 
-.dark .gui-v2-projects {
+.dark .gui-projects {
     background: #0f172a;
 }
 
-.dark .gui-v2-projects-header h3 {
-    color: #f8fafc;
-}
-
-.dark .gui-v2-project-card {
+.dark .gui-project-card {
     background: #1e293b;
     border-color: rgba(255, 255, 255, 0.08);
     color: #cbd5e1;
 }
 
-.dark .gui-v2-project-card strong {
+.dark .gui-project-card strong {
     color: #f8fafc;
 }
 
-.dark .gui-v2-project-card:hover {
+.dark .gui-project-card:hover {
     border-color: rgba(59, 130, 246, 0.45);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
 }
 
-.dark .gui-v2-project-icon {
+.dark .gui-project-icon {
     background: #334155;
 }
 
-.dark .gui-v2-resume {
+.dark .gui-resume {
     background: #0f172a;
     color: #cbd5e1;
 }
 
-.dark .gui-v2-resume h3,
-.dark .gui-v2-resume h4,
-.dark .gui-v2-resume h5,
-.dark .gui-v2-resume dt {
+.dark .gui-resume h3,
+.dark .gui-resume h4,
+.dark .gui-resume h5,
+.dark .gui-resume dt {
     color: #f8fafc;
 }
 
-.dark .gui-v2-resume-section-title {
+.dark .gui-resume-section-title {
     border-bottom-color: rgba(255, 255, 255, 0.15);
     color: #f8fafc;
 }
 
-.dark .gui-v2-resume-hero {
+.dark .gui-resume-hero {
     border-bottom-color: #334155;
 }
 
-.dark .gui-v2-resume-hero p {
+.dark .gui-resume-hero p {
     color: #94a3b8;
 }
 
-.dark .gui-v2-dock {
+.dark .gui-dock {
     background: rgba(15, 23, 42, 0.72);
     border-color: rgba(255, 255, 255, 0.08);
     box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
 }
 
-.dark .gui-v2-dock-button:hover,
-.dark .gui-v2-dock-button:focus-visible,
-.dark .gui-v2-dock-button[aria-pressed="true"] {
+.dark .gui-dock-button:hover,
+.dark .gui-dock-button:focus-visible,
+.dark .gui-dock-button[aria-pressed="true"] {
     background: rgba(30, 41, 59, 0.86);
 }
 
-.dark .gui-v2-system-bar {
+.dark .gui-system-bar {
     background: rgba(15, 23, 42, 0.78);
     border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
-.dark .gui-v2-system-name {
-    color: #f8fafc;
-}
-
-.dark .gui-v2-system-clock {
+.dark .gui-system-clock {
     color: #cbd5e1;
 }
 
-.dark .gui-v2-system-icon {
+.dark .gui-system-icon {
     color: #cbd5e1;
 }
 
-.dark .gui-v2-window-menu,
-.dark .gui-v2-system-action {
-    color: #cbd5e1;
-}
-
-.dark .gui-v2-system-action:hover {
-    background: rgb(255 255 255 / 8%);
-}
-
-.dark .gui-v2-lang-button:hover {
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.dark .gui-v2-lang-button[aria-pressed="true"] {
-    background: #f8fafc;
-    color: #0f172a;
-}
-
-.dark .gui-v2-system-divider {
+.dark .gui-system-divider {
     background: rgba(255, 255, 255, 0.15);
 }
 
 /* ── 2026 macOS-inspired adaptive material system ───────── */
 
-.gui-v2-shell {
+.gui-shell {
     --gui-accent: #0a84ff;
     --gui-text: #182230;
     --gui-text-secondary: #5d6878;
@@ -852,7 +745,7 @@
     background-color: #dfe7f2;
 }
 
-.gui-v2-shell[data-theme="dark"] {
+.gui-shell[data-theme="dark"] {
     --gui-accent: #5aaeff;
     --gui-text: #f4f7fb;
     --gui-text-secondary: #aeb8c8;
@@ -868,61 +761,61 @@
     background-color: #11141b;
 }
 
-.gui-v2-shell[data-theme="light"][data-wallpaper="aurora"] {
+.gui-shell[data-theme="light"][data-wallpaper="aurora"] {
     background:
         radial-gradient(circle at 18% 18%, #d9f1ff 0, transparent 34%),
         radial-gradient(circle at 78% 24%, #e5ddff 0, transparent 32%),
         linear-gradient(145deg, #f8fbff 0%, #dce8f5 54%, #cad8e9 100%);
 }
 
-.gui-v2-shell[data-theme="light"][data-wallpaper="sunset"] {
+.gui-shell[data-theme="light"][data-wallpaper="sunset"] {
     background:
         radial-gradient(circle at 70% 18%, #ffd8c4 0, transparent 34%),
         radial-gradient(circle at 18% 72%, #e7d8ff 0, transparent 38%),
         linear-gradient(145deg, #fff7f0 0%, #efdce8 52%, #d8d9f1 100%);
 }
 
-.gui-v2-shell[data-theme="light"][data-wallpaper="forest"] {
+.gui-shell[data-theme="light"][data-wallpaper="forest"] {
     background:
         radial-gradient(circle at 26% 22%, #d7f7ea 0, transparent 36%),
         radial-gradient(circle at 78% 74%, #c9e8ec 0, transparent 34%),
         linear-gradient(145deg, #f2fbf7 0%, #d7ebe2 52%, #bfd8d4 100%);
 }
 
-.gui-v2-shell[data-theme="light"][data-wallpaper="dark"] {
+.gui-shell[data-theme="light"][data-wallpaper="dark"] {
     background:
         radial-gradient(circle at 72% 22%, #e1e4ed 0, transparent 36%),
         linear-gradient(145deg, #f8f9fc 0%, #d9dde7 52%, #c5cad5 100%);
 }
 
-.gui-v2-shell[data-theme="dark"][data-wallpaper="aurora"] {
+.gui-shell[data-theme="dark"][data-wallpaper="aurora"] {
     background:
         radial-gradient(circle at 18% 20%, #17395a 0, transparent 38%),
         radial-gradient(circle at 78% 18%, #322b59 0, transparent 34%),
         linear-gradient(145deg, #121824 0%, #151b28 48%, #0d1119 100%);
 }
 
-.gui-v2-shell[data-theme="dark"][data-wallpaper="sunset"] {
+.gui-shell[data-theme="dark"][data-wallpaper="sunset"] {
     background:
         radial-gradient(circle at 72% 18%, #633626 0, transparent 36%),
         radial-gradient(circle at 20% 72%, #38264f 0, transparent 38%),
         linear-gradient(145deg, #21151a 0%, #211827 48%, #101219 100%);
 }
 
-.gui-v2-shell[data-theme="dark"][data-wallpaper="forest"] {
+.gui-shell[data-theme="dark"][data-wallpaper="forest"] {
     background:
         radial-gradient(circle at 24% 20%, #174738 0, transparent 38%),
         radial-gradient(circle at 78% 74%, #153747 0, transparent 34%),
         linear-gradient(145deg, #101d19 0%, #10211f 48%, #0c1315 100%);
 }
 
-.gui-v2-shell[data-theme="dark"][data-wallpaper="dark"] {
+.gui-shell[data-theme="dark"][data-wallpaper="dark"] {
     background:
         radial-gradient(circle at 72% 20%, #2b3040 0, transparent 34%),
         linear-gradient(145deg, #151820 0%, #0f1218 58%, #090b10 100%);
 }
 
-.gui-v2-wallpaper-art {
+.gui-wallpaper-art {
     pointer-events: none;
     position: absolute;
     inset: 0;
@@ -931,7 +824,7 @@
     filter: saturate(112%);
 }
 
-.gui-v2-wallpaper-art span {
+.gui-wallpaper-art span {
     position: absolute;
     width: min(48vw, 700px);
     aspect-ratio: 1;
@@ -946,26 +839,26 @@
     transform: rotate(-18deg);
 }
 
-.gui-v2-wallpaper-art span:nth-child(1) {
+.gui-wallpaper-art span:nth-child(1) {
     top: -24%;
     right: -8%;
 }
 
-.gui-v2-wallpaper-art span:nth-child(2) {
+.gui-wallpaper-art span:nth-child(2) {
     bottom: -38%;
     left: 8%;
     width: min(58vw, 820px);
     transform: rotate(24deg);
 }
 
-.gui-v2-wallpaper-art span:nth-child(3) {
+.gui-wallpaper-art span:nth-child(3) {
     top: 34%;
     left: 42%;
     width: min(24vw, 340px);
     opacity: 0.38;
 }
 
-.gui-v2-shell[data-theme="dark"] .gui-v2-wallpaper-art span {
+.gui-shell[data-theme="dark"] .gui-wallpaper-art span {
     background: linear-gradient(
         145deg,
         rgb(255 255 255 / 8%),
@@ -973,14 +866,14 @@
     );
 }
 
-.gui-v2-shell button:not(:disabled),
-.gui-v2-shell a[href],
-.gui-v2-shell select,
-.gui-v2-project-card {
+.gui-shell button:not(:disabled),
+.gui-shell a[href],
+.gui-shell select,
+.gui-project-card {
     cursor: pointer;
 }
 
-.gui-v2-system-bar {
+.gui-system-bar {
     border-bottom-color: var(--gui-border);
     background: var(--gui-glass);
     color: var(--gui-text);
@@ -988,122 +881,23 @@
     backdrop-filter: blur(24px) saturate(145%);
 }
 
-.gui-v2-system-identity {
+.gui-system-identity {
     display: flex;
     min-width: 0;
     align-items: center;
     gap: 8px;
 }
 
-.gui-v2-portfolio-mark {
-    display: grid;
-    width: 24px;
-    height: 24px;
-    flex: 0 0 auto;
-    place-items: center;
-    border: 1px solid rgb(255 255 255 / 54%);
-    border-radius: 8px;
-    background: linear-gradient(145deg, #70b7ff, #5575ff 55%, #7760ff);
-    box-shadow:
-        inset 0 1px 0 rgb(255 255 255 / 58%),
-        0 4px 12px rgb(46 86 180 / 26%);
-    color: white;
-    font-size: 12px;
-    font-weight: 750;
-}
-
-.gui-v2-portfolio-brand {
-    display: grid;
-    min-width: 0;
-    line-height: 1;
-}
-
-.gui-v2-portfolio-brand strong {
-    overflow: hidden;
-    color: var(--gui-text);
-    font-size: 11px;
-    font-weight: 650;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.gui-v2-portfolio-brand span {
-    margin-top: 2px;
-    color: var(--gui-text-secondary);
-    font-size: 8px;
-    letter-spacing: 0.02em;
-}
-
-.gui-v2-viewer-chip {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    border: 1px solid var(--gui-border);
-    border-radius: 999px;
-    background: var(--gui-control);
-    padding: 2px 7px 2px 3px;
-    color: var(--gui-text-secondary);
-    font-size: 10px;
-}
-
-.gui-v2-viewer-avatar {
-    display: grid;
-    width: 18px;
-    height: 18px;
-    place-items: center;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #8e9aac, #566275);
-    color: white;
-    font-size: 9px;
-    font-weight: 700;
-}
-
-.gui-v2-window-menu,
-.gui-v2-system-action,
-.gui-v2-lang-button {
-    border: 1px solid transparent;
-    background: transparent;
+.gui-system-clock,
+.gui-system-icon {
     color: var(--gui-text-secondary);
 }
 
-.gui-v2-window-menu:hover,
-.gui-v2-system-action:hover,
-.gui-v2-lang-button:hover {
-    border-color: var(--gui-border);
-    background: var(--gui-control-hover);
-}
-
-.gui-v2-system-action {
-    display: grid;
-    width: 24px;
-    height: 24px;
-    place-items: center;
-    padding: 0;
-}
-
-.gui-v2-system-action svg {
-    width: 13px;
-    height: 13px;
-}
-
-.gui-v2-lang-button[aria-pressed="true"] {
-    border-color: var(--gui-border);
-    background: var(--gui-glass-strong);
-    color: var(--gui-text);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 32%);
-}
-
-.gui-v2-system-clock,
-.gui-v2-system-icon,
-.gui-v2-system-name {
-    color: var(--gui-text-secondary);
-}
-
-.gui-v2-system-divider {
+.gui-system-divider {
     background: color-mix(in srgb, var(--gui-text-secondary) 24%, transparent);
 }
 
-.gui-v2-window {
+.gui-window {
     border-color: var(--gui-border);
     border-radius: 18px;
     background: var(--gui-window);
@@ -1111,12 +905,12 @@
     backdrop-filter: blur(30px) saturate(132%);
 }
 
-.gui-v2-window[data-active="false"] {
+.gui-window[data-active="false"] {
     filter: saturate(0.78) brightness(0.96);
     box-shadow: 0 20px 58px rgb(22 31 48 / 16%);
 }
 
-.gui-v2-title-bar {
+.gui-title-bar {
     border-bottom-color: color-mix(
         in srgb,
         var(--gui-text-secondary) 13%,
@@ -1126,44 +920,39 @@
     backdrop-filter: blur(24px) saturate(145%);
 }
 
-.gui-v2-title-text,
-.gui-v2-position-select {
+.gui-title-text {
     color: var(--gui-text-secondary);
 }
 
-.gui-v2-position-select {
-    background: var(--gui-control);
-}
-
-.gui-v2-window-content,
-.gui-v2-projects,
-.gui-v2-resume,
-.gui-v2-legacy-surface,
-.gui-v2-shell[data-theme="dark"] .gui-v2-legacy-surface {
+.gui-window-content,
+.gui-projects,
+.gui-resume,
+.gui-app-surface,
+.gui-shell[data-theme="dark"] .gui-app-surface {
     background: var(--gui-window-solid);
     color: var(--gui-text);
 }
 
-.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .bg-white,
-.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .bg-slate-50 {
+.gui-shell[data-theme="dark"] .gui-window-content .bg-white,
+.gui-shell[data-theme="dark"] .gui-window-content .bg-slate-50 {
     background-color: #202631 !important;
 }
 
-.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-black,
-.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-pen-gray-800,
-.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-slate-800 {
+.gui-shell[data-theme="dark"] .gui-window-content .text-black,
+.gui-shell[data-theme="dark"] .gui-window-content .text-pen-gray-800,
+.gui-shell[data-theme="dark"] .gui-window-content .text-slate-800 {
     color: #f4f7fb !important;
 }
 
-.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-pen-gray-700,
-.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-pen-gray-600,
-.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-slate-700,
-.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-slate-600,
-.gui-v2-shell[data-theme="dark"] .gui-v2-window-content .text-slate-500 {
+.gui-shell[data-theme="dark"] .gui-window-content .text-pen-gray-700,
+.gui-shell[data-theme="dark"] .gui-window-content .text-pen-gray-600,
+.gui-shell[data-theme="dark"] .gui-window-content .text-slate-700,
+.gui-shell[data-theme="dark"] .gui-window-content .text-slate-600,
+.gui-shell[data-theme="dark"] .gui-window-content .text-slate-500 {
     color: #b7c1d0 !important;
 }
 
-.gui-v2-project-card {
+.gui-project-card {
     border-color: color-mix(
         in srgb,
         var(--gui-text-secondary) 13%,
@@ -1175,29 +964,27 @@
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 32%);
 }
 
-.gui-v2-project-card:hover {
+.gui-project-card:hover {
     border-color: color-mix(in srgb, var(--gui-accent) 42%, transparent);
     background: var(--gui-control-hover);
     box-shadow: 0 16px 36px rgb(20 42 76 / 12%);
 }
 
-.gui-v2-project-card strong,
-.gui-v2-projects-header h3,
-.gui-v2-resume h3,
-.gui-v2-resume h4,
-.gui-v2-resume h5,
-.gui-v2-resume dt {
+.gui-project-card strong,
+.gui-resume h3,
+.gui-resume h4,
+.gui-resume h5,
+.gui-resume dt {
     color: var(--gui-text);
 }
 
-.gui-v2-project-card span,
-.gui-v2-projects-header p,
-.gui-v2-resume p,
-.gui-v2-resume dd {
+.gui-project-card span,
+.gui-resume p,
+.gui-resume dd {
     color: var(--gui-text-secondary);
 }
 
-.gui-v2-dock {
+.gui-dock {
     border-color: var(--gui-border);
     border-radius: 24px;
     background: var(--gui-glass);
@@ -1207,18 +994,18 @@
     backdrop-filter: blur(28px) saturate(155%);
 }
 
-.gui-v2-dock-button {
+.gui-dock-button {
     cursor: pointer;
     border-radius: 15px;
 }
 
-.gui-v2-dock-button:hover,
-.gui-v2-dock-button:focus-visible,
-.gui-v2-dock-button[aria-pressed="true"] {
+.gui-dock-button:hover,
+.gui-dock-button:focus-visible,
+.gui-dock-button[aria-pressed="true"] {
     background: var(--gui-control-hover);
 }
 
-.gui-v2-app-icon {
+.gui-app-icon {
     position: relative;
     display: grid;
     width: 36px;
@@ -1234,7 +1021,7 @@
     color: white;
 }
 
-.gui-v2-app-icon::after {
+.gui-app-icon::after {
     position: absolute;
     inset: 0;
     background: linear-gradient(
@@ -1246,85 +1033,85 @@
     pointer-events: none;
 }
 
-.gui-v2-app-icon[data-size="desktop"] {
+.gui-app-icon[data-size="desktop"] {
     width: 54px;
     height: 54px;
     border-radius: 15px;
 }
 
-.gui-v2-app-icon[data-size="project"] {
+.gui-app-icon[data-size="project"] {
     width: 70px;
     height: 70px;
     border-radius: 19px;
 }
 
-.gui-v2-app-icon[data-app-icon="about"] {
+.gui-app-icon[data-app-icon="about"] {
     background: none;
     border: none;
     box-shadow: none;
     border-radius: 0;
 }
 
-.gui-v2-app-icon[data-app-icon="about"]::after {
+.gui-app-icon[data-app-icon="about"]::after {
     display: none;
 }
 
-.gui-v2-app-icon[data-app-icon="projects"] {
+.gui-app-icon[data-app-icon="projects"] {
     background: none;
     border: none;
     box-shadow: none;
     border-radius: 0;
 }
 
-.gui-v2-app-icon[data-app-icon="projects"]::after {
+.gui-app-icon[data-app-icon="projects"]::after {
     display: none;
 }
 
-.gui-v2-app-icon[data-app-icon="resume"] {
+.gui-app-icon[data-app-icon="resume"] {
     background: none;
     border: none;
     box-shadow: none;
     border-radius: 0;
 }
 
-.gui-v2-app-icon[data-app-icon="resume"]::after {
+.gui-app-icon[data-app-icon="resume"]::after {
     display: none;
 }
 
-.gui-v2-app-icon[data-app-icon="terminal"] {
+.gui-app-icon[data-app-icon="terminal"] {
     background: none;
     border: none;
     box-shadow: none;
     border-radius: 0;
 }
 
-.gui-v2-app-icon[data-app-icon="terminal"]::after {
+.gui-app-icon[data-app-icon="terminal"]::after {
     display: none;
 }
 
-.gui-v2-app-icon[data-app-icon="contact"] {
+.gui-app-icon[data-app-icon="contact"] {
     background: none;
     border: none;
     box-shadow: none;
     border-radius: 0;
 }
 
-.gui-v2-app-icon[data-app-icon="contact"]::after {
+.gui-app-icon[data-app-icon="contact"]::after {
     display: none;
 }
 
-.gui-v2-app-icon[data-app-icon="settings"] {
+.gui-app-icon[data-app-icon="settings"] {
     background: none;
     border: none;
     box-shadow: none;
     border-radius: 0;
 }
 
-.gui-v2-app-icon[data-app-icon="settings"]::after {
+.gui-app-icon[data-app-icon="settings"]::after {
     display: none;
 }
 
-.gui-v2-app-icon-image {
+.gui-app-icon-image {
     position: relative;
     z-index: 1;
     width: 72%;
@@ -1333,64 +1120,55 @@
     filter: drop-shadow(0 2px 3px rgb(0 0 0 / 18%));
 }
 
-.gui-v2-shortcut {
+.gui-shortcut {
     cursor: pointer;
     color: var(--gui-text);
     text-shadow: 0 1px 4px rgb(255 255 255 / 46%);
 }
 
-.gui-v2-shell[data-theme="dark"] .gui-v2-shortcut {
+.gui-shell[data-theme="dark"] .gui-shortcut {
     text-shadow: 0 1px 4px rgb(0 0 0 / 72%);
 }
 
-.gui-v2-shortcut:hover,
-.gui-v2-shortcut:focus-visible {
+.gui-shortcut:hover,
+.gui-shortcut:focus-visible {
     background: var(--gui-control);
 }
 
-.gui-v2-background-type {
+.gui-background-type {
     color: var(--gui-text);
 }
 
-@media (width < 768px) {
-    .gui-v2-window:not(.gui-v2-window-maximized) {
+@media (width < 768px) and (pointer: coarse) {
+    .gui-window:not(.gui-window-maximized) {
         width: auto !important;
         height: auto !important;
         max-width: none !important;
         max-height: none !important;
     }
 
-    .gui-v2-portfolio-brand span,
-    .gui-v2-viewer-chip > span:last-child {
-        display: none;
-    }
-
-    .gui-v2-viewer-chip {
-        padding-right: 3px;
-    }
-
-    .gui-v2-system-controls {
+    .gui-system-controls {
         gap: 2px;
     }
 
-    .gui-v2-wallpaper-art span {
+    .gui-wallpaper-art span {
         opacity: 0.38;
     }
 }
 
-.gui-v2-shell[data-theme] .gui-v2-system-bar {
+.gui-shell[data-theme] .gui-system-bar {
     border-bottom-color: var(--gui-border);
     background: var(--gui-glass);
     color: var(--gui-text);
 }
 
-.gui-v2-shell[data-theme] .gui-v2-window {
+.gui-shell[data-theme] .gui-window {
     border-color: var(--gui-border);
     background: var(--gui-window);
     box-shadow: var(--gui-shadow);
 }
 
-.gui-v2-shell[data-theme] .gui-v2-title-bar {
+.gui-shell[data-theme] .gui-title-bar {
     border-bottom-color: color-mix(
         in srgb,
         var(--gui-text-secondary) 13%,
@@ -1399,25 +1177,22 @@
     background: var(--gui-titlebar);
 }
 
-.gui-v2-shell[data-theme] .gui-v2-title-text,
-.gui-v2-shell[data-theme] .gui-v2-position-select,
-.gui-v2-shell[data-theme] .gui-v2-system-clock,
-.gui-v2-shell[data-theme] .gui-v2-system-icon,
-.gui-v2-shell[data-theme] .gui-v2-window-menu,
-.gui-v2-shell[data-theme] .gui-v2-system-action {
+.gui-shell[data-theme] .gui-title-text,
+.gui-shell[data-theme] .gui-system-clock,
+.gui-shell[data-theme] .gui-system-icon {
     color: var(--gui-text-secondary);
 }
 
-.gui-v2-shell[data-theme] .gui-v2-window-content,
-.gui-v2-shell[data-theme] .gui-v2-projects,
-.gui-v2-shell[data-theme] .gui-v2-resume,
-.gui-v2-shell[data-theme] .gui-v2-legacy-surface,
-.gui-v2-shell[data-theme] .gui-v2-settings-surface {
+.gui-shell[data-theme] .gui-window-content,
+.gui-shell[data-theme] .gui-projects,
+.gui-shell[data-theme] .gui-resume,
+.gui-shell[data-theme] .gui-app-surface,
+.gui-shell[data-theme] .gui-settings-surface {
     background: var(--gui-window-solid);
     color: var(--gui-text);
 }
 
-.gui-v2-shell[data-theme] .gui-v2-project-card {
+.gui-shell[data-theme] .gui-project-card {
     border-color: color-mix(
         in srgb,
         var(--gui-text-secondary) 13%,
@@ -1427,11 +1202,11 @@
     color: var(--gui-text);
 }
 
-.gui-v2-shell[data-theme] .gui-v2-project-icon {
+.gui-shell[data-theme] .gui-project-icon {
     background: transparent;
 }
 
-.gui-v2-shell[data-theme] .gui-v2-dock {
+.gui-shell[data-theme] .gui-dock {
     border-color: var(--gui-border);
     background: var(--gui-glass);
     box-shadow:
@@ -1439,58 +1214,52 @@
         0 18px 46px rgb(17 30 54 / 24%);
 }
 
-.gui-v2-shell[data-theme] .gui-v2-dock-button:hover,
-.gui-v2-shell[data-theme] .gui-v2-dock-button:focus-visible,
-.gui-v2-shell[data-theme] .gui-v2-dock-button[aria-pressed="true"] {
+.gui-shell[data-theme] .gui-dock-button:hover,
+.gui-shell[data-theme] .gui-dock-button:focus-visible,
+.gui-shell[data-theme] .gui-dock-button[aria-pressed="true"] {
     background: var(--gui-control-hover);
 }
 
-.gui-v2-shell[data-theme] .gui-v2-lang-button[aria-pressed="true"] {
-    border-color: var(--gui-border);
-    background: var(--gui-glass-strong);
-    color: var(--gui-text);
-}
-
 /* 2026 macOS-inspired desktop: calm photography, translucent chrome, clear folders. */
-.gui-v2-shell[data-wallpaper="aurora"] {
+.gui-shell[data-wallpaper="aurora"] {
     background-image:
         linear-gradient(rgb(9 18 34 / 8%), rgb(9 18 34 / 24%)),
         url("/wallpapers/alpine-twilight.jpg");
 }
 
-.gui-v2-shell[data-wallpaper="sunset"] {
+.gui-shell[data-wallpaper="sunset"] {
     background-image:
         linear-gradient(rgb(30 18 60 / 6%), rgb(20 12 42 / 18%)),
         url("/wallpapers/soft-spectrum.jpg");
 }
 
-.gui-v2-shell[data-wallpaper="forest"] {
+.gui-shell[data-wallpaper="forest"] {
     background-image:
         linear-gradient(rgb(5 28 24 / 4%), rgb(5 28 24 / 20%)),
         url("/wallpapers/forest-lake.jpg");
 }
 
-.gui-v2-shell[data-wallpaper="dark"] {
+.gui-shell[data-wallpaper="dark"] {
     background-image:
         linear-gradient(rgb(34 5 8 / 8%), rgb(28 4 8 / 22%)),
         url("/wallpapers/red-landscape.jpg");
 }
 
-.gui-v2-shell[data-wallpaper] {
+.gui-shell[data-wallpaper] {
     background-position: center;
     background-size: cover;
 }
 
-.gui-v2-wallpaper-art {
+.gui-wallpaper-art {
     display: none;
 }
 
-.gui-v2-system-bar {
+.gui-system-bar {
     justify-content: space-between;
     font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
 }
 
-.gui-v2-system-title {
+.gui-system-title {
     position: absolute;
     left: 50%;
     max-width: 40vw;
@@ -1504,52 +1273,18 @@
     white-space: nowrap;
 }
 
-.gui-v2-system-identity {
+.gui-system-identity {
     min-width: 84px;
 }
 
-.gui-v2-viewer-chip {
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-}
-
-.gui-v2-folder-view {
+.gui-folder-view {
     display: flex;
     min-height: 100%;
     flex-direction: column;
     padding: 0;
 }
 
-.gui-v2-projects-header {
-    padding: 14px 18px 12px;
-    background: color-mix(in srgb, var(--gui-window-solid) 94%, transparent);
-}
-
-.gui-v2-folder-path {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    color: var(--gui-text-secondary);
-    font-size: 13px;
-}
-
-.gui-v2-folder-path .gui-v2-app-icon {
-    width: 24px;
-    height: 24px;
-}
-
-.gui-v2-folder-path strong {
-    color: var(--gui-text);
-}
-
-.gui-v2-folder-description {
-    margin-top: 5px;
-    color: var(--gui-text-secondary);
-    font-size: 12px;
-}
-
-.gui-v2-project-grid {
+.gui-project-grid {
     grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
     align-content: start;
     gap: 14px;
@@ -1557,7 +1292,7 @@
     padding: 20px;
 }
 
-.gui-v2-project-card {
+.gui-project-card {
     min-height: 170px;
     flex-direction: column;
     align-items: center;
@@ -1569,19 +1304,19 @@
     box-shadow: none !important;
 }
 
-.gui-v2-project-card:hover,
-.gui-v2-project-card:focus-visible {
+.gui-project-card:hover,
+.gui-project-card:focus-visible {
     background: var(--gui-control-hover) !important;
     transform: none;
 }
 
-.gui-v2-project-icon {
+.gui-project-icon {
     width: 72px;
     height: 72px;
     margin-bottom: 4px;
 }
 
-.gui-v2-project-card strong {
+.gui-project-card strong {
     max-width: 100%;
     overflow: hidden;
     font-size: 13px;
@@ -1589,22 +1324,7 @@
     white-space: nowrap;
 }
 
-.gui-v2-project-kind {
-    color: var(--gui-text-secondary);
-    font-size: 10px;
-}
-
-.gui-v2-project-summary {
-    display: -webkit-box;
-    overflow: hidden;
-    color: var(--gui-text-secondary);
-    font-size: 11px;
-    line-height: 1.4;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-}
-
-.gui-v2-wallpaper-preview {
+.gui-wallpaper-preview {
     width: 100%;
     aspect-ratio: 16 / 10;
     border-radius: 8px;
@@ -1614,28 +1334,28 @@
     transition: transform 180ms ease;
 }
 
-.group:hover .gui-v2-wallpaper-preview {
+.group:hover .gui-wallpaper-preview {
     transform: scale(1.02);
 }
 
-.gui-v2-wallpaper-preview[data-wallpaper="aurora"] {
+.gui-wallpaper-preview[data-wallpaper="aurora"] {
     background-image: url("/wallpapers/alpine-twilight.jpg");
 }
 
-.gui-v2-wallpaper-preview[data-wallpaper="sunset"] {
+.gui-wallpaper-preview[data-wallpaper="sunset"] {
     background-image: url("/wallpapers/soft-spectrum.jpg");
 }
 
-.gui-v2-wallpaper-preview[data-wallpaper="forest"] {
+.gui-wallpaper-preview[data-wallpaper="forest"] {
     background-image: url("/wallpapers/forest-lake.jpg");
 }
 
-.gui-v2-wallpaper-preview[data-wallpaper="dark"] {
+.gui-wallpaper-preview[data-wallpaper="dark"] {
     background-image: url("/wallpapers/red-landscape.jpg");
 }
 
 @media (width < 1024px) {
-    .gui-v2-shortcuts {
+    .gui-shortcuts {
         display: grid;
         top: 54px;
         right: max(10px, env(safe-area-inset-right, 0px));
@@ -1644,31 +1364,30 @@
 }
 
 @media (width < 640px) {
-    .gui-v2-system-title {
+    .gui-system-title {
         max-width: 42vw;
         font-size: 11px;
     }
 
-    .gui-v2-system-identity {
+    .gui-system-identity {
         min-width: 34px;
     }
 
-    .gui-v2-viewer-chip > span:last-child,
-    .gui-v2-system-status,
-    .gui-v2-system-divider {
+    .gui-system-status,
+    .gui-system-divider {
         display: none;
     }
 
-    .gui-v2-shortcuts {
+    .gui-shortcuts {
         grid-template-columns: repeat(2, 68px);
     }
 
-    .gui-v2-shortcut {
+    .gui-shortcut {
         width: 68px;
     }
 }
 
-.gui-v2-viewer-name {
+.gui-viewer-name {
     color: var(--gui-text);
     font-size: 12px;
     font-weight: 600;
@@ -1676,8 +1395,8 @@
     white-space: nowrap;
 }
 
-.gui-v2-folder-view,
-.gui-v2-shell[data-theme] .gui-v2-folder-view {
+.gui-folder-view,
+.gui-shell[data-theme] .gui-folder-view {
     position: relative;
     display: block;
     min-height: 100%;
@@ -1691,7 +1410,7 @@
     padding: 16px 16px 42px;
 }
 
-.gui-v2-folder-view .gui-v2-project-grid {
+.gui-folder-view .gui-project-grid {
     position: relative;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -1701,7 +1420,7 @@
     padding: 0;
 }
 
-.gui-v2-folder-view .gui-v2-project-card {
+.gui-folder-view .gui-project-card {
     display: flex;
     min-height: 0;
     width: 100%;
@@ -1718,19 +1437,19 @@
     transition: background-color 140ms ease, color 140ms ease;
 }
 
-.gui-v2-folder-view .gui-v2-project-card:hover,
-.gui-v2-folder-view .gui-v2-project-card:focus-visible {
+.gui-folder-view .gui-project-card:hover,
+.gui-folder-view .gui-project-card:focus-visible {
     background: rgb(255 255 255 / 4%) !important;
     color: rgb(255 255 255 / 90%);
     outline: 2px solid transparent;
     transform: none;
 }
 
-.gui-v2-folder-view .gui-v2-project-card:focus-visible {
+.gui-folder-view .gui-project-card:focus-visible {
     box-shadow: 0 0 0 2px rgb(59 130 246 / 50%) !important;
 }
 
-.gui-v2-folder-view .gui-v2-project-icon {
+.gui-folder-view .gui-project-icon {
     position: relative;
     display: flex;
     width: 56px;
@@ -1744,18 +1463,18 @@
     transition: background-color 140ms ease, color 140ms ease;
 }
 
-.gui-v2-folder-view .gui-v2-project-card:hover .gui-v2-project-icon {
+.gui-folder-view .gui-project-card:hover .gui-project-icon {
     background: rgb(255 255 255 / 6%);
     color: #60a5fa;
 }
 
-.gui-v2-folder-view .gui-v2-project-icon > svg {
+.gui-folder-view .gui-project-icon > svg {
     width: 32px;
     height: 32px;
     stroke-width: 1.5;
 }
 
-.gui-v2-folder-view .gui-v2-project-icon > span {
+.gui-folder-view .gui-project-icon > span {
     position: absolute;
     right: -4px;
     bottom: -4px;
@@ -1771,7 +1490,7 @@
     box-shadow: 0 1px 2px rgb(0 0 0 / 24%);
 }
 
-.gui-v2-folder-view .gui-v2-project-card strong {
+.gui-folder-view .gui-project-card strong {
     display: block;
     max-width: 100%;
     overflow: hidden;
@@ -1785,7 +1504,7 @@
     white-space: nowrap;
 }
 
-.gui-v2-folder-footer {
+.gui-folder-footer {
     position: absolute;
     right: 0;
     bottom: 0;
@@ -1800,14 +1519,14 @@
     backdrop-filter: blur(4px);
 }
 
-/* GUI theme is the single styling authority for V2 surfaces. */
-.gui-v2-folder-view,
-.gui-v2-shell[data-theme] .gui-v2-folder-view {
+/* The GUI theme is the single styling authority for application surfaces. */
+.gui-folder-view,
+.gui-shell[data-theme] .gui-folder-view {
     height: 100%;
     min-height: 0;
 }
 
-.gui-v2-shell[data-theme="light"] .gui-v2-folder-view {
+.gui-shell[data-theme="light"] .gui-folder-view {
     background-color: #f7f9fc;
     background-image:
         linear-gradient(rgb(24 34 48 / 3%) 1px, transparent 1px),
@@ -1815,82 +1534,82 @@
     color: #182230;
 }
 
-.gui-v2-shell[data-theme="light"] .gui-v2-folder-view .gui-v2-project-card {
+.gui-shell[data-theme="light"] .gui-folder-view .gui-project-card {
     color: rgb(24 34 48 / 72%);
 }
 
-.gui-v2-shell[data-theme="light"] .gui-v2-folder-view .gui-v2-project-card:hover,
-.gui-v2-shell[data-theme="light"] .gui-v2-folder-view .gui-v2-project-card:focus-visible {
+.gui-shell[data-theme="light"] .gui-folder-view .gui-project-card:hover,
+.gui-shell[data-theme="light"] .gui-folder-view .gui-project-card:focus-visible {
     background: rgb(24 34 48 / 6%) !important;
     color: #182230;
 }
 
-.gui-v2-shell[data-theme="light"] .gui-v2-folder-view .gui-v2-project-icon {
+.gui-shell[data-theme="light"] .gui-folder-view .gui-project-icon {
     background: rgb(24 34 48 / 4%);
     color: #2563eb;
 }
 
-.gui-v2-shell[data-theme="light"] .gui-v2-folder-footer {
+.gui-shell[data-theme="light"] .gui-folder-footer {
     border-top-color: rgb(24 34 48 / 9%);
     background: rgb(247 249 252 / 78%);
     color: rgb(24 34 48 / 52%);
 }
 
-.gui-v2-shell[data-theme="light"] .gui-v2-settings-panel,
-.gui-v2-shell[data-theme="light"] .gui-v2-wallpaper-option {
+.gui-shell[data-theme="light"] .gui-settings-panel,
+.gui-shell[data-theme="light"] .gui-wallpaper-option {
     border-color: rgb(24 34 48 / 10%);
     background: #f8fafc;
     color: #182230;
 }
 
-.gui-v2-shell[data-theme="dark"] .gui-v2-settings-panel,
-.gui-v2-shell[data-theme="dark"] .gui-v2-wallpaper-option {
+.gui-shell[data-theme="dark"] .gui-settings-panel,
+.gui-shell[data-theme="dark"] .gui-wallpaper-option {
     border-color: rgb(255 255 255 / 8%);
     background: #272730;
     color: #f4f7fb;
 }
 
-.gui-v2-shell[data-theme="light"] .gui-v2-wallpaper-option:hover {
+.gui-shell[data-theme="light"] .gui-wallpaper-option:hover {
     border-color: rgb(24 34 48 / 22%);
     background: #eef2f7;
 }
 
-.gui-v2-shell[data-theme="dark"] .gui-v2-wallpaper-option:hover {
+.gui-shell[data-theme="dark"] .gui-wallpaper-option:hover {
     border-color: rgb(255 255 255 / 16%);
     background: #30303a;
 }
 
-.gui-v2-shell[data-theme] .gui-v2-wallpaper-option[aria-pressed="true"] {
+.gui-shell[data-theme] .gui-wallpaper-option[aria-pressed="true"] {
     border-color: #2563eb;
 }
 
-.gui-v2-shell[data-theme="light"] .gui-v2-wallpaper-option[aria-pressed="true"] {
+.gui-shell[data-theme="light"] .gui-wallpaper-option[aria-pressed="true"] {
     background: rgb(239 246 255 / 86%);
 }
 
-.gui-v2-shell[data-theme="dark"] .gui-v2-wallpaper-option[aria-pressed="true"] {
+.gui-shell[data-theme="dark"] .gui-wallpaper-option[aria-pressed="true"] {
     background: rgb(30 58 138 / 22%);
 }
 
-.gui-v2-shell[data-theme][data-wallpaper="aurora"] {
+.gui-shell[data-theme][data-wallpaper="aurora"] {
     background-image:
         linear-gradient(rgb(9 18 34 / 8%), rgb(9 18 34 / 24%)),
         url("/wallpapers/alpine-twilight.jpg");
 }
 
-.gui-v2-shell[data-theme][data-wallpaper="sunset"] {
+.gui-shell[data-theme][data-wallpaper="sunset"] {
     background-image:
         linear-gradient(rgb(30 18 60 / 6%), rgb(20 12 42 / 18%)),
         url("/wallpapers/soft-spectrum.jpg");
 }
 
-.gui-v2-shell[data-theme][data-wallpaper="forest"] {
+.gui-shell[data-theme][data-wallpaper="forest"] {
     background-image:
         linear-gradient(rgb(5 28 24 / 4%), rgb(5 28 24 / 20%)),
         url("/wallpapers/forest-lake.jpg");
 }
 
-.gui-v2-shell[data-theme][data-wallpaper="dark"] {
+.gui-shell[data-theme][data-wallpaper="dark"] {
     background-image:
         linear-gradient(rgb(34 5 8 / 8%), rgb(28 4 8 / 22%)),
         url("/wallpapers/red-landscape.jpg");

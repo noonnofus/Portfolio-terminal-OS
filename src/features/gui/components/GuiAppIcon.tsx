@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { appCatalog } from "@/features/gui-v2/apps/appCatalog";
-import { isProjectAppId, type GuiAppId } from "@/features/gui-v2/apps/appTypes";
+import { appCatalog } from "@/features/gui/registry/appCatalog";
+import { isProjectAppId, type GuiAppId } from "@/features/gui/registry/appTypes";
 
 type CoreAppId = Exclude<GuiAppId, `project:${string}`>;
 
@@ -76,7 +76,7 @@ export function GuiAppIcon({
   if (isProjectAppId(appId)) {
     return (
       <span
-        className="gui-v2-app-icon"
+        className="gui-app-icon"
         data-app-icon={appId}
         data-size={size}
         aria-hidden="true"
@@ -86,7 +86,7 @@ export function GuiAppIcon({
           alt=""
           width={iconSize}
           height={iconSize}
-          className="gui-v2-app-icon-image"
+          className="gui-app-icon-image"
         />
       </span>
     );
@@ -94,7 +94,7 @@ export function GuiAppIcon({
 
   return (
     <span
-      className="gui-v2-app-icon"
+      className="gui-app-icon"
       data-app-icon={appId}
       data-size={size}
       aria-hidden="true"

@@ -1,14 +1,14 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
-import { appCatalog } from "@/features/gui-v2/apps/appCatalog";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { appCatalog } from "@/features/gui/registry/appCatalog";
 import {
     createOpenAppCommand,
     type GuiAppId,
-} from "@/features/gui-v2/apps/appTypes";
-import { useGuiNavigation } from "@/features/gui-v2/navigation/GuiNavigationProvider";
-import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
-import { GuiAppIcon } from "@/features/gui-v2/components/GuiAppIcon";
+} from "@/features/gui/registry/appTypes";
+import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
+import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
+import { GuiAppIcon } from "@/features/gui/components/GuiAppIcon";
 
 const shortcutIds = [
     "projects",
@@ -20,9 +20,13 @@ const shortcutIds = [
 function DraggableShortcut({
     appId,
     language,
+    isSelected,
+    onSelect,
 }: {
     appId: GuiAppId;
     language: "ko" | "en";
+    isSelected: boolean;
+    onSelect: (id: GuiAppId) => void;
 }) {
     const app = appCatalog[appId];
     const { navigate, navigationBusy } = useGuiNavigation();
@@ -84,15 +88,26 @@ function DraggableShortcut({
         [],
     );
 
-    const handlePointerUp = useCallback(() => {
-        const state = dragState.current;
-        dragState.current = null;
-        setIsDragging(false);
-        // If it was just a click (not a drag), open the app
-        if (state && !state.wasDragged) {
-            navigate(createOpenAppCommand(appId));
-        }
-    }, [appId, navigate]);
+    const handlePointerUp = useCallback(
+        (e: React.PointerEvent<HTMLButtonElement>) => {
+            const state = dragState.current;
+            dragState.current = null;
+            setIsDragging(false);
+            // If it was just a click (not a drag)
+            if (state && !state.wasDragged) {
+                if (e.pointerType === "touch" || e.pointerType === "pen") {
+                    // Touch/Pen devices: run app immediately on single tap
+                    navigate(createOpenAppCommand(appId));
+                } else {
+                    // Mouse: focus and select on a single click. Opening remains
+                    // exclusive to the native double-click handler below.
+                    ref.current?.focus();
+                    onSelect(appId);
+                }
+            }
+        },
+        [appId, navigate, onSelect],
+    );
 
     return (
         <button
@@ -109,7 +124,11 @@ function DraggableShortcut({
                     navigate(createOpenAppCommand(appId));
                 }
             }}
-            className="gui-v2-shortcut"
+            onDoubleClick={() => {
+                navigate(createOpenAppCommand(appId));
+            }}
+            className="gui-shortcut"
+            data-selected={isSelected}
             style={{
                 transform: offset
                     ? `translate(${offset.x}px, ${offset.y}px)`
@@ -128,16 +147,34 @@ function DraggableShortcut({
 
 /* ── Desktop shortcuts container ────────────────────────── */
 
-export function GuiDesktopShortcutsV2() {
-    const language = useGuiV2Store((state) => state.language);
+export function GuiDesktopShortcuts() {
+    const language = useGuiStore((state) => state.language);
+    const [selectedShortcutId, setSelectedShortcutId] = useState<GuiAppId | null>(null);
+
+    useEffect(() => {
+        const handleGlobalClick = (e: PointerEvent) => {
+            const target = e.target as HTMLElement;
+            // 만약 클릭된 요소가 바탕화면 단축아이콘 내부가 아니라면 선택을 해제합니다.
+            if (!target.closest(".gui-shortcut")) {
+                setSelectedShortcutId(null);
+            }
+        };
+
+        window.addEventListener("pointerdown", handleGlobalClick);
+        return () => {
+            window.removeEventListener("pointerdown", handleGlobalClick);
+        };
+    }, []);
 
     return (
-        <nav aria-label="Desktop shortcuts" className="gui-v2-shortcuts">
+        <nav aria-label="Desktop shortcuts" className="gui-shortcuts">
             {shortcutIds.map((appId) => (
                 <DraggableShortcut
                     key={appId}
                     appId={appId}
                     language={language}
+                    isSelected={selectedShortcutId === appId}
+                    onSelect={setSelectedShortcutId}
                 />
             ))}
         </nav>
