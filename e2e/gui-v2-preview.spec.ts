@@ -109,6 +109,37 @@ test.describe("GUI V2 preview", () => {
         expect(windowLayerZ).toBeGreaterThan(shortcutsZ);
     });
 
+    test("drags desktop shortcuts at narrow viewport widths", async ({ page }) => {
+        await page.setViewportSize({ width: 390, height: 844 });
+        await page.goto("/gui?app=desktop");
+
+        const projectsShortcut = page
+            .getByRole("navigation", { name: "Desktop shortcuts" })
+            .getByRole("button", { name: "프로젝트" });
+        const before = await projectsShortcut.boundingBox();
+        expect(before).not.toBeNull();
+
+        await page.mouse.move(
+            (before?.x ?? 0) + (before?.width ?? 0) / 2,
+            (before?.y ?? 0) + (before?.height ?? 0) / 2,
+        );
+        await page.mouse.down();
+        await page.mouse.move(
+            (before?.x ?? 0) + (before?.width ?? 0) / 2 - 72,
+            (before?.y ?? 0) + (before?.height ?? 0) / 2 + 80,
+        );
+        await page.mouse.up();
+
+        const after = await projectsShortcut.boundingBox();
+        expect((after?.x ?? 0) - (before?.x ?? 0)).toBeLessThan(-60);
+        expect((after?.y ?? 0) - (before?.y ?? 0)).toBeGreaterThan(60);
+        await expect(page).toHaveURL(/app=desktop/);
+
+        await projectsShortcut.focus();
+        await page.keyboard.press("Enter");
+        await expect(page).toHaveURL(/app=projects/);
+    });
+
     test("keeps tablet chrome usable and desktop decoration non-interactive", async ({
         page,
     }) => {
