@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { projectSlugs } from "@/features/gui-v2/apps/appTypes";
+import { projectSlugs } from "@/features/gui/registry/appTypes";
 import { projectCatalog } from "@/shared/content/portfolio/catalog";
 import { projectSummaries } from "@/shared/content/portfolio/projectSummaries";
 

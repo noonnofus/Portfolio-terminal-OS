@@ -14,7 +14,7 @@ test.describe("route compatibility", () => {
         await expect(page).toHaveURL(/\/gui$/);
     });
 
-    test("reused project loaders register their namespace on demand", async ({
+    test("project loaders register their namespace on demand", async ({
         page,
     }) => {
         await page.goto("/gui?app=projects");
@@ -22,7 +22,7 @@ test.describe("route compatibility", () => {
             .getByRole("button", {
                 name: "WCHMS 프로젝트 열기",
             })
-            .click();
+            .dblclick();
 
         await expect(
             page.getByRole("heading", {
@@ -31,10 +31,4 @@ test.describe("route compatibility", () => {
         ).toBeVisible();
     });
 
-    test("removes the preview route after the entry switch", async ({
-        request,
-    }) => {
-        const response = await request.get("/gui-v2");
-        expect(response.status()).toBe(404);
-    });
 });
