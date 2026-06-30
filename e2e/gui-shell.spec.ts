@@ -283,6 +283,24 @@ test.describe("GUI shell", () => {
             name: "WCHMS 프로젝트 열기",
         });
         const projectGrid = page.locator(".gui-project-grid");
+        const projectFolder = page.locator(".gui-folder-view");
+        const hoverTarget = page.getByRole("button", {
+            name: "Flare 프로젝트 열기",
+        });
+        const hoverStylesBefore = await hoverTarget.evaluate((element) => ({
+            background: getComputedStyle(element).backgroundColor,
+            iconBackground: getComputedStyle(
+                element.querySelector(".gui-project-icon")!,
+            ).backgroundColor,
+        }));
+        await hoverTarget.hover();
+        const hoverStylesAfter = await hoverTarget.evaluate((element) => ({
+            background: getComputedStyle(element).backgroundColor,
+            iconBackground: getComputedStyle(
+                element.querySelector(".gui-project-icon")!,
+            ).backgroundColor,
+        }));
+        expect(hoverStylesAfter).toEqual(hoverStylesBefore);
 
         await projectFile.click();
         await expect(projectFile).toBeFocused();
@@ -295,8 +313,13 @@ test.describe("GUI shell", () => {
 
         const before = await projectFile.boundingBox();
         const bounds = await projectGrid.boundingBox();
+        const folderBounds = await projectFolder.boundingBox();
         expect(before).not.toBeNull();
         expect(bounds).not.toBeNull();
+        expect(folderBounds).not.toBeNull();
+        expect(bounds?.height ?? 0).toBeGreaterThan(
+            (folderBounds?.height ?? 0) - 70,
+        );
         await page.mouse.move(
             (before?.x ?? 0) + (before?.width ?? 0) / 2,
             (before?.y ?? 0) + (before?.height ?? 0) / 2,
@@ -304,13 +327,17 @@ test.describe("GUI shell", () => {
         await page.mouse.down();
         await page.mouse.move(
             (before?.x ?? 0) + (before?.width ?? 0) / 2 + 64,
-            (before?.y ?? 0) + (before?.height ?? 0) / 2 + 48,
+            (bounds?.y ?? 0) + (bounds?.height ?? 0) + 100,
         );
         await page.mouse.up();
 
         const after = await projectFile.boundingBox();
         expect((after?.x ?? 0) - (before?.x ?? 0)).toBeGreaterThan(50);
-        expect((after?.y ?? 0) - (before?.y ?? 0)).toBeGreaterThan(35);
+        expect((after?.y ?? 0) - (before?.y ?? 0)).toBeGreaterThan(180);
+        expect((after?.y ?? 0) + (after?.height ?? 0)).toBeCloseTo(
+            (bounds?.y ?? 0) + (bounds?.height ?? 0),
+            0,
+        );
         expect(after?.x).toBeGreaterThanOrEqual(bounds?.x ?? 0);
         expect((after?.x ?? 0) + (after?.width ?? 0)).toBeLessThanOrEqual(
             (bounds?.x ?? 0) + (bounds?.width ?? 0),
