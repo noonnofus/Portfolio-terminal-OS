@@ -120,13 +120,45 @@
   border-radius: 12px;
   padding: 8px;
   font-size: 12px;
+  outline: none;
 }
 
-.desktop-app:focus-visible,
-.desktop-app[data-selected="true"] {
-  background: rgb(255 255 255 / 72%);
-  outline: 2px solid #2563eb;
-  outline-offset: 2px;
+.desktop-app-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.desktop-app-name {
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-align: center;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+/* ── Selected/Focused Desktop app styling ── */
+.desktop-app:focus-visible .desktop-app-icon-wrapper,
+.desktop-app[data-selected="true"] .desktop-app-icon-wrapper {
+  background: rgba(0, 0, 0, 0.22);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 10px rgb(0 0 0 / 12%);
+}
+
+.desktop-app:focus-visible .desktop-app-name,
+.desktop-app[data-selected="true"] .desktop-app-name {
+  background-color: #0b61e8;
+  color: #ffffff !important;
+  text-shadow: none !important;
 }
 
 .gui-window-layer {
@@ -1120,9 +1152,11 @@
   text-shadow: 0 1px 4px rgb(0 0 0 / 72%);
 }
 
-.desktop-app:focus-visible,
-.desktop-app[data-selected="true"] {
-  background: var(--gui-control);
+.gui-shell[data-theme="dark"] .desktop-app:focus-visible .desktop-app-icon-wrapper,
+.gui-shell[data-theme="dark"] .desktop-app[data-selected="true"] .desktop-app-icon-wrapper {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 10px rgb(0 0 0 / 25%);
 }
 
 .gui-background-type {
