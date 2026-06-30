@@ -1,7 +1,7 @@
 "use client";
 
-import { appLoaderRegistry } from "@/features/gui-v2/apps/appLoaderRegistry";
-import type { GuiAppId } from "@/features/gui-v2/apps/appTypes";
+import { appLoaderRegistry } from "@/features/gui/registry/appLoaderRegistry";
+import type { GuiAppId } from "@/features/gui/registry/appTypes";
 import type { Language } from "@/shared/lib/i18n/useLanguageStore";
 
 export function GuiAppRenderer({

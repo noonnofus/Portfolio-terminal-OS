@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { planNavigation } from "@/features/gui-v2/navigation/planNavigation";
+import { planNavigation } from "@/features/gui/navigation/planNavigation";
 import type {
     GuiHistoryState,
     GuiWorkspaceState,
-} from "@/features/gui-v2/navigation/navigationTypes";
+} from "@/features/gui/navigation/navigationTypes";
 
 const aboutEntry: GuiHistoryState = {
     gui: {

@@ -1,15 +1,15 @@
 import { createStore } from "zustand/vanilla";
-import type { GuiAppId, GuiUrlState } from "@/features/gui-v2/apps/appTypes";
+import type { GuiAppId, GuiUrlState } from "@/features/gui/registry/appTypes";
 import type {
     GuiWindowSnapshot,
     GuiWorkspaceState,
     StoreCommand,
     WorkspaceFocus,
-} from "@/features/gui-v2/navigation/navigationTypes";
+} from "@/features/gui/navigation/navigationTypes";
 import type { Language } from "@/shared/lib/i18n/useLanguageStore";
-import type { PageVisibility } from "@/features/gui-v2/runtime/appVisibility";
+import type { PageVisibility } from "@/features/gui/runtime/appVisibility";
 
-export type GuiV2State = GuiWorkspaceState & {
+export type GuiState = GuiWorkspaceState & {
     activationSequence: number;
     pageVisibility: PageVisibility;
     resumeEpoch: number;
@@ -18,15 +18,15 @@ export type GuiV2State = GuiWorkspaceState & {
     dockAutoHide: boolean;
 };
 
-export type GuiV2Actions = {
+export type GuiActions = {
     dispatch: (command: StoreCommand) => void;
     setPageVisibility: (visibility: PageVisibility) => void;
     signalPageRestore: () => void;
     setUrlReady: (ready: boolean) => void;
 };
 
-export type GuiV2Store = GuiV2State & GuiV2Actions;
-export type GuiV2StoreApi = ReturnType<typeof createGuiV2Store>;
+export type GuiStore = GuiState & GuiActions;
+export type GuiStoreApi = ReturnType<typeof createGuiStore>;
 
 function appIdFromView(view: GuiUrlState): GuiAppId | null {
     switch (view.app) {
@@ -54,9 +54,9 @@ function getNextFocus(
 }
 
 function activateApp(
-    state: GuiV2State,
+    state: GuiState,
     appId: GuiAppId,
-): Pick<GuiV2State, "windows" | "focus" | "activationSequence"> {
+): Pick<GuiState, "windows" | "focus" | "activationSequence"> {
     const activationSequence = state.activationSequence + 1;
     const existingWindow = state.windows.find(
         (window) => window.windowId === appId,
@@ -89,10 +89,10 @@ function activateApp(
     };
 }
 
-export function createGuiV2Store(
-    urlBasePath: "/gui" | "/gui-v2" = "/gui-v2",
+export function createGuiStore(
+    urlBasePath: "/gui" = "/gui",
 ) {
-    return createStore<GuiV2Store>()((set) => ({
+    return createStore<GuiStore>()((set) => ({
         windows: [],
         focus: { mode: "desktop", activeWindowId: null },
         language: "ko",
@@ -185,7 +185,7 @@ export function createGuiV2Store(
     }));
 }
 
-export function selectWorkspaceState(store: GuiV2Store): GuiWorkspaceState {
+export function selectWorkspaceState(store: GuiStore): GuiWorkspaceState {
     return {
         windows: store.windows,
         focus: store.focus,
@@ -195,6 +195,6 @@ export function selectWorkspaceState(store: GuiV2Store): GuiWorkspaceState {
     };
 }
 
-export function getLanguageFromState(state: GuiV2State): Language {
+export function getLanguageFromState(state: GuiState): Language {
     return state.language;
 }

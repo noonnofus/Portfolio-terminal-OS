@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
     getChunkRetryKey,
     isChunkLoadFailure,
-} from "@/features/gui-v2/components/WindowErrorBoundary";
+} from "@/features/gui/components/WindowErrorBoundary";
 
 describe("WindowErrorBoundary helpers", () => {
     it("recognizes dynamic chunk failures without treating render errors as chunks", () => {

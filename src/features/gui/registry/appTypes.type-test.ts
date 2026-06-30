@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 import type {
     GuiAppLoaderMap,
     OpenAppCommand,
-} from "@/features/gui-v2/apps/appTypes";
+} from "@/features/gui/registry/appTypes";
 
 const validAboutCommand = {
     type: "open-app",

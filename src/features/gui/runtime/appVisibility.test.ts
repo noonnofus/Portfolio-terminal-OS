@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { deriveVisibility } from "@/features/gui-v2/runtime/appVisibility";
+import { deriveVisibility } from "@/features/gui/runtime/appVisibility";
 
 describe("deriveVisibility", () => {
     it("preserves window state while the page is visible", () => {

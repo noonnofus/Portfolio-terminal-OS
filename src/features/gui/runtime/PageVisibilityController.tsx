@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import { useGuiV2StoreApi } from "@/features/gui-v2/store/GuiV2StoreProvider";
+import { useGuiStoreApi } from "@/features/gui/store/GuiStoreProvider";
 
 export function PageVisibilityController() {
-    const store = useGuiV2StoreApi();
+    const store = useGuiStoreApi();
 
     useEffect(() => {
         const syncVisibility = () => {

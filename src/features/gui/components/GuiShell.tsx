@@ -2,23 +2,23 @@
 
 import { useSyncExternalStore } from "react";
 import { MotionConfig } from "framer-motion";
-import { GuiDesktopShortcutsV2 } from "@/features/gui-v2/components/GuiDesktopShortcutsV2";
-import { GuiDockV2 } from "@/features/gui-v2/components/GuiDockV2";
-import { GuiSystemBarV2 } from "@/features/gui-v2/components/GuiSystemBarV2";
-import type { GuiViewer } from "@/features/gui-v2/components/GuiSystemBarV2";
-import { GuiWindowLayerV2 } from "@/features/gui-v2/components/GuiWindowLayerV2";
-import { PageVisibilityController } from "@/features/gui-v2/runtime/PageVisibilityController";
-import { useGuiV2Store } from "@/features/gui-v2/store/GuiV2StoreProvider";
+import { GuiDesktopShortcuts } from "@/features/gui/components/GuiDesktopShortcuts";
+import { GuiDock } from "@/features/gui/components/GuiDock";
+import { GuiSystemBar } from "@/features/gui/components/GuiSystemBar";
+import type { GuiViewer } from "@/features/gui/components/GuiSystemBar";
+import { GuiWindowLayer } from "@/features/gui/components/GuiWindowLayer";
+import { PageVisibilityController } from "@/features/gui/runtime/PageVisibilityController";
+import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 import { useColorMode } from "@/shared/ui/color-mode";
-import "@/features/gui-v2/styles/gui-v2.css";
+import "@/features/gui/styles/gui.css";
 
-export function GuiShellV2({
+export function GuiShell({
     viewer = { kind: "guest" },
 }: {
     viewer?: GuiViewer;
 }) {
-    const urlReady = useGuiV2Store((state) => state.urlReady);
-    const wallpaper = useGuiV2Store((state) => state.wallpaper);
+    const urlReady = useGuiStore((state) => state.urlReady);
+    const wallpaper = useGuiStore((state) => state.wallpaper);
     const { colorMode } = useColorMode();
     const themeMounted = useSyncExternalStore(
         () => () => undefined,
@@ -29,26 +29,26 @@ export function GuiShellV2({
     return (
         <MotionConfig reducedMotion="user">
             <div
-                className="gui-v2-shell"
+                className="gui-shell"
                 data-wallpaper={wallpaper}
                 data-theme={themeMounted ? colorMode : undefined}
             >
                 <PageVisibilityController />
                 <div
                     aria-hidden="true"
-                    className="gui-v2-wallpaper-art"
+                    className="gui-wallpaper-art"
                 >
                     <span />
                     <span />
                     <span />
                 </div>
-                <div aria-hidden className="gui-v2-background-type">
+                <div aria-hidden className="gui-background-type">
                     HYUNHO
                 </div>
-                <GuiSystemBarV2 viewer={viewer} />
-                <GuiDesktopShortcutsV2 />
-                {urlReady ? <GuiWindowLayerV2 /> : null}
-                <GuiDockV2 />
+                <GuiSystemBar viewer={viewer} />
+                <GuiDesktopShortcuts />
+                {urlReady ? <GuiWindowLayer /> : null}
+                <GuiDock />
             </div>
         </MotionConfig>
     );

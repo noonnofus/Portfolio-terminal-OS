@@ -1,7 +1,7 @@
 import {
     publicAssetPath,
     type GuiAppCatalog,
-} from "@/features/gui-v2/apps/appTypes";
+} from "@/features/gui/registry/appTypes";
 
 export const appCatalog = {
     about: {

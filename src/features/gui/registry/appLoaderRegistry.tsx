@@ -4,9 +4,9 @@ import dynamic from "next/dynamic";
 import type {
     GuiAppComponentProps,
     GuiAppLoaderMap,
-} from "@/features/gui-v2/apps/appTypes";
+} from "@/features/gui/registry/appTypes";
 import { ensureProjectNamespace } from "@/shared/lib/i18n/loadProjectNamespace";
-import { useAppRuntime } from "@/features/gui-v2/runtime/AppRuntimeContext";
+import { useAppRuntime } from "@/features/gui/runtime/AppRuntimeContext";
 
 function WindowLoadingState() {
     return (
@@ -19,7 +19,7 @@ function WindowLoadingState() {
 const AboutApp = dynamic<GuiAppComponentProps<"about">>(
     async () => {
         const { default: App } = await import(
-            "@/features/applications/components/about/AppAbout"
+            "@/features/apps/about/AboutApp"
         );
         return function AboutAdapter({ language }) {
             return <App language={language} />;
@@ -29,26 +29,29 @@ const AboutApp = dynamic<GuiAppComponentProps<"about">>(
 );
 
 const ProjectsApp = dynamic<GuiAppComponentProps<"projects">>(
-    () => import("@/features/gui-v2/apps/components/ProjectsAppV2"),
+    () => import("@/features/apps/projects/ProjectsApp"),
     { loading: WindowLoadingState },
 );
 
 const ResumeApp = dynamic<GuiAppComponentProps<"resume">>(
-    () => import("@/features/gui-v2/apps/components/ResumeAppV2"),
+    () => import("@/features/apps/resume/ResumeApp"),
     { loading: WindowLoadingState },
 );
 
 const TerminalApp = dynamic<GuiAppComponentProps<"terminal">>(
     async () => {
         const { default: App } = await import(
-            "@/features/applications/components/terminal/AppTerminal"
+            "@/features/apps/terminal/TerminalWindowApp"
         );
         return function TerminalAdapter() {
             const { effectiveVisibility, resumeEpoch } =
                 useAppRuntime();
             return (
                 <App
-                    active={effectiveVisibility === "active"}
+                    active={
+                        effectiveVisibility === "active" ||
+                        effectiveVisibility === "inactive"
+                    }
                     resumeSignal={resumeEpoch}
                 />
             );
@@ -60,7 +63,7 @@ const TerminalApp = dynamic<GuiAppComponentProps<"terminal">>(
 const ContactApp = dynamic<GuiAppComponentProps<"contact">>(
     async () => {
         const { default: App } = await import(
-            "@/features/applications/components/contact/AppContact"
+            "@/features/apps/contact/ContactApp"
         );
         return function ContactAdapter({ language }) {
             return <App language={language} />;
@@ -70,7 +73,7 @@ const ContactApp = dynamic<GuiAppComponentProps<"contact">>(
 );
 
 const SettingsApp = dynamic<GuiAppComponentProps<"settings">>(
-    () => import("@/features/gui-v2/apps/components/SettingsAppV2"),
+    () => import("@/features/apps/settings/SettingsApp"),
     { loading: WindowLoadingState },
 );
 
@@ -78,7 +81,7 @@ const WchmsApp = dynamic<GuiAppComponentProps<"project:wchms">>(
     async () => {
         await ensureProjectNamespace("WCHMS");
         const { default: App } = await import(
-            "@/features/applications/components/wchms/AppWCHMS"
+            "@/features/apps/wchms/WchmsApp"
         );
         return function WchmsAdapter({ language }) {
             return <App language={language} />;
@@ -91,7 +94,7 @@ const FlareApp = dynamic<GuiAppComponentProps<"project:flare">>(
     async () => {
         await ensureProjectNamespace("Flare");
         const { default: App } = await import(
-            "@/features/applications/components/flare/AppFlare"
+            "@/features/apps/flare/FlareApp"
         );
         return function FlareAdapter({ language }) {
             return <App language={language} />;
@@ -104,7 +107,7 @@ const WeConnectApp = dynamic<GuiAppComponentProps<"project:weconnect">>(
     async () => {
         await ensureProjectNamespace("WeConnect");
         const { default: App } = await import(
-            "@/features/applications/components/we-connect/AppWeConnect"
+            "@/features/apps/we-connect/WeConnectApp"
         );
         return function WeConnectAdapter({ language }) {
             return <App language={language} />;
@@ -117,7 +120,7 @@ const PageSsenceApp = dynamic<GuiAppComponentProps<"project:pagessence">>(
     async () => {
         await ensureProjectNamespace("PageSsence");
         const { default: App } = await import(
-            "@/features/applications/components/page-ssence/AppPageSsence"
+            "@/features/apps/page-ssence/PageSsenceApp"
         );
         return function PageSsenceAdapter({ language }) {
             return <App language={language} />;
@@ -130,7 +133,7 @@ const DiceRollerApp = dynamic<GuiAppComponentProps<"project:diceroller">>(
     async () => {
         await ensureProjectNamespace("DiceRoller");
         const { default: App } = await import(
-            "@/features/applications/components/dice-roller/AppDiceRoller"
+            "@/features/apps/dice-roller/DiceRollerApp"
         );
         return function DiceRollerAdapter({ language }) {
             return <App language={language} />;
@@ -143,7 +146,7 @@ const MejuBotApp = dynamic<GuiAppComponentProps<"project:mejubot">>(
     async () => {
         await ensureProjectNamespace("Mejubot");
         const { default: App } = await import(
-            "@/features/applications/components/mejubot/AppMejubot"
+            "@/features/apps/mejubot/MejuBotApp"
         );
         return function MejuBotAdapter({ language }) {
             return <App language={language} />;
@@ -156,7 +159,7 @@ const WebPianoApp = dynamic<GuiAppComponentProps<"project:webpiano">>(
     async () => {
         await ensureProjectNamespace("WebPiano");
         const { default: App } = await import(
-            "@/features/applications/components/web-piano/AppWebPiano"
+            "@/features/apps/web-piano/WebPianoApp"
         );
         return function WebPianoAdapter({ language }) {
             return <App language={language} />;

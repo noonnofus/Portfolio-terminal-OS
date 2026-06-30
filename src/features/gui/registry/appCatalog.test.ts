@@ -2,18 +2,18 @@ import { describe, expect, it } from "vitest";
 import {
     appCatalog,
     appCatalogKeys,
-} from "@/features/gui-v2/apps/appCatalog";
-import { appLoaderRegistryKeys } from "@/features/gui-v2/apps/appLoaderRegistry";
+} from "@/features/gui/registry/appCatalog";
+import { appLoaderRegistryKeys } from "@/features/gui/registry/appLoaderRegistry";
 import {
     externalUrl,
     publicAssetPath,
-} from "@/features/gui-v2/apps/appTypes";
+} from "@/features/gui/registry/appTypes";
 import {
     parseGuiUrl,
     serializeGuiUrl,
-} from "@/features/gui-v2/apps/parseGuiAppTarget";
+} from "@/features/gui/registry/parseGuiAppTarget";
 
-describe("GUI V2 app boundaries", () => {
+describe("GUI app boundaries", () => {
     it("keeps catalog and client loader keys identical", () => {
         expect(appLoaderRegistryKeys).toEqual(appCatalogKeys);
         expect(Object.keys(appCatalog)).toHaveLength(13);
@@ -45,12 +45,6 @@ describe("GUI V2 app boundaries", () => {
             }),
         ).toBe("/gui?app=project&slug=wchms&lang=en");
         expect(serializeGuiUrl({ app: "about", lang: "ko" })).toBe("/gui");
-        expect(
-            serializeGuiUrl(
-                { app: "projects", lang: "ko" },
-                "/gui-v2",
-            ),
-        ).toBe("/gui-v2?app=projects");
     });
 
     it("falls back through the allowlist for invalid values", () => {

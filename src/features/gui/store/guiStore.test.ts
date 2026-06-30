@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { createGuiV2Store } from "@/features/gui-v2/store/guiV2Store";
+import { createGuiStore } from "@/features/gui/store/guiStore";
 
-describe("GUI V2 store", () => {
+describe("GUI store", () => {
     it("creates an isolated bootstrap-ready store for each shell", () => {
-        const first = createGuiV2Store();
-        const second = createGuiV2Store();
+        const first = createGuiStore();
+        const second = createGuiStore();
 
         first.getState().dispatch({
             type: "open-app",
@@ -24,7 +24,7 @@ describe("GUI V2 store", () => {
     });
 
     it("reopens and restores a URL-targeted app without closing others", () => {
-        const store = createGuiV2Store();
+        const store = createGuiStore();
 
         store.getState().dispatch({
             type: "apply-url-state",
@@ -42,7 +42,7 @@ describe("GUI V2 store", () => {
     });
 
     it("preserves windows while showing the desktop", () => {
-        const store = createGuiV2Store();
+        const store = createGuiStore();
 
         store.getState().dispatch({
             type: "open-app",
@@ -59,7 +59,7 @@ describe("GUI V2 store", () => {
     });
 
     it("stores page visibility independently from window focus", () => {
-        const store = createGuiV2Store();
+        const store = createGuiStore();
         store.getState().dispatch({
             type: "open-app",
             appId: "terminal",
