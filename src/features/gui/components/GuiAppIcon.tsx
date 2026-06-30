@@ -2,7 +2,10 @@
 
 import Image from "next/image";
 import { appCatalog } from "@/features/gui/registry/appCatalog";
-import { isProjectAppId, type GuiAppId } from "@/features/gui/registry/appTypes";
+import {
+  isProjectAppId,
+  type GuiAppId,
+} from "@/features/gui/registry/appTypes";
 
 type CoreAppId = Exclude<GuiAppId, `project:${string}`>;
 
@@ -28,7 +31,7 @@ const coreIcons: Record<CoreAppId, (size: number) => React.ReactNode> = {
   ),
   resume: (s) => (
     <Image
-      src="/icons/file.png"
+      src="/icons/pdf_file.png"
       alt="이력서"
       width={s}
       height={s}
