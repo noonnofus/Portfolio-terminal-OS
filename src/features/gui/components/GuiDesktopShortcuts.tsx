@@ -137,8 +137,10 @@ function DraggableShortcut({
                 touchAction: "none",
             }}
         >
-            <GuiAppIcon appId={appId} size="desktop" />
-            <span className="pointer-events-none">
+            <div className="desktop-app-icon-wrapper">
+                <GuiAppIcon appId={appId} size="desktop" />
+            </div>
+            <span className="desktop-app-name pointer-events-none">
                 {app.titles[language]}
             </span>
         </button>
