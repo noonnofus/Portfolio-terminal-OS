@@ -101,7 +101,7 @@
   user-select: none;
 }
 
-.gui-shortcuts {
+.desktop-apps {
   position: fixed;
   top: 72px;
   right: max(18px, env(safe-area-inset-right, 0px));
@@ -111,7 +111,7 @@
   gap: 20px;
 }
 
-.gui-shortcut {
+.desktop-app {
   display: flex;
   width: 88px;
   flex-direction: column;
@@ -122,8 +122,8 @@
   font-size: 12px;
 }
 
-.gui-shortcut:focus-visible,
-.gui-shortcut[data-selected="true"] {
+.desktop-app:focus-visible,
+.desktop-app[data-selected="true"] {
   background: rgb(255 255 255 / 72%);
   outline: 2px solid #2563eb;
   outline-offset: 2px;
@@ -442,7 +442,7 @@
   }
 }
 
-.gui-dock-button {
+.dock-app {
   position: relative;
   display: grid;
   width: 48px;
@@ -451,19 +451,19 @@
   border-radius: 14px;
 }
 
-.gui-dock-button:hover,
-.gui-dock-button:focus-visible,
-.gui-dock-button[aria-pressed="true"] {
+.dock-app:hover,
+.dock-app:focus-visible,
+.dock-app[aria-pressed="true"] {
   background: rgb(219 234 254 / 86%);
   outline: 2px solid transparent;
 }
 
-.gui-dock-button:focus-visible {
+.dock-app:focus-visible {
   outline-color: #2563eb;
 }
 
 @media (width < 1024px) {
-  .gui-shortcuts {
+  .desktop-apps {
     display: none;
   }
 }
@@ -540,7 +540,7 @@
 
   .gui-system-bar,
   .gui-dock,
-  .gui-shortcuts,
+  .desktop-apps,
   .gui-background-type,
   .gui-title-bar,
   .gui-resume-print-action,
@@ -700,9 +700,9 @@
   box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
 }
 
-.dark .gui-dock-button:hover,
-.dark .gui-dock-button:focus-visible,
-.dark .gui-dock-button[aria-pressed="true"] {
+.dark .dock-app:hover,
+.dark .dock-app:focus-visible,
+.dark .dock-app[aria-pressed="true"] {
   background: rgba(30, 41, 59, 0.86);
 }
 
@@ -988,14 +988,14 @@
   backdrop-filter: blur(28px) saturate(155%);
 }
 
-.gui-dock-button {
+.dock-app {
   cursor: pointer;
   border-radius: 15px;
 }
 
-.gui-dock-button:hover,
-.gui-dock-button:focus-visible,
-.gui-dock-button[aria-pressed="true"] {
+.dock-app:hover,
+.dock-app:focus-visible,
+.dock-app[aria-pressed="true"] {
   background: var(--gui-control-hover);
 }
 
@@ -1110,18 +1110,18 @@
   filter: drop-shadow(0 2px 3px rgb(0 0 0 / 18%));
 }
 
-.gui-shortcut {
+.desktop-app {
   cursor: pointer;
   color: var(--gui-text);
   text-shadow: 0 1px 4px rgb(255 255 255 / 46%);
 }
 
-.gui-shell[data-theme="dark"] .gui-shortcut {
+.gui-shell[data-theme="dark"] .desktop-app {
   text-shadow: 0 1px 4px rgb(0 0 0 / 72%);
 }
 
-.gui-shortcut:focus-visible,
-.gui-shortcut[data-selected="true"] {
+.desktop-app:focus-visible,
+.desktop-app[data-selected="true"] {
   background: var(--gui-control);
 }
 
@@ -1200,9 +1200,9 @@
     0 18px 46px rgb(17 30 54 / 24%);
 }
 
-.gui-shell[data-theme] .gui-dock-button:hover,
-.gui-shell[data-theme] .gui-dock-button:focus-visible,
-.gui-shell[data-theme] .gui-dock-button[aria-pressed="true"] {
+.gui-shell[data-theme] .dock-app:hover,
+.gui-shell[data-theme] .dock-app:focus-visible,
+.gui-shell[data-theme] .dock-app[aria-pressed="true"] {
   background: var(--gui-control-hover);
 }
 
@@ -1386,7 +1386,7 @@
 }
 
 @media (width < 1024px) {
-  .gui-shortcuts {
+  .desktop-apps {
     display: grid;
     top: 54px;
     right: max(10px, env(safe-area-inset-right, 0px));
@@ -1409,11 +1409,11 @@
     display: none;
   }
 
-  .gui-shortcuts {
+  .desktop-apps {
     grid-template-columns: repeat(2, 68px);
   }
 
-  .gui-shortcut {
+  .desktop-app {
     width: 68px;
   }
 }
