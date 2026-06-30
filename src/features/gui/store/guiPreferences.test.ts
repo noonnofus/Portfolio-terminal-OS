@@ -16,13 +16,13 @@ describe("GUI preferences storage", () => {
 
         writeGuiPreferences(storage, {
             language: "en",
-            wallpaper: "forest",
+            wallpaper: "tahoe_light",
             dockAutoHide: true,
         });
 
         expect(readGuiPreferences(storage)).toEqual({
             language: "en",
-            wallpaper: "forest",
+            wallpaper: "tahoe_light",
             dockAutoHide: true,
         });
         expect(values.has(GUI_PREFERENCES_STORAGE_KEY)).toBe(true);

@@ -1,6 +1,6 @@
 export type GuiPreferences = {
     language: "ko" | "en";
-    wallpaper: "aurora" | "sunset" | "forest" | "dark";
+    wallpaper: "golden_gate_light" | "golden_gate_dark" | "tahoe_light" | "tahoe_dark" | "tahoe_beach_dawn" | "tahoe_beach_day" | "tahoe_beach_dusk" | "tahoe_beach_night";
     dockAutoHide: boolean;
 };
 
@@ -13,10 +13,14 @@ export const GUI_PREFERENCES_STORAGE_KEY = "gui:preferences";
 
 const languages = new Set<GuiPreferences["language"]>(["ko", "en"]);
 const wallpapers = new Set<GuiPreferences["wallpaper"]>([
-    "aurora",
-    "sunset",
-    "forest",
-    "dark",
+    "golden_gate_light",
+    "golden_gate_dark",
+    "tahoe_light",
+    "tahoe_dark",
+    "tahoe_beach_dawn",
+    "tahoe_beach_day",
+    "tahoe_beach_dusk",
+    "tahoe_beach_night",
 ]);
 
 export function readGuiPreferences(

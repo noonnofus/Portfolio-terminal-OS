@@ -57,7 +57,7 @@ export type StoreCommand =
     | { type: "minimize-window"; windowId: WindowId }
     | { type: "show-desktop" }
     | { type: "change-language"; language: Language }
-    | { type: "change-wallpaper"; wallpaper: "aurora" | "sunset" | "forest" | "dark" }
+    | { type: "change-wallpaper"; wallpaper: "golden_gate_light" | "golden_gate_dark" | "tahoe_light" | "tahoe_dark" | "tahoe_beach_dawn" | "tahoe_beach_day" | "tahoe_beach_dusk" | "tahoe_beach_night" }
     | { type: "change-dock-auto-hide"; enabled: boolean }
     | { type: "apply-url-state"; view: GuiUrlState }
     | { type: "advance-entry-sequence" };

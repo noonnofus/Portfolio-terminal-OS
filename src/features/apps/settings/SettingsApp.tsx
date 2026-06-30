@@ -32,10 +32,14 @@ export default function SettingsApp({
             wallpaperLabel: "배경화면 선택",
             wallpaperDesc: "데스크톱 배경 무드를 선택하세요.",
             wallpapers: {
-                aurora: "알파인 트와일라잇 (기본)",
-                sunset: "소프트 스펙트럼",
-                forest: "포레스트 레이크",
-                dark: "레드 랜드스케이프",
+                golden_gate_light: "Golden Gate Light",
+                golden_gate_dark: "Golden Gate Dark",
+                tahoe_light: "Tahoe Light",
+                tahoe_dark: "Tahoe Dark",
+                tahoe_beach_dawn: "Tahoe Beach - Dawn",
+                tahoe_beach_day: "Tahoe Beach - Day",
+                tahoe_beach_dusk: "Tahoe Beach - Dusk",
+                tahoe_beach_night: "Tahoe Beach - Night",
             },
         },
         en: {
@@ -55,10 +59,14 @@ export default function SettingsApp({
             wallpaperLabel: "Choose Wallpaper",
             wallpaperDesc: "Choose a mood for your desktop background.",
             wallpapers: {
-                aurora: "Alpine Twilight (Default)",
-                sunset: "Soft Spectrum",
-                forest: "Forest Lake",
-                dark: "Red Landscape",
+                golden_gate_light: "Golden Gate Light",
+                golden_gate_dark: "Golden Gate Dark",
+                tahoe_light: "Tahoe Light",
+                tahoe_dark: "Tahoe Dark",
+                tahoe_beach_dawn: "Tahoe Beach - Dawn",
+                tahoe_beach_day: "Tahoe Beach - Day",
+                tahoe_beach_dusk: "Tahoe Beach - Dusk",
+                tahoe_beach_night: "Tahoe Beach - Night",
             },
         },
     }[language];
@@ -213,7 +221,7 @@ export default function SettingsApp({
                         </p>
                     </div>
                     <div className="grid grid-cols-2 gap-3 mt-3 sm:grid-cols-4">
-                        {(["aurora", "sunset", "forest", "dark"] as const).map(
+                        {(["golden_gate_light", "golden_gate_dark", "tahoe_light", "tahoe_dark", "tahoe_beach_dawn", "tahoe_beach_day", "tahoe_beach_dusk", "tahoe_beach_night"] as const).map(
                             (type) => {
                                 return (
                                     <button

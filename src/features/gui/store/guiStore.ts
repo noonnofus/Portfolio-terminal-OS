@@ -14,7 +14,7 @@ export type GuiState = GuiWorkspaceState & {
     pageVisibility: PageVisibility;
     resumeEpoch: number;
     urlReady: boolean;
-    wallpaper: "aurora" | "sunset" | "forest" | "dark";
+    wallpaper: "golden_gate_light" | "golden_gate_dark" | "tahoe_light" | "tahoe_dark" | "tahoe_beach_dawn" | "tahoe_beach_day" | "tahoe_beach_dusk" | "tahoe_beach_night";
     dockAutoHide: boolean;
 };
 
@@ -102,7 +102,7 @@ export function createGuiStore(
         pageVisibility: "visible",
         resumeEpoch: 0,
         urlReady: false,
-        wallpaper: "aurora",
+        wallpaper: "golden_gate_light",
         dockAutoHide: false,
         dispatch: (command) =>
             set((state) => {
