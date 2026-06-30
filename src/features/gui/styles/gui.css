@@ -1,927 +1,925 @@
 .gui-shell {
-    position: relative;
-    min-height: 100dvh;
-    overflow: hidden;
-    color: #111827;
-    transition: background 0.5s ease;
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  color: #111827;
+  transition: background 0.5s ease;
 }
 
 .gui-shell[data-wallpaper="aurora"] {
-    background:
-        radial-gradient(circle at 20% 20%, rgb(219 234 254 / 70%), transparent 35%),
-        linear-gradient(135deg, #f8fafc, #e2e8f0);
+  background:
+    radial-gradient(circle at 20% 20%, rgb(219 234 254 / 70%), transparent 35%),
+    linear-gradient(135deg, #f8fafc, #e2e8f0);
 }
 
 .gui-shell[data-wallpaper="sunset"] {
-    background:
-        radial-gradient(circle at 80% 20%, rgb(254 186 116 / 70%), transparent 45%),
-        linear-gradient(135deg, #ea580c, #4a0e4e);
+  background:
+    radial-gradient(circle at 80% 20%, rgb(254 186 116 / 70%), transparent 45%),
+    linear-gradient(135deg, #ea580c, #4a0e4e);
 }
 
 .gui-shell[data-wallpaper="forest"] {
-    background:
-        radial-gradient(circle at 20% 80%, rgb(167 243 208 / 50%), transparent 45%),
-        linear-gradient(135deg, #064e3b, #022c22);
+  background:
+    radial-gradient(circle at 20% 80%, rgb(167 243 208 / 50%), transparent 45%),
+    linear-gradient(135deg, #064e3b, #022c22);
 }
 
 .gui-shell[data-wallpaper="dark"] {
-    background:
-        radial-gradient(circle at 50% 50%, rgb(63 63 70 / 30%), transparent 70%),
-        linear-gradient(135deg, #09090b, #27272a);
+  background:
+    radial-gradient(circle at 50% 50%, rgb(63 63 70 / 30%), transparent 70%),
+    linear-gradient(135deg, #09090b, #27272a);
 }
 
 .gui-system-bar {
-    position: fixed;
-    inset: 0 0 auto;
-    z-index: 100;
-    display: flex;
-    height: 36px;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid rgb(15 23 42 / 12%);
-    background: rgb(248 250 252 / 88%);
-    padding: 0 max(12px, env(safe-area-inset-right, 0px)) 0
-        max(12px, env(safe-area-inset-left, 0px));
-    backdrop-filter: blur(16px);
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  display: flex;
+  height: 36px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(15 23 42 / 12%);
+  background: rgb(248 250 252 / 88%);
+  padding: 0 max(12px, env(safe-area-inset-right, 0px)) 0
+    max(12px, env(safe-area-inset-left, 0px));
+  backdrop-filter: blur(16px);
 }
 
 .gui-system-controls {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .gui-system-divider {
-    width: 1px;
-    height: 16px;
-    margin: 0 6px;
-    background: rgb(15 23 42 / 15%);
+  width: 1px;
+  height: 16px;
+  margin: 0 6px;
+  background: rgb(15 23 42 / 15%);
 }
 
 .gui-system-clock {
-    font-family: "SF Mono", "Menlo", "Monaco", "Cascadia Code", monospace;
-    font-size: 12px;
-    font-weight: 500;
-    font-variant-numeric: tabular-nums;
-    color: #334155;
-    letter-spacing: 0.02em;
-    padding: 0 4px;
+  font-family: "SF Mono", "Menlo", "Monaco", "Cascadia Code", monospace;
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: #334155;
+  letter-spacing: 0.02em;
+  padding: 0 4px;
 }
 
 /* ── System status icons (dineshd.dev style) ─────────── */
 
 .gui-system-status {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px;
 }
 
 .gui-system-icon {
-    width: 15px;
-    height: 15px;
-    color: #64748b;
+  width: 15px;
+  height: 15px;
+  color: #64748b;
 }
 
 .gui-system-icon-battery {
-    width: 17px;
-    height: 17px;
+  width: 17px;
+  height: 17px;
 }
 
 .gui-background-type {
-    pointer-events: none;
-    position: absolute;
-    inset: 20% auto auto 8%;
-    color: #0f172a;
-    font-size: clamp(7rem, 22vw, 22rem);
-    font-weight: 800;
-    letter-spacing: -0.08em;
-    line-height: 0.8;
-    opacity: 0.045;
-    user-select: none;
+  pointer-events: none;
+  position: absolute;
+  inset: 20% auto auto 8%;
+  color: #0f172a;
+  font-size: clamp(7rem, 22vw, 22rem);
+  font-weight: 800;
+  letter-spacing: -0.08em;
+  line-height: 0.8;
+  opacity: 0.045;
+  user-select: none;
 }
 
 .gui-shortcuts {
-    position: fixed;
-    top: 72px;
-    right: max(18px, env(safe-area-inset-right, 0px));
-    z-index: 30;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  position: fixed;
+  top: 72px;
+  right: max(18px, env(safe-area-inset-right, 0px));
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .gui-shortcut {
-    display: flex;
-    width: 88px;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    border-radius: 12px;
-    padding: 8px;
-    font-size: 12px;
+  display: flex;
+  width: 88px;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border-radius: 12px;
+  padding: 8px;
+  font-size: 12px;
 }
 
 .gui-shortcut:hover,
 .gui-shortcut:focus-visible {
-    background: rgb(255 255 255 / 72%);
-    outline: 2px solid #2563eb;
-    outline-offset: 2px;
+  background: rgb(255 255 255 / 72%);
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }
 
 .gui-window-layer {
-    position: absolute;
-    inset: 36px 0 0;
-    z-index: 35;
-    pointer-events: none;
+  position: absolute;
+  inset: 36px 0 0;
+  z-index: 35;
+  pointer-events: none;
 }
 
 .gui-window {
-    position: absolute;
-    pointer-events: auto;
-    display: flex;
-    width: min(760px, 72vw);
-    height: min(620px, 72vh);
-    min-width: 360px;
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid rgb(15 23 42 / 18%);
-    border-radius: 14px;
-    background: rgb(255 255 255 / 96%);
-    box-shadow: 0 24px 70px rgb(15 23 42 / 24%);
+  position: absolute;
+  pointer-events: auto;
+  display: flex;
+  width: min(760px, 72vw);
+  height: min(620px, 72vh);
+  min-width: 360px;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgb(15 23 42 / 18%);
+  border-radius: 14px;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 24px 70px rgb(15 23 42 / 24%);
 }
 
 .gui-window[data-active="false"] {
-    filter: saturate(0.82) brightness(0.96);
+  filter: saturate(0.82) brightness(0.96);
 }
 
 /* ── macOS-style title bar ───────────────────────────────── */
 
 .gui-title-bar {
-    display: grid;
-    grid-template-columns: 72px 1fr 72px;
-    min-height: 42px;
-    align-items: center;
-    border-bottom: 1px solid rgb(15 23 42 / 12%);
-    background: rgb(241 245 249 / 92%);
-    padding: 0 10px;
-    cursor: grab;
-    user-select: none;
+  display: grid;
+  grid-template-columns: 72px 1fr 72px;
+  min-height: 42px;
+  align-items: center;
+  border-bottom: 1px solid rgb(15 23 42 / 12%);
+  background: rgb(241 245 249 / 92%);
+  padding: 0 10px;
+  cursor: grab;
+  user-select: none;
 }
 
 .gui-title-bar:active {
-    cursor: grabbing;
+  cursor: grabbing;
 }
 
 /* Traffic lights container */
 .gui-traffic-lights {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* Individual traffic light button */
 .gui-traffic-light {
-    display: grid;
-    width: 13px;
-    height: 13px;
-    place-items: center;
-    border-radius: 999px;
-    border: 0.5px solid rgb(0 0 0 / 12%);
-    cursor: pointer;
-    transition: filter 120ms ease;
+  display: grid;
+  width: 13px;
+  height: 13px;
+  place-items: center;
+  border-radius: 999px;
+  border: 0.5px solid rgb(0 0 0 / 12%);
+  cursor: pointer;
+  transition: filter 120ms ease;
 }
 
 .gui-traffic-light:focus-visible {
-    outline: 2px solid #2563eb;
-    outline-offset: 2px;
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }
 
 /* Close button — red */
 .gui-traffic-close {
-    background: #ff5f57;
+  background: #ff5f57;
 }
 
 .gui-traffic-close:hover {
-    filter: brightness(0.88);
+  filter: brightness(0.88);
 }
 
 /* Minimize button — yellow */
 .gui-traffic-minimize {
-    background: #febc2e;
+  background: #febc2e;
 }
 
 .gui-traffic-minimize:hover {
-    filter: brightness(0.88);
+  filter: brightness(0.88);
 }
 
 /* Maximize button — green */
 .gui-traffic-maximize {
-    background: #28c840;
+  background: #28c840;
 }
 
 .gui-traffic-maximize:hover {
-    filter: brightness(0.88);
+  filter: brightness(0.88);
 }
 
 /* Traffic light inner icon — hidden until hover on group */
 .gui-traffic-icon {
-    width: 8px;
-    height: 8px;
-    color: rgb(0 0 0 / 0);
-    transition: color 100ms ease;
+  width: 8px;
+  height: 8px;
+  color: rgb(0 0 0 / 0);
+  transition: color 100ms ease;
 }
 
 .gui-traffic-lights:hover .gui-traffic-icon {
-    color: rgb(0 0 0 / 55%);
+  color: rgb(0 0 0 / 55%);
 }
 
 /* Centered title text */
 .gui-title-text {
-    text-align: center;
-    font-size: 13px;
-    font-weight: 500;
-    color: #374151;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Spacer for grid symmetry */
 .gui-title-spacer {
-    width: 72px;
+  width: 72px;
 }
 
 /* ── Maximized window override ────────────────────────── */
 
 .gui-window-maximized {
-    position: fixed !important;
-    border-radius: 0 !important;
-    border: none !important;
+  position: fixed !important;
+  border-radius: 0 !important;
+  border: none !important;
 }
 
 .gui-window-maximized .gui-title-bar {
-    cursor: default;
+  cursor: default;
 }
 
 /* ── Window content ─────────────────────────────────────── */
 
 .gui-window-content {
-    min-height: 0;
-    flex: 1;
-    overflow: auto;
-    background: #f8fafc;
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+  background: #f8fafc;
 }
 
 .gui-window-error {
-    display: grid;
-    gap: 12px;
-    padding: 28px;
+  display: grid;
+  gap: 12px;
+  padding: 28px;
 }
 
 .gui-window-error > div {
-    display: flex;
-    gap: 8px;
+  display: flex;
+  gap: 8px;
 }
 
 .gui-window-error button {
-    border-radius: 8px;
-    background: #0f172a;
-    padding: 8px 12px;
-    color: white;
-    font-size: 12px;
+  border-radius: 8px;
+  background: #0f172a;
+  padding: 8px 12px;
+  color: white;
+  font-size: 12px;
 }
 
 .gui-projects {
-    min-height: 100%;
-    background: #f8fafc;
-    padding: 28px;
+  min-height: 100%;
+  background: #f8fafc;
+  padding: 28px;
 }
 
 .gui-project-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-    margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 20px;
 }
 
 .gui-project-card {
-    display: flex;
-    width: 100%;
-    min-height: 170px;
-    gap: 16px;
-    border: 1px solid rgb(15 23 42 / 10%);
-    border-radius: 14px;
-    background: white;
-    padding: 18px;
-    text-align: left;
-    transition:
-        border-color 140ms ease,
-        box-shadow 140ms ease,
-        transform 140ms ease;
+  display: flex;
+  width: 100%;
+  min-height: 170px;
+  gap: 16px;
+  border: 1px solid rgb(15 23 42 / 10%);
+  border-radius: 14px;
+  background: white;
+  padding: 18px;
+  text-align: left;
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease;
 }
 
 .gui-project-card:hover {
-    border-color: rgb(37 99 235 / 38%);
-    box-shadow: 0 12px 30px rgb(15 23 42 / 10%);
-    transform: translateY(-2px);
+  border-color: rgb(37 99 235 / 38%);
+  box-shadow: 0 12px 30px rgb(15 23 42 / 10%);
+  transform: translateY(-2px);
 }
 
 .gui-project-card:focus-visible {
-    border-color: #2563eb;
-    outline: 3px solid rgb(37 99 235 / 30%);
-    outline-offset: 2px;
+  border-color: #2563eb;
+  outline: 3px solid rgb(37 99 235 / 30%);
+  outline-offset: 2px;
 }
 
 .gui-project-icon {
-    display: grid;
-    width: 76px;
-    height: 76px;
-    flex: 0 0 auto;
-    place-items: center;
-    border-radius: 16px;
-    background: #f1f5f9;
+  display: grid;
+  width: 76px;
+  height: 76px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 16px;
+  background: #f1f5f9;
 }
 
 .gui-resume {
-    min-height: 100%;
-    background: white;
-    padding: 34px;
+  min-height: 100%;
+  background: white;
+  padding: 34px;
 }
 
 .gui-resume-hero {
-    position: relative;
-    border-bottom: 2px solid #0f172a;
-    padding-bottom: 24px;
+  position: relative;
+  border-bottom: 2px solid #0f172a;
+  padding-bottom: 24px;
 }
 
 .gui-resume-print-action {
-    position: absolute;
-    top: 0;
-    right: 0;
-    border-radius: 9px;
-    background: #0f172a;
-    padding: 9px 13px;
-    color: white;
-    font-size: 12px;
-    font-weight: 600;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 9px;
+  background: #0f172a;
+  padding: 9px 13px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .gui-resume-print-action:hover,
 .gui-resume-print-action:focus-visible {
-    background: #1d4ed8;
-    outline: 3px solid rgb(37 99 235 / 28%);
-    outline-offset: 2px;
+  background: #1d4ed8;
+  outline: 3px solid rgb(37 99 235 / 28%);
+  outline-offset: 2px;
 }
 
 .gui-resume-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1.7fr) minmax(220px, 0.8fr);
-    gap: 36px;
-    margin-top: 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(220px, 0.8fr);
+  gap: 36px;
+  margin-top: 28px;
 }
 
 .gui-resume-section-title {
-    border-bottom: 1px solid rgb(15 23 42 / 18%);
-    padding-bottom: 7px;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+  border-bottom: 1px solid rgb(15 23 42 / 18%);
+  padding-bottom: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .gui-resume-block {
-    break-inside: avoid;
+  break-inside: avoid;
 }
 
 .gui-resume-link {
-    display: block;
-    overflow-wrap: anywhere;
-    color: #1d4ed8;
-    text-decoration: underline;
-    text-underline-offset: 3px;
+  display: block;
+  overflow-wrap: anywhere;
+  color: #1d4ed8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .gui-dock {
-    position: fixed;
-    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-    left: 50%;
-    z-index: 100;
-    display: flex;
-    min-height: 64px;
-    transform: translateX(-50%);
-    align-items: center;
-    transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
-    gap: 6px;
-    border: 1px solid rgb(255 255 255 / 70%);
-    border-radius: 22px;
-    background: rgb(248 250 252 / 78%);
-    padding: 8px 10px;
-    box-shadow: 0 14px 36px rgb(15 23 42 / 22%);
-    backdrop-filter: blur(20px);
+  position: fixed;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  z-index: 100;
+  display: flex;
+  min-height: 64px;
+  transform: translateX(-50%);
+  align-items: center;
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  gap: 6px;
+  border: 1px solid rgb(255 255 255 / 70%);
+  border-radius: 22px;
+  background: rgb(248 250 252 / 78%);
+  padding: 8px 10px;
+  box-shadow: 0 14px 36px rgb(15 23 42 / 22%);
+  backdrop-filter: blur(20px);
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .gui-dock[data-auto-hide="true"] {
-        transform: translate(-50%, calc(100% + 4px));
-    }
+  .gui-dock[data-auto-hide="true"] {
+    transform: translate(-50%, calc(100% + 4px));
+  }
 
-    .gui-dock[data-auto-hide="true"]::before {
-        position: absolute;
-        right: 50%;
-        bottom: 100%;
-        width: 100vw;
-        height: 18px;
-        transform: translateX(50%);
-        content: "";
-    }
+  .gui-dock[data-auto-hide="true"]::before {
+    position: absolute;
+    right: 50%;
+    bottom: 100%;
+    width: 100vw;
+    height: 18px;
+    transform: translateX(50%);
+    content: "";
+  }
 
-    .gui-dock[data-auto-hide="true"]:hover,
-    .gui-dock[data-auto-hide="true"]:focus-within {
-        transform: translateX(-50%);
-    }
+  .gui-dock[data-auto-hide="true"]:hover,
+  .gui-dock[data-auto-hide="true"]:focus-within {
+    transform: translateX(-50%);
+  }
 }
 
 .gui-dock-button {
-    position: relative;
-    display: grid;
-    width: 48px;
-    height: 48px;
-    place-items: center;
-    border-radius: 14px;
+  position: relative;
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 14px;
 }
 
 .gui-dock-button:hover,
 .gui-dock-button:focus-visible,
 .gui-dock-button[aria-pressed="true"] {
-    background: rgb(219 234 254 / 86%);
-    outline: 2px solid transparent;
+  background: rgb(219 234 254 / 86%);
+  outline: 2px solid transparent;
 }
 
 .gui-dock-button:focus-visible {
-    outline-color: #2563eb;
+  outline-color: #2563eb;
 }
 
 @media (width < 1024px) {
-    .gui-shortcuts {
-        display: none;
-    }
-
+  .gui-shortcuts {
+    display: none;
+  }
 }
 
 @media (width < 768px) and (pointer: coarse) {
-    .gui-background-type {
-        display: none;
-    }
+  .gui-background-type {
+    display: none;
+  }
 
-    .gui-window-layer {
-        position: fixed;
-        inset: 36px 0 0;
-    }
+  .gui-window-layer {
+    position: fixed;
+    inset: 36px 0 0;
+  }
 
-    .gui-window:not(.gui-window-maximized) {
-        position: fixed;
-        inset: 44px 8px
-            calc(84px + env(safe-area-inset-bottom, 0px)) 8px !important;
-        width: auto;
-        height: auto;
-        min-width: 0;
-        border-radius: 12px;
-    }
+  .gui-window:not(.gui-window-maximized) {
+    position: fixed;
+    inset: 44px 8px calc(84px + env(safe-area-inset-bottom, 0px)) 8px !important;
+    width: auto;
+    height: auto;
+    min-width: 0;
+    border-radius: 12px;
+  }
 
-    .gui-window[data-active="false"] {
-        display: none;
-    }
+  .gui-window[data-active="false"] {
+    display: none;
+  }
 
-    .gui-projects {
-        padding: 18px;
-    }
+  .gui-projects {
+    padding: 18px;
+  }
 
-    .gui-project-grid {
-        grid-template-columns: minmax(0, 1fr);
-    }
+  .gui-project-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-    .gui-project-card {
-        min-height: 0;
-        padding: 14px;
-    }
+  .gui-project-card {
+    min-height: 0;
+    padding: 14px;
+  }
 
-    .gui-project-icon {
-        width: 60px;
-        height: 60px;
-    }
+  .gui-project-icon {
+    width: 60px;
+    height: 60px;
+  }
 
-    .gui-resume {
-        padding: 22px 18px;
-    }
+  .gui-resume {
+    padding: 22px 18px;
+  }
 
-    .gui-resume-print-action {
-        position: static;
-        margin-top: 16px;
-    }
+  .gui-resume-print-action {
+    position: static;
+    margin-top: 16px;
+  }
 
-    .gui-resume-layout {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 30px;
-    }
+  .gui-resume-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+  }
 }
 
 @media print {
-    @page {
-        margin: 14mm;
-        size: auto;
-    }
+  @page {
+    margin: 14mm;
+    size: auto;
+  }
 
-    html,
-    body {
-        height: auto !important;
-        min-height: 0 !important;
-        overflow: visible !important;
-        background: white !important;
-    }
+  html,
+  body {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: white !important;
+  }
 
-    .gui-system-bar,
-    .gui-dock,
-    .gui-shortcuts,
-    .gui-background-type,
-    .gui-title-bar,
-    .gui-resume-print-action,
-    [data-window-id]:not([data-window-id="resume"]) {
-        display: none !important;
-    }
+  .gui-system-bar,
+  .gui-dock,
+  .gui-shortcuts,
+  .gui-background-type,
+  .gui-title-bar,
+  .gui-resume-print-action,
+  [data-window-id]:not([data-window-id="resume"]) {
+    display: none !important;
+  }
 
-    .gui-shell,
-    .gui-window-layer,
-    [data-window-id="resume"],
-    [data-window-id="resume"] .gui-window-content,
-    [data-window-id="resume"] [data-effective-visibility] {
-        position: static !important;
-        display: block !important;
-        width: auto !important;
-        height: auto !important;
-        min-height: 0 !important;
-        overflow: visible !important;
-        border: 0 !important;
-        border-radius: 0 !important;
-        background: white !important;
-        box-shadow: none !important;
-        filter: none !important;
-    }
+  .gui-shell,
+  .gui-window-layer,
+  [data-window-id="resume"],
+  [data-window-id="resume"] .gui-window-content,
+  [data-window-id="resume"] [data-effective-visibility] {
+    position: static !important;
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: white !important;
+    box-shadow: none !important;
+    filter: none !important;
+  }
 
-    .gui-resume {
-        padding: 0 !important;
-        color: black !important;
-    }
+  .gui-resume {
+    padding: 0 !important;
+    color: black !important;
+  }
 
-    .gui-resume-layout {
-        display: block !important;
-    }
+  .gui-resume-layout {
+    display: block !important;
+  }
 
-    .gui-resume-layout > aside {
-        margin-top: 28px;
-    }
+  .gui-resume-layout > aside {
+    margin-top: 28px;
+  }
 
-    .gui-resume a[href^="http"]::after,
-    .gui-resume a[href^="mailto"]::after {
-        content: " (" attr(href) ")";
-        color: #334155;
-        font-size: 9pt;
-        text-decoration: none;
-    }
+  .gui-resume a[href^="http"]::after,
+  .gui-resume a[href^="mailto"]::after {
+    content: " (" attr(href) ")";
+    color: #334155;
+    font-size: 9pt;
+    text-decoration: none;
+  }
 }
 
 /* ── Sleek scrollbars for windows ── */
 .gui-window-content::-webkit-scrollbar,
 .gui-window-content *::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  width: 8px;
+  height: 8px;
 }
 
 .gui-window-content::-webkit-scrollbar-track,
 .gui-window-content *::-webkit-scrollbar-track {
-    background: transparent;
+  background: transparent;
 }
 
 .gui-window-content::-webkit-scrollbar-thumb,
 .gui-window-content *::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.18);
-    border-radius: 99px;
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 99px;
 }
 
 .gui-window-content::-webkit-scrollbar-thumb:hover,
 .gui-window-content *::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.35);
 }
 
 .dark .gui-window-content::-webkit-scrollbar-thumb,
 .dark .gui-window-content *::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .dark .gui-window-content::-webkit-scrollbar-thumb:hover,
 .dark .gui-window-content *::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.35);
 }
 
 /* ── Dark mode styling override for GUI ── */
 .dark.gui-shell,
 .dark .gui-shell {
-    color: #f8fafc;
+  color: #f8fafc;
 }
 
 .dark .gui-window {
-    background: rgba(30, 41, 59, 0.94);
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+  background: rgba(30, 41, 59, 0.94);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
 }
 
 .dark .gui-title-bar {
-    background: rgba(15, 23, 42, 0.9);
-    border-bottom-color: rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.9);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 .dark .gui-title-text {
-    color: #cbd5e1;
+  color: #cbd5e1;
 }
 
 .dark .gui-window-content {
-    background: #0f172a;
+  background: #0f172a;
 }
 
 .dark .gui-projects {
-    background: #0f172a;
+  background: #0f172a;
 }
 
 .dark .gui-project-card {
-    background: #1e293b;
-    border-color: rgba(255, 255, 255, 0.08);
-    color: #cbd5e1;
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
 }
 
 .dark .gui-project-card strong {
-    color: #f8fafc;
+  color: #f8fafc;
 }
 
 .dark .gui-project-card:hover {
-    border-color: rgba(59, 130, 246, 0.45);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  border-color: rgba(59, 130, 246, 0.45);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
 }
 
 .dark .gui-project-icon {
-    background: #334155;
+  background: #334155;
 }
 
 .dark .gui-resume {
-    background: #0f172a;
-    color: #cbd5e1;
+  background: #0f172a;
+  color: #cbd5e1;
 }
 
 .dark .gui-resume h3,
 .dark .gui-resume h4,
 .dark .gui-resume h5,
 .dark .gui-resume dt {
-    color: #f8fafc;
+  color: #f8fafc;
 }
 
 .dark .gui-resume-section-title {
-    border-bottom-color: rgba(255, 255, 255, 0.15);
-    color: #f8fafc;
+  border-bottom-color: rgba(255, 255, 255, 0.15);
+  color: #f8fafc;
 }
 
 .dark .gui-resume-hero {
-    border-bottom-color: #334155;
+  border-bottom-color: #334155;
 }
 
 .dark .gui-resume-hero p {
-    color: #94a3b8;
+  color: #94a3b8;
 }
 
 .dark .gui-dock {
-    background: rgba(15, 23, 42, 0.72);
-    border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+  background: rgba(15, 23, 42, 0.72);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
 }
 
 .dark .gui-dock-button:hover,
 .dark .gui-dock-button:focus-visible,
 .dark .gui-dock-button[aria-pressed="true"] {
-    background: rgba(30, 41, 59, 0.86);
+  background: rgba(30, 41, 59, 0.86);
 }
 
 .dark .gui-system-bar {
-    background: rgba(15, 23, 42, 0.78);
-    border-bottom-color: rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.78);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 .dark .gui-system-clock {
-    color: #cbd5e1;
+  color: #cbd5e1;
 }
 
 .dark .gui-system-icon {
-    color: #cbd5e1;
+  color: #cbd5e1;
 }
 
 .dark .gui-system-divider {
-    background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* ── 2026 macOS-inspired adaptive material system ───────── */
 
 .gui-shell {
-    --gui-accent: #0a84ff;
-    --gui-text: #182230;
-    --gui-text-secondary: #5d6878;
-    --gui-border: rgb(255 255 255 / 58%);
-    --gui-window: rgb(250 252 255 / 88%);
-    --gui-window-solid: #f7f9fc;
-    --gui-titlebar: rgb(245 248 252 / 76%);
-    --gui-glass: rgb(249 251 255 / 66%);
-    --gui-glass-strong: rgb(248 250 254 / 82%);
-    --gui-control: rgb(255 255 255 / 52%);
-    --gui-control-hover: rgb(255 255 255 / 82%);
-    --gui-shadow: 0 28px 80px rgb(31 43 68 / 22%);
-    isolation: isolate;
-    color: var(--gui-text);
-    background-color: #dfe7f2;
+  --gui-accent: #0a84ff;
+  --gui-text: #182230;
+  --gui-text-secondary: #5d6878;
+  --gui-border: rgb(255 255 255 / 58%);
+  --gui-window: rgb(250 252 255 / 88%);
+  --gui-window-solid: #f7f9fc;
+  --gui-titlebar: rgb(245 248 252 / 76%);
+  --gui-glass: rgb(249 251 255 / 66%);
+  --gui-glass-strong: rgb(248 250 254 / 82%);
+  --gui-control: rgb(255 255 255 / 52%);
+  --gui-control-hover: rgb(255 255 255 / 82%);
+  --gui-shadow: 0 28px 80px rgb(31 43 68 / 22%);
+  isolation: isolate;
+  color: var(--gui-text);
+  background-color: #dfe7f2;
 }
 
 .gui-shell[data-theme="dark"] {
-    --gui-accent: #5aaeff;
-    --gui-text: #f4f7fb;
-    --gui-text-secondary: #aeb8c8;
-    --gui-border: rgb(255 255 255 / 14%);
-    --gui-window: rgb(25 29 38 / 88%);
-    --gui-window-solid: #191d26;
-    --gui-titlebar: rgb(35 40 51 / 76%);
-    --gui-glass: rgb(22 27 36 / 62%);
-    --gui-glass-strong: rgb(27 32 42 / 82%);
-    --gui-control: rgb(255 255 255 / 8%);
-    --gui-control-hover: rgb(255 255 255 / 15%);
-    --gui-shadow: 0 34px 90px rgb(0 0 0 / 48%);
-    background-color: #11141b;
+  --gui-accent: #5aaeff;
+  --gui-text: #f4f7fb;
+  --gui-text-secondary: #aeb8c8;
+  --gui-border: rgb(255 255 255 / 14%);
+  --gui-window: rgb(25 29 38 / 88%);
+  --gui-window-solid: #191d26;
+  --gui-titlebar: rgb(35 40 51 / 76%);
+  --gui-glass: rgb(22 27 36 / 62%);
+  --gui-glass-strong: rgb(27 32 42 / 82%);
+  --gui-control: rgb(255 255 255 / 8%);
+  --gui-control-hover: rgb(255 255 255 / 15%);
+  --gui-shadow: 0 34px 90px rgb(0 0 0 / 48%);
+  background-color: #11141b;
 }
 
 .gui-shell[data-theme="light"][data-wallpaper="aurora"] {
-    background:
-        radial-gradient(circle at 18% 18%, #d9f1ff 0, transparent 34%),
-        radial-gradient(circle at 78% 24%, #e5ddff 0, transparent 32%),
-        linear-gradient(145deg, #f8fbff 0%, #dce8f5 54%, #cad8e9 100%);
+  background:
+    radial-gradient(circle at 18% 18%, #d9f1ff 0, transparent 34%),
+    radial-gradient(circle at 78% 24%, #e5ddff 0, transparent 32%),
+    linear-gradient(145deg, #f8fbff 0%, #dce8f5 54%, #cad8e9 100%);
 }
 
 .gui-shell[data-theme="light"][data-wallpaper="sunset"] {
-    background:
-        radial-gradient(circle at 70% 18%, #ffd8c4 0, transparent 34%),
-        radial-gradient(circle at 18% 72%, #e7d8ff 0, transparent 38%),
-        linear-gradient(145deg, #fff7f0 0%, #efdce8 52%, #d8d9f1 100%);
+  background:
+    radial-gradient(circle at 70% 18%, #ffd8c4 0, transparent 34%),
+    radial-gradient(circle at 18% 72%, #e7d8ff 0, transparent 38%),
+    linear-gradient(145deg, #fff7f0 0%, #efdce8 52%, #d8d9f1 100%);
 }
 
 .gui-shell[data-theme="light"][data-wallpaper="forest"] {
-    background:
-        radial-gradient(circle at 26% 22%, #d7f7ea 0, transparent 36%),
-        radial-gradient(circle at 78% 74%, #c9e8ec 0, transparent 34%),
-        linear-gradient(145deg, #f2fbf7 0%, #d7ebe2 52%, #bfd8d4 100%);
+  background:
+    radial-gradient(circle at 26% 22%, #d7f7ea 0, transparent 36%),
+    radial-gradient(circle at 78% 74%, #c9e8ec 0, transparent 34%),
+    linear-gradient(145deg, #f2fbf7 0%, #d7ebe2 52%, #bfd8d4 100%);
 }
 
 .gui-shell[data-theme="light"][data-wallpaper="dark"] {
-    background:
-        radial-gradient(circle at 72% 22%, #e1e4ed 0, transparent 36%),
-        linear-gradient(145deg, #f8f9fc 0%, #d9dde7 52%, #c5cad5 100%);
+  background:
+    radial-gradient(circle at 72% 22%, #e1e4ed 0, transparent 36%),
+    linear-gradient(145deg, #f8f9fc 0%, #d9dde7 52%, #c5cad5 100%);
 }
 
 .gui-shell[data-theme="dark"][data-wallpaper="aurora"] {
-    background:
-        radial-gradient(circle at 18% 20%, #17395a 0, transparent 38%),
-        radial-gradient(circle at 78% 18%, #322b59 0, transparent 34%),
-        linear-gradient(145deg, #121824 0%, #151b28 48%, #0d1119 100%);
+  background:
+    radial-gradient(circle at 18% 20%, #17395a 0, transparent 38%),
+    radial-gradient(circle at 78% 18%, #322b59 0, transparent 34%),
+    linear-gradient(145deg, #121824 0%, #151b28 48%, #0d1119 100%);
 }
 
 .gui-shell[data-theme="dark"][data-wallpaper="sunset"] {
-    background:
-        radial-gradient(circle at 72% 18%, #633626 0, transparent 36%),
-        radial-gradient(circle at 20% 72%, #38264f 0, transparent 38%),
-        linear-gradient(145deg, #21151a 0%, #211827 48%, #101219 100%);
+  background:
+    radial-gradient(circle at 72% 18%, #633626 0, transparent 36%),
+    radial-gradient(circle at 20% 72%, #38264f 0, transparent 38%),
+    linear-gradient(145deg, #21151a 0%, #211827 48%, #101219 100%);
 }
 
 .gui-shell[data-theme="dark"][data-wallpaper="forest"] {
-    background:
-        radial-gradient(circle at 24% 20%, #174738 0, transparent 38%),
-        radial-gradient(circle at 78% 74%, #153747 0, transparent 34%),
-        linear-gradient(145deg, #101d19 0%, #10211f 48%, #0c1315 100%);
+  background:
+    radial-gradient(circle at 24% 20%, #174738 0, transparent 38%),
+    radial-gradient(circle at 78% 74%, #153747 0, transparent 34%),
+    linear-gradient(145deg, #101d19 0%, #10211f 48%, #0c1315 100%);
 }
 
 .gui-shell[data-theme="dark"][data-wallpaper="dark"] {
-    background:
-        radial-gradient(circle at 72% 20%, #2b3040 0, transparent 34%),
-        linear-gradient(145deg, #151820 0%, #0f1218 58%, #090b10 100%);
+  background:
+    radial-gradient(circle at 72% 20%, #2b3040 0, transparent 34%),
+    linear-gradient(145deg, #151820 0%, #0f1218 58%, #090b10 100%);
 }
 
 .gui-wallpaper-art {
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    overflow: hidden;
-    filter: saturate(112%);
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  filter: saturate(112%);
 }
 
 .gui-wallpaper-art span {
-    position: absolute;
-    width: min(48vw, 700px);
-    aspect-ratio: 1;
-    border-radius: 42% 58% 62% 38% / 44% 42% 58% 56%;
-    background: linear-gradient(
-        145deg,
-        rgb(255 255 255 / 34%),
-        rgb(255 255 255 / 3%)
-    );
-    opacity: 0.72;
-    filter: blur(1px);
-    transform: rotate(-18deg);
+  position: absolute;
+  width: min(48vw, 700px);
+  aspect-ratio: 1;
+  border-radius: 42% 58% 62% 38% / 44% 42% 58% 56%;
+  background: linear-gradient(
+    145deg,
+    rgb(255 255 255 / 34%),
+    rgb(255 255 255 / 3%)
+  );
+  opacity: 0.72;
+  filter: blur(1px);
+  transform: rotate(-18deg);
 }
 
 .gui-wallpaper-art span:nth-child(1) {
-    top: -24%;
-    right: -8%;
+  top: -24%;
+  right: -8%;
 }
 
 .gui-wallpaper-art span:nth-child(2) {
-    bottom: -38%;
-    left: 8%;
-    width: min(58vw, 820px);
-    transform: rotate(24deg);
+  bottom: -38%;
+  left: 8%;
+  width: min(58vw, 820px);
+  transform: rotate(24deg);
 }
 
 .gui-wallpaper-art span:nth-child(3) {
-    top: 34%;
-    left: 42%;
-    width: min(24vw, 340px);
-    opacity: 0.38;
+  top: 34%;
+  left: 42%;
+  width: min(24vw, 340px);
+  opacity: 0.38;
 }
 
 .gui-shell[data-theme="dark"] .gui-wallpaper-art span {
-    background: linear-gradient(
-        145deg,
-        rgb(255 255 255 / 8%),
-        rgb(255 255 255 / 1%)
-    );
+  background: linear-gradient(
+    145deg,
+    rgb(255 255 255 / 8%),
+    rgb(255 255 255 / 1%)
+  );
 }
 
 .gui-shell button:not(:disabled),
 .gui-shell a[href],
 .gui-shell select,
 .gui-project-card {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .gui-system-bar {
-    border-bottom-color: var(--gui-border);
-    background: var(--gui-glass);
-    color: var(--gui-text);
-    box-shadow: 0 1px 0 rgb(255 255 255 / 22%);
-    backdrop-filter: blur(24px) saturate(145%);
+  border-bottom-color: var(--gui-border);
+  background: var(--gui-glass);
+  color: var(--gui-text);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 22%);
+  backdrop-filter: blur(24px) saturate(145%);
 }
 
 .gui-system-identity {
-    display: flex;
-    min-width: 0;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
 }
 
 .gui-system-clock,
 .gui-system-icon {
-    color: var(--gui-text-secondary);
+  color: var(--gui-text-secondary);
 }
 
 .gui-system-divider {
-    background: color-mix(in srgb, var(--gui-text-secondary) 24%, transparent);
+  background: color-mix(in srgb, var(--gui-text-secondary) 24%, transparent);
 }
 
 .gui-window {
-    border-color: var(--gui-border);
-    border-radius: 18px;
-    background: var(--gui-window);
-    box-shadow: var(--gui-shadow);
-    backdrop-filter: blur(30px) saturate(132%);
+  border-color: var(--gui-border);
+  border-radius: 18px;
+  background: var(--gui-window);
+  box-shadow: var(--gui-shadow);
+  backdrop-filter: blur(30px) saturate(132%);
 }
 
 .gui-window[data-active="false"] {
-    filter: saturate(0.78) brightness(0.96);
-    box-shadow: 0 20px 58px rgb(22 31 48 / 16%);
+  filter: saturate(0.78) brightness(0.96);
+  box-shadow: 0 20px 58px rgb(22 31 48 / 16%);
 }
 
 .gui-title-bar {
-    border-bottom-color: color-mix(
-        in srgb,
-        var(--gui-text-secondary) 13%,
-        transparent
-    );
-    background: var(--gui-titlebar);
-    backdrop-filter: blur(24px) saturate(145%);
+  border-bottom-color: color-mix(
+    in srgb,
+    var(--gui-text-secondary) 13%,
+    transparent
+  );
+  background: var(--gui-titlebar);
+  backdrop-filter: blur(24px) saturate(145%);
 }
 
 .gui-title-text {
-    color: var(--gui-text-secondary);
+  color: var(--gui-text-secondary);
 }
 
 .gui-window-content,
@@ -929,19 +927,19 @@
 .gui-resume,
 .gui-app-surface,
 .gui-shell[data-theme="dark"] .gui-app-surface {
-    background: var(--gui-window-solid);
-    color: var(--gui-text);
+  background: var(--gui-window-solid);
+  color: var(--gui-text);
 }
 
 .gui-shell[data-theme="dark"] .gui-window-content .bg-white,
 .gui-shell[data-theme="dark"] .gui-window-content .bg-slate-50 {
-    background-color: #202631 !important;
+  background-color: #202631 !important;
 }
 
 .gui-shell[data-theme="dark"] .gui-window-content .text-black,
 .gui-shell[data-theme="dark"] .gui-window-content .text-pen-gray-800,
 .gui-shell[data-theme="dark"] .gui-window-content .text-slate-800 {
-    color: #f4f7fb !important;
+  color: #f4f7fb !important;
 }
 
 .gui-shell[data-theme="dark"] .gui-window-content .text-pen-gray-700,
@@ -949,25 +947,21 @@
 .gui-shell[data-theme="dark"] .gui-window-content .text-slate-700,
 .gui-shell[data-theme="dark"] .gui-window-content .text-slate-600,
 .gui-shell[data-theme="dark"] .gui-window-content .text-slate-500 {
-    color: #b7c1d0 !important;
+  color: #b7c1d0 !important;
 }
 
 .gui-project-card {
-    border-color: color-mix(
-        in srgb,
-        var(--gui-text-secondary) 13%,
-        transparent
-    );
-    border-radius: 16px;
-    background: var(--gui-control);
-    color: var(--gui-text);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 32%);
+  border-color: color-mix(in srgb, var(--gui-text-secondary) 13%, transparent);
+  border-radius: 16px;
+  background: var(--gui-control);
+  color: var(--gui-text);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 32%);
 }
 
 .gui-project-card:hover {
-    border-color: color-mix(in srgb, var(--gui-accent) 42%, transparent);
-    background: var(--gui-control-hover);
-    box-shadow: 0 16px 36px rgb(20 42 76 / 12%);
+  border-color: color-mix(in srgb, var(--gui-accent) 42%, transparent);
+  background: var(--gui-control-hover);
+  box-shadow: 0 16px 36px rgb(20 42 76 / 12%);
 }
 
 .gui-project-card strong,
@@ -975,212 +969,208 @@
 .gui-resume h4,
 .gui-resume h5,
 .gui-resume dt {
-    color: var(--gui-text);
+  color: var(--gui-text);
 }
 
 .gui-project-card span,
 .gui-resume p,
 .gui-resume dd {
-    color: var(--gui-text-secondary);
+  color: var(--gui-text-secondary);
 }
 
 .gui-dock {
-    border-color: var(--gui-border);
-    border-radius: 24px;
-    background: var(--gui-glass);
-    box-shadow:
-        inset 0 1px 0 rgb(255 255 255 / 42%),
-        0 18px 46px rgb(17 30 54 / 24%);
-    backdrop-filter: blur(28px) saturate(155%);
+  border-color: var(--gui-border);
+  border-radius: 24px;
+  background: var(--gui-glass);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 42%),
+    0 18px 46px rgb(17 30 54 / 24%);
+  backdrop-filter: blur(28px) saturate(155%);
 }
 
 .gui-dock-button {
-    cursor: pointer;
-    border-radius: 15px;
+  cursor: pointer;
+  border-radius: 15px;
 }
 
 .gui-dock-button:hover,
 .gui-dock-button:focus-visible,
 .gui-dock-button[aria-pressed="true"] {
-    background: var(--gui-control-hover);
+  background: var(--gui-control-hover);
 }
 
 .gui-app-icon {
-    position: relative;
-    display: grid;
-    width: 36px;
-    height: 36px;
-    place-items: center;
-    overflow: hidden;
-    border: 1px solid rgb(255 255 255 / 48%);
-    border-radius: 10px;
-    background: linear-gradient(145deg, #8e9aac, #566275);
-    box-shadow:
-        inset 0 1px 0 rgb(255 255 255 / 58%),
-        0 7px 14px rgb(20 32 58 / 24%);
-    color: white;
+  position: relative;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 48%);
+  border-radius: 10px;
+  background: linear-gradient(145deg, #8e9aac, #566275);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 58%),
+    0 7px 14px rgb(20 32 58 / 24%);
+  color: white;
 }
 
 .gui-app-icon::after {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        155deg,
-        rgb(255 255 255 / 42%),
-        transparent 46%
-    );
-    content: "";
-    pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(155deg, rgb(255 255 255 / 42%), transparent 46%);
+  content: "";
+  pointer-events: none;
 }
 
 .gui-app-icon[data-size="desktop"] {
-    width: 54px;
-    height: 54px;
-    border-radius: 15px;
+  width: 54px;
+  height: 54px;
+  border-radius: 15px;
 }
 
 .gui-app-icon[data-size="project"] {
-    width: 70px;
-    height: 70px;
-    border-radius: 19px;
+  width: 70px;
+  height: 70px;
+  border-radius: 19px;
 }
 
 .gui-app-icon[data-app-icon="about"] {
-    background: none;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
 }
 
 .gui-app-icon[data-app-icon="about"]::after {
-    display: none;
+  display: none;
 }
 
 .gui-app-icon[data-app-icon="projects"] {
-    background: none;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
 }
 
 .gui-app-icon[data-app-icon="projects"]::after {
-    display: none;
+  display: none;
 }
 
 .gui-app-icon[data-app-icon="resume"] {
-    background: none;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
 }
 
 .gui-app-icon[data-app-icon="resume"]::after {
-    display: none;
+  display: none;
 }
 
 .gui-app-icon[data-app-icon="terminal"] {
-    background: none;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
 }
 
 .gui-app-icon[data-app-icon="terminal"]::after {
-    display: none;
+  display: none;
 }
 
 .gui-app-icon[data-app-icon="contact"] {
-    background: none;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
 }
 
 .gui-app-icon[data-app-icon="contact"]::after {
-    display: none;
+  display: none;
 }
 
 .gui-app-icon[data-app-icon="settings"] {
-    background: none;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
 }
 
 .gui-app-icon[data-app-icon="settings"]::after {
-    display: none;
+  display: none;
 }
 
 .gui-app-icon-image {
-    position: relative;
-    z-index: 1;
-    width: 72%;
-    height: 72%;
-    object-fit: contain;
-    filter: drop-shadow(0 2px 3px rgb(0 0 0 / 18%));
+  position: relative;
+  z-index: 1;
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 3px rgb(0 0 0 / 18%));
 }
 
 .gui-shortcut {
-    cursor: pointer;
-    color: var(--gui-text);
-    text-shadow: 0 1px 4px rgb(255 255 255 / 46%);
+  cursor: pointer;
+  color: var(--gui-text);
+  text-shadow: 0 1px 4px rgb(255 255 255 / 46%);
 }
 
 .gui-shell[data-theme="dark"] .gui-shortcut {
-    text-shadow: 0 1px 4px rgb(0 0 0 / 72%);
+  text-shadow: 0 1px 4px rgb(0 0 0 / 72%);
 }
 
 .gui-shortcut:hover,
 .gui-shortcut:focus-visible {
-    background: var(--gui-control);
+  background: var(--gui-control);
 }
 
 .gui-background-type {
-    color: var(--gui-text);
+  color: var(--gui-text);
 }
 
 @media (width < 768px) and (pointer: coarse) {
-    .gui-window:not(.gui-window-maximized) {
-        width: auto !important;
-        height: auto !important;
-        max-width: none !important;
-        max-height: none !important;
-    }
+  .gui-window:not(.gui-window-maximized) {
+    width: auto !important;
+    height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+  }
 
-    .gui-system-controls {
-        gap: 2px;
-    }
+  .gui-system-controls {
+    gap: 2px;
+  }
 
-    .gui-wallpaper-art span {
-        opacity: 0.38;
-    }
+  .gui-wallpaper-art span {
+    opacity: 0.38;
+  }
 }
 
 .gui-shell[data-theme] .gui-system-bar {
-    border-bottom-color: var(--gui-border);
-    background: var(--gui-glass);
-    color: var(--gui-text);
+  border-bottom-color: var(--gui-border);
+  background: var(--gui-glass);
+  color: var(--gui-text);
 }
 
 .gui-shell[data-theme] .gui-window {
-    border-color: var(--gui-border);
-    background: var(--gui-window);
-    box-shadow: var(--gui-shadow);
+  border-color: var(--gui-border);
+  background: var(--gui-window);
+  box-shadow: var(--gui-shadow);
 }
 
 .gui-shell[data-theme] .gui-title-bar {
-    border-bottom-color: color-mix(
-        in srgb,
-        var(--gui-text-secondary) 13%,
-        transparent
-    );
-    background: var(--gui-titlebar);
+  border-bottom-color: color-mix(
+    in srgb,
+    var(--gui-text-secondary) 13%,
+    transparent
+  );
+  background: var(--gui-titlebar);
 }
 
 .gui-shell[data-theme] .gui-title-text,
 .gui-shell[data-theme] .gui-system-clock,
 .gui-shell[data-theme] .gui-system-icon {
-    color: var(--gui-text-secondary);
+  color: var(--gui-text-secondary);
 }
 
 .gui-shell[data-theme] .gui-window-content,
@@ -1188,429 +1178,500 @@
 .gui-shell[data-theme] .gui-resume,
 .gui-shell[data-theme] .gui-app-surface,
 .gui-shell[data-theme] .gui-settings-surface {
-    background: var(--gui-window-solid);
-    color: var(--gui-text);
+  background: var(--gui-window-solid);
+  color: var(--gui-text);
 }
 
 .gui-shell[data-theme] .gui-project-card {
-    border-color: color-mix(
-        in srgb,
-        var(--gui-text-secondary) 13%,
-        transparent
-    );
-    background: var(--gui-control);
-    color: var(--gui-text);
+  border-color: color-mix(in srgb, var(--gui-text-secondary) 13%, transparent);
+  background: var(--gui-control);
+  color: var(--gui-text);
 }
 
 .gui-shell[data-theme] .gui-project-icon {
-    background: transparent;
+  background: transparent;
 }
 
 .gui-shell[data-theme] .gui-dock {
-    border-color: var(--gui-border);
-    background: var(--gui-glass);
-    box-shadow:
-        inset 0 1px 0 rgb(255 255 255 / 42%),
-        0 18px 46px rgb(17 30 54 / 24%);
+  border-color: var(--gui-border);
+  background: var(--gui-glass);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 42%),
+    0 18px 46px rgb(17 30 54 / 24%);
 }
 
 .gui-shell[data-theme] .gui-dock-button:hover,
 .gui-shell[data-theme] .gui-dock-button:focus-visible,
 .gui-shell[data-theme] .gui-dock-button[aria-pressed="true"] {
-    background: var(--gui-control-hover);
+  background: var(--gui-control-hover);
 }
 
 /* 2026 macOS-inspired desktop: calm photography, translucent chrome, clear folders. */
-.gui-shell[data-wallpaper="aurora"] {
-    background-image:
-        linear-gradient(rgb(9 18 34 / 8%), rgb(9 18 34 / 24%)),
-        url("/wallpapers/alpine-twilight.jpg");
+.gui-shell[data-wallpaper="golden_gate_light"] {
+  background-image:
+    linear-gradient(rgb(15 23 42 / 4%), rgb(15 23 42 / 12%)),
+    url("/wallpapers/golden_gate_light.jpg");
 }
 
-.gui-shell[data-wallpaper="sunset"] {
-    background-image:
-        linear-gradient(rgb(30 18 60 / 6%), rgb(20 12 42 / 18%)),
-        url("/wallpapers/soft-spectrum.jpg");
+.gui-shell[data-wallpaper="golden_gate_dark"] {
+  background-image:
+    linear-gradient(rgb(0 0 0 / 15%), rgb(0 0 0 / 30%)),
+    url("/wallpapers/golden_gate_dark.jpg");
 }
 
-.gui-shell[data-wallpaper="forest"] {
-    background-image:
-        linear-gradient(rgb(5 28 24 / 4%), rgb(5 28 24 / 20%)),
-        url("/wallpapers/forest-lake.jpg");
+.gui-shell[data-wallpaper="tahoe_light"] {
+  background-image:
+    linear-gradient(rgb(15 23 42 / 4%), rgb(15 23 42 / 12%)),
+    url("/wallpapers/tahoe_light.jpg");
 }
 
-.gui-shell[data-wallpaper="dark"] {
-    background-image:
-        linear-gradient(rgb(34 5 8 / 8%), rgb(28 4 8 / 22%)),
-        url("/wallpapers/red-landscape.jpg");
+.gui-shell[data-wallpaper="tahoe_dark"] {
+  background-image:
+    linear-gradient(rgb(0 0 0 / 15%), rgb(0 0 0 / 30%)),
+    url("/wallpapers/tahoe_dark.jpg");
+}
+
+.gui-shell[data-wallpaper="tahoe_beach_dawn"] {
+  background-image:
+    linear-gradient(rgb(15 23 42 / 4%), rgb(15 23 42 / 12%)),
+    url("/wallpapers/tahoe_beach_dawn.jpg");
+}
+
+.gui-shell[data-wallpaper="tahoe_beach_day"] {
+  background-image:
+    linear-gradient(rgb(15 23 42 / 4%), rgb(15 23 42 / 12%)),
+    url("/wallpapers/tahoe_beach_day.jpg");
+}
+
+.gui-shell[data-wallpaper="tahoe_beach_dusk"] {
+  background-image:
+    linear-gradient(rgb(15 23 42 / 4%), rgb(15 23 42 / 12%)),
+    url("/wallpapers/tahoe_beach_dusk.jpg");
+}
+
+.gui-shell[data-wallpaper="tahoe_beach_night"] {
+  background-image:
+    linear-gradient(rgb(0 0 0 / 15%), rgb(0 0 0 / 30%)),
+    url("/wallpapers/tahoe_beach_night.jpg");
 }
 
 .gui-shell[data-wallpaper] {
-    background-position: center;
-    background-size: cover;
+  background-position: center;
+  background-size: cover;
 }
 
 .gui-wallpaper-art {
-    display: none;
+  display: none;
 }
 
 .gui-system-bar {
-    justify-content: space-between;
-    font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  justify-content: space-between;
+  font-family:
+    var(--font-sans),
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    sans-serif;
 }
 
 .gui-system-title {
-    position: absolute;
-    left: 50%;
-    max-width: 40vw;
-    overflow: hidden;
-    color: var(--gui-text);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    text-overflow: ellipsis;
-    transform: translateX(-50%);
-    white-space: nowrap;
+  position: absolute;
+  left: 50%;
+  max-width: 40vw;
+  overflow: hidden;
+  color: var(--gui-text);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-overflow: ellipsis;
+  transform: translateX(-50%);
+  white-space: nowrap;
 }
 
 .gui-system-identity {
-    min-width: 84px;
+  min-width: 84px;
 }
 
 .gui-folder-view {
-    display: flex;
-    min-height: 100%;
-    flex-direction: column;
-    padding: 0;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  padding: 0;
 }
 
 .gui-project-grid {
-    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
-    align-content: start;
-    gap: 14px;
-    margin: 0;
-    padding: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  align-content: start;
+  gap: 14px;
+  margin: 0;
+  padding: 20px;
 }
 
 .gui-project-card {
-    min-height: 170px;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    border-color: transparent !important;
-    background: transparent !important;
-    padding: 12px 8px;
-    text-align: center;
-    box-shadow: none !important;
+  min-height: 170px;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  border-color: transparent !important;
+  background: transparent !important;
+  padding: 12px 8px;
+  text-align: center;
+  box-shadow: none !important;
 }
 
 .gui-project-card:hover,
 .gui-project-card:focus-visible {
-    background: var(--gui-control-hover) !important;
-    transform: none;
+  background: var(--gui-control-hover) !important;
+  transform: none;
 }
 
 .gui-project-icon {
-    width: 72px;
-    height: 72px;
-    margin-bottom: 4px;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 4px;
 }
 
 .gui-project-card strong {
-    max-width: 100%;
-    overflow: hidden;
-    font-size: 13px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .gui-wallpaper-preview {
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    border-radius: 8px;
-    background-position: center;
-    background-size: cover;
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 18%);
-    transition: transform 180ms ease;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  background-position: center;
+  background-size: cover;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 18%);
+  transition: transform 180ms ease;
 }
 
 .group:hover .gui-wallpaper-preview {
-    transform: scale(1.02);
+  transform: scale(1.02);
 }
 
-.gui-wallpaper-preview[data-wallpaper="aurora"] {
-    background-image: url("/wallpapers/alpine-twilight.jpg");
+.gui-wallpaper-preview[data-wallpaper="golden_gate_light"] {
+  background-image: url("/wallpapers/golden_gate_light.jpg");
 }
 
-.gui-wallpaper-preview[data-wallpaper="sunset"] {
-    background-image: url("/wallpapers/soft-spectrum.jpg");
+.gui-wallpaper-preview[data-wallpaper="golden_gate_dark"] {
+  background-image: url("/wallpapers/golden_gate_dark.jpg");
 }
 
-.gui-wallpaper-preview[data-wallpaper="forest"] {
-    background-image: url("/wallpapers/forest-lake.jpg");
+.gui-wallpaper-preview[data-wallpaper="tahoe_light"] {
+  background-image: url("/wallpapers/tahoe_light.jpg");
 }
 
-.gui-wallpaper-preview[data-wallpaper="dark"] {
-    background-image: url("/wallpapers/red-landscape.jpg");
+.gui-wallpaper-preview[data-wallpaper="tahoe_dark"] {
+  background-image: url("/wallpapers/tahoe_dark.jpg");
+}
+
+.gui-wallpaper-preview[data-wallpaper="tahoe_beach_dawn"] {
+  background-image: url("/wallpapers/tahoe_beach_dawn.jpg");
+}
+
+.gui-wallpaper-preview[data-wallpaper="tahoe_beach_day"] {
+  background-image: url("/wallpapers/tahoe_beach_day.jpg");
+}
+
+.gui-wallpaper-preview[data-wallpaper="tahoe_beach_dusk"] {
+  background-image: url("/wallpapers/tahoe_beach_dusk.jpg");
+}
+
+.gui-wallpaper-preview[data-wallpaper="tahoe_beach_night"] {
+  background-image: url("/wallpapers/tahoe_beach_night.jpg");
 }
 
 @media (width < 1024px) {
-    .gui-shortcuts {
-        display: grid;
-        top: 54px;
-        right: max(10px, env(safe-area-inset-right, 0px));
-        gap: 10px;
-    }
+  .gui-shortcuts {
+    display: grid;
+    top: 54px;
+    right: max(10px, env(safe-area-inset-right, 0px));
+    gap: 10px;
+  }
 }
 
 @media (width < 640px) {
-    .gui-system-title {
-        max-width: 42vw;
-        font-size: 11px;
-    }
+  .gui-system-title {
+    max-width: 42vw;
+    font-size: 11px;
+  }
 
-    .gui-system-identity {
-        min-width: 34px;
-    }
+  .gui-system-identity {
+    min-width: 34px;
+  }
 
-    .gui-system-status,
-    .gui-system-divider {
-        display: none;
-    }
+  .gui-system-status,
+  .gui-system-divider {
+    display: none;
+  }
 
-    .gui-shortcuts {
-        grid-template-columns: repeat(2, 68px);
-    }
+  .gui-shortcuts {
+    grid-template-columns: repeat(2, 68px);
+  }
 
-    .gui-shortcut {
-        width: 68px;
-    }
+  .gui-shortcut {
+    width: 68px;
+  }
 }
 
 .gui-viewer-name {
-    color: var(--gui-text);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    white-space: nowrap;
+  color: var(--gui-text);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 
 .gui-folder-view,
 .gui-shell[data-theme] .gui-folder-view {
-    position: relative;
-    display: block;
-    min-height: 100%;
-    overflow-y: auto;
-    background-color: #09090b;
-    background-image:
-        linear-gradient(rgb(255 255 255 / 2%) 1px, transparent 1px),
-        linear-gradient(90deg, rgb(255 255 255 / 2%) 1px, transparent 1px);
-    background-size: 24px 24px;
-    color: white;
-    padding: 16px 16px 42px;
+  position: relative;
+  display: block;
+  min-height: 100%;
+  overflow-y: auto;
+  background-color: #09090b;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 2%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 2%) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: white;
+  padding: 16px 16px 42px;
 }
 
 .gui-folder-view .gui-project-grid {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    align-content: start;
-    gap: 8px;
-    margin: 0;
-    padding: 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  align-content: start;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
 }
 
 .gui-folder-view .gui-project-card {
-    display: flex;
-    min-height: 0;
-    width: 100%;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    border: 0 !important;
-    border-radius: 8px;
-    background: transparent !important;
-    padding: 12px;
-    color: rgb(255 255 255 / 70%);
-    box-shadow: none !important;
-    text-align: center;
-    transition: background-color 140ms ease, color 140ms ease;
+  display: flex;
+  min-height: 0;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: 0 !important;
+  border-radius: 8px;
+  background: transparent !important;
+  padding: 12px;
+  color: rgb(255 255 255 / 70%);
+  box-shadow: none !important;
+  text-align: center;
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
 }
 
 .gui-folder-view .gui-project-card:hover,
 .gui-folder-view .gui-project-card:focus-visible {
-    background: rgb(255 255 255 / 4%) !important;
-    color: rgb(255 255 255 / 90%);
-    outline: 2px solid transparent;
-    transform: none;
+  background: rgb(255 255 255 / 4%) !important;
+  color: rgb(255 255 255 / 90%);
+  outline: 2px solid transparent;
+  transform: none;
 }
 
 .gui-folder-view .gui-project-card:focus-visible {
-    box-shadow: 0 0 0 2px rgb(59 130 246 / 50%) !important;
+  box-shadow: 0 0 0 2px rgb(59 130 246 / 50%) !important;
 }
 
 .gui-folder-view .gui-project-icon {
-    position: relative;
-    display: flex;
-    width: 56px;
-    height: 56px;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-    border-radius: 8px;
-    background: rgb(255 255 255 / 3%);
-    color: rgb(96 165 250 / 80%);
-    transition: background-color 140ms ease, color 140ms ease;
+  position: relative;
+  display: flex;
+  width: 56px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 3%);
+  color: rgb(96 165 250 / 80%);
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
 }
 
 .gui-folder-view .gui-project-card:hover .gui-project-icon {
-    background: rgb(255 255 255 / 6%);
-    color: #60a5fa;
+  background: rgb(255 255 255 / 6%);
+  color: #60a5fa;
 }
 
 .gui-folder-view .gui-project-icon > img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .gui-folder-view .gui-project-icon > span {
-    position: absolute;
-    right: -4px;
-    bottom: -4px;
-    border-radius: 3px;
-    background: rgb(59 130 246 / 90%);
-    padding: 2px 4px;
-    color: white;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 9px;
-    font-weight: 700;
-    line-height: 1;
-    text-transform: uppercase;
-    box-shadow: 0 1px 2px rgb(0 0 0 / 24%);
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 3px;
+  background: rgb(59 130 246 / 90%);
+  padding: 2px 4px;
+  color: white;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 24%);
 }
 
 .gui-folder-view .gui-project-card strong {
-    display: block;
-    max-width: 100%;
-    overflow: hidden;
-    padding-inline: 4px;
-    color: inherit;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 16px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  padding-inline: 4px;
+  color: inherit;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .gui-folder-footer {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    border-top: 1px solid rgb(255 255 255 / 6%);
-    background: rgb(0 0 0 / 40%);
-    padding: 8px 16px;
-    color: rgb(255 255 255 / 40%);
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 12px;
-    line-height: 16px;
-    backdrop-filter: blur(4px);
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-top: 1px solid rgb(255 255 255 / 6%);
+  background: rgb(0 0 0 / 40%);
+  padding: 8px 16px;
+  color: rgb(255 255 255 / 40%);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 16px;
+  backdrop-filter: blur(4px);
 }
 
 /* The GUI theme is the single styling authority for application surfaces. */
 .gui-folder-view,
 .gui-shell[data-theme] .gui-folder-view {
-    height: 100%;
-    min-height: 0;
+  height: 100%;
+  min-height: 0;
 }
 
 .gui-shell[data-theme="light"] .gui-folder-view {
-    background-color: #f7f9fc;
-    background-image:
-        linear-gradient(rgb(24 34 48 / 3%) 1px, transparent 1px),
-        linear-gradient(90deg, rgb(24 34 48 / 3%) 1px, transparent 1px);
-    color: #182230;
+  background-color: #f7f9fc;
+  background-image:
+    linear-gradient(rgb(24 34 48 / 3%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(24 34 48 / 3%) 1px, transparent 1px);
+  color: #182230;
 }
 
 .gui-shell[data-theme="light"] .gui-folder-view .gui-project-card {
-    color: rgb(24 34 48 / 72%);
+  color: rgb(24 34 48 / 72%);
 }
 
 .gui-shell[data-theme="light"] .gui-folder-view .gui-project-card:hover,
-.gui-shell[data-theme="light"] .gui-folder-view .gui-project-card:focus-visible {
-    background: rgb(24 34 48 / 6%) !important;
-    color: #182230;
+.gui-shell[data-theme="light"]
+  .gui-folder-view
+  .gui-project-card:focus-visible {
+  background: rgb(24 34 48 / 6%) !important;
+  color: #182230;
 }
 
 .gui-shell[data-theme="light"] .gui-folder-view .gui-project-icon {
-    background: rgb(24 34 48 / 4%);
-    color: #2563eb;
+  background: rgb(24 34 48 / 4%);
+  color: #2563eb;
 }
 
 .gui-shell[data-theme="light"] .gui-folder-footer {
-    border-top-color: rgb(24 34 48 / 9%);
-    background: rgb(247 249 252 / 78%);
-    color: rgb(24 34 48 / 52%);
+  border-top-color: rgb(24 34 48 / 9%);
+  background: rgb(247 249 252 / 78%);
+  color: rgb(24 34 48 / 52%);
 }
 
 .gui-shell[data-theme="light"] .gui-settings-panel,
 .gui-shell[data-theme="light"] .gui-wallpaper-option {
-    border-color: rgb(24 34 48 / 10%);
-    background: #f8fafc;
-    color: #182230;
+  border-color: rgb(24 34 48 / 10%);
+  background: #f8fafc;
+  color: #182230;
 }
 
 .gui-shell[data-theme="dark"] .gui-settings-panel,
 .gui-shell[data-theme="dark"] .gui-wallpaper-option {
-    border-color: rgb(255 255 255 / 8%);
-    background: #272730;
-    color: #f4f7fb;
+  border-color: rgb(255 255 255 / 8%);
+  background: #272730;
+  color: #f4f7fb;
 }
 
 .gui-shell[data-theme="light"] .gui-wallpaper-option:hover {
-    border-color: rgb(24 34 48 / 22%);
-    background: #eef2f7;
+  border-color: rgb(24 34 48 / 22%);
+  background: #eef2f7;
 }
 
 .gui-shell[data-theme="dark"] .gui-wallpaper-option:hover {
-    border-color: rgb(255 255 255 / 16%);
-    background: #30303a;
+  border-color: rgb(255 255 255 / 16%);
+  background: #30303a;
 }
 
 .gui-shell[data-theme] .gui-wallpaper-option[aria-pressed="true"] {
-    border-color: #2563eb;
+  border-color: #2563eb;
 }
 
 .gui-shell[data-theme="light"] .gui-wallpaper-option[aria-pressed="true"] {
-    background: rgb(239 246 255 / 86%);
+  background: rgb(239 246 255 / 86%);
 }
 
 .gui-shell[data-theme="dark"] .gui-wallpaper-option[aria-pressed="true"] {
-    background: rgb(30 58 138 / 22%);
+  background: rgb(30 58 138 / 22%);
 }
 
-.gui-shell[data-theme][data-wallpaper="aurora"] {
-    background-image:
-        linear-gradient(rgb(9 18 34 / 8%), rgb(9 18 34 / 24%)),
-        url("/wallpapers/alpine-twilight.jpg");
+.gui-shell[data-theme][data-wallpaper="golden_gate_light"] {
+  background-image:
+    linear-gradient(rgb(15 23 42 / 4%), rgb(15 23 42 / 12%)),
+    url("/wallpapers/golden_gate_light.jpg");
 }
 
-.gui-shell[data-theme][data-wallpaper="sunset"] {
-    background-image:
-        linear-gradient(rgb(30 18 60 / 6%), rgb(20 12 42 / 18%)),
-        url("/wallpapers/soft-spectrum.jpg");
+.gui-shell[data-theme][data-wallpaper="golden_gate_dark"] {
+  background-image:
+    linear-gradient(rgb(0 0 0 / 15%), rgb(0 0 0 / 30%)),
+    url("/wallpapers/golden_gate_dark.jpg");
 }
 
-.gui-shell[data-theme][data-wallpaper="forest"] {
-    background-image:
-        linear-gradient(rgb(5 28 24 / 4%), rgb(5 28 24 / 20%)),
-        url("/wallpapers/forest-lake.jpg");
+.gui-shell[data-theme][data-wallpaper="tahoe_light"] {
+  background-image:
+    linear-gradient(rgb(15 23 42 / 4%), rgb(15 23 42 / 12%)),
+    url("/wallpapers/tahoe_light.jpg");
 }
 
-.gui-shell[data-theme][data-wallpaper="dark"] {
-    background-image:
-        linear-gradient(rgb(34 5 8 / 8%), rgb(28 4 8 / 22%)),
-        url("/wallpapers/red-landscape.jpg");
+.gui-shell[data-theme][data-wallpaper="tahoe_dark"] {
+  background-image:
+    linear-gradient(rgb(0 0 0 / 15%), rgb(0 0 0 / 30%)),
+    url("/wallpapers/tahoe_dark.jpg");
+}
+
+.gui-shell[data-theme][data-wallpaper="tahoe_beach_dawn"] {
+  background-image:
+    linear-gradient(rgb(15 23 42 / 4%), rgb(15 23 42 / 12%)),
+    url("/wallpapers/tahoe_beach_dawn.jpg");
+}
+
+.gui-shell[data-theme][data-wallpaper="tahoe_beach_day"] {
+  background-image:
+    linear-gradient(rgb(15 23 42 / 4%), rgb(15 23 42 / 12%)),
+    url("/wallpapers/tahoe_beach_day.jpg");
+}
+
+.gui-shell[data-theme][data-wallpaper="tahoe_beach_dusk"] {
+  background-image:
+    linear-gradient(rgb(15 23 42 / 4%), rgb(15 23 42 / 12%)),
+    url("/wallpapers/tahoe_beach_dusk.jpg");
+}
+
+.gui-shell[data-theme][data-wallpaper="tahoe_beach_night"] {
+  background-image:
+    linear-gradient(rgb(0 0 0 / 15%), rgb(0 0 0 / 30%)),
+    url("/wallpapers/tahoe_beach_night.jpg");
 }
