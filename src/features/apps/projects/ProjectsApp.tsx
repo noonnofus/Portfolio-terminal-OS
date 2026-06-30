@@ -1,10 +1,10 @@
 "use client";
 
-import { FileText } from "lucide-react";
 import { createOpenAppCommand } from "@/features/gui/registry/appTypes";
 import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
 import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 import { orderedProjectSummaries } from "@/shared/content/portfolio/projectSummaries";
+import Image from "next/image";
 
 /** File renderer inside Project folder **/
 export default function ProjectsApp() {
@@ -40,7 +40,11 @@ export default function ProjectsApp() {
                 }`}
               >
                 <span className="gui-project-icon" aria-hidden="true">
-                  <FileText />
+                  <Image
+                    src={content.fileIcon}
+                    fill
+                    alt={`${content.title} 파일 아이콘`}
+                  />
                   <span>md</span>
                 </span>
                 <strong title={content.title}>{content.title}</strong>
