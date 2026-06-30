@@ -1573,6 +1573,42 @@
   white-space: nowrap;
 }
 
+.gui-folder-view .gui-project-card:focus-visible,
+.gui-folder-view .gui-project-card[data-selected="true"] {
+  outline: none;
+  box-shadow: none !important;
+}
+
+.gui-folder-view .gui-project-card:focus-visible .gui-project-icon,
+.gui-folder-view
+  .gui-project-card[data-selected="true"]
+  .gui-project-icon {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.22);
+  box-shadow: 0 4px 10px rgb(0 0 0 / 12%);
+}
+
+.gui-folder-view .gui-project-card:focus-visible strong,
+.gui-folder-view .gui-project-card[data-selected="true"] strong {
+  border-radius: 4px;
+  background-color: #0b61e8;
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+.gui-shell[data-theme="dark"]
+  .gui-folder-view
+  .gui-project-card:focus-visible
+  .gui-project-icon,
+.gui-shell[data-theme="dark"]
+  .gui-folder-view
+  .gui-project-card[data-selected="true"]
+  .gui-project-icon {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 4px 10px rgb(0 0 0 / 25%);
+}
+
 .gui-folder-footer {
   position: absolute;
   right: 0;
