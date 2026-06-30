@@ -158,7 +158,7 @@ test.describe("GUI shell", () => {
             ),
         );
         const shortcutsZ = Number(
-            await page.locator(".gui-shortcuts").evaluate((element) =>
+            await page.locator(".desktop-apps").evaluate((element) =>
                 getComputedStyle(element).zIndex,
             ),
         );
@@ -222,7 +222,7 @@ test.describe("GUI shell", () => {
         expect(windowBox?.width).toBe(740);
 
         const backgroundType = page.locator(
-            ".gui-background-type",
+            ".gui-wallpaper-art",
         );
         await expect(backgroundType).toHaveAttribute(
             "aria-hidden",
@@ -236,7 +236,7 @@ test.describe("GUI shell", () => {
         const dock = page.getByRole("navigation", { name: "Applications" });
         await dock.getByRole("button", { name: "프로젝트" }).click();
         const aboutWindow = page.locator('[data-window-id="about"]');
-        const shortcutLayer = page.locator(".gui-shortcuts");
+        const shortcutLayer = page.locator(".desktop-apps");
         const inactiveZ = Number(await aboutWindow.evaluate((element) => getComputedStyle(element).zIndex));
         const shortcutsZ = Number(await shortcutLayer.evaluate((element) => getComputedStyle(element).zIndex));
         expect(inactiveZ).toBeGreaterThan(shortcutsZ);
@@ -273,6 +273,52 @@ test.describe("GUI shell", () => {
         await page.mouse.up();
         await expect(aboutWindow).toHaveCSS("top", "0px");
         expect((await aboutWindow.boundingBox())?.y).toBe(36);
+    });
+
+    test("gives project files the desktop selection and bounded drag contract", async ({
+        page,
+    }) => {
+        await page.goto("/gui?app=projects");
+        const projectFile = page.getByRole("button", {
+            name: "WCHMS 프로젝트 열기",
+        });
+        const projectGrid = page.locator(".gui-project-grid");
+
+        await projectFile.click();
+        await expect(projectFile).toBeFocused();
+        await expect(projectFile).toHaveAttribute("data-selected", "true");
+        await expect(projectFile.locator("strong")).toHaveCSS(
+            "background-color",
+            "rgb(11, 97, 232)",
+        );
+        await expect(page).toHaveURL(/app=projects/);
+
+        const before = await projectFile.boundingBox();
+        const bounds = await projectGrid.boundingBox();
+        expect(before).not.toBeNull();
+        expect(bounds).not.toBeNull();
+        await page.mouse.move(
+            (before?.x ?? 0) + (before?.width ?? 0) / 2,
+            (before?.y ?? 0) + (before?.height ?? 0) / 2,
+        );
+        await page.mouse.down();
+        await page.mouse.move(
+            (before?.x ?? 0) + (before?.width ?? 0) / 2 + 64,
+            (before?.y ?? 0) + (before?.height ?? 0) / 2 + 48,
+        );
+        await page.mouse.up();
+
+        const after = await projectFile.boundingBox();
+        expect((after?.x ?? 0) - (before?.x ?? 0)).toBeGreaterThan(50);
+        expect((after?.y ?? 0) - (before?.y ?? 0)).toBeGreaterThan(35);
+        expect(after?.x).toBeGreaterThanOrEqual(bounds?.x ?? 0);
+        expect((after?.x ?? 0) + (after?.width ?? 0)).toBeLessThanOrEqual(
+            (bounds?.x ?? 0) + (bounds?.width ?? 0),
+        );
+        await expect(page).toHaveURL(/app=projects/);
+
+        await projectFile.dblclick();
+        await expect(page).toHaveURL(/app=project&slug=wchms/);
     });
 
     test("opens independent project windows without eager media", async ({
@@ -522,7 +568,7 @@ test.describe("GUI shell", () => {
         await page.getByRole("button", { name: "English" }).click();
         await page.getByRole("button", { name: "Dark Mode" }).click();
         await page.getByRole("button", { name: "Auto hide" }).click();
-        await page.getByRole("button", { name: /Forest Lake/ }).click();
+        await page.getByRole("button", { name: /Tahoe Light/ }).click();
 
         await page.goto("/gui?app=settings");
 
@@ -533,7 +579,7 @@ test.describe("GUI shell", () => {
         );
         await expect(page.locator(".gui-shell")).toHaveAttribute(
             "data-wallpaper",
-            "forest",
+            "tahoe_light",
         );
         await expect(
             page.getByRole("navigation", { name: "Applications" }),
@@ -575,11 +621,11 @@ test.describe("GUI shell", () => {
 
         await page
             .getByRole("dialog", { name: "설정" })
-            .getByRole("button", { name: /포레스트 레이크/ })
+            .getByRole("button", { name: /Tahoe Light/ })
             .click();
         await expect(page.locator(".gui-shell")).toHaveAttribute(
             "data-wallpaper",
-            "forest",
+            "tahoe_light",
         );
 
         await page
@@ -591,7 +637,7 @@ test.describe("GUI shell", () => {
         await expect(shell).toHaveAttribute("data-theme", "light");
         await expect(shell).toHaveCSS(
             "background-image",
-            /forest-lake\.jpg/,
+            /tahoe_light\.jpg/,
         );
         const settings = page.getByRole("dialog", { name: "설정" });
         await expect(
@@ -634,9 +680,9 @@ test.describe("GUI shell", () => {
             "Guest",
         );
 
-        const dockButtons = page.locator(".gui-dock-button");
+        const dockButtons = page.locator(".dock-app");
         await expect(dockButtons.first()).toHaveCSS("cursor", "pointer");
-        await expect(page.locator(".gui-shortcut").first()).toHaveCSS(
+        await expect(page.locator(".desktop-app").first()).toHaveCSS(
             "cursor",
             "pointer",
         );
