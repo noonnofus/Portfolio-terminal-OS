@@ -411,7 +411,7 @@
     min-height: 64px;
     transform: translateX(-50%);
     align-items: center;
-    transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
     gap: 6px;
     border: 1px solid rgb(255 255 255 / 70%);
     border-radius: 22px;
