@@ -122,8 +122,8 @@
   font-size: 12px;
 }
 
-.gui-shortcut:hover,
-.gui-shortcut:focus-visible {
+.gui-shortcut:focus-visible,
+.gui-shortcut[data-selected="true"] {
   background: rgb(255 255 255 / 72%);
   outline: 2px solid #2563eb;
   outline-offset: 2px;
@@ -1120,8 +1120,8 @@
   text-shadow: 0 1px 4px rgb(0 0 0 / 72%);
 }
 
-.gui-shortcut:hover,
-.gui-shortcut:focus-visible {
+.gui-shortcut:focus-visible,
+.gui-shortcut[data-selected="true"] {
   background: var(--gui-control);
 }
 
