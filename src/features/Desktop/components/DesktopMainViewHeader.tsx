@@ -89,7 +89,7 @@ export default function DesktopMainViewHeader() {
                         className="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-desktop-bar-foreground"
                     >
                         <Image
-                            src="/icons/main.png"
+                            src="/icons/about.png"
                             alt=""
                             width={24}
                             height={24}
@@ -108,7 +108,7 @@ export default function DesktopMainViewHeader() {
                     </div>
                     <div>
                         <Image
-                            src={"/icons/wifi-connect.png"}
+                            src={"/icons/about.png"}
                             alt="wifi-status-icon"
                             width={16}
                             height={16}
