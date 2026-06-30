@@ -43,7 +43,7 @@ function DraggableShortcut({
 
     const handlePointerDown = useCallback(
         (e: React.PointerEvent<HTMLButtonElement>) => {
-            if (e.button !== 0 || globalThis.innerWidth < 1024) return;
+            if (e.button !== 0) return;
 
             const el = ref.current;
             if (!el) return;
@@ -104,12 +104,11 @@ function DraggableShortcut({
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onLostPointerCapture={handlePointerUp}
-            onClick={() => {
-                if (globalThis.innerWidth < 1024) {
+            onClick={(event) => {
+                if (event.detail === 0) {
                     navigate(createOpenAppCommand(appId));
                 }
             }}
-            onDoubleClick={() => navigate(createOpenAppCommand(appId))}
             className="gui-v2-shortcut"
             style={{
                 transform: offset
