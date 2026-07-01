@@ -8,34 +8,39 @@ import {
   type RefObject,
 } from "react";
 
+export type Point = {
+  x: number;
+  y: number;
+};
+
 type DragState = {
   startX: number;
   startY: number;
-  origX: number;
-  origY: number;
+  origin: Point;
   wasDragged: boolean;
-  bounds:
-    | {
-        minX: number;
-        maxX: number;
-        minY: number;
-        maxY: number;
-      }
-    | undefined;
+  bounds?: {
+    minX: number;
+    maxX: number;
+    minY: number;
+    maxY: number;
+  };
 };
 
 export function useDraggableAppItem({
   boundsRef,
+  position,
+  onPositionChange,
   onOpen,
   onSelect,
 }: {
-  boundsRef?: RefObject<HTMLElement | null>;
+  boundsRef: RefObject<HTMLElement | null>;
+  position: Point;
+  onPositionChange: (position: Point) => void;
   onOpen: () => void;
   onSelect: () => void;
 }) {
   const ref = useRef<HTMLButtonElement>(null);
   const dragState = useRef<DragState | null>(null);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
 
   const handlePointerDown = useCallback(
@@ -43,38 +48,35 @@ export function useDraggableAppItem({
       if (event.button !== 0) return;
 
       const element = ref.current;
-      if (element === null) return;
+      const boundsElement = boundsRef.current;
+      if (element === null || boundsElement === null) return;
 
       const elementRect = element.getBoundingClientRect();
-      const boundsRect = boundsRef?.current?.getBoundingClientRect();
+      const boundsRect = boundsElement.getBoundingClientRect();
       dragState.current = {
         startX: event.clientX,
         startY: event.clientY,
-        origX: offset.x,
-        origY: offset.y,
+        origin: position,
         wasDragged: false,
-        bounds:
-          boundsRect === undefined
-            ? undefined
-            : {
-                minX: offset.x + boundsRect.left - elementRect.left,
-                maxX: offset.x + boundsRect.right - elementRect.right,
-                minY: offset.y + boundsRect.top - elementRect.top,
-                maxY: offset.y + boundsRect.bottom - elementRect.bottom,
-              },
+        bounds: {
+          minX: position.x + boundsRect.left - elementRect.left,
+          maxX: position.x + boundsRect.right - elementRect.right,
+          minY: position.y + boundsRect.top - elementRect.top,
+          maxY: position.y + boundsRect.bottom - elementRect.bottom,
+        },
       };
 
       element.setPointerCapture(event.pointerId);
       setIsDragging(true);
       event.preventDefault();
     },
-    [boundsRef, offset],
+    [boundsRef, position],
   );
 
   const handlePointerMove = useCallback(
     (event: PointerEvent<HTMLButtonElement>) => {
       const state = dragState.current;
-      if (state === null) return;
+      if (state === null || state.bounds === undefined) return;
 
       const deltaX = event.clientX - state.startX;
       const deltaY = event.clientY - state.startY;
@@ -82,20 +84,18 @@ export function useDraggableAppItem({
         state.wasDragged = true;
       }
 
-      const nextX = state.origX + deltaX;
-      const nextY = state.origY + deltaY;
-      setOffset({
-        x:
-          state.bounds === undefined
-            ? nextX
-            : Math.min(state.bounds.maxX, Math.max(state.bounds.minX, nextX)),
-        y:
-          state.bounds === undefined
-            ? nextY
-            : Math.min(state.bounds.maxY, Math.max(state.bounds.minY, nextY)),
+      onPositionChange({
+        x: Math.min(
+          state.bounds.maxX,
+          Math.max(state.bounds.minX, state.origin.x + deltaX),
+        ),
+        y: Math.min(
+          state.bounds.maxY,
+          Math.max(state.bounds.minY, state.origin.y + deltaY),
+        ),
       });
     },
-    [],
+    [onPositionChange],
   );
 
   const handlePointerUp = useCallback(
@@ -118,7 +118,6 @@ export function useDraggableAppItem({
 
   return {
     ref,
-    offset,
     isDragging,
     handlePointerDown,
     handlePointerMove,

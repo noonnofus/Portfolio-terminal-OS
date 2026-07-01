@@ -60,3 +60,4 @@ playwright-report/
 blob-report/
 
 AGENTS.md
+!src/features/apps/AGENTS.md

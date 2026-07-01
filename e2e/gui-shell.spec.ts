@@ -87,6 +87,7 @@ test.describe("GUI shell", () => {
             .getByRole("navigation", { name: "Desktop shortcuts" })
             .getByRole("button", { name: "프로젝트" });
 
+        await expect(projectsShortcut).toHaveCSS("width", "70px");
         await projectsShortcut.click();
         await expect(projectsShortcut).toBeFocused();
         await expect(projectsShortcut).toHaveAttribute("data-selected", "true");
@@ -282,6 +283,7 @@ test.describe("GUI shell", () => {
         const projectFile = page.getByRole("button", {
             name: "WCHMS 프로젝트 열기",
         });
+        await expect(projectFile).toHaveCSS("width", "70px");
         const projectGrid = page.locator(".gui-project-grid");
         const projectFolder = page.locator(".gui-folder-view");
         const hoverTarget = page.getByRole("button", {
@@ -290,24 +292,37 @@ test.describe("GUI shell", () => {
         const hoverStylesBefore = await hoverTarget.evaluate((element) => ({
             background: getComputedStyle(element).backgroundColor,
             iconBackground: getComputedStyle(
-                element.querySelector(".gui-project-icon")!,
+                element.querySelector(".desktop-app-icon-wrapper")!,
             ).backgroundColor,
         }));
         await hoverTarget.hover();
         const hoverStylesAfter = await hoverTarget.evaluate((element) => ({
             background: getComputedStyle(element).backgroundColor,
             iconBackground: getComputedStyle(
-                element.querySelector(".gui-project-icon")!,
+                element.querySelector(".desktop-app-icon-wrapper")!,
             ).backgroundColor,
         }));
         expect(hoverStylesAfter).toEqual(hoverStylesBefore);
 
+        const documentIcon = projectFile.locator(".directory-item-icon");
+        const iconBeforeFocus = await documentIcon.boundingBox();
         await projectFile.click();
         await expect(projectFile).toBeFocused();
         await expect(projectFile).toHaveAttribute("data-selected", "true");
-        await expect(projectFile.locator("strong")).toHaveCSS(
+        const iconAfterFocus = await documentIcon.boundingBox();
+        expect(iconAfterFocus?.width).toBe(iconBeforeFocus?.width);
+        expect(iconAfterFocus?.height).toBe(iconBeforeFocus?.height);
+        await expect(projectFile.locator(".desktop-app-name")).toHaveCSS(
             "background-color",
             "rgb(11, 97, 232)",
+        );
+        await expect(projectFile.locator(".desktop-app-name")).toHaveCSS(
+            "text-overflow",
+            "clip",
+        );
+        await expect(projectFile.locator(".desktop-app-name")).toHaveCSS(
+            "white-space",
+            "normal",
         );
         await expect(page).toHaveURL(/app=projects/);
 
@@ -364,9 +379,11 @@ test.describe("GUI shell", () => {
         const projectsBox = await projectsWindow.boundingBox();
         expect(projectsBox?.width).toBe(700);
         expect(projectsBox?.height).toBe(450);
-        await expect(projectsWindow.locator(".gui-project-icon").first()).toHaveCSS(
+        await expect(
+            projectsWindow.locator(".desktop-app-icon-wrapper").first(),
+        ).toHaveCSS(
             "width",
-            "56px",
+            "70px",
         );
         await expect(
             page.getByRole("button", {

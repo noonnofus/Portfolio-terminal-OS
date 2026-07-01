@@ -4,6 +4,7 @@ import type {
     OpenAppCommand,
 } from "@/features/gui/registry/appTypes";
 import type { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { WallpaperId } from "@/features/gui/appearance/wallpaperCatalog";
 
 export type WindowId = GuiAppId;
 
@@ -57,7 +58,7 @@ export type StoreCommand =
     | { type: "minimize-window"; windowId: WindowId }
     | { type: "show-desktop" }
     | { type: "change-language"; language: Language }
-    | { type: "change-wallpaper"; wallpaper: "golden_gate_light" | "golden_gate_dark" | "tahoe_light" | "tahoe_dark" | "tahoe_beach_dawn" | "tahoe_beach_day" | "tahoe_beach_dusk" | "tahoe_beach_night" }
+    | { type: "change-wallpaper"; wallpaper: WallpaperId }
     | { type: "change-dock-auto-hide"; enabled: boolean }
     | { type: "apply-url-state"; view: GuiUrlState }
     | { type: "advance-entry-sequence" };

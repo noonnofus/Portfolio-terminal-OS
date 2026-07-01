@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "validate:app-structure": "node scripts/validate-app-structure.mjs",
     "test": "vitest run --dir src",
     "test:e2e": "playwright test --project=chromium",
     "test:e2e:release": "playwright test"

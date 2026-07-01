@@ -1,113 +1,32 @@
-import {
-  publicAssetPath,
-  type GuiAppCatalog,
-} from "@/features/gui/registry/appTypes";
+import { aboutAppConfig } from "@/features/apps/about/app.config";
+import { contactAppConfig } from "@/features/apps/contact/app.config";
+import { diceRollerAppConfig } from "@/features/apps/projects/apps/diceroller/app.config";
+import { flareAppConfig } from "@/features/apps/projects/apps/flare/app.config";
+import { mejuBotAppConfig } from "@/features/apps/projects/apps/mejubot/app.config";
+import { pageSsenceAppConfig } from "@/features/apps/projects/apps/pagessence/app.config";
+import { wchmsAppConfig } from "@/features/apps/projects/apps/wchms/app.config";
+import { webPianoAppConfig } from "@/features/apps/projects/apps/webpiano/app.config";
+import { weConnectAppConfig } from "@/features/apps/projects/apps/weconnect/app.config";
+import { projectsAppConfig } from "@/features/apps/projects/app.config";
+import { resumeAppConfig } from "@/features/apps/resume/app.config";
+import { settingsAppConfig } from "@/features/apps/settings/app.config";
+import { terminalAppConfig } from "@/features/apps/terminal/app.config";
+import type { AppConfigMap } from "@/features/gui/registry/appTypes";
 
 export const appCatalog = {
-  about: {
-    appId: "about",
-    url: { app: "about" },
-    titles: { ko: "나에 대해서", en: "About" },
-    icon: publicAssetPath("/icons/about.png"),
-    order: 10,
-    window: { width: 740, height: 640 },
-  },
-  projects: {
-    appId: "projects",
-    url: { app: "projects" },
-    titles: { ko: "프로젝트", en: "Projects" },
-    icon: publicAssetPath("/icons/folder.png"),
-    order: 20,
-    window: { width: 700, height: 450 },
-  },
-  resume: {
-    appId: "resume",
-    url: { app: "resume" },
-    titles: { ko: "이력서", en: "Resume" },
-    icon: publicAssetPath("/icons/pdf_file.png"),
-    order: 30,
-    window: { width: 850, height: 680 },
-  },
-  terminal: {
-    appId: "terminal",
-    url: { app: "terminal" },
-    titles: { ko: "터미널", en: "Terminal" },
-    icon: publicAssetPath("/icons/iterm2.png"),
-    order: 40,
-    window: { width: 800, height: 530 },
-  },
-  contact: {
-    appId: "contact",
-    url: { app: "contact" },
-    titles: { ko: "연락처", en: "Contact" },
-    icon: publicAssetPath("/icons/contact.png"),
-    order: 50,
-    window: { width: 600, height: 370 },
-  },
-  settings: {
-    appId: "settings",
-    url: { app: "settings" },
-    titles: { ko: "설정", en: "Settings" },
-    icon: publicAssetPath("/icons/settings.png"),
-    order: 60,
-    window: { width: 740, height: 610 },
-  },
-  "project:wchms": {
-    appId: "project:wchms",
-    url: { app: "project", slug: "wchms" },
-    titles: { ko: "WCHMS", en: "WCHMS" },
-    icon: publicAssetPath("/icons/wchms.png"),
-    order: 110,
-    window: { width: 840, height: 640 },
-  },
-  "project:flare": {
-    appId: "project:flare",
-    url: { app: "project", slug: "flare" },
-    titles: { ko: "Flare", en: "Flare" },
-    icon: publicAssetPath("/icons/flare.png"),
-    order: 120,
-    window: { width: 840, height: 640 },
-  },
-  "project:weconnect": {
-    appId: "project:weconnect",
-    url: { app: "project", slug: "weconnect" },
-    titles: { ko: "WeConnect", en: "WeConnect" },
-    icon: publicAssetPath("/icons/weconnect.svg"),
-    order: 130,
-    window: { width: 840, height: 640 },
-  },
-  "project:pagessence": {
-    appId: "project:pagessence",
-    url: { app: "project", slug: "pagessence" },
-    titles: { ko: "pageSsence", en: "PageSsence" },
-    icon: publicAssetPath("/icons/pagessence.png"),
-    order: 140,
-    window: { width: 840, height: 640 },
-  },
-  "project:diceroller": {
-    appId: "project:diceroller",
-    url: { app: "project", slug: "diceroller" },
-    titles: { ko: "다이스롤러", en: "DiceRoller" },
-    icon: publicAssetPath("/icons/diceroller.png"),
-    order: 150,
-    window: { width: 840, height: 640 },
-  },
-  "project:mejubot": {
-    appId: "project:mejubot",
-    url: { app: "project", slug: "mejubot" },
-    titles: { ko: "디스코드 봇", en: "Discord Bot" },
-    icon: publicAssetPath("/icons/mejubot.png"),
-    order: 160,
-    window: { width: 840, height: 640 },
-  },
-  "project:webpiano": {
-    appId: "project:webpiano",
-    url: { app: "project", slug: "webpiano" },
-    titles: { ko: "웹 피아노", en: "WebPiano" },
-    icon: publicAssetPath("/icons/webpiano.png"),
-    order: 170,
-    window: { width: 840, height: 640 },
-  },
-} satisfies GuiAppCatalog;
+  about: aboutAppConfig,
+  projects: projectsAppConfig,
+  resume: resumeAppConfig,
+  terminal: terminalAppConfig,
+  contact: contactAppConfig,
+  settings: settingsAppConfig,
+  "project:wchms": wchmsAppConfig,
+  "project:flare": flareAppConfig,
+  "project:weconnect": weConnectAppConfig,
+  "project:pagessence": pageSsenceAppConfig,
+  "project:diceroller": diceRollerAppConfig,
+  "project:mejubot": mejuBotAppConfig,
+  "project:webpiano": webPianoAppConfig,
+} satisfies AppConfigMap;
 
 export const appCatalogKeys = Object.keys(appCatalog).sort();

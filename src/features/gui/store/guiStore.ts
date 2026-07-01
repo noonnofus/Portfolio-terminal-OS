@@ -8,13 +8,14 @@ import type {
 } from "@/features/gui/navigation/navigationTypes";
 import type { Language } from "@/shared/lib/i18n/useLanguageStore";
 import type { PageVisibility } from "@/features/gui/runtime/appVisibility";
+import type { WallpaperId } from "@/features/gui/appearance/wallpaperCatalog";
 
 export type GuiState = GuiWorkspaceState & {
     activationSequence: number;
     pageVisibility: PageVisibility;
     resumeEpoch: number;
     urlReady: boolean;
-    wallpaper: "golden_gate_light" | "golden_gate_dark" | "tahoe_light" | "tahoe_dark" | "tahoe_beach_dawn" | "tahoe_beach_day" | "tahoe_beach_dusk" | "tahoe_beach_night";
+    wallpaper: WallpaperId;
     dockAutoHide: boolean;
 };
 

@@ -4,6 +4,8 @@ import { useColorMode } from "@/shared/ui/color-mode";
 import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 import type { GuiAppComponentProps } from "@/features/gui/registry/appTypes";
 import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
+import { orderedWallpapers } from "@/features/gui/appearance/wallpaperCatalog";
+import { getWallpaperPreviewStyle } from "@/features/gui/appearance/wallpaperPresentation";
 
 export default function SettingsApp({
     language,
@@ -31,16 +33,6 @@ export default function SettingsApp({
             dockAlways: "항상 표시",
             wallpaperLabel: "배경화면 선택",
             wallpaperDesc: "데스크톱 배경 무드를 선택하세요.",
-            wallpapers: {
-                golden_gate_light: "Golden Gate Light",
-                golden_gate_dark: "Golden Gate Dark",
-                tahoe_light: "Tahoe Light",
-                tahoe_dark: "Tahoe Dark",
-                tahoe_beach_dawn: "Tahoe Beach - Dawn",
-                tahoe_beach_day: "Tahoe Beach - Day",
-                tahoe_beach_dusk: "Tahoe Beach - Dusk",
-                tahoe_beach_night: "Tahoe Beach - Night",
-            },
         },
         en: {
             title: "System Settings",
@@ -58,16 +50,6 @@ export default function SettingsApp({
             dockAlways: "Always show",
             wallpaperLabel: "Choose Wallpaper",
             wallpaperDesc: "Choose a mood for your desktop background.",
-            wallpapers: {
-                golden_gate_light: "Golden Gate Light",
-                golden_gate_dark: "Golden Gate Dark",
-                tahoe_light: "Tahoe Light",
-                tahoe_dark: "Tahoe Dark",
-                tahoe_beach_dawn: "Tahoe Beach - Dawn",
-                tahoe_beach_day: "Tahoe Beach - Day",
-                tahoe_beach_dusk: "Tahoe Beach - Dusk",
-                tahoe_beach_night: "Tahoe Beach - Night",
-            },
         },
     }[language];
 
@@ -221,31 +203,31 @@ export default function SettingsApp({
                         </p>
                     </div>
                     <div className="grid grid-cols-2 gap-3 mt-3 sm:grid-cols-4">
-                        {(["golden_gate_light", "golden_gate_dark", "tahoe_light", "tahoe_dark", "tahoe_beach_dawn", "tahoe_beach_day", "tahoe_beach_dusk", "tahoe_beach_night"] as const).map(
-                            (type) => {
+                        {orderedWallpapers.map(
+                            ({ id, labels }) => {
                                 return (
                                     <button
-                                        key={type}
+                                        key={id}
                                         type="button"
-                                        aria-pressed={wallpaper === type}
+                                        aria-pressed={wallpaper === id}
                                         onClick={() =>
                                             dispatch({
                                                 type: "change-wallpaper",
-                                                wallpaper: type,
+                                                wallpaper: id,
                                             })
                                         }
                                         className={`gui-wallpaper-option group relative flex flex-col items-center p-2 rounded-xl border-2 transition-all duration-200 ${
-                                            wallpaper === type
+                                            wallpaper === id
                                                 ? "border-blue-600 bg-blue-50/50 dark:bg-blue-950/20"
                                                 : "border-transparent bg-slate-50 dark:bg-[#272730] hover:border-slate-300 dark:hover:border-slate-700"
                                         }`}
                                     >
                                         <div
                                             className="gui-wallpaper-preview"
-                                            data-wallpaper={type}
+                                            style={getWallpaperPreviewStyle(id)}
                                         />
                                         <span className="text-[11px] font-medium mt-2 text-slate-700 dark:text-slate-300">
-                                            {t.wallpapers[type]}
+                                            {labels[language]}
                                         </span>
                                     </button>
                                 );
