@@ -6,21 +6,34 @@ import {
 import { appLoaderRegistryKeys } from "@/features/gui/registry/appLoaderRegistry";
 import {
     externalUrl,
+    folderAppIds,
     publicAssetPath,
 } from "@/features/gui/registry/appTypes";
+import { collectFolderAppIds } from "@/features/gui/directory/directoryTree";
+import { wallpaperIds } from "@/features/gui/appearance/wallpaperCatalog";
 import {
     parseGuiUrl,
     serializeGuiUrl,
 } from "@/features/gui/registry/parseGuiAppTarget";
 
 describe("GUI app boundaries", () => {
-    it("keeps catalog and client loader keys identical", () => {
-        expect(appLoaderRegistryKeys).toEqual(appCatalogKeys);
+    it("keeps leaf loaders and folder IDs aligned", () => {
+        expect(appLoaderRegistryKeys).toEqual(
+            appCatalogKeys.filter((key) => key !== "projects"),
+        );
+        expect(collectFolderAppIds().toSorted()).toEqual(
+            [...folderAppIds].toSorted(),
+        );
         expect(Object.keys(appCatalog)).toHaveLength(13);
         expect(appCatalog.contact.window).toEqual({
             width: 600,
             height: 370,
         });
+    });
+
+    it("keeps wallpaper IDs catalog-driven", () => {
+        expect(wallpaperIds).toHaveLength(8);
+        expect(new Set(wallpaperIds).size).toBe(wallpaperIds.length);
     });
 
     it("canonicalizes supported GUI URLs", () => {

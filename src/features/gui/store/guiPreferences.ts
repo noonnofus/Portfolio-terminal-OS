@@ -1,6 +1,11 @@
+import {
+    isWallpaperId,
+    type WallpaperId,
+} from "@/features/gui/appearance/wallpaperCatalog";
+
 export type GuiPreferences = {
     language: "ko" | "en";
-    wallpaper: "golden_gate_light" | "golden_gate_dark" | "tahoe_light" | "tahoe_dark" | "tahoe_beach_dawn" | "tahoe_beach_day" | "tahoe_beach_dusk" | "tahoe_beach_night";
+    wallpaper: WallpaperId;
     dockAutoHide: boolean;
 };
 
@@ -12,17 +17,6 @@ type StoredGuiPreferences = {
 export const GUI_PREFERENCES_STORAGE_KEY = "gui:preferences";
 
 const languages = new Set<GuiPreferences["language"]>(["ko", "en"]);
-const wallpapers = new Set<GuiPreferences["wallpaper"]>([
-    "golden_gate_light",
-    "golden_gate_dark",
-    "tahoe_light",
-    "tahoe_dark",
-    "tahoe_beach_dawn",
-    "tahoe_beach_day",
-    "tahoe_beach_dusk",
-    "tahoe_beach_night",
-]);
-
 export function readGuiPreferences(
     storage: Pick<Storage, "getItem">,
 ): GuiPreferences | null {
@@ -48,9 +42,7 @@ export function readGuiPreferences(
         const preferences = value.preferences as Record<string, unknown>;
         if (
             !languages.has(preferences.language as GuiPreferences["language"]) ||
-            !wallpapers.has(
-                preferences.wallpaper as GuiPreferences["wallpaper"],
-            ) ||
+            !isWallpaperId(preferences.wallpaper) ||
             typeof preferences.dockAutoHide !== "boolean"
         ) {
             return null;

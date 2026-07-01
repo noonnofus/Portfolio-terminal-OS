@@ -86,6 +86,8 @@ test("all project windows stay bounded and release DOM after close", async ({
         if ((await dialog.count()) === 0) {
             continue;
         }
+        await dialog.dispatchEvent("pointerdown");
+        await expect(dialog).toHaveAttribute("data-active", "true");
         await dialog
             .getByRole("button", { name: `${project.windowTitle} close` })
             .click();

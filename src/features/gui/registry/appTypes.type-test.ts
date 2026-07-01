@@ -1,8 +1,20 @@
 import type { ComponentProps } from "react";
 import type {
+    AppConfig,
     GuiAppLoaderMap,
     OpenAppCommand,
 } from "@/features/gui/registry/appTypes";
+
+const validSettingsConfigUrl = {
+    appId: "settings",
+    url: { app: "settings" },
+} satisfies Pick<AppConfig<"settings">, "appId" | "url">;
+
+const invalidSettingsConfigUrl = {
+    appId: "settings",
+    // @ts-expect-error Settings cannot target a project URL.
+    url: { app: "project", slug: "wchms" },
+} satisfies Pick<AppConfig<"settings">, "appId" | "url">;
 
 const validAboutCommand = {
     type: "open-app",
@@ -42,3 +54,5 @@ void validProjectCommand;
 void invalidAboutCommand;
 void invalidProjectCommand;
 void validWchmsProps;
+void validSettingsConfigUrl;
+void invalidSettingsConfigUrl;

@@ -1,23 +1,40 @@
 "use client";
 
 import { appLoaderRegistry } from "@/features/gui/registry/appLoaderRegistry";
-import type { GuiAppId } from "@/features/gui/registry/appTypes";
+import {
+    type GuiAppId,
+    isFolderAppId,
+} from "@/features/gui/registry/appTypes";
+import { DirectorySurface } from "@/features/gui/directory/DirectorySurface";
+import { findDirectoryByAppId } from "@/features/gui/directory/directoryTree";
+import type { WindowId } from "@/features/gui/navigation/navigationTypes";
 import type { Language } from "@/shared/lib/i18n/useLanguageStore";
 
 export function GuiAppRenderer({
+    windowId,
     appId,
     language,
 }: {
+    windowId: WindowId;
     appId: GuiAppId;
     language: Language;
 }) {
+    if (isFolderAppId(appId)) {
+        const directory = findDirectoryByAppId(appId);
+        if (directory === null) return null;
+        return (
+            <DirectorySurface
+                key={`${windowId}:${directory.nodeId}`}
+                windowId={windowId}
+                directory={directory}
+                variant="window"
+            />
+        );
+    }
+
     switch (appId) {
         case "about": {
             const App = appLoaderRegistry.about;
-            return <App language={language} />;
-        }
-        case "projects": {
-            const App = appLoaderRegistry.projects;
             return <App language={language} />;
         }
         case "resume": {

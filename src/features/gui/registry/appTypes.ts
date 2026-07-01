@@ -80,7 +80,7 @@ export type GuiAppLoaderMap = {
     [K in GuiAppId]: ComponentType<GuiAppComponentProps<K>>;
 };
 
-type GuiAppUrlTargetMap = {
+export type GuiAppUrlTargetMap = {
     about: { app: "about" };
     projects: { app: "projects" };
     resume: { app: "resume" };
@@ -109,6 +109,25 @@ export type GuiAppCatalogEntry<K extends GuiAppId> = {
 export type GuiAppCatalog = {
     [K in GuiAppId]: GuiAppCatalogEntry<K>;
 };
+
+export const folderAppIds = ["projects"] as const satisfies readonly GuiAppId[];
+
+export type FolderAppId = (typeof folderAppIds)[number];
+export type LeafAppId = Exclude<GuiAppId, FolderAppId>;
+
+export type AppConfig<K extends GuiAppId> = GuiAppCatalogEntry<K>;
+
+export type AppConfigMap = {
+    [K in GuiAppId]: AppConfig<K>;
+};
+
+export type LeafAppLoaderMap = {
+    [K in LeafAppId]: GuiAppLoaderMap[K];
+};
+
+export function isFolderAppId(appId: GuiAppId): appId is FolderAppId {
+    return folderAppIds.some((folderAppId) => folderAppId === appId);
+}
 
 export type OpenAppCommand = {
     [K in GuiAppId]: {
