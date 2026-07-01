@@ -101,6 +101,16 @@ function MacRestoreIcon({ className }: { className?: string }) {
     );
 }
 
+/**
+ * Total vertical chrome reservation in pixels.
+ * window-layer CSS already offsets the top by SYSTEM_BAR_HEIGHT (36 px),
+ * but JS clamps use globalThis.innerHeight so we subtract
+ * SYSTEM_BAR_HEIGHT + a small bottom margin (8 px) here.
+ * Windows may slide behind the floating Dock (z-index 100),
+ * matching macOS behaviour.
+ */
+const WINDOW_CHROME_RESERVE_PX = 44; // 36 (system bar) + 8 (bottom padding)
+
 /* ── Window frame component ─────────────────────────────── */
 
 export function GuiWindowFrame({
@@ -201,7 +211,7 @@ export function GuiWindowFrame({
             );
             const maxTop = Math.max(
                 0,
-                globalThis.innerHeight - 116 - rect.height,
+                globalThis.innerHeight - WINDOW_CHROME_RESERVE_PX - rect.height,
             );
             setPos({
                 left: Math.max(
@@ -246,7 +256,7 @@ export function GuiWindowFrame({
         const maxLeft = Math.max(0, globalThis.innerWidth - rect.width);
         const maxTop = Math.max(
             0,
-            globalThis.innerHeight - 116 - rect.height,
+            globalThis.innerHeight - WINDOW_CHROME_RESERVE_PX - rect.height,
         );
 
         setPos((current) => {
@@ -294,7 +304,7 @@ export function GuiWindowFrame({
               width: `${app.window.width}px`,
               height: `${app.window.height}px`,
               maxWidth: "calc(100vw - 48px)",
-              maxHeight: "calc(100dvh - 116px)",
+              maxHeight: `calc(100dvh - ${WINDOW_CHROME_RESERVE_PX}px)`,
               zIndex: active ? 80 : 40 + index,
           };
 
@@ -320,7 +330,7 @@ export function GuiWindowFrame({
         : Math.min(app.window.width, screenWidth - 48);
     const windowHeight = maximized
         ? screenHeight - 36
-        : Math.min(app.window.height, screenHeight - 116);
+        : Math.min(app.window.height, screenHeight - WINDOW_CHROME_RESERVE_PX);
     const minimizeX = shouldReduceMotion
         ? 0
         : targetX - (currentLeft + windowWidth / 2);
@@ -438,6 +448,7 @@ export function GuiWindowFrame({
                         >
                             <WindowErrorBoundary appId={appId}>
                                 <GuiAppRenderer
+                                    windowId={win.windowId}
                                     appId={appId}
                                     language={language}
                                 />

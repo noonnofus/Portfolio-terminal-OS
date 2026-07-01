@@ -11,6 +11,7 @@ import { PageVisibilityController } from "@/features/gui/runtime/PageVisibilityC
 import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 import { useColorMode } from "@/shared/ui/color-mode";
 import "@/features/gui/styles/gui.css";
+import { getWallpaperStyle } from "@/features/gui/appearance/wallpaperPresentation";
 
 export function GuiShell({
   viewer = { kind: "guest" },
@@ -32,6 +33,7 @@ export function GuiShell({
         className="gui-shell"
         data-wallpaper={wallpaper}
         data-theme={themeMounted ? colorMode : undefined}
+        style={getWallpaperStyle(wallpaper)}
       >
         <PageVisibilityController />
         <div aria-hidden="true" className="gui-wallpaper-art">
