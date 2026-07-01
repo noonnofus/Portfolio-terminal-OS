@@ -6,30 +6,6 @@
   transition: background 0.5s ease;
 }
 
-.gui-shell[data-wallpaper="aurora"] {
-  background:
-    radial-gradient(circle at 20% 20%, rgb(219 234 254 / 70%), transparent 35%),
-    linear-gradient(135deg, #f8fafc, #e2e8f0);
-}
-
-.gui-shell[data-wallpaper="sunset"] {
-  background:
-    radial-gradient(circle at 80% 20%, rgb(254 186 116 / 70%), transparent 45%),
-    linear-gradient(135deg, #ea580c, #4a0e4e);
-}
-
-.gui-shell[data-wallpaper="forest"] {
-  background:
-    radial-gradient(circle at 20% 80%, rgb(167 243 208 / 50%), transparent 45%),
-    linear-gradient(135deg, #064e3b, #022c22);
-}
-
-.gui-shell[data-wallpaper="dark"] {
-  background:
-    radial-gradient(circle at 50% 50%, rgb(63 63 70 / 30%), transparent 70%),
-    linear-gradient(135deg, #09090b, #27272a);
-}
-
 .gui-system-bar {
   position: fixed;
   inset: 0 0 auto;
@@ -765,60 +741,6 @@
   background-color: #11141b;
 }
 
-.gui-shell[data-theme="light"][data-wallpaper="aurora"] {
-  background:
-    radial-gradient(circle at 18% 18%, #d9f1ff 0, transparent 34%),
-    radial-gradient(circle at 78% 24%, #e5ddff 0, transparent 32%),
-    linear-gradient(145deg, #f8fbff 0%, #dce8f5 54%, #cad8e9 100%);
-}
-
-.gui-shell[data-theme="light"][data-wallpaper="sunset"] {
-  background:
-    radial-gradient(circle at 70% 18%, #ffd8c4 0, transparent 34%),
-    radial-gradient(circle at 18% 72%, #e7d8ff 0, transparent 38%),
-    linear-gradient(145deg, #fff7f0 0%, #efdce8 52%, #d8d9f1 100%);
-}
-
-.gui-shell[data-theme="light"][data-wallpaper="forest"] {
-  background:
-    radial-gradient(circle at 26% 22%, #d7f7ea 0, transparent 36%),
-    radial-gradient(circle at 78% 74%, #c9e8ec 0, transparent 34%),
-    linear-gradient(145deg, #f2fbf7 0%, #d7ebe2 52%, #bfd8d4 100%);
-}
-
-.gui-shell[data-theme="light"][data-wallpaper="dark"] {
-  background:
-    radial-gradient(circle at 72% 22%, #e1e4ed 0, transparent 36%),
-    linear-gradient(145deg, #f8f9fc 0%, #d9dde7 52%, #c5cad5 100%);
-}
-
-.gui-shell[data-theme="dark"][data-wallpaper="aurora"] {
-  background:
-    radial-gradient(circle at 18% 20%, #17395a 0, transparent 38%),
-    radial-gradient(circle at 78% 18%, #322b59 0, transparent 34%),
-    linear-gradient(145deg, #121824 0%, #151b28 48%, #0d1119 100%);
-}
-
-.gui-shell[data-theme="dark"][data-wallpaper="sunset"] {
-  background:
-    radial-gradient(circle at 72% 18%, #633626 0, transparent 36%),
-    radial-gradient(circle at 20% 72%, #38264f 0, transparent 38%),
-    linear-gradient(145deg, #21151a 0%, #211827 48%, #101219 100%);
-}
-
-.gui-shell[data-theme="dark"][data-wallpaper="forest"] {
-  background:
-    radial-gradient(circle at 24% 20%, #174738 0, transparent 38%),
-    radial-gradient(circle at 78% 74%, #153747 0, transparent 34%),
-    linear-gradient(145deg, #101d19 0%, #10211f 48%, #0c1315 100%);
-}
-
-.gui-shell[data-theme="dark"][data-wallpaper="dark"] {
-  background:
-    radial-gradient(circle at 72% 20%, #2b3040 0, transparent 34%),
-    linear-gradient(145deg, #151820 0%, #0f1218 58%, #090b10 100%);
-}
-
 .gui-wallpaper-art {
   pointer-events: none;
   position: absolute;
@@ -1253,8 +1175,6 @@
   flex-direction: column;
   align-items: center;
   gap: 5px;
-  /*border-color: transparent !important;*/
-  /*background: transparent !important;*/
   padding: 12px 8px;
   text-align: center;
   box-shadow: none !important;
@@ -1379,8 +1299,6 @@
 .gui-folder-view .gui-project-icon {
   position: relative;
   display: flex;
-  /*width: 70px;
-  height: 70px;*/
   align-items: center;
   justify-content: center;
   margin: 0;
@@ -1411,7 +1329,6 @@
   font-weight: 700;
   line-height: 1;
   text-transform: uppercase;
-  /*box-shadow: 0 1px 2px rgb(0 0 0 / 24%);*/
 }
 
 .gui-folder-view .gui-project-card strong {
@@ -1657,7 +1574,6 @@
   max-width: 180px;
   flex-wrap: wrap;
   gap: 4px;
-  /*border: 1px solid rgb(148 163 184 / 25%);*/
   border-radius: 8px;
   background: rgb(15 23 42 / 92%);
   padding: 6px;
@@ -1686,23 +1602,10 @@
   }
 }
 
-/*
- * Shared Finder-style selection contract.
- * Desktop shortcuts and every folder surface use the same tile and label.
- */
-/*.directory-item:is(:focus-visible, [data-selected="true"]) {
-  outline: none !important;
-}*/
-
 .directory-item:is(:focus-visible, [data-selected="true"])
   .desktop-app-icon-wrapper {
-  /*border-color: transparent !important;*/
   background: var(--directory-selection-tile) !important;
   outline: 1px solid var(--directory-selection-border);
-  /*outline-offset: -1px;*/
-  /*box-shadow:
-    inset 0 0 0 1px rgb(62 47 41 / 24%),
-    0 2px 5px rgb(0 0 0 / 18%) !important;*/
 }
 
 .directory-item .desktop-app-name {
