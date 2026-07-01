@@ -880,7 +880,11 @@ test.describe("GUI shell", () => {
     });
 });
 
-async function expectGuiScreenshot(page: Page, name: string) {
+async function expectGuiScreenshot(
+    page: Page,
+    name: string,
+    options?: { stabilizeSelectionOutline?: boolean },
+) {
     await page.waitForLoadState("networkidle");
     await page.evaluate(async () => {
         await document.fonts.ready;
@@ -890,9 +894,25 @@ async function expectGuiScreenshot(page: Page, name: string) {
             ),
         );
     });
-    await expect(page).toHaveScreenshot(name, {
-        mask: [page.locator(".gui-system-clock")],
-    });
+    const stabilizationStyle = options?.stabilizeSelectionOutline
+        ? await page.addStyleTag({
+              content: `
+                .directory-item:is(:focus-visible, [data-selected="true"])
+                    .desktop-app-icon-wrapper {
+                    outline: none !important;
+                }
+            `,
+          })
+        : null;
+    try {
+        await expect(page).toHaveScreenshot(name, {
+            mask: [page.locator(".gui-system-clock")],
+        });
+    } finally {
+        await stabilizationStyle?.evaluate((element) =>
+            element.parentNode?.removeChild(element),
+        );
+    }
 }
 
 test.describe("GUI visual parity", () => {
@@ -908,7 +928,19 @@ test.describe("GUI visual parity", () => {
             .getByRole("navigation", { name: "Desktop shortcuts" })
             .getByRole("button", { name: "프로젝트" })
             .click();
-        await expectGuiScreenshot(page, "desktop-selected.png");
+        const selectedIcon = page
+            .getByRole("navigation", { name: "Desktop shortcuts" })
+            .getByRole("button", { name: "프로젝트" })
+            .locator(".desktop-app-icon-wrapper");
+        await expect(selectedIcon).toHaveCSS("outline-width", "1px");
+        await expect(selectedIcon).toHaveCSS("outline-style", "solid");
+        await expect(selectedIcon).toHaveCSS(
+            "outline-color",
+            "rgba(255, 255, 255, 0.38)",
+        );
+        await expectGuiScreenshot(page, "desktop-selected.png", {
+            stabilizeSelectionOutline: true,
+        });
     });
 
     test("captures Projects idle and selected states", async ({ page }) => {
@@ -918,7 +950,18 @@ test.describe("GUI visual parity", () => {
         await page
             .getByRole("button", { name: "WCHMS 프로젝트 열기" })
             .click();
-        await expectGuiScreenshot(page, "projects-selected.png");
+        const selectedIcon = page
+            .getByRole("button", { name: "WCHMS 프로젝트 열기" })
+            .locator(".desktop-app-icon-wrapper");
+        await expect(selectedIcon).toHaveCSS("outline-width", "1px");
+        await expect(selectedIcon).toHaveCSS("outline-style", "solid");
+        await expect(selectedIcon).toHaveCSS(
+            "outline-color",
+            "rgba(255, 255, 255, 0.38)",
+        );
+        await expectGuiScreenshot(page, "projects-selected.png", {
+            stabilizeSelectionOutline: true,
+        });
     });
 
     test("captures normal and maximized windows", async ({ page }) => {
@@ -948,7 +991,20 @@ test.describe("GUI visual parity", () => {
         await expect
             .poll(async () => (await dock.boundingBox())?.y ?? 900)
             .toBeLessThan(850);
-        await expect(dock).toHaveScreenshot("dock-auto-hide-revealed.png");
+        const dockCaptureStyle = await page.addStyleTag({
+            content: `
+                .gui-dock[data-auto-hide="true"] {
+                    transform: translateX(-50%) !important;
+                }
+            `,
+        });
+        try {
+            await expect(dock).toHaveScreenshot("dock-auto-hide-revealed.png");
+        } finally {
+            await dockCaptureStyle.evaluate((element) =>
+                element.parentNode?.removeChild(element),
+            );
+        }
     });
 
     test("captures responsive layouts in Chromium", async ({
