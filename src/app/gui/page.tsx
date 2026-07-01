@@ -1,5 +1,10 @@
-import DesktopMainView from "@/features/Desktop/components/DesktopMainView";
+import type { Metadata } from "next";
+import { GuiEntry } from "@/features/gui/GuiEntry";
 
-export default function guiPage() {
-    return <DesktopMainView />;
+export const metadata: Metadata = {
+  title: "Hyunho Kim | Portfolio",
+};
+
+export default function GuiPage() {
+  return <GuiEntry />;
 }

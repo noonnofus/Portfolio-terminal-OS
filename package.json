@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "vitest run --dir src"
+    "validate:app-structure": "node scripts/validate-app-structure.mjs",
+    "test": "vitest run --dir src",
+    "test:e2e": "playwright test --project=chromium",
+    "test:e2e:release": "playwright test"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "1.1.15",
@@ -36,6 +39,7 @@
     "zustand": "5.0.14"
   },
   "devDependencies": {
+    "@playwright/test": "1.61.0",
     "@tailwindcss/postcss": "4.3.0",
     "@types/node": "^20",
     "@types/react": "^19",

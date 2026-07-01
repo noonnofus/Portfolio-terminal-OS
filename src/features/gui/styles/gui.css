@@ -1,0 +1,1600 @@
+.gui-shell {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  transition: background 0.5s ease;
+}
+
+.gui-system-bar {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  display: flex;
+  height: 36px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(15 23 42 / 12%);
+  padding: 0 max(12px, env(safe-area-inset-right, 0px)) 0
+    max(12px, env(safe-area-inset-left, 0px));
+}
+
+.gui-system-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gui-system-divider {
+  width: 1px;
+  height: 16px;
+  margin: 0 6px;
+  background: rgb(15 23 42 / 15%);
+}
+
+.gui-system-clock {
+  font-family: "SF Mono", "Menlo", "Monaco", "Cascadia Code", monospace;
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: #334155;
+  letter-spacing: 0.02em;
+  padding: 0 4px;
+}
+
+/* ── System status icons (dineshd.dev style) ─────────── */
+
+.gui-system-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px;
+}
+
+.gui-system-icon {
+  width: 15px;
+  height: 15px;
+  color: #64748b;
+}
+
+.gui-system-icon-battery {
+  width: 17px;
+  height: 17px;
+}
+
+.gui-background-type {
+  pointer-events: none;
+  position: absolute;
+  inset: 20% auto auto 8%;
+  color: #0f172a;
+  font-size: clamp(7rem, 22vw, 22rem);
+  font-weight: 800;
+  letter-spacing: -0.08em;
+  line-height: 0.8;
+  opacity: 0.045;
+  user-select: none;
+}
+
+.desktop-apps {
+  position: fixed;
+  top: 72px;
+  right: max(18px, env(safe-area-inset-right, 0px));
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.desktop-app {
+  display: flex;
+  width: 88px;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border-radius: 12px;
+  padding: 8px;
+  font-size: 12px;
+  outline: none;
+}
+
+.desktop-app-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.desktop-app-name {
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-align: center;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.gui-window-layer {
+  position: absolute;
+  inset: 36px 0 0;
+  z-index: 35;
+  pointer-events: none;
+}
+
+.gui-window {
+  position: absolute;
+  pointer-events: auto;
+  display: flex;
+  width: min(760px, 72vw);
+  height: min(620px, 72vh);
+  min-width: 360px;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgb(15 23 42 / 18%);
+}
+
+/* ── macOS-style title bar ───────────────────────────────── */
+
+.gui-title-bar {
+  display: grid;
+  grid-template-columns: 72px 1fr 72px;
+  min-height: 42px;
+  align-items: center;
+  border-bottom: 1px solid rgb(15 23 42 / 12%);
+  background: rgb(241 245 249 / 92%);
+  padding: 0 10px;
+  cursor: grab;
+  user-select: none;
+}
+
+.gui-title-bar:active {
+  cursor: grabbing;
+}
+
+/* Traffic lights container */
+.gui-traffic-lights {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Individual traffic light button */
+.gui-traffic-light {
+  display: grid;
+  width: 13px;
+  height: 13px;
+  place-items: center;
+  border-radius: 999px;
+  border: 0.5px solid rgb(0 0 0 / 12%);
+  cursor: pointer;
+  transition: filter 120ms ease;
+}
+
+.gui-traffic-light:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Close button — red */
+.gui-traffic-close {
+  background: #ff5f57;
+}
+
+.gui-traffic-close:hover {
+  filter: brightness(0.88);
+}
+
+/* Minimize button — yellow */
+.gui-traffic-minimize {
+  background: #febc2e;
+}
+
+.gui-traffic-minimize:hover {
+  filter: brightness(0.88);
+}
+
+/* Maximize button — green */
+.gui-traffic-maximize {
+  background: #28c840;
+}
+
+.gui-traffic-maximize:hover {
+  filter: brightness(0.88);
+}
+
+/* Traffic light inner icon — hidden until hover on group */
+.gui-traffic-icon {
+  width: 8px;
+  height: 8px;
+  color: rgb(0 0 0 / 0);
+  transition: color 100ms ease;
+}
+
+.gui-traffic-lights:hover .gui-traffic-icon {
+  color: rgb(0 0 0 / 55%);
+}
+
+/* Centered title text */
+.gui-title-text {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Spacer for grid symmetry */
+.gui-title-spacer {
+  width: 72px;
+}
+
+/* ── Maximized window override ────────────────────────── */
+
+.gui-window-maximized {
+  position: fixed !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+.gui-window-maximized .gui-title-bar {
+  cursor: default;
+}
+
+/* ── Window content ─────────────────────────────────────── */
+
+.gui-window-content {
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+}
+
+.gui-window-error {
+  display: grid;
+  gap: 12px;
+  padding: 28px;
+}
+
+.gui-window-error > div {
+  display: flex;
+  gap: 8px;
+}
+
+.gui-window-error button {
+  border-radius: 8px;
+  background: #0f172a;
+  padding: 8px 12px;
+  color: white;
+  font-size: 12px;
+}
+
+.gui-projects {
+  min-height: 100%;
+  background: #f8fafc;
+  padding: 28px;
+}
+
+.gui-project-grid {
+  display: grid;
+}
+
+.gui-project-card {
+  display: flex;
+  width: 100%;
+  border: 1px solid rgb(15 23 42 / 10%);
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease;
+}
+
+.gui-project-card:focus-visible {
+  border-color: #2563eb;
+  outline: 3px solid rgb(37 99 235 / 30%);
+  outline-offset: 2px;
+}
+
+.gui-project-icon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 16px;
+  background: #f1f5f9;
+}
+
+.gui-resume {
+  min-height: 100%;
+  background: white;
+  padding: 34px;
+}
+
+.gui-resume-hero {
+  position: relative;
+  border-bottom: 2px solid #0f172a;
+  padding-bottom: 24px;
+}
+
+.gui-resume-print-action {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 9px;
+  background: #0f172a;
+  padding: 9px 13px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.gui-resume-print-action:hover,
+.gui-resume-print-action:focus-visible {
+  background: #1d4ed8;
+  outline: 3px solid rgb(37 99 235 / 28%);
+  outline-offset: 2px;
+}
+
+.gui-resume-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(220px, 0.8fr);
+  gap: 36px;
+  margin-top: 28px;
+}
+
+.gui-resume-section-title {
+  border-bottom: 1px solid rgb(15 23 42 / 18%);
+  padding-bottom: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.gui-resume-block {
+  break-inside: avoid;
+}
+
+.gui-resume-link {
+  display: block;
+  overflow-wrap: anywhere;
+  color: #1d4ed8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.gui-dock {
+  position: fixed;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  z-index: 100;
+  display: flex;
+  min-height: 64px;
+  transform: translateX(-50%);
+  align-items: center;
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  gap: 6px;
+  border: 1px solid rgb(255 255 255 / 70%);
+  padding: 8px 10px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gui-dock[data-auto-hide="true"] {
+    transform: translate(-50%, calc(100% + 4px));
+  }
+
+  .gui-dock[data-auto-hide="true"]::before {
+    position: absolute;
+    right: 50%;
+    bottom: 100%;
+    width: 100vw;
+    height: 18px;
+    transform: translateX(50%);
+    content: "";
+  }
+
+  .gui-dock[data-auto-hide="true"]:hover,
+  .gui-dock[data-auto-hide="true"]:focus-within {
+    transform: translateX(-50%);
+  }
+}
+
+.dock-app {
+  position: relative;
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 14px;
+}
+
+.dock-app:hover,
+.dock-app:focus-visible,
+.dock-app[aria-pressed="true"] {
+  background: rgb(219 234 254 / 86%);
+  outline: 2px solid transparent;
+}
+
+.dock-app:focus-visible {
+  outline-color: #2563eb;
+}
+
+@media (width < 1024px) {
+  .desktop-apps {
+    display: none;
+  }
+}
+
+@media (width < 768px) and (pointer: coarse) {
+  .gui-background-type {
+    display: none;
+  }
+
+  .gui-window-layer {
+    position: fixed;
+    inset: 36px 0 0;
+  }
+
+  .gui-window:not(.gui-window-maximized) {
+    position: fixed;
+    inset: 44px 8px calc(84px + env(safe-area-inset-bottom, 0px)) 8px !important;
+    width: auto;
+    height: auto;
+    min-width: 0;
+    border-radius: 12px;
+  }
+
+  .gui-window[data-active="false"] {
+    display: none;
+  }
+
+  .gui-projects {
+    padding: 18px;
+  }
+
+  .gui-project-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .gui-project-card {
+    min-height: 0;
+    padding: 14px;
+  }
+
+  .gui-project-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .gui-resume {
+    padding: 22px 18px;
+  }
+
+  .gui-resume-print-action {
+    position: static;
+    margin-top: 16px;
+  }
+
+  .gui-resume-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+  }
+}
+
+@media print {
+  @page {
+    margin: 14mm;
+    size: auto;
+  }
+
+  html,
+  body {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: white !important;
+  }
+
+  .gui-system-bar,
+  .gui-dock,
+  .desktop-apps,
+  .gui-background-type,
+  .gui-title-bar,
+  .gui-resume-print-action,
+  [data-window-id]:not([data-window-id="resume"]) {
+    display: none !important;
+  }
+
+  .gui-shell,
+  .gui-window-layer,
+  [data-window-id="resume"],
+  [data-window-id="resume"] .gui-window-content,
+  [data-window-id="resume"] [data-effective-visibility] {
+    position: static !important;
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: white !important;
+    box-shadow: none !important;
+    filter: none !important;
+  }
+
+  .gui-resume {
+    padding: 0 !important;
+    color: black !important;
+  }
+
+  .gui-resume-layout {
+    display: block !important;
+  }
+
+  .gui-resume-layout > aside {
+    margin-top: 28px;
+  }
+
+  .gui-resume a[href^="http"]::after,
+  .gui-resume a[href^="mailto"]::after {
+    content: " (" attr(href) ")";
+    color: #334155;
+    font-size: 9pt;
+    text-decoration: none;
+  }
+}
+
+/* ── Sleek scrollbars for windows ── */
+.gui-window-content::-webkit-scrollbar,
+.gui-window-content *::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.gui-window-content::-webkit-scrollbar-track,
+.gui-window-content *::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.gui-window-content::-webkit-scrollbar-thumb,
+.gui-window-content *::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 99px;
+}
+
+.gui-window-content::-webkit-scrollbar-thumb:hover,
+.gui-window-content *::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.dark .gui-window-content::-webkit-scrollbar-thumb,
+.dark .gui-window-content *::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark .gui-window-content::-webkit-scrollbar-thumb:hover,
+.dark .gui-window-content *::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Dark mode styling override for GUI ── */
+.dark.gui-shell,
+.dark .gui-shell {
+  color: #f8fafc;
+}
+
+.dark .gui-window {
+  background: rgba(30, 41, 59, 0.94);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+}
+
+.dark .gui-title-bar {
+  background: rgba(15, 23, 42, 0.9);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .gui-title-text {
+  color: #cbd5e1;
+}
+
+.dark .gui-window-content {
+  background: #0f172a;
+}
+
+.dark .gui-projects {
+  background: #0f172a;
+}
+
+.dark .gui-project-card {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+}
+
+.dark .gui-project-card strong {
+  color: #f8fafc;
+}
+
+.dark .gui-project-icon {
+  background: #334155;
+}
+
+.dark .gui-resume {
+  background: #0f172a;
+  color: #cbd5e1;
+}
+
+.dark .gui-resume h3,
+.dark .gui-resume h4,
+.dark .gui-resume h5,
+.dark .gui-resume dt {
+  color: #f8fafc;
+}
+
+.dark .gui-resume-section-title {
+  border-bottom-color: rgba(255, 255, 255, 0.15);
+  color: #f8fafc;
+}
+
+.dark .gui-resume-hero {
+  border-bottom-color: #334155;
+}
+
+.dark .gui-resume-hero p {
+  color: #94a3b8;
+}
+
+.dark .gui-dock {
+  background: rgba(15, 23, 42, 0.72);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+}
+
+.dark .dock-app:hover,
+.dark .dock-app:focus-visible,
+.dark .dock-app[aria-pressed="true"] {
+  background: rgba(30, 41, 59, 0.86);
+}
+
+.dark .gui-system-bar {
+  background: rgba(15, 23, 42, 0.78);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .gui-system-clock {
+  color: #cbd5e1;
+}
+
+.dark .gui-system-icon {
+  color: #cbd5e1;
+}
+
+.dark .gui-system-divider {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ── 2026 macOS-inspired adaptive material system ───────── */
+
+.gui-shell {
+  --gui-accent: #0a84ff;
+  --gui-text: #182230;
+  --gui-text-secondary: #5d6878;
+  --gui-border: rgb(255 255 255 / 58%);
+  --gui-window: rgb(250 252 255 / 88%);
+  --gui-window-solid: #f7f9fc;
+  --gui-titlebar: rgb(245 248 252 / 76%);
+  --gui-glass: rgb(249 251 255 / 66%);
+  --gui-glass-strong: rgb(248 250 254 / 82%);
+  --gui-control: rgb(255 255 255 / 52%);
+  --gui-control-hover: rgb(255 255 255 / 82%);
+  --gui-shadow: 0 28px 80px rgb(31 43 68 / 22%);
+  isolation: isolate;
+  color: var(--gui-text);
+  background-color: #dfe7f2;
+}
+
+.gui-shell[data-theme="dark"] {
+  --gui-accent: #5aaeff;
+  --gui-text: #f4f7fb;
+  --gui-text-secondary: #aeb8c8;
+  --gui-border: rgb(255 255 255 / 14%);
+  --gui-window: rgb(25 29 38 / 88%);
+  --gui-window-solid: #191d26;
+  --gui-titlebar: rgb(35 40 51 / 76%);
+  --gui-glass: rgb(22 27 36 / 62%);
+  --gui-glass-strong: rgb(27 32 42 / 82%);
+  --gui-control: rgb(255 255 255 / 8%);
+  --gui-control-hover: rgb(255 255 255 / 15%);
+  --gui-shadow: 0 34px 90px rgb(0 0 0 / 48%);
+  background-color: #11141b;
+}
+
+.gui-wallpaper-art {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  filter: saturate(112%);
+}
+
+.gui-wallpaper-art span {
+  position: absolute;
+  width: min(48vw, 700px);
+  aspect-ratio: 1;
+  border-radius: 42% 58% 62% 38% / 44% 42% 58% 56%;
+  background: linear-gradient(
+    145deg,
+    rgb(255 255 255 / 34%),
+    rgb(255 255 255 / 3%)
+  );
+  opacity: 0.72;
+  filter: blur(1px);
+  transform: rotate(-18deg);
+}
+
+.gui-wallpaper-art span:nth-child(1) {
+  top: -24%;
+  right: -8%;
+}
+
+.gui-wallpaper-art span:nth-child(2) {
+  bottom: -38%;
+  left: 8%;
+  width: min(58vw, 820px);
+  transform: rotate(24deg);
+}
+
+.gui-wallpaper-art span:nth-child(3) {
+  top: 34%;
+  left: 42%;
+  width: min(24vw, 340px);
+  opacity: 0.38;
+}
+
+.gui-shell[data-theme="dark"] .gui-wallpaper-art span {
+  background: linear-gradient(
+    145deg,
+    rgb(255 255 255 / 8%),
+    rgb(255 255 255 / 1%)
+  );
+}
+
+.gui-shell button:not(:disabled),
+.gui-shell a[href],
+.gui-shell select,
+.gui-project-card {
+  cursor: pointer;
+}
+
+.gui-system-bar {
+  border-bottom-color: var(--gui-border);
+  background: var(--gui-glass);
+  color: var(--gui-text);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 22%);
+  backdrop-filter: blur(24px) saturate(145%);
+}
+
+.gui-system-identity {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.gui-system-clock,
+.gui-system-icon {
+  color: var(--gui-text-secondary);
+}
+
+.gui-system-divider {
+  background: color-mix(in srgb, var(--gui-text-secondary) 24%, transparent);
+}
+
+.gui-window {
+  border-color: var(--gui-border);
+  border-radius: 18px;
+  background: var(--gui-window);
+  box-shadow: var(--gui-shadow);
+  backdrop-filter: blur(30px) saturate(132%);
+}
+
+.gui-window[data-active="false"] {
+  filter: saturate(0.78) brightness(0.96);
+  box-shadow: 0 20px 58px rgb(22 31 48 / 16%);
+}
+
+.gui-title-bar {
+  border-bottom-color: color-mix(
+    in srgb,
+    var(--gui-text-secondary) 13%,
+    transparent
+  );
+  background: var(--gui-titlebar);
+  backdrop-filter: blur(24px) saturate(145%);
+}
+
+.gui-title-text {
+  color: var(--gui-text-secondary);
+}
+
+.gui-window-content,
+.gui-projects,
+.gui-resume,
+.gui-app-surface,
+.gui-shell[data-theme="dark"] .gui-app-surface {
+  background: var(--gui-window-solid);
+  color: var(--gui-text);
+}
+
+.gui-shell[data-theme="dark"] .gui-window-content .bg-white,
+.gui-shell[data-theme="dark"] .gui-window-content .bg-slate-50 {
+  background-color: #202631 !important;
+}
+
+.gui-shell[data-theme="dark"] .gui-window-content .text-black,
+.gui-shell[data-theme="dark"] .gui-window-content .text-pen-gray-800,
+.gui-shell[data-theme="dark"] .gui-window-content .text-slate-800 {
+  color: #f4f7fb !important;
+}
+
+.gui-shell[data-theme="dark"] .gui-window-content .text-pen-gray-700,
+.gui-shell[data-theme="dark"] .gui-window-content .text-pen-gray-600,
+.gui-shell[data-theme="dark"] .gui-window-content .text-slate-700,
+.gui-shell[data-theme="dark"] .gui-window-content .text-slate-600,
+.gui-shell[data-theme="dark"] .gui-window-content .text-slate-500 {
+  color: #b7c1d0 !important;
+}
+
+.gui-project-card {
+  border-color: color-mix(in srgb, var(--gui-text-secondary) 13%, transparent);
+  border-radius: 16px;
+  background: var(--gui-control);
+  color: var(--gui-text);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 32%);
+}
+
+.gui-project-card strong,
+.gui-resume h3,
+.gui-resume h4,
+.gui-resume h5,
+.gui-resume dt {
+  color: var(--gui-text);
+}
+
+.gui-project-card span,
+.gui-resume p,
+.gui-resume dd {
+  color: var(--gui-text-secondary);
+}
+
+.gui-dock {
+  border-color: var(--gui-border);
+  border-radius: 24px;
+  background: var(--gui-glass);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 42%),
+    0 18px 46px rgb(17 30 54 / 24%);
+  backdrop-filter: blur(28px) saturate(155%);
+}
+
+.dock-app {
+  cursor: pointer;
+  border-radius: 15px;
+}
+
+.dock-app:hover,
+.dock-app:focus-visible,
+.dock-app[aria-pressed="true"] {
+  background: var(--gui-control-hover);
+}
+
+.gui-app-icon {
+  position: relative;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 48%);
+  border-radius: 10px;
+  background: linear-gradient(145deg, #8e9aac, #566275);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 58%),
+    0 7px 14px rgb(20 32 58 / 24%);
+  color: white;
+}
+
+.gui-app-icon::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(155deg, rgb(255 255 255 / 42%), transparent 46%);
+  content: "";
+  pointer-events: none;
+}
+
+.gui-app-icon[data-size="desktop"] {
+  width: 54px;
+  height: 54px;
+  border-radius: 15px;
+}
+
+.gui-app-icon[data-size="project"] {
+  width: 70px;
+  height: 70px;
+  border-radius: 19px;
+}
+
+.gui-app-icon[data-app-icon="about"] {
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.gui-app-icon[data-app-icon="about"]::after {
+  display: none;
+}
+
+.gui-app-icon[data-app-icon="projects"] {
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.gui-app-icon[data-app-icon="projects"]::after {
+  display: none;
+}
+
+.gui-app-icon[data-app-icon="resume"] {
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.gui-app-icon[data-app-icon="resume"]::after {
+  display: none;
+}
+
+.gui-app-icon[data-app-icon="terminal"] {
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.gui-app-icon[data-app-icon="terminal"]::after {
+  display: none;
+}
+
+.gui-app-icon[data-app-icon="contact"] {
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.gui-app-icon[data-app-icon="contact"]::after {
+  display: none;
+}
+
+.gui-app-icon[data-app-icon="settings"] {
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.gui-app-icon[data-app-icon="settings"]::after {
+  display: none;
+}
+
+.gui-app-icon-image {
+  position: relative;
+  z-index: 1;
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 3px rgb(0 0 0 / 18%));
+}
+
+.desktop-app {
+  cursor: pointer;
+  color: var(--gui-text);
+  text-shadow: 0 1px 4px rgb(255 255 255 / 46%);
+}
+
+.gui-shell[data-theme="dark"] .desktop-app {
+  text-shadow: 0 1px 4px rgb(0 0 0 / 72%);
+}
+
+.gui-background-type {
+  color: var(--gui-text);
+}
+
+@media (width < 768px) and (pointer: coarse) {
+  .gui-window:not(.gui-window-maximized) {
+    width: auto !important;
+    height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+  }
+
+  .gui-system-controls {
+    gap: 2px;
+  }
+
+  .gui-wallpaper-art span {
+    opacity: 0.38;
+  }
+}
+
+.gui-shell[data-theme] .gui-system-bar {
+  border-bottom-color: var(--gui-border);
+  background: var(--gui-glass);
+  color: var(--gui-text);
+}
+
+.gui-shell[data-theme] .gui-window {
+  border-color: var(--gui-border);
+  background: var(--gui-window);
+  box-shadow: var(--gui-shadow);
+}
+
+.gui-shell[data-theme] .gui-title-bar {
+  border-bottom-color: color-mix(
+    in srgb,
+    var(--gui-text-secondary) 13%,
+    transparent
+  );
+  background: var(--gui-titlebar);
+}
+
+.gui-shell[data-theme] .gui-title-text,
+.gui-shell[data-theme] .gui-system-clock,
+.gui-shell[data-theme] .gui-system-icon {
+  color: var(--gui-text-secondary);
+}
+
+.gui-shell[data-theme] .gui-window-content,
+.gui-shell[data-theme] .gui-projects,
+.gui-shell[data-theme] .gui-resume,
+.gui-shell[data-theme] .gui-app-surface,
+.gui-shell[data-theme] .gui-settings-surface {
+  background: var(--gui-window-solid);
+  color: var(--gui-text);
+}
+
+.gui-shell[data-theme] .gui-project-card {
+  border-color: color-mix(in srgb, var(--gui-text-secondary) 13%, transparent);
+  background: var(--gui-control);
+  color: var(--gui-text);
+}
+
+.gui-shell[data-theme] .gui-project-icon {
+  background: transparent;
+}
+
+.gui-shell[data-theme] .gui-dock {
+  border-color: var(--gui-border);
+  background: var(--gui-glass);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 42%),
+    0 18px 46px rgb(17 30 54 / 24%);
+}
+
+.gui-shell[data-theme] .dock-app:hover,
+.gui-shell[data-theme] .dock-app:focus-visible,
+.gui-shell[data-theme] .dock-app[aria-pressed="true"] {
+  background: var(--gui-control-hover);
+}
+
+.gui-wallpaper-art {
+  display: none;
+}
+
+.gui-system-bar {
+  justify-content: space-between;
+  font-family:
+    var(--font-sans),
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    sans-serif;
+}
+
+.gui-system-title {
+  position: absolute;
+  left: 50%;
+  max-width: 40vw;
+  overflow: hidden;
+  color: var(--gui-text);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-overflow: ellipsis;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.gui-system-identity {
+  min-width: 84px;
+}
+
+.gui-folder-view {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  padding: 0;
+}
+
+.gui-project-grid {
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  align-content: start;
+  gap: 14px;
+  margin: 0;
+  padding: 20px;
+}
+
+.gui-project-card {
+  min-height: 170px;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 8px;
+  text-align: center;
+  box-shadow: none !important;
+}
+
+.gui-project-icon {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 4px;
+}
+
+.gui-project-card strong {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gui-wallpaper-preview {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  background-position: center;
+  background-size: cover;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 18%);
+  transition: transform 180ms ease;
+}
+
+.group:hover .gui-wallpaper-preview {
+  transform: scale(1.02);
+}
+
+@media (width < 1024px) {
+  .desktop-apps {
+    display: grid;
+    top: 54px;
+    right: max(10px, env(safe-area-inset-right, 0px));
+    gap: 10px;
+  }
+}
+
+@media (width < 640px) {
+  .gui-system-title {
+    max-width: 42vw;
+    font-size: 11px;
+  }
+
+  .gui-system-identity {
+    min-width: 34px;
+  }
+
+  .gui-system-status,
+  .gui-system-divider {
+    display: none;
+  }
+
+  .desktop-apps {
+    grid-template-columns: repeat(2, 68px);
+  }
+
+  .desktop-app {
+    width: 68px;
+  }
+}
+
+.gui-viewer-name {
+  color: var(--gui-text);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.gui-folder-view,
+.gui-shell[data-theme] .gui-folder-view {
+  position: relative;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  overflow-y: auto;
+  background-color: #09090b;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 2%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 2%) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: white;
+  padding: 16px 16px 42px;
+}
+
+.gui-folder-view .gui-project-grid {
+  position: relative;
+  display: grid;
+  flex: 1;
+  min-height: 0;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  align-content: start;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.gui-folder-view .gui-project-card {
+  display: flex;
+  min-height: 0;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: 0 !important;
+  border-radius: 8px;
+  background: transparent !important;
+  padding: 12px;
+  color: rgb(255 255 255 / 70%);
+  box-shadow: none !important;
+  text-align: center;
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
+}
+
+.gui-folder-view .gui-project-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border-radius: 3px;
+  background: rgb(255 255 255 / 3%);
+  color: rgb(96 165 250 / 80%);
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
+}
+
+.gui-folder-view .gui-project-icon > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gui-folder-view .gui-project-icon > span {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 3px;
+  background: rgb(59 130 246 / 90%);
+  padding: 2px 4px;
+  color: white;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.gui-folder-view .gui-project-card strong {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  padding-inline: 4px;
+  color: inherit;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gui-folder-view .gui-project-card:focus-visible,
+.gui-folder-view .gui-project-card[data-selected="true"] {
+  outline: none;
+  box-shadow: none !important;
+}
+
+.gui-folder-footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-top: 1px solid rgb(255 255 255 / 6%);
+  background: rgb(0 0 0 / 40%);
+  padding: 8px 16px;
+  color: rgb(255 255 255 / 40%);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 16px;
+  backdrop-filter: blur(4px);
+}
+
+/* The GUI theme is the single styling authority for application surfaces. */
+.gui-folder-view,
+.gui-shell[data-theme] .gui-folder-view {
+  height: 100%;
+  min-height: 0;
+}
+
+.gui-shell[data-theme="light"] .gui-folder-view {
+  background-color: #f7f9fc;
+  background-image:
+    linear-gradient(rgb(24 34 48 / 3%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(24 34 48 / 3%) 1px, transparent 1px);
+  color: #182230;
+}
+
+.gui-shell[data-theme="light"] .gui-folder-view .gui-project-card {
+  color: rgb(24 34 48 / 72%);
+}
+
+.gui-shell[data-theme="light"] .gui-folder-view .gui-project-icon {
+  background: rgb(24 34 48 / 4%);
+  color: #2563eb;
+}
+
+.gui-shell[data-theme="light"] .gui-folder-footer {
+  border-top-color: rgb(24 34 48 / 9%);
+  background: rgb(247 249 252 / 78%);
+  color: rgb(24 34 48 / 52%);
+}
+
+.gui-shell[data-theme="light"] .gui-settings-panel,
+.gui-shell[data-theme="light"] .gui-wallpaper-option {
+  border-color: rgb(24 34 48 / 10%);
+  background: #f8fafc;
+  color: #182230;
+}
+
+.gui-shell[data-theme="dark"] .gui-settings-panel,
+.gui-shell[data-theme="dark"] .gui-wallpaper-option {
+  border-color: rgb(255 255 255 / 8%);
+  background: #272730;
+  color: #f4f7fb;
+}
+
+.gui-shell[data-theme="light"] .gui-wallpaper-option:hover {
+  border-color: rgb(24 34 48 / 22%);
+  background: #eef2f7;
+}
+
+.gui-shell[data-theme="dark"] .gui-wallpaper-option:hover {
+  border-color: rgb(255 255 255 / 16%);
+  background: #30303a;
+}
+
+.gui-shell[data-theme] .gui-wallpaper-option[aria-pressed="true"] {
+  border-color: #2563eb;
+}
+
+.gui-shell[data-theme="light"] .gui-wallpaper-option[aria-pressed="true"] {
+  background: rgb(239 246 255 / 86%);
+}
+
+.gui-shell[data-theme="dark"] .gui-wallpaper-option[aria-pressed="true"] {
+  background: rgb(30 58 138 / 22%);
+}
+
+.gui-shell[data-theme][data-wallpaper] {
+  background-image: var(--gui-wallpaper-overlay), var(--gui-wallpaper-image);
+  background-position: var(--gui-wallpaper-position);
+  background-size: cover;
+}
+
+.directory-surface {
+  position: relative;
+  min-width: 0;
+}
+
+.directory-surface--desktop {
+  position: fixed;
+  inset: 36px 0 0;
+  z-index: 30;
+  display: block;
+  grid-template-columns: none;
+  padding: 18px max(18px, env(safe-area-inset-right, 0px)) 96px
+    max(18px, env(safe-area-inset-left, 0px));
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.directory-surface--window {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #09090b;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 2%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 2%) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: white;
+}
+
+.gui-shell[data-theme="light"] .directory-surface--window {
+  background-color: #f7f9fc;
+  background-image:
+    linear-gradient(rgb(24 34 48 / 3%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(24 34 48 / 3%) 1px, transparent 1px);
+  color: #182230;
+}
+
+.directory-grid {
+  position: relative;
+  min-height: 0;
+}
+
+.directory-surface--desktop .directory-grid {
+  margin-left: auto;
+  width: min(192px, 100%);
+}
+
+.directory-surface--window .directory-grid {
+  flex: 1;
+  overflow: auto;
+  padding: 16px 16px 48px;
+}
+
+.gui-folder-view .directory-grid.gui-project-grid {
+  display: block;
+  grid-template-columns: none;
+}
+
+.directory-row {
+  display: grid;
+  grid-template-columns: repeat(var(--directory-columns), minmax(0, 1fr));
+  gap: 12px 16px;
+}
+
+.directory-row + .directory-row {
+  margin-top: 12px;
+}
+
+.directory-cell {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  justify-items: center;
+}
+
+.directory-surface--desktop .directory-cell {
+  justify-items: end;
+}
+
+.directory-item {
+  --directory-selection-tile: rgb(91 76 68 / 42%);
+  --directory-selection-border: rgb(255 255 255 / 38%);
+  --directory-selection-label: #0b61e8;
+
+  width: 70px;
+  max-width: 70px;
+  min-height: 0;
+  padding: 0;
+  color: inherit;
+}
+
+.directory-item[data-appearance="document"] .desktop-app-icon-wrapper {
+  position: relative;
+}
+
+.directory-item-icon {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  flex: 0 0 54px;
+  place-items: center;
+}
+
+.directory-item-icon-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.directory-surface--window .desktop-app-name {
+  max-width: 100%;
+  overflow: hidden;
+  color: inherit;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.directory-empty {
+  display: grid;
+  min-height: 160px;
+  place-items: center;
+  color: rgb(100 116 139);
+}
+
+.directory-action-menu {
+  position: absolute;
+  top: calc(100% - 8px);
+  left: 50%;
+  z-index: 10;
+  display: flex;
+  width: max-content;
+  max-width: 180px;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-radius: 8px;
+  background: rgb(15 23 42 / 92%);
+  padding: 6px;
+  color: white;
+  box-shadow: 0 12px 32px rgb(0 0 0 / 28%);
+  transform: translateX(-50%);
+}
+
+.directory-action-menu button {
+  border-radius: 5px;
+  padding: 4px 7px;
+}
+
+.directory-action-menu button:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 1px;
+}
+
+@media (width < 640px) {
+  .directory-surface--desktop {
+    padding: 12px 10px 88px;
+  }
+
+  .directory-surface--desktop .directory-grid {
+    width: min(152px, 100%);
+  }
+}
+
+.directory-item:is(:focus-visible, [data-selected="true"])
+  .desktop-app-icon-wrapper {
+  background: var(--directory-selection-tile) !important;
+  outline: 1px solid var(--directory-selection-border);
+}
+
+.directory-item .desktop-app-name {
+  width: max-content;
+  max-width: 70px !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere;
+  text-overflow: clip !important;
+  white-space: normal !important;
+}
+
+.directory-item:is(:focus-visible, [data-selected="true"]) .desktop-app-name {
+  border-radius: 5px;
+  background: var(--directory-selection-label) !important;
+  color: #fff !important;
+  font-weight: 600;
+  text-shadow: none !important;
+}

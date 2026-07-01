@@ -55,5 +55,9 @@ docs/
 untitled.pen
 
 .playwright-mcp/
+test-results/
+playwright-report/
+blob-report/
 
 AGENTS.md
+!src/features/apps/AGENTS.md

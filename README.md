@@ -13,12 +13,15 @@
 🔗 **Live Website:** [Go to Website](https://hyunho.vercel.app/)
 
 ## 📜 Description  
-This project is a portfolio website designed with a terminal and OS-style interface. It is built with **Next.js 16, React 19, TypeScript, Zustand, and Tailwind CSS**, with **xterm.js** powering the terminal experience and a bilingual desktop shell rendered from an app registry.
+This project is a bilingual portfolio with two entries: an xterm-powered
+terminal at `/` and an OS-style GUI at `/gui`. The GUI provides shareable
+app/language URLs, independent project windows, an HTML résumé with print
+support, Settings, keyboard window switching, responsive layouts, and
+resource-aware terminal/media lifecycle management.
 
-### 🚀 **Planned Features**  
+### 🚀 **Planned Features**
 - Add OS-like built-in applications (e.g., web browser, file manager)  
-- Improve animations and window management  
-- Implement more customizable themes  
+- Add SEO-focused project and résumé routes
 
 ## 📸 Screenshots  
 ![Website Screenshot](./public/images/Terminal-view.png)
@@ -39,6 +42,8 @@ npm test
 npm run lint
 npx tsc --noEmit --pretty false
 npm run build
+npm run test:e2e
+npm run test:e2e:release
 ```
 
 Recommended order:
@@ -54,6 +59,8 @@ Current meaning of each gate:
 - `npm run lint`: runs ESLint with the Next.js 16 flat config baseline
 - `npx tsc --noEmit --pretty false`: runs standalone TypeScript validation
 - `npm run build`: runs the production build including Next.js TypeScript validation
+- `npm run test:e2e`: runs Chromium critical GUI coverage
+- `npm run test:e2e:release`: runs Chromium, Firefox, and WebKit release coverage
 
 ## 📦 Installation  
 ```bash
@@ -78,12 +85,12 @@ npm test
 npm run lint
 npx tsc --noEmit --pretty false
 npm run build
+npm run test:e2e
+npm run test:e2e:release
 ```
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-
-
 
 
 
