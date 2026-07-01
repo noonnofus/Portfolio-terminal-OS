@@ -139,13 +139,6 @@
   flex-direction: column;
   overflow: hidden;
   border: 1px solid rgb(15 23 42 / 18%);
-  border-radius: 14px;
-  background: rgb(255 255 255 / 96%);
-  box-shadow: 0 24px 70px rgb(15 23 42 / 24%);
-}
-
-.gui-window[data-active="false"] {
-  filter: saturate(0.82) brightness(0.96);
 }
 
 /* ── macOS-style title bar ───────────────────────────────── */
@@ -263,7 +256,6 @@
   min-height: 0;
   flex: 1;
   overflow: auto;
-  background: #f8fafc;
 }
 
 .gui-window-error {
