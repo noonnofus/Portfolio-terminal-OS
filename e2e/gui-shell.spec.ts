@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 test.describe("GUI shell", () => {
     test("hydrates a persisted dark theme without a server mismatch", async ({ page }) => {
@@ -847,13 +847,143 @@ test.describe("GUI shell", () => {
         await aboutWindow
             .getByRole("button", { name: "나에 대해서 restore" })
             .click();
-        const startedAt = Date.now();
+        await aboutWindow.evaluate((dialog) => {
+            const startedAt = performance.now();
+            const observer = new MutationObserver(() => {
+                if (dialog.isConnected) return;
+                document.documentElement.dataset.minimizeElapsed = String(
+                    performance.now() - startedAt,
+                );
+                observer.disconnect();
+            });
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+            });
+        });
         await aboutWindow
             .getByRole("button", {
                 name: "나에 대해서 minimize",
             })
             .click();
         await expect(aboutWindow).toBeHidden();
-        expect(Date.now() - startedAt).toBeLessThan(300);
+        await expect(page.locator("html")).toHaveAttribute(
+            "data-minimize-elapsed",
+            /\d/,
+        );
+        const minimizeElapsed = Number(
+            await page
+                .locator("html")
+                .getAttribute("data-minimize-elapsed"),
+        );
+        expect(minimizeElapsed).toBeLessThan(300);
+    });
+});
+
+async function expectGuiScreenshot(page: Page, name: string) {
+    await page.waitForLoadState("networkidle");
+    await page.evaluate(async () => {
+        await document.fonts.ready;
+        await Promise.all(
+            [...document.images].map((image) =>
+                image.complete ? image.decode().catch(() => undefined) : Promise.resolve(),
+            ),
+        );
+    });
+    await expect(page).toHaveScreenshot(name, {
+        mask: [page.locator(".gui-system-clock")],
+    });
+}
+
+test.describe("GUI visual parity", () => {
+    test.beforeEach(async ({ page }) => {
+        await page.setViewportSize({ width: 1440, height: 900 });
+    });
+
+    test("captures desktop idle and selected states", async ({ page }) => {
+        await page.goto("/gui?app=desktop");
+        await expectGuiScreenshot(page, "desktop-idle.png");
+
+        await page
+            .getByRole("navigation", { name: "Desktop shortcuts" })
+            .getByRole("button", { name: "프로젝트" })
+            .click();
+        await expectGuiScreenshot(page, "desktop-selected.png");
+    });
+
+    test("captures Projects idle and selected states", async ({ page }) => {
+        await page.goto("/gui?app=projects");
+        await expectGuiScreenshot(page, "projects-idle.png");
+
+        await page
+            .getByRole("button", { name: "WCHMS 프로젝트 열기" })
+            .click();
+        await expectGuiScreenshot(page, "projects-selected.png");
+    });
+
+    test("captures normal and maximized windows", async ({ page }) => {
+        await page.goto("/gui");
+        await expectGuiScreenshot(page, "window-normal.png");
+
+        await page
+            .getByRole("dialog", { name: "나에 대해서" })
+            .getByRole("button", { name: "나에 대해서 maximize" })
+            .click();
+        await expectGuiScreenshot(page, "window-maximized.png");
+    });
+
+    test("captures Settings themes and revealed Dock", async ({ page }) => {
+        await page.goto("/gui?app=settings");
+        await expectGuiScreenshot(page, "settings-light.png");
+
+        const settings = page.getByRole("dialog", { name: "설정" });
+        await settings.getByRole("button", { name: "다크 모드" }).click();
+        await expectGuiScreenshot(page, "settings-dark.png");
+
+        await settings.getByRole("button", { name: "자동 숨김" }).click();
+        await page.mouse.move(720, 899);
+        const dock = page.getByRole("navigation", {
+            name: "Applications",
+        });
+        await expect
+            .poll(async () => (await dock.boundingBox())?.y ?? 900)
+            .toBeLessThan(850);
+        await expect(dock).toHaveScreenshot("dock-auto-hide-revealed.png");
+    });
+
+    test("captures responsive layouts in Chromium", async ({
+        page,
+        browserName,
+    }) => {
+        test.skip(
+            browserName !== "chromium",
+            "Responsive snapshots run once in Chromium.",
+        );
+
+        for (const viewport of [
+            { width: 1024, height: 768 },
+            { width: 768, height: 1024 },
+            { width: 390, height: 844 },
+        ]) {
+            await page.setViewportSize(viewport);
+            await page.goto("/gui");
+            await expectGuiScreenshot(
+                page,
+                `responsive-${viewport.width}x${viewport.height}.png`,
+            );
+        }
+    });
+
+    test("captures Resume print isolation", async ({ page }) => {
+        await page.goto("/gui?lang=en");
+        await page
+            .getByRole("navigation", { name: "Applications" })
+            .getByRole("button", { name: "Resume" })
+            .click();
+        await page.emulateMedia({ media: "print" });
+        await page.waitForLoadState("networkidle");
+        await expect(page).toHaveScreenshot("resume-print.png", {
+            fullPage: true,
+        });
     });
 });
