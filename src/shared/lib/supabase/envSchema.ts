@@ -22,13 +22,13 @@ function readRequired(
   return value;
 }
 
-function validateSupabaseUrl(value: string): string {
+function validateSecureOrigin(value: string, name: string): string {
   let url: URL;
 
   try {
     url = new URL(value);
   } catch {
-    throw new Error("SUPABASE_URL must be a valid absolute URL");
+    throw new Error(`${name} must be a valid absolute URL`);
   }
 
   const isLocalDevelopment =
@@ -37,18 +37,28 @@ function validateSupabaseUrl(value: string): string {
 
   if (url.protocol !== "https:" && !isLocalDevelopment) {
     throw new Error(
-      "SUPABASE_URL must use HTTPS unless it targets local development",
+      `${name} must use HTTPS unless it targets local development`,
     );
   }
 
   return url.origin;
 }
 
+export function parseApplicationOrigin(source: EnvironmentSource): string {
+  return validateSecureOrigin(
+    readRequired(source, "APP_ORIGIN"),
+    "APP_ORIGIN",
+  );
+}
+
 export function parseSupabasePublicEnv(
   source: EnvironmentSource,
 ): SupabasePublicEnv {
   return {
-    url: validateSupabaseUrl(readRequired(source, "SUPABASE_URL")),
+    url: validateSecureOrigin(
+      readRequired(source, "SUPABASE_URL"),
+      "SUPABASE_URL",
+    ),
     publishableKey: readRequired(source, "SUPABASE_PUBLISHABLE_KEY"),
   };
 }

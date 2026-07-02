@@ -1,9 +1,36 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  parseApplicationOrigin,
   parseSupabasePublicEnv,
   parseSupabaseSecretEnv,
 } from "@/shared/lib/supabase/envSchema";
+
+describe("parseApplicationOrigin", () => {
+  it("normalizes the configured canonical origin", () => {
+    expect(
+      parseApplicationOrigin({
+        APP_ORIGIN: "https://portfolio.example/gui",
+      }),
+    ).toBe("https://portfolio.example");
+  });
+
+  it("allows localhost over HTTP", () => {
+    expect(
+      parseApplicationOrigin({
+        APP_ORIGIN: "http://localhost:3000",
+      }),
+    ).toBe("http://localhost:3000");
+  });
+
+  it("rejects insecure remote origins", () => {
+    expect(() =>
+      parseApplicationOrigin({
+        APP_ORIGIN: "http://portfolio.example",
+      }),
+    ).toThrow("APP_ORIGIN must use HTTPS");
+  });
+});
 
 describe("parseSupabasePublicEnv", () => {
   it("accepts a hosted HTTPS project", () => {
