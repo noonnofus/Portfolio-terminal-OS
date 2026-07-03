@@ -16,3 +16,10 @@ Run the account mapping spike:
 npx supabase db query --linked \
   --file supabase/spikes/phase0_account_mapping.sql
 ```
+
+Run the account deletion atomicity spike:
+
+```bash
+npx supabase db query --linked \
+  --file supabase/spikes/phase0_account_deletion.sql
+```
