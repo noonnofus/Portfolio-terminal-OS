@@ -2,10 +2,23 @@ import "server-only";
 
 import {
   createServerClient,
+  type CookieOptions,
   type CookieMethodsServer,
 } from "@supabase/ssr";
 
-import { getSupabasePublicEnv } from "@/shared/lib/supabase/env";
+import {
+  getApplicationOrigin,
+  getSupabasePublicEnv,
+} from "@/shared/lib/supabase/env";
+
+export function getSupabaseCookieOptions(): CookieOptions {
+  return {
+    httpOnly: true,
+    path: "/",
+    sameSite: "lax",
+    secure: new URL(getApplicationOrigin()).protocol === "https:",
+  };
+}
 
 export function createSupabaseServerClient(
   cookieMethods: CookieMethodsServer,
@@ -13,6 +26,7 @@ export function createSupabaseServerClient(
   const { publishableKey, url } = getSupabasePublicEnv();
 
   return createServerClient(url, publishableKey, {
+    cookieOptions: getSupabaseCookieOptions(),
     cookies: cookieMethods,
   });
 }
