@@ -23,3 +23,11 @@ Run the account deletion atomicity spike:
 npx supabase db query --linked \
   --file supabase/spikes/phase0_account_deletion.sql
 ```
+
+After completing a second OAuth login for the same GitHub user, run the
+deletion session-binding spike:
+
+```bash
+npx supabase db query --linked \
+  --file supabase/spikes/phase0_deletion_session_binding.sql
+```
