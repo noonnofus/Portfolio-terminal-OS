@@ -7,5 +7,6 @@ export const contactAppConfig = defineAppConfig({
   titles: { ko: "연락처", en: "Contact" },
   icon: publicAssetPath("/icons/contact.png"),
   order: 50,
+  dock: { visible: true, order: 50 },
   window: { width: 600, height: 370 },
 });

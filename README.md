@@ -16,8 +16,9 @@
 This project is a bilingual portfolio with two entries: an xterm-powered
 terminal at `/` and an OS-style GUI at `/gui`. The GUI provides shareable
 app/language URLs, independent project windows, an HTML résumé with print
-support, Settings, keyboard window switching, responsive layouts, and
-resource-aware terminal/media lifecycle management.
+support, Settings, keyboard window switching, responsive layouts,
+GitHub-authenticated Notes, persisted user preferences, server-backed
+wallpapers, and resource-aware terminal/media lifecycle management.
 
 ### 🚀 **Planned Features**
 - Add OS-like built-in applications (e.g., web browser, file manager)  
@@ -30,8 +31,10 @@ resource-aware terminal/media lifecycle management.
 ## 🛠️ Tech Stack  
 - **Frontend:** Next.js, React, TypeScript, Tailwind CSS
 - **State Management:** Zustand
+- **Data/Auth:** Supabase, GitHub OAuth
 - **UI Libraries:** Framer Motion, Radix UI primitives, next-themes
 - **Terminal Emulator:** xterm.js
+- **Data Fetching / Editing:** TanStack Query, TipTap Markdown, react-markdown
 
 ## ✅ Verification Gates
 
@@ -40,6 +43,7 @@ Run these commands before treating a refactor as complete:
 ```bash
 npm test
 npm run lint
+npm run validate:app-structure
 npx tsc --noEmit --pretty false
 npm run build
 npm run test:e2e
@@ -50,13 +54,15 @@ Recommended order:
 
 1. `npm test`
 2. `npm run lint`
-3. `npx tsc --noEmit --pretty false`
-4. `npm run build`
+3. `npm run validate:app-structure`
+4. `npx tsc --noEmit --pretty false`
+5. `npm run build`
 
 Current meaning of each gate:
 
 - `npm test`: runs core unit tests with Vitest
 - `npm run lint`: runs ESLint with the Next.js 16 flat config baseline
+- `npm run validate:app-structure`: validates GUI app config/loader contracts
 - `npx tsc --noEmit --pretty false`: runs standalone TypeScript validation
 - `npm run build`: runs the production build including Next.js TypeScript validation
 - `npm run test:e2e`: runs Chromium critical GUI coverage
@@ -91,7 +97,6 @@ npm run test:e2e:release
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-
 
 
 

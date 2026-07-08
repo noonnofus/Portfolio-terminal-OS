@@ -7,5 +7,6 @@ export const terminalAppConfig = defineAppConfig({
   titles: { ko: "터미널", en: "Terminal" },
   icon: publicAssetPath("/icons/iterm2.png"),
   order: 40,
+  dock: { visible: true, order: 40 },
   window: { width: 800, height: 530 },
 });

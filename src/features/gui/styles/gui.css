@@ -10,7 +10,7 @@
   inset: 0 0 auto;
   z-index: 100;
   display: flex;
-  height: 36px;
+  height: var(--gui-system-bar-height);
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgb(15 23 42 / 12%);
@@ -121,7 +121,7 @@
 
 .gui-window-layer {
   position: absolute;
-  inset: 36px 0 0;
+  inset: var(--gui-system-bar-height) 0 0;
   z-index: 35;
   pointer-events: none;
 }
@@ -135,7 +135,7 @@
   min-width: 360px;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid rgb(15 23 42 / 18%);
+  border: var(--gui-window-border-width) solid rgb(15 23 42 / 18%);
 }
 
 /* ── macOS-style title bar ───────────────────────────────── */
@@ -143,7 +143,7 @@
 .gui-title-bar {
   display: grid;
   grid-template-columns: 72px 1fr 72px;
-  min-height: 42px;
+  min-height: var(--gui-titlebar-height);
   align-items: center;
   border-bottom: 1px solid rgb(15 23 42 / 12%);
   background: rgb(241 245 249 / 92%);
@@ -682,36 +682,109 @@
 /* ── 2026 macOS-inspired adaptive material system ───────── */
 
 .gui-shell {
-  --gui-accent: #0a84ff;
+  --gui-system-bar-height: 36px;
+  --gui-titlebar-height: 42px;
+  --gui-window-radius: 18px;
+  --gui-window-border-width: 1px;
+  --gui-window-edge-gap: 24px;
+  --gui-window-mobile-edge-gap: 12px;
+  --gui-window-max-width-offset: 48px;
+  --gui-window-chrome-reserve: 44px;
+  --gui-titlebar-bg: rgb(70 68 67);
+  --gui-titlebar-border: color-mix(
+    in srgb,
+    var(--gui-text-secondary) 13%,
+    transparent
+  );
+  --gui-titlebar-text: #f5f5f7;
+  --gui-app-header: var(--gui-titlebar-bg);
+  --gui-app-surface-bg: rgb(30 30 30);
+  --gui-app-surface-text: #f5f5f7;
+  --gui-app-surface-muted: #b7c1d0;
+  --gui-app-divider: rgb(255 255 255 / 12%);
+  --gui-app-content: var(--gui-app-surface-bg);
+  --gui-app-content-text: var(--gui-app-surface-text);
   --gui-text: #182230;
   --gui-text-secondary: #5d6878;
   --gui-border: rgb(255 255 255 / 58%);
   --gui-window: rgb(250 252 255 / 88%);
-  --gui-window-solid: #f7f9fc;
-  --gui-titlebar: rgb(245 248 252 / 76%);
+  --gui-window-bg: var(--gui-window);
+  --gui-window-border: var(--gui-border);
+  --gui-window-shadow: var(--gui-shadow);
   --gui-glass: rgb(249 251 255 / 66%);
-  --gui-glass-strong: rgb(248 250 254 / 82%);
   --gui-control: rgb(255 255 255 / 52%);
   --gui-control-hover: rgb(255 255 255 / 82%);
   --gui-shadow: 0 28px 80px rgb(31 43 68 / 22%);
+  --gui-directory-bg: #09090b;
+  --gui-directory-bg-light: #f7f9fc;
+  --gui-directory-grid-line: rgb(255 255 255 / 2%);
+  --gui-directory-grid-line-light: rgb(24 34 48 / 3%);
+  --gui-directory-text: rgb(255 255 255 / 70%);
+  --gui-directory-text-light: rgb(24 34 48 / 72%);
+  --gui-directory-icon-bg: rgb(255 255 255 / 3%);
+  --gui-directory-icon-bg-light: rgb(24 34 48 / 4%);
+  --gui-directory-icon-text: rgb(96 165 250 / 80%);
+  --gui-directory-icon-text-light: #2563eb;
+  --gui-directory-footer-border: rgb(255 255 255 / 6%);
+  --gui-directory-footer-border-light: rgb(24 34 48 / 9%);
+  --gui-directory-footer-bg: rgb(0 0 0 / 40%);
+  --gui-directory-footer-bg-light: rgb(247 249 252 / 78%);
+  --gui-directory-footer-text: rgb(255 255 255 / 40%);
+  --gui-directory-footer-text-light: rgb(24 34 48 / 52%);
+  --gui-dock-icon-size: 36px;
+  --gui-desktop-icon-size: 54px;
+  --gui-desktop-icon-hitbox: 70px;
+  --gui-project-card-icon-size: 72px;
+  --gui-app-icon-project-size: 70px;
+  --directory-selection-tile: rgb(91 76 68 / 42%);
+  --directory-selection-border: rgb(255 255 255 / 38%);
+  --directory-selection-label: #0b61e8;
+  --notes-accent: #ffd54a;
+  --notes-accent-hover: #ffca24;
+  --notes-text: #1d1d1f;
+  --notes-muted: #958a6b;
+  --notes-muted-soft: #766f5f;
+  --notes-muted-placeholder: #9a8f72;
+  --notes-muted-strong: #5f583f;
+  --notes-code-bg: #f0e6bd;
+  --notes-focus-bg: #fff7cf;
+  --notes-quote-border: #d9c46f;
+  --notes-link: #a56a00;
+  --notes-link-decoration: rgb(217 165 0 / 45%);
   isolation: isolate;
   color: var(--gui-text);
   background-color: #dfe7f2;
 }
 
 .gui-shell[data-theme="dark"] {
-  --gui-accent: #5aaeff;
+  --gui-titlebar-bg: rgb(70 68 67);
+  --gui-app-header: var(--gui-titlebar-bg);
+  --gui-app-surface-bg: rgb(30 30 30);
+  --gui-app-surface-text: #f5f5f7;
+  --gui-app-surface-muted: #b7c1d0;
+  --gui-app-content: var(--gui-app-surface-bg);
+  --gui-app-content-text: var(--gui-app-surface-text);
   --gui-text: #f4f7fb;
   --gui-text-secondary: #aeb8c8;
   --gui-border: rgb(255 255 255 / 14%);
   --gui-window: rgb(25 29 38 / 88%);
-  --gui-window-solid: #191d26;
-  --gui-titlebar: rgb(35 40 51 / 76%);
+  --gui-window-bg: var(--gui-window);
+  --gui-window-border: var(--gui-border);
+  --gui-window-shadow: var(--gui-shadow);
   --gui-glass: rgb(22 27 36 / 62%);
-  --gui-glass-strong: rgb(27 32 42 / 82%);
   --gui-control: rgb(255 255 255 / 8%);
   --gui-control-hover: rgb(255 255 255 / 15%);
   --gui-shadow: 0 34px 90px rgb(0 0 0 / 48%);
+  --notes-text: #f5f5f7;
+  --notes-muted: rgb(255 255 255 / 42%);
+  --notes-muted-soft: rgb(255 255 255 / 55%);
+  --notes-muted-placeholder: rgb(255 255 255 / 38%);
+  --notes-muted-strong: rgb(255 255 255 / 72%);
+  --notes-code-bg: rgb(255 255 255 / 10%);
+  --notes-focus-bg: rgb(255 255 255 / 5%);
+  --notes-quote-border: rgb(255 213 74 / 50%);
+  --notes-link: #ffd54a;
+  --notes-link-decoration: rgb(255 213 74 / 45%);
   background-color: #11141b;
 }
 
@@ -798,10 +871,10 @@
 }
 
 .gui-window {
-  border-color: var(--gui-border);
-  border-radius: 18px;
-  background: var(--gui-window);
-  box-shadow: var(--gui-shadow);
+  border-color: var(--gui-window-border);
+  border-radius: var(--gui-window-radius);
+  background: var(--gui-window-bg);
+  box-shadow: var(--gui-window-shadow);
   backdrop-filter: blur(30px) saturate(132%);
 }
 
@@ -811,17 +884,13 @@
 }
 
 .gui-title-bar {
-  border-bottom-color: color-mix(
-    in srgb,
-    var(--gui-text-secondary) 13%,
-    transparent
-  );
-  background: var(--gui-titlebar);
+  border-bottom-color: var(--gui-titlebar-border);
+  background: var(--gui-titlebar-bg);
   backdrop-filter: blur(24px) saturate(145%);
 }
 
 .gui-title-text {
-  color: var(--gui-text-secondary);
+  color: var(--gui-titlebar-text);
 }
 
 .gui-window-content,
@@ -829,27 +898,37 @@
 .gui-resume,
 .gui-app-surface,
 .gui-shell[data-theme="dark"] .gui-app-surface {
-  background: var(--gui-window-solid);
-  color: var(--gui-text);
+  background: var(--gui-app-surface-bg);
+  color: var(--gui-app-surface-text);
 }
 
+.gui-shell[data-theme] .gui-window-content .bg-white,
+.gui-shell[data-theme] .gui-window-content .bg-slate-50,
 .gui-shell[data-theme="dark"] .gui-window-content .bg-white,
 .gui-shell[data-theme="dark"] .gui-window-content .bg-slate-50 {
-  background-color: #202631 !important;
+  background-color: var(--gui-app-surface-bg) !important;
 }
 
+.gui-shell[data-theme] .gui-window-content .text-black,
+.gui-shell[data-theme] .gui-window-content .text-pen-gray-800,
+.gui-shell[data-theme] .gui-window-content .text-slate-800,
 .gui-shell[data-theme="dark"] .gui-window-content .text-black,
 .gui-shell[data-theme="dark"] .gui-window-content .text-pen-gray-800,
 .gui-shell[data-theme="dark"] .gui-window-content .text-slate-800 {
-  color: #f4f7fb !important;
+  color: var(--gui-app-surface-text) !important;
 }
 
+.gui-shell[data-theme] .gui-window-content .text-pen-gray-700,
+.gui-shell[data-theme] .gui-window-content .text-pen-gray-600,
+.gui-shell[data-theme] .gui-window-content .text-slate-700,
+.gui-shell[data-theme] .gui-window-content .text-slate-600,
+.gui-shell[data-theme] .gui-window-content .text-slate-500,
 .gui-shell[data-theme="dark"] .gui-window-content .text-pen-gray-700,
 .gui-shell[data-theme="dark"] .gui-window-content .text-pen-gray-600,
 .gui-shell[data-theme="dark"] .gui-window-content .text-slate-700,
 .gui-shell[data-theme="dark"] .gui-window-content .text-slate-600,
 .gui-shell[data-theme="dark"] .gui-window-content .text-slate-500 {
-  color: #b7c1d0 !important;
+  color: var(--gui-app-surface-muted) !important;
 }
 
 .gui-project-card {
@@ -898,8 +977,8 @@
 .gui-app-icon {
   position: relative;
   display: grid;
-  width: 36px;
-  height: 36px;
+  width: var(--gui-dock-icon-size);
+  height: var(--gui-dock-icon-size);
   place-items: center;
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 48%);
@@ -920,14 +999,14 @@
 }
 
 .gui-app-icon[data-size="desktop"] {
-  width: 54px;
-  height: 54px;
+  width: var(--gui-desktop-icon-size);
+  height: var(--gui-desktop-icon-size);
   border-radius: 15px;
 }
 
 .gui-app-icon[data-size="project"] {
-  width: 70px;
-  height: 70px;
+  width: var(--gui-app-icon-project-size);
+  height: var(--gui-app-icon-project-size);
   border-radius: 19px;
 }
 
@@ -997,6 +1076,17 @@
   display: none;
 }
 
+.gui-app-icon[data-app-icon="notes"] {
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.gui-app-icon[data-app-icon="notes"]::after {
+  display: none;
+}
+
 .gui-app-icon-image {
   position: relative;
   z-index: 1;
@@ -1044,21 +1134,20 @@
 }
 
 .gui-shell[data-theme] .gui-window {
-  border-color: var(--gui-border);
-  background: var(--gui-window);
-  box-shadow: var(--gui-shadow);
+  border-color: var(--gui-window-border);
+  background: var(--gui-window-bg);
+  box-shadow: var(--gui-window-shadow);
 }
 
 .gui-shell[data-theme] .gui-title-bar {
-  border-bottom-color: color-mix(
-    in srgb,
-    var(--gui-text-secondary) 13%,
-    transparent
-  );
-  background: var(--gui-titlebar);
+  border-bottom-color: var(--gui-titlebar-border);
+  background: var(--gui-titlebar-bg);
 }
 
-.gui-shell[data-theme] .gui-title-text,
+.gui-shell[data-theme] .gui-title-text {
+  color: var(--gui-titlebar-text);
+}
+
 .gui-shell[data-theme] .gui-system-clock,
 .gui-shell[data-theme] .gui-system-icon {
   color: var(--gui-text-secondary);
@@ -1069,8 +1158,8 @@
 .gui-shell[data-theme] .gui-resume,
 .gui-shell[data-theme] .gui-app-surface,
 .gui-shell[data-theme] .gui-settings-surface {
-  background: var(--gui-window-solid);
-  color: var(--gui-text);
+  background: var(--gui-app-surface-bg);
+  color: var(--gui-app-surface-text);
 }
 
 .gui-shell[data-theme] .gui-project-card {
@@ -1155,8 +1244,8 @@
 }
 
 .gui-project-icon {
-  width: 72px;
-  height: 72px;
+  width: var(--gui-project-card-icon-size);
+  height: var(--gui-project-card-icon-size);
   margin-bottom: 4px;
 }
 
@@ -1230,10 +1319,10 @@
   min-height: 100%;
   flex-direction: column;
   overflow-y: auto;
-  background-color: #09090b;
+  background-color: var(--gui-directory-bg);
   background-image:
-    linear-gradient(rgb(255 255 255 / 2%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 2%) 1px, transparent 1px);
+    linear-gradient(var(--gui-directory-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--gui-directory-grid-line) 1px, transparent 1px);
   background-size: 24px 24px;
   color: white;
   padding: 16px 16px 42px;
@@ -1262,7 +1351,7 @@
   border-radius: 8px;
   background: transparent !important;
   padding: 12px;
-  color: rgb(255 255 255 / 70%);
+  color: var(--gui-directory-text);
   box-shadow: none !important;
   text-align: center;
   transition:
@@ -1277,8 +1366,8 @@
   justify-content: center;
   margin: 0;
   border-radius: 3px;
-  background: rgb(255 255 255 / 3%);
-  color: rgb(96 165 250 / 80%);
+  background: var(--gui-directory-icon-bg);
+  color: var(--gui-directory-icon-text);
   transition:
     background-color 140ms ease,
     color 140ms ease;
@@ -1330,10 +1419,10 @@
   right: 0;
   bottom: 0;
   left: 0;
-  border-top: 1px solid rgb(255 255 255 / 6%);
-  background: rgb(0 0 0 / 40%);
+  border-top: 1px solid var(--gui-directory-footer-border);
+  background: var(--gui-directory-footer-bg);
   padding: 8px 16px;
-  color: rgb(255 255 255 / 40%);
+  color: var(--gui-directory-footer-text);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 12px;
   line-height: 16px;
@@ -1348,26 +1437,30 @@
 }
 
 .gui-shell[data-theme="light"] .gui-folder-view {
-  background-color: #f7f9fc;
+  background-color: var(--gui-directory-bg-light);
   background-image:
-    linear-gradient(rgb(24 34 48 / 3%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(24 34 48 / 3%) 1px, transparent 1px);
+    linear-gradient(var(--gui-directory-grid-line-light) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      var(--gui-directory-grid-line-light) 1px,
+      transparent 1px
+    );
   color: #182230;
 }
 
 .gui-shell[data-theme="light"] .gui-folder-view .gui-project-card {
-  color: rgb(24 34 48 / 72%);
+  color: var(--gui-directory-text-light);
 }
 
 .gui-shell[data-theme="light"] .gui-folder-view .gui-project-icon {
-  background: rgb(24 34 48 / 4%);
-  color: #2563eb;
+  background: var(--gui-directory-icon-bg-light);
+  color: var(--gui-directory-icon-text-light);
 }
 
 .gui-shell[data-theme="light"] .gui-folder-footer {
-  border-top-color: rgb(24 34 48 / 9%);
-  background: rgb(247 249 252 / 78%);
-  color: rgb(24 34 48 / 52%);
+  border-top-color: var(--gui-directory-footer-border-light);
+  background: var(--gui-directory-footer-bg-light);
+  color: var(--gui-directory-footer-text-light);
 }
 
 .gui-shell[data-theme="light"] .gui-settings-panel,
@@ -1419,7 +1512,7 @@
 
 .directory-surface--desktop {
   position: fixed;
-  inset: 36px 0 0;
+  inset: var(--gui-system-bar-height) 0 0;
   z-index: 30;
   display: block;
   grid-template-columns: none;
@@ -1435,19 +1528,23 @@
   min-height: 0;
   flex-direction: column;
   overflow: hidden;
-  background-color: #09090b;
+  background-color: var(--gui-directory-bg);
   background-image:
-    linear-gradient(rgb(255 255 255 / 2%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 2%) 1px, transparent 1px);
+    linear-gradient(var(--gui-directory-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--gui-directory-grid-line) 1px, transparent 1px);
   background-size: 24px 24px;
   color: white;
 }
 
 .gui-shell[data-theme="light"] .directory-surface--window {
-  background-color: #f7f9fc;
+  background-color: var(--gui-directory-bg-light);
   background-image:
-    linear-gradient(rgb(24 34 48 / 3%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(24 34 48 / 3%) 1px, transparent 1px);
+    linear-gradient(var(--gui-directory-grid-line-light) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      var(--gui-directory-grid-line-light) 1px,
+      transparent 1px
+    );
   color: #182230;
 }
 
@@ -1494,12 +1591,8 @@
 }
 
 .directory-item {
-  --directory-selection-tile: rgb(91 76 68 / 42%);
-  --directory-selection-border: rgb(255 255 255 / 38%);
-  --directory-selection-label: #0b61e8;
-
-  width: 70px;
-  max-width: 70px;
+  width: var(--gui-desktop-icon-hitbox);
+  max-width: var(--gui-desktop-icon-hitbox);
   min-height: 0;
   padding: 0;
   color: inherit;
@@ -1511,9 +1604,9 @@
 
 .directory-item-icon {
   display: grid;
-  width: 54px;
-  height: 54px;
-  flex: 0 0 54px;
+  width: var(--gui-desktop-icon-size);
+  height: var(--gui-desktop-icon-size);
+  flex: 0 0 var(--gui-desktop-icon-size);
   place-items: center;
 }
 
@@ -1584,7 +1677,7 @@
 
 .directory-item .desktop-app-name {
   width: max-content;
-  max-width: 70px !important;
+  max-width: var(--gui-desktop-icon-hitbox) !important;
   overflow: visible !important;
   overflow-wrap: anywhere;
   text-overflow: clip !important;
@@ -1597,4 +1690,124 @@
   color: #fff !important;
   font-weight: 600;
   text-shadow: none !important;
+}
+
+.gui-system-auth-link,
+.gui-viewer-role {
+  border-radius: 999px;
+  background: rgb(255 255 255 / 18%);
+  padding: 3px 8px;
+  color: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.gui-system-auth-link {
+  cursor: pointer;
+}
+
+.notes-tiptap-editor .ProseMirror {
+  min-height: 7rem;
+  background: transparent;
+  color: var(--gui-app-surface-text);
+  font-size: 15px;
+  line-height: 1.75;
+  letter-spacing: -0.005em;
+  outline: none;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.notes-tiptap-editor .ProseMirror p {
+  margin: 0.5rem 0;
+}
+
+.notes-tiptap-editor .ProseMirror p:first-child,
+.notes-tiptap-editor .ProseMirror h1:first-child,
+.notes-tiptap-editor .ProseMirror h2:first-child,
+.notes-tiptap-editor .ProseMirror h3:first-child {
+  margin-top: 0;
+}
+
+.notes-tiptap-editor .ProseMirror p:last-child {
+  margin-bottom: 0;
+}
+
+.notes-tiptap-editor .ProseMirror h1 {
+  margin: 1.25rem 0 0.75rem;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.notes-tiptap-editor .ProseMirror h2 {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.notes-tiptap-editor .ProseMirror h3 {
+  margin: 1rem 0 0.5rem;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.notes-tiptap-editor .ProseMirror ul,
+.notes-tiptap-editor .ProseMirror ol {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+
+.notes-tiptap-editor .ProseMirror ul {
+  list-style: disc;
+}
+
+.notes-tiptap-editor .ProseMirror ol {
+  list-style: decimal;
+}
+
+.notes-tiptap-editor .ProseMirror li {
+  margin: 0.25rem 0;
+  padding-left: 0.25rem;
+}
+
+.notes-tiptap-editor .ProseMirror blockquote {
+  margin: 0.75rem 0;
+  border-left: 2px solid var(--notes-quote-border);
+  padding-left: 0.75rem;
+  color: var(--notes-muted-strong);
+}
+
+.notes-tiptap-editor .ProseMirror code {
+  border-radius: 0.375rem;
+  background: var(--notes-code-bg);
+  padding: 0.125rem 0.375rem;
+  font-size: 0.92em;
+}
+
+.notes-tiptap-editor .ProseMirror pre {
+  margin: 0.75rem 0;
+  overflow-x: auto;
+  border-radius: 0.75rem;
+  background: var(--notes-code-bg);
+  padding: 0.75rem;
+  font-size: 13px;
+}
+
+.dark .notes-tiptap-editor .ProseMirror {
+  background: var(--gui-app-surface-bg);
+  color: var(--gui-app-surface-text);
+}
+
+.dark .notes-tiptap-editor .ProseMirror blockquote {
+  border-left-color: var(--notes-quote-border);
+  color: var(--notes-muted-strong);
+}
+
+.dark .notes-tiptap-editor .ProseMirror code,
+.dark .notes-tiptap-editor .ProseMirror pre {
+  background: var(--notes-code-bg);
 }

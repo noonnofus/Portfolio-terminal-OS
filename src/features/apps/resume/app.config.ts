@@ -7,5 +7,6 @@ export const resumeAppConfig = defineAppConfig({
   titles: { ko: "이력서", en: "Resume" },
   icon: publicAssetPath("/icons/pdf_file.png"),
   order: 30,
+  dock: { visible: true, order: 30 },
   window: { width: 850, height: 680 },
 });

@@ -14,7 +14,7 @@ import type {
   DesktopNode,
   DesktopNodeId,
 } from "@/features/gui/directory/directoryTypes";
-import { appCatalog } from "@/features/gui/registry/appCatalog";
+import { appMetadata } from "@/features/gui/registry/appMetadata";
 import type { Language } from "@/shared/lib/i18n/useLanguageStore";
 import { orderedProjectSummaries } from "@/shared/content/portfolio/projectSummaries";
 
@@ -54,7 +54,7 @@ export function DesktopItem({
     element: HTMLButtonElement | null,
   ) => void;
 }) {
-  const app = appCatalog[node.appId];
+  const app = appMetadata[node.appId];
   const projectSummary = orderedProjectSummaries.find(
     (project) => `project:${project.slug}` === node.appId,
   );

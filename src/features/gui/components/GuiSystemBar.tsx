@@ -5,10 +5,6 @@ import { createOpenAppCommand } from "@/features/gui/registry/appTypes";
 import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
 import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 
-export type GuiViewer =
-    | { kind: "guest" }
-    | { kind: "authenticated"; displayName: string };
-
 /* ── Icons (dineshd.dev style — Lucide-like stroked SVGs) ─── */
 
 function WifiIcon() {
@@ -89,16 +85,13 @@ function SystemClock() {
 
 /* ── System bar ───────────────────────────────────────────── */
 
-export function GuiSystemBar({
-    viewer,
-}: {
-    viewer: GuiViewer;
-}) {
+export function GuiSystemBar() {
     const windows = useGuiStore((state) => state.windows);
     const focus = useGuiStore((state) => state.focus);
+    const viewer = useGuiStore((state) => state.viewer);
     const { navigate } = useGuiNavigation();
     const viewerName =
-        viewer.kind === "authenticated" ? viewer.displayName : "Guest";
+        viewer.status === "authenticated" ? viewer.displayName : "Guest";
 
     useEffect(() => {
         const handleWindowCycle = (event: KeyboardEvent) => {

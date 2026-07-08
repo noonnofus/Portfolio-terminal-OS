@@ -8,15 +8,20 @@ import { useTerminalSequenceController } from "./hooks/useTerminalSequenceContro
 import { useTerminalSession } from "./hooks/useTerminalSession";
 import { executeCommand } from "./lib/commandParser";
 import useIsTouchDevice from "@/shared/hooks/useIsTouchDevice";
-import { TERMINAL_PROMPT } from "./lib/bootSequence";
 import { useLanguageStore } from "@/shared/lib/i18n/useLanguageStore";
 import type { TerminalAction } from "./lib/terminalActions";
+import {
+  formatTerminalPrompt,
+  type TerminalPromptIdentity,
+} from "./lib/terminalPrompt";
 
 export default function TerminalApp({
   active = true,
+  promptIdentity,
   resumeSignal = 0,
 }: {
   active?: boolean;
+  promptIdentity: TerminalPromptIdentity;
   resumeSignal?: number;
 }) {
   const router = useRouter();
@@ -24,12 +29,14 @@ export default function TerminalApp({
   const isTouchDevice = useIsTouchDevice();
   const currentLanguage = useLanguageStore((state) => state.currentLanguage);
   const setLanguage = useLanguageStore((state) => state.setLanguage);
+  const terminalPrompt = formatTerminalPrompt(promptIdentity);
 
   const inputRef = useRef("");
   const sequence = useTerminalSequenceController();
   const bootSequence = useTerminalBootSequence({
     isTouchDevice,
     language: currentLanguage,
+    prompt: terminalPrompt,
     sequence,
   });
   const session = useTerminalSession({
@@ -88,7 +95,7 @@ export default function TerminalApp({
         if (result.type === "change-language") {
           handleTerminalAction(result);
           if (result.language === currentLanguage) {
-            term.write(TERMINAL_PROMPT);
+            term.write(terminalPrompt);
           }
           return;
         }
@@ -110,7 +117,7 @@ export default function TerminalApp({
             break;
         }
 
-        term.write(TERMINAL_PROMPT);
+        term.write(terminalPrompt);
       } else if (char === 127) {
         if (inputRef.current.length > 0) {
           inputRef.current = inputRef.current.slice(0, -1);

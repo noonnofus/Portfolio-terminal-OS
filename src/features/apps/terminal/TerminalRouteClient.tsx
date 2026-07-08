@@ -7,5 +7,5 @@ const TerminalApp = dynamic(() => import("./TerminalApp"), {
 });
 
 export default function TerminalRouteClient() {
-    return <TerminalApp />;
+    return <TerminalApp promptIdentity={{ status: "guest" }} />;
 }

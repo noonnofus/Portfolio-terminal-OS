@@ -36,8 +36,8 @@ describe("parseSupabasePublicEnv", () => {
   it("accepts a hosted HTTPS project", () => {
     expect(
       parseSupabasePublicEnv({
-        SUPABASE_URL: "https://project.supabase.co/path",
-        SUPABASE_PUBLISHABLE_KEY: "publishable-key",
+        NEXT_PUBLIC_SUPABASE_URL: "https://project.supabase.co/path",
+        NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "publishable-key",
       }),
     ).toEqual({
       url: "https://project.supabase.co",
@@ -48,8 +48,8 @@ describe("parseSupabasePublicEnv", () => {
   it("accepts local Supabase over HTTP", () => {
     expect(
       parseSupabasePublicEnv({
-        SUPABASE_URL: "http://127.0.0.1:54321",
-        SUPABASE_PUBLISHABLE_KEY: "publishable-key",
+        NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54321",
+        NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "publishable-key",
       }).url,
     ).toBe("http://127.0.0.1:54321");
   });
@@ -59,15 +59,15 @@ describe("parseSupabasePublicEnv", () => {
 
     expect(() =>
       parseSupabasePublicEnv({
-        SUPABASE_URL: unsafeUrl,
-        SUPABASE_PUBLISHABLE_KEY: "publishable-key",
+        NEXT_PUBLIC_SUPABASE_URL: unsafeUrl,
+        NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "publishable-key",
       }),
-    ).toThrow("SUPABASE_URL must use HTTPS");
+    ).toThrow("NEXT_PUBLIC_SUPABASE_URL must use HTTPS");
 
     try {
       parseSupabasePublicEnv({
-        SUPABASE_URL: unsafeUrl,
-        SUPABASE_PUBLISHABLE_KEY: "publishable-key",
+        NEXT_PUBLIC_SUPABASE_URL: unsafeUrl,
+        NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "publishable-key",
       });
     } catch (error) {
       expect(String(error)).not.toContain(unsafeUrl);
@@ -77,9 +77,21 @@ describe("parseSupabasePublicEnv", () => {
   it("rejects incomplete configuration", () => {
     expect(() =>
       parseSupabasePublicEnv({
-        SUPABASE_URL: "https://project.supabase.co",
+        NEXT_PUBLIC_SUPABASE_URL: "https://project.supabase.co",
       }),
-    ).toThrow("SUPABASE_PUBLISHABLE_KEY");
+    ).toThrow("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY");
+  });
+
+  it("supports legacy non-public names during migration", () => {
+    expect(
+      parseSupabasePublicEnv({
+        SUPABASE_URL: "https://project.supabase.co",
+        SUPABASE_PUBLISHABLE_KEY: "publishable-key",
+      }),
+    ).toEqual({
+      url: "https://project.supabase.co",
+      publishableKey: "publishable-key",
+    });
   });
 });
 

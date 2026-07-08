@@ -7,5 +7,6 @@ export const settingsAppConfig = defineAppConfig({
   titles: { ko: "설정", en: "Settings" },
   icon: publicAssetPath("/icons/settings.png"),
   order: 60,
+  dock: { visible: true, order: 60 },
   window: { width: 740, height: 610 },
 });

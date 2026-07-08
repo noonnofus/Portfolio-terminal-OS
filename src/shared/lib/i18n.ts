@@ -10,6 +10,10 @@ import koAbout from '../../../public/locales/ko/About.json';
 import enAbout from '../../../public/locales/en/About.json';
 import koContact from '../../../public/locales/ko/Contact.json';
 import enContact from '../../../public/locales/en/Contact.json';
+import koNotes from '../../../public/locales/ko/Notes.json';
+import enNotes from '../../../public/locales/en/Notes.json';
+import koSettings from '../../../public/locales/ko/Settings.json';
+import enSettings from '../../../public/locales/en/Settings.json';
 import koTerminal from '../../../public/locales/ko/Terminal.json';
 import enTerminal from '../../../public/locales/en/Terminal.json';
 
@@ -19,6 +23,8 @@ const resources = {
     AboutSite: koAboutSite,
     About: koAbout,
     Contact: koContact,
+    Notes: koNotes,
+    Settings: koSettings,
     Terminal: koTerminal,
   },
   en: {
@@ -26,6 +32,8 @@ const resources = {
     AboutSite: enAboutSite,
     About: enAbout,
     Contact: enContact,
+    Notes: enNotes,
+    Settings: enSettings,
     Terminal: enTerminal,
   },
 };

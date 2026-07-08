@@ -6,6 +6,7 @@ import {
   type CookieMethodsServer,
 } from "@supabase/ssr";
 
+import type { Database } from "@/shared/lib/supabase/database.types";
 import {
   getApplicationOrigin,
   getSupabasePublicEnv,
@@ -25,8 +26,19 @@ export function createSupabaseServerClient(
 ) {
   const { publishableKey, url } = getSupabasePublicEnv();
 
-  return createServerClient(url, publishableKey, {
+  return createServerClient<Database>(url, publishableKey, {
     cookieOptions: getSupabaseCookieOptions(),
     cookies: cookieMethods,
+  });
+}
+
+export function createSupabaseRequestClient(
+  request: { cookies: { getAll: () => ReturnType<CookieMethodsServer["getAll"]> } },
+) {
+  return createSupabaseServerClient({
+    getAll: () => request.cookies.getAll(),
+    setAll: () => {
+      // Route handlers are preceded by proxy.ts for auth refresh.
+    },
   });
 }

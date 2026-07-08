@@ -7,6 +7,7 @@ import {
     type ReactNode,
 } from "react";
 import { useStore } from "zustand";
+import type { Viewer } from "@/features/auth/model/viewer";
 import {
     createGuiStore,
     type GuiStore,
@@ -17,13 +18,15 @@ const GuiStoreContext = createContext<GuiStoreApi | null>(null);
 
 export function GuiStoreProvider({
     children,
+    initialViewer = { status: "guest" },
     urlBasePath = "/gui",
 }: {
     children: ReactNode;
+    initialViewer?: Viewer;
     urlBasePath?: "/gui";
 }) {
     const [store] = useState<GuiStoreApi>(() =>
-        createGuiStore(urlBasePath),
+        createGuiStore(urlBasePath, initialViewer),
     );
 
     return (

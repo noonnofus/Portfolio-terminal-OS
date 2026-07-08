@@ -7,5 +7,6 @@ export const aboutAppConfig = defineAppConfig({
   titles: { ko: "나에 대해서", en: "About" },
   icon: publicAssetPath("/icons/about.png"),
   order: 10,
+  dock: { visible: true, order: 10 },
   window: { width: 740, height: 640 },
 });

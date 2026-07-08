@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { appCatalog } from "@/features/gui/registry/appCatalog";
+import { appMetadata } from "@/features/gui/registry/appMetadata";
 import {
   isProjectAppId,
   type GuiAppId,
@@ -56,6 +56,15 @@ const coreIcons: Record<CoreAppId, (size: number) => React.ReactNode> = {
       className="w-full h-full object-contain"
     />
   ),
+  notes: (s) => (
+    <Image
+      src="/icons/note.png"
+      alt="노트"
+      width={s}
+      height={s}
+      className="w-full h-full object-contain"
+    />
+  ),
   settings: (s) => (
     <Image
       src="/icons/settings.png"
@@ -85,7 +94,7 @@ export function GuiAppIcon({
         aria-hidden="true"
       >
         <Image
-          src={appCatalog[appId].icon}
+          src={appMetadata[appId].icon}
           alt=""
           width={iconSize}
           height={iconSize}

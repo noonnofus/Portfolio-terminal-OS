@@ -2,23 +2,15 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { appCatalog } from "@/features/gui/registry/appCatalog";
+import { appMetadata } from "@/features/gui/registry/appMetadata";
 import {
     createOpenAppCommand,
     type GuiAppId,
 } from "@/features/gui/registry/appTypes";
+import { dockAppIds } from "@/features/gui/registry/dockApps";
 import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
 import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 import { GuiAppIcon } from "@/features/gui/components/GuiAppIcon";
-
-const dockAppIds = [
-    "about",
-    "projects",
-    "resume",
-    "terminal",
-    "contact",
-    "settings",
-] as const satisfies readonly GuiAppId[];
 
 export function GuiDock() {
     const language = useGuiStore((state) => state.language);
@@ -48,7 +40,7 @@ export function GuiDock() {
             data-auto-hide={dockAutoHide}
         >
             {dockAppIds.map((appId) => {
-                const app = appCatalog[appId];
+                const app = appMetadata[appId];
                 const isOpen = windows.some((w) => w.appId === appId);
                 const isActive = activeWindowId === appId;
 

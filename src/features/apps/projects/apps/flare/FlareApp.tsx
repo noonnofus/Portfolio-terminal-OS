@@ -27,7 +27,7 @@ interface AppProjectFlareProps {
 export default function AppProjectFlare({}: AppProjectFlareProps) {
     const { t } = useTranslation(['Flare', 'common']);
     return (
-        <div className="w-full h-full overflow-y-auto bg-white rounded-b-pen-lg text-black">
+        <div className="gui-app-surface w-full h-full overflow-y-auto">
             <div className="my-8 mx-4 md:mx-36">
                 <div className="flex flex-col items-center mt-8 mb-3">
                     <h2 className="text-3xl font-bold text-pen-gray-800 mb-6">
@@ -102,7 +102,7 @@ export default function AppProjectFlare({}: AppProjectFlareProps) {
                                 Tech Stack
                             </h3>
 
-                            <h4 className="mt-6 mb-2 text-lg font-semibold text-black">Frontend</h4>
+                            <h4 className="mt-6 mb-2 text-lg font-semibold text-[var(--gui-app-surface-text)]">Frontend</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon label="Next.js" icon={Triangle} color="black" />
                                 <StackIcon label="React" icon={Orbit} color="#61DAFB" />
@@ -110,13 +110,13 @@ export default function AppProjectFlare({}: AppProjectFlareProps) {
                                 <StackIcon label="Tailwind CSS" icon={Palette} color="#38B2AC" />
                             </div>
 
-                            <h4 className="mt-6 mb-2 text-lg font-semibold text-black">{t('backendDatabase')}</h4>
+                            <h4 className="mt-6 mb-2 text-lg font-semibold text-[var(--gui-app-surface-text)]">{t('backendDatabase')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon label="PostgreSQL" icon={Database} color="#336791" />
                                 <StackIcon label="Drizzle ORM" icon={DatabaseZap} color="#C5F74F" />
                             </div>
 
-                            <h4 className="mt-6 mb-2 text-lg font-semibold text-black">{t('cloudAPIs')}</h4>
+                            <h4 className="mt-6 mb-2 text-lg font-semibold text-[var(--gui-app-surface-text)]">{t('cloudAPIs')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon label="AWS S3" icon={Cloud} color="#FF9900" />
                                 <StackIcon label="OpenAI API" icon={Brain} color="#7fdbff" />
@@ -124,7 +124,7 @@ export default function AppProjectFlare({}: AppProjectFlareProps) {
                                 <StackIcon label="Firebase" icon={Cloud} color="#FFCA28" />
                             </div>
 
-                            <h4 className="mt-6 mb-2 text-lg font-semibold text-black">{t('pwaRealtime')}</h4>
+                            <h4 className="mt-6 mb-2 text-lg font-semibold text-[var(--gui-app-surface-text)]">{t('pwaRealtime')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon label="Next.js PWA" icon={Triangle} color="black" />
                                 <StackIcon label="Push Notifications" icon={Bell} color="#f59e0b" />

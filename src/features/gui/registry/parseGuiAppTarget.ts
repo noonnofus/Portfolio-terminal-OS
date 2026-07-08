@@ -1,4 +1,4 @@
-import { appCatalog } from "@/features/gui/registry/appCatalog";
+import { appMetadata } from "@/features/gui/registry/appMetadata";
 import {
     isProjectSlug,
     type GuiAppId,
@@ -32,6 +32,8 @@ export function parseGuiUrl(searchParams: URLSearchParams): GuiUrlState {
             return { app: "terminal", lang };
         case "contact":
             return { app: "contact", lang };
+        case "notes":
+            return { app: "notes", lang };
         case "settings":
             return { app: "settings", lang };
         case "project": {
@@ -71,7 +73,7 @@ export function getGuiUrlStateForApp(
     appId: GuiAppId,
     language: Language,
 ): GuiUrlState {
-    const target = appCatalog[appId].url;
+    const target = appMetadata[appId].url;
 
     if (target.app === "project") {
         return { app: "project", slug: target.slug, lang: language };

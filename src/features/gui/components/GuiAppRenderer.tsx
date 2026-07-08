@@ -49,6 +49,10 @@ export function GuiAppRenderer({
             const App = appLoaderRegistry.contact;
             return <App language={language} />;
         }
+        case "notes": {
+            const App = appLoaderRegistry.notes;
+            return <App language={language} />;
+        }
         case "settings": {
             const App = appLoaderRegistry.settings;
             return <App language={language} />;

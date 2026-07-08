@@ -1,10 +1,7 @@
 import { useCallback, useRef } from "react";
 import type { Terminal } from "@xterm/xterm";
 import chooseASCII from "../lib/ascii";
-import {
-  TERMINAL_BOOT_TIMING,
-  TERMINAL_PROMPT,
-} from "../lib/bootSequence";
+import { TERMINAL_BOOT_TIMING } from "../lib/bootSequence";
 import type { Language } from "@/shared/lib/i18n/useLanguageStore";
 import {
   getTerminalContent,
@@ -20,12 +17,14 @@ import type {
 interface UseTerminalBootSequenceOptions {
   isTouchDevice: boolean;
   language: Language;
+  prompt: string;
   sequence: TerminalSequenceController;
 }
 
 export function useTerminalBootSequence({
   isTouchDevice,
   language,
+  prompt,
   sequence,
 }: UseTerminalBootSequenceOptions) {
   const isAnimatingRef = useRef(false);
@@ -57,10 +56,10 @@ export function useTerminalBootSequence({
         });
         terminal.write("\r\n");
       });
-      terminal.write(TERMINAL_PROMPT);
+      terminal.write(prompt);
       isAnimatingRef.current = false;
     },
-    [isTouchDevice, language, sequence],
+    [isTouchDevice, language, prompt, sequence],
   );
 
   const start = useCallback(
@@ -111,11 +110,11 @@ export function useTerminalBootSequence({
         if (animationGenerationRef.current !== runGeneration) return;
         if (!completed) return;
 
-        terminal.write(TERMINAL_PROMPT);
+        terminal.write(prompt);
         isAnimatingRef.current = false;
       });
     },
-    [isTouchDevice, language, sequence],
+    [isTouchDevice, language, prompt, sequence],
   );
 
   const consumeInput = useCallback(

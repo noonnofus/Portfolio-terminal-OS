@@ -754,7 +754,7 @@ test.describe("GUI shell", () => {
         );
         await expect(contactSurface).toHaveCSS(
             "background-color",
-            "rgb(247, 249, 252)",
+            "rgb(30, 30, 30)",
         );
 
         await page
@@ -772,11 +772,11 @@ test.describe("GUI shell", () => {
 
         await expect(contactSurface).toHaveCSS(
             "background-color",
-            "rgb(25, 29, 38)",
+            "rgb(30, 30, 30)",
         );
         await expect(contactSurface).toHaveCSS(
             "color",
-            "rgb(244, 247, 251)",
+            "rgb(245, 245, 247)",
         );
     });
 

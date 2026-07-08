@@ -2,6 +2,7 @@
 
 import { aboutAppLoader } from "@/features/apps/about/app.loader";
 import { contactAppLoader } from "@/features/apps/contact/app.loader";
+import { notesAppLoader } from "@/features/apps/notes/app.loader";
 import { diceRollerAppLoader } from "@/features/apps/projects/apps/diceroller/app.loader";
 import { flareAppLoader } from "@/features/apps/projects/apps/flare/app.loader";
 import { mejuBotAppLoader } from "@/features/apps/projects/apps/mejubot/app.loader";
@@ -19,6 +20,7 @@ export const appLoaderRegistry = {
   resume: resumeAppLoader,
   terminal: terminalAppLoader,
   contact: contactAppLoader,
+  notes: notesAppLoader,
   settings: settingsAppLoader,
   "project:wchms": wchmsAppLoader,
   "project:flare": flareAppLoader,

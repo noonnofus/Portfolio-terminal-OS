@@ -1,4 +1,4 @@
-export const TERMINAL_PROMPT = "guest@noonnofus.com ~ % ";
+export const TERMINAL_PROMPT_SUFFIX = "@noonnofus.com ~ % ";
 
 export const TERMINAL_BOOT_TIMING = {
   asciiLine: 200,

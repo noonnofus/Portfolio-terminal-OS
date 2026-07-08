@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { DesktopNode } from "@/features/gui/directory/directoryTypes";
-import { appCatalog } from "@/features/gui/registry/appCatalog";
+import { appMetadata } from "@/features/gui/registry/appMetadata";
 import { publicAssetPath } from "@/features/gui/registry/appTypes";
 
 const documentIcon = publicAssetPath("/icons/document.png");
@@ -9,7 +9,7 @@ export function DirectoryItemIcon({ node }: { node: DesktopNode }) {
   const source =
     node.appearance === "document" && node.appId.startsWith("project:")
       ? documentIcon
-      : appCatalog[node.appId].icon;
+      : appMetadata[node.appId].icon;
 
   return (
     <span className="directory-item-icon" aria-hidden="true">

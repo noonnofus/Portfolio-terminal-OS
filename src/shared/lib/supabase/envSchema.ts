@@ -54,12 +54,21 @@ export function parseApplicationOrigin(source: EnvironmentSource): string {
 export function parseSupabasePublicEnv(
   source: EnvironmentSource,
 ): SupabasePublicEnv {
+  const url =
+    source.NEXT_PUBLIC_SUPABASE_URL?.trim() ||
+    source.SUPABASE_URL?.trim();
+  const publishableKey =
+    source.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim() ||
+    source.SUPABASE_PUBLISHABLE_KEY?.trim();
+
   return {
     url: validateSecureOrigin(
-      readRequired(source, "SUPABASE_URL"),
-      "SUPABASE_URL",
+      url ?? readRequired(source, "NEXT_PUBLIC_SUPABASE_URL"),
+      "NEXT_PUBLIC_SUPABASE_URL",
     ),
-    publishableKey: readRequired(source, "SUPABASE_PUBLISHABLE_KEY"),
+    publishableKey:
+      publishableKey ??
+      readRequired(source, "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"),
   };
 }
 

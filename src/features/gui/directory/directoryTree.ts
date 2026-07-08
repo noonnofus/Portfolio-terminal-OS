@@ -1,4 +1,5 @@
 import { projectsNode } from "@/features/apps/projects/app.config";
+import { notesNode } from "@/features/apps/notes/app.config";
 import { defineFileNode } from "@/features/gui/directory/directoryTypes";
 import type {
   DesktopFolderNode,
@@ -21,6 +22,7 @@ export const desktopDirectory: DesktopFolderNode = {
       appId: "resume",
       appearance: "document",
     }),
+    notesNode,
   ],
 };
 

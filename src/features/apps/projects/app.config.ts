@@ -15,6 +15,7 @@ export const projectsAppConfig = defineAppConfig({
   titles: { ko: "프로젝트", en: "Projects" },
   icon: publicAssetPath("/icons/folder.png"),
   order: 20,
+  dock: { visible: true, order: 20 },
   window: { width: 700, height: 450 },
 });
 
