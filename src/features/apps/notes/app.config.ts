@@ -6,7 +6,7 @@ export const notesAppConfig = defineAppConfig({
   appId: "notes",
   url: { app: "notes" },
   titles: { ko: "방명록", en: "Guestbook" },
-  icon: publicAssetPath("/icons/note.png"),
+  icon: publicAssetPath("/icons/optimized/note.png"),
   order: 55,
   dock: { visible: true, order: 55 },
   window: { width: 640, height: 560 },

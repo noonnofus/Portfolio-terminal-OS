@@ -1,6 +1,5 @@
 import "server-only";
 
-import { isEnabledWallpaper } from "@/features/wallpapers/server/wallpaperRepository";
 import { createSupabaseAdminClient } from "@/shared/lib/supabase/admin";
 import type {
   UserPreferencesInput,
@@ -32,6 +31,18 @@ function toPreferences(row: UserPreferencesRow): UserPreferences {
   };
 }
 
+function isWallpaperForeignKeyError(error: {
+  code?: string;
+  message?: string;
+  details?: string;
+}): boolean {
+  const text = `${error.message ?? ""} ${error.details ?? ""}`;
+  return (
+    error.code === "23503" &&
+    text.includes("user_preferences_wallpaper_id_fkey")
+  );
+}
+
 export async function getUserPreferences(
   accountId: string,
 ): Promise<UserPreferences> {
@@ -52,10 +63,6 @@ export async function saveUserPreferences(
   accountId: string,
   preferences: UserPreferencesInput,
 ): Promise<UserPreferences | null> {
-  if (!(await isEnabledWallpaper(preferences.wallpaperId))) {
-    return null;
-  }
-
   const supabase = createSupabaseAdminClient();
   const { data, error } = await supabase
     .from("user_preferences")
@@ -73,7 +80,12 @@ export async function saveUserPreferences(
     .select("language, theme, dock_auto_hide, wallpaper_id")
     .single();
 
-  if (error || data === null) {
+  if (error) {
+    if (isWallpaperForeignKeyError(error)) return null;
+    throw new Error("Failed to save user preferences");
+  }
+
+  if (data === null) {
     throw new Error("Failed to save user preferences");
   }
 

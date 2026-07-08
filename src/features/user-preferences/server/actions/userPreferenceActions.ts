@@ -1,6 +1,6 @@
 "use server";
 
-import { requireCurrentViewer } from "@/features/auth/server/requireCurrentViewer";
+import { requireCurrentUserId } from "@/features/auth/server/requireCurrentViewer";
 import type { ActionResult } from "@/features/user-preferences/model/actionResult";
 import {
   parseUserPreferencesInput,
@@ -16,13 +16,13 @@ export async function saveUserPreferencesAction(
     return { ok: false, status: 400, error: "invalid_input" };
   }
 
-  const viewer = await requireCurrentViewer();
-  if (viewer === null) {
+  const accountId = await requireCurrentUserId();
+  if (accountId === null) {
     return { ok: false, status: 401, error: "unauthorized" };
   }
 
   const preferences = await saveUserPreferences(
-    viewer.accountId,
+    accountId,
     parsedInput,
   );
   if (preferences === null) {

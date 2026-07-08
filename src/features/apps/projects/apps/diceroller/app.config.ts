@@ -6,7 +6,7 @@ export const diceRollerAppConfig = defineAppConfig({
   appId: "project:diceroller",
   url: { app: "project", slug: "diceroller" },
   titles: { ko: "다이스롤러", en: "DiceRoller" },
-  icon: publicAssetPath("/icons/diceroller.png"),
+  icon: publicAssetPath("/icons/optimized/diceroller.png"),
   order: 150,
   window: { width: 840, height: 640 },
 });

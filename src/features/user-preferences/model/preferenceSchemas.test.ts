@@ -19,6 +19,22 @@ describe("parseUserPreferencesInput", () => {
     });
   });
 
+  it("accepts wallpaper ids by shape and leaves existence checks to the DB FK", () => {
+    expect(
+      parseUserPreferencesInput({
+        language: "ko",
+        theme: "system",
+        dockAutoHide: false,
+        wallpaperId: "not_in_frontend_catalog",
+      }),
+    ).toEqual({
+      language: "ko",
+      theme: "system",
+      dockAutoHide: false,
+      wallpaperId: "not_in_frontend_catalog",
+    });
+  });
+
   it("rejects unknown fields and invalid values", () => {
     expect(
       parseUserPreferencesInput({

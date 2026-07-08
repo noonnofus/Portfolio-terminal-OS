@@ -12,66 +12,73 @@ type CoreAppId = Exclude<GuiAppId, `project:${string}`>;
 const coreIcons: Record<CoreAppId, (size: number) => React.ReactNode> = {
   about: (s) => (
     <Image
-      src="/icons/about.png"
+      src="/icons/optimized/about.png"
       alt="나에 대해서"
       width={s}
       height={s}
       className="w-full h-full object-contain"
+      unoptimized
     />
   ),
   projects: (s) => (
     <Image
-      src="/icons/folder.png"
+      src="/icons/optimized/folder.png"
       alt="프로젝트_폴더"
       width={s}
       height={s}
       className="w-full h-full object-contain"
       loading="eager"
+      unoptimized
     />
   ),
   resume: (s) => (
     <Image
-      src="/icons/pdf_file.png"
+      src="/icons/optimized/pdf_file.png"
       alt="이력서"
       width={s}
       height={s}
       className="w-full h-full object-contain"
+      unoptimized
     />
   ),
   terminal: (s) => (
     <Image
-      src="/icons/iterm2.png"
+      src="/icons/optimized/iterm2.png"
       alt="터미널"
       width={s}
       height={s}
       className="w-full h-full object-contain"
+      unoptimized
     />
   ),
   contact: (s) => (
     <Image
-      src="/icons/contact.png"
+      src="/icons/optimized/contact.png"
       alt="연락처"
       width={s}
       height={s}
       className="w-full h-full object-contain"
+      unoptimized
     />
   ),
   notes: (s) => (
     <Image
-      src="/icons/note.png"
+      src="/icons/optimized/note.png"
       alt="노트"
       width={s}
       height={s}
       className="w-full h-full object-contain"
+      unoptimized
     />
   ),
   settings: (s) => (
     <Image
-      src="/icons/settings.png"
+      src="/icons/optimized/settings.png"
       alt="세팅"
       width={s}
       height={s}
       className="w-full h-full object-contain"
+      unoptimized
     />
   ),
 };
@@ -99,6 +106,7 @@ export function GuiAppIcon({
           width={iconSize}
           height={iconSize}
           className="gui-app-icon-image"
+          unoptimized
         />
       </span>
     );

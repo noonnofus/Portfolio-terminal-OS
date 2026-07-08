@@ -5,7 +5,7 @@ export const settingsAppConfig = defineAppConfig({
   appId: "settings",
   url: { app: "settings" },
   titles: { ko: "설정", en: "Settings" },
-  icon: publicAssetPath("/icons/settings.png"),
+  icon: publicAssetPath("/icons/optimized/settings.png"),
   order: 60,
   dock: { visible: true, order: 60 },
   window: { width: 740, height: 610 },

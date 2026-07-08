@@ -59,7 +59,7 @@ export function GuiDock() {
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: 8, scale: 0.9 }}
                                     transition={{ duration: 0.15, ease: "easeOut" }}
-                                    className="absolute -top-12 px-3 py-1 bg-slate-900/90 dark:bg-slate-800/90 text-white text-[11px] font-semibold rounded-lg shadow-md border border-slate-700/30 whitespace-nowrap backdrop-blur-md z-[110]"
+                                    className="gui-dock-tooltip absolute -top-12 z-[110] whitespace-nowrap rounded-lg border px-3 py-1 text-[11px] font-semibold shadow-md backdrop-blur-md"
                                 >
                                     {app.titles[language]}
                                 </motion.div>

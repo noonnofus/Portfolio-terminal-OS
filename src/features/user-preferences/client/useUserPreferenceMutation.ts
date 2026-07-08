@@ -15,7 +15,7 @@ function unwrapActionResult<T>(result: ActionResult<T>, prefix: string): T {
   return result.data;
 }
 
-export function useSaveUserPreferencesMutation() {
+export function useSaveUserPreferencesMutation(viewerKey: string | null) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -26,9 +26,12 @@ export function useSaveUserPreferencesMutation() {
         "user_preferences_save_failed",
       );
     },
-    onSuccess: () =>
-      queryClient.invalidateQueries({
-        queryKey: userPreferenceQueryKeys.all,
-      }),
+    onSuccess: (preferences) => {
+      if (viewerKey === null) return;
+      queryClient.setQueryData(
+        userPreferenceQueryKeys.detail(viewerKey),
+        preferences,
+      );
+    },
   });
 }

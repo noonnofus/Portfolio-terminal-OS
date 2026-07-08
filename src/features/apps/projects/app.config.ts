@@ -13,7 +13,7 @@ export const projectsAppConfig = defineAppConfig({
   appId: "projects",
   url: { app: "projects" },
   titles: { ko: "프로젝트", en: "Projects" },
-  icon: publicAssetPath("/icons/folder.png"),
+  icon: publicAssetPath("/icons/optimized/folder.png"),
   order: 20,
   dock: { visible: true, order: 20 },
   window: { width: 700, height: 450 },

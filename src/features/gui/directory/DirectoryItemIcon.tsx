@@ -3,7 +3,7 @@ import type { DesktopNode } from "@/features/gui/directory/directoryTypes";
 import { appMetadata } from "@/features/gui/registry/appMetadata";
 import { publicAssetPath } from "@/features/gui/registry/appTypes";
 
-const documentIcon = publicAssetPath("/icons/document.png");
+const documentIcon = publicAssetPath("/icons/optimized/document.png");
 
 export function DirectoryItemIcon({ node }: { node: DesktopNode }) {
   const source =
@@ -20,6 +20,7 @@ export function DirectoryItemIcon({ node }: { node: DesktopNode }) {
         height={54}
         className="directory-item-icon-image"
         loading={node.appId === "projects" ? "eager" : "lazy"}
+        unoptimized
       />
     </span>
   );

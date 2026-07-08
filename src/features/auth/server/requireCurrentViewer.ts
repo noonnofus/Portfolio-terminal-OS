@@ -35,3 +35,23 @@ export async function requireCurrentViewer(): Promise<
     role: account.role,
   };
 }
+
+export async function requireCurrentUserId(): Promise<string | null> {
+  const cookieStore = await cookies();
+  const supabase = createSupabaseServerClient({
+    getAll: () => cookieStore.getAll(),
+    setAll: () => {
+      // proxy.ts owns Supabase auth cookie refresh for /gui and actions.
+    },
+  });
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error || user === null || user.is_anonymous) {
+    return null;
+  }
+
+  return user.id;
+}

@@ -32,7 +32,7 @@ export default function SettingsApp({
         viewer.status === "authenticated" ? viewer.accountId : null;
     const wallpapersQuery = useWallpapersQuery();
     const preferencesQuery = useUserPreferencesQuery(viewerKey);
-    const savePreferencesMutation = useSaveUserPreferencesMutation();
+    const savePreferencesMutation = useSaveUserPreferencesMutation(viewerKey);
     const { colorMode, setColorMode } = useColorMode();
     const [settingsView, setSettingsView] = useState<"main" | "account">(
         "main",
