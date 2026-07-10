@@ -1,17 +1,9 @@
 "use client";
 
-import {
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
-import {
-    motion,
-    AnimatePresence,
-    useReducedMotion,
-} from "framer-motion";
-import { appCatalog } from "@/features/gui/registry/appCatalog";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { appMetadata } from "@/features/gui/registry/appMetadata";
+import { dockAppIds } from "@/features/gui/registry/dockApps";
 import {
     createOpenAppCommand,
     type GuiAppId,
@@ -109,7 +101,9 @@ function MacRestoreIcon({ className }: { className?: string }) {
  * Windows may slide behind the floating Dock (z-index 100),
  * matching macOS behaviour.
  */
-const WINDOW_CHROME_RESERVE_PX = 44; // 36 (system bar) + 8 (bottom padding)
+const GUI_SYSTEM_BAR_HEIGHT_PX = 36;
+const GUI_WINDOW_MAX_WIDTH_OFFSET_PX = 48;
+const GUI_WINDOW_CHROME_RESERVE_PX = 44; // 36 (system bar) + 8 (bottom padding)
 
 /* ── Window frame component ─────────────────────────────── */
 
@@ -130,7 +124,7 @@ export function GuiWindowFrame({
     const { navigate, navigationBusy } = useGuiNavigation();
     const shouldReduceMotion = useReducedMotion();
     const appId: GuiAppId = win.appId;
-    const app = appCatalog[appId];
+    const app = appMetadata[appId];
     const title = app.titles[language];
     const headingId = `gui-window-${appId.replace(":", "-")}`;
     const windowVisibility = win.minimized
@@ -142,12 +136,12 @@ export function GuiWindowFrame({
     /* ── Maximize state ─────────────────────────────────── */
     const [maximized, setMaximized] = useState(false);
 
-    const handleMinimize = useCallback(() => {
+    const handleMinimize = () => {
         navigate({
             type: "minimize-window",
             windowId: appId,
         });
-    }, [appId, navigate]);
+    };
 
     /* ── Drag state (desktop ≥1024px only) ──────────────── */
     const sectionRef = useRef<HTMLElement>(null);
@@ -166,71 +160,62 @@ export function GuiWindowFrame({
     const currentLeft = pos?.left ?? defaultLeft;
     const currentTop = pos?.top ?? defaultTop;
 
-    const handlePointerDown = useCallback(
-        (e: React.PointerEvent<HTMLDivElement>) => {
-            // Only primary button, desktop viewport, not maximized
-            const usesTouchWindowLayout = globalThis.matchMedia(
-                "(pointer: coarse)",
-            ).matches;
-            if (e.button !== 0 || usesTouchWindowLayout || maximized) return;
-            // Don't drag if clicking on a button
-            if ((e.target as HTMLElement).closest("button")) return;
+    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+        // Only primary button, desktop viewport, not maximized
+        const usesTouchWindowLayout =
+            globalThis.matchMedia("(pointer: coarse)").matches;
+        if (e.button !== 0 || usesTouchWindowLayout || maximized) return;
+        // Don't drag if clicking on a button
+        if ((e.target as HTMLElement).closest("button")) return;
 
-            if (!active) {
-                navigate(createOpenAppCommand(appId));
-            }
+        if (!active) {
+            navigate(createOpenAppCommand(appId));
+        }
 
-            const el = sectionRef.current;
-            if (!el) return;
+        const el = sectionRef.current;
+        if (!el) return;
 
-            dragState.current = {
-                startX: e.clientX,
-                startY: e.clientY,
-                origLeft: currentLeft,
-                origTop: currentTop,
-            };
+        dragState.current = {
+            startX: e.clientX,
+            startY: e.clientY,
+            origLeft: currentLeft,
+            origTop: currentTop,
+        };
 
-            el.setPointerCapture(e.pointerId);
-        },
-        [active, appId, currentLeft, currentTop, maximized, navigate],
-    );
+        el.setPointerCapture(e.pointerId);
+    };
 
-    const handlePointerMove = useCallback(
-        (e: React.PointerEvent<HTMLElement>) => {
-            if (!dragState.current) return;
-            const dx = e.clientX - dragState.current.startX;
-            const dy = e.clientY - dragState.current.startY;
+    const handlePointerMove = (e: React.PointerEvent<HTMLElement>) => {
+        if (!dragState.current) return;
+        const dx = e.clientX - dragState.current.startX;
+        const dy = e.clientY - dragState.current.startY;
 
-            const element = sectionRef.current;
-            if (element === null) return;
+        const element = sectionRef.current;
+        if (element === null) return;
 
-            const rect = element.getBoundingClientRect();
-            const maxLeft = Math.max(
+        const rect = element.getBoundingClientRect();
+        const maxLeft = Math.max(0, globalThis.innerWidth - rect.width);
+        const maxTop = Math.max(
+            0,
+            globalThis.innerHeight -
+                GUI_WINDOW_CHROME_RESERVE_PX -
+                rect.height,
+        );
+        setPos({
+            left: Math.max(
                 0,
-                globalThis.innerWidth - rect.width,
-            );
-            const maxTop = Math.max(
+                Math.min(maxLeft, dragState.current.origLeft + dx),
+            ),
+            top: Math.max(
                 0,
-                globalThis.innerHeight - WINDOW_CHROME_RESERVE_PX - rect.height,
-            );
-            setPos({
-                left: Math.max(
-                    0,
-                    Math.min(maxLeft, dragState.current.origLeft + dx),
-                ),
-                top: Math.max(
-                    0,
-                    Math.min(maxTop, dragState.current.origTop + dy),
-                ),
-            });
-        },
-        [],
-    );
+                Math.min(maxTop, dragState.current.origTop + dy),
+            ),
+        });
+    };
 
-    const handlePointerUp = useCallback(() => {
+    const handlePointerUp = () => {
         dragState.current = null;
-    }, []);
-
+    };
 
     useEffect(() => {
         if (active && !wasActiveRef.current) {
@@ -240,9 +225,8 @@ export function GuiWindowFrame({
     }, [active]);
 
     useEffect(() => {
-        const usesTouchWindowLayout = globalThis.matchMedia(
-            "(pointer: coarse)",
-        ).matches;
+        const usesTouchWindowLayout =
+            globalThis.matchMedia("(pointer: coarse)").matches;
         if (usesTouchWindowLayout || maximized) {
             return;
         }
@@ -256,7 +240,7 @@ export function GuiWindowFrame({
         const maxLeft = Math.max(0, globalThis.innerWidth - rect.width);
         const maxTop = Math.max(
             0,
-            globalThis.innerHeight - WINDOW_CHROME_RESERVE_PX - rect.height,
+            globalThis.innerHeight - GUI_WINDOW_CHROME_RESERVE_PX - rect.height,
         );
 
         setPos((current) => {
@@ -269,22 +253,13 @@ export function GuiWindowFrame({
                 Math.max(0, current?.top ?? defaultTop),
             );
 
-            if (
-                current?.left === nextLeft &&
-                current.top === nextTop
-            ) {
+            if (current?.left === nextLeft && current.top === nextTop) {
                 return current;
             }
 
             return { left: nextLeft, top: nextTop };
         });
-    }, [
-        active,
-        clampEpoch,
-        defaultLeft,
-        defaultTop,
-        maximized,
-    ]);
+    }, [active, clampEpoch, defaultLeft, defaultTop, maximized]);
 
     const isHidden = win.minimized || workspaceDesktop;
 
@@ -292,9 +267,9 @@ export function GuiWindowFrame({
     const windowStyle = maximized
         ? {
               left: "0px",
-              top: "36px",
+              top: `${GUI_SYSTEM_BAR_HEIGHT_PX}px`,
               width: "100vw",
-              height: "calc(100dvh - 36px)",
+              height: `calc(100dvh - ${GUI_SYSTEM_BAR_HEIGHT_PX}px)`,
               zIndex: active ? 80 : 40 + index,
               borderRadius: "0px",
           }
@@ -303,34 +278,32 @@ export function GuiWindowFrame({
               top: `${currentTop}px`,
               width: `${app.window.width}px`,
               height: `${app.window.height}px`,
-              maxWidth: "calc(100vw - 48px)",
-              maxHeight: `calc(100dvh - ${WINDOW_CHROME_RESERVE_PX}px)`,
+              maxWidth: `calc(100vw - ${GUI_WINDOW_MAX_WIDTH_OFFSET_PX}px)`,
+              maxHeight: `calc(100dvh - ${GUI_WINDOW_CHROME_RESERVE_PX}px)`,
               zIndex: active ? 80 : 40 + index,
           };
 
     // Calculate dynamic minimize transition offsets to the specific Dock icon
-    const dockAppIds = [
-        "about",
-        "projects",
-        "resume",
-        "terminal",
-        "contact",
-        "settings",
-    ];
-    const dockIndex = dockAppIds.indexOf(appId);
+    const dockIndex = dockAppIds.findIndex((dockAppId) => dockAppId === appId);
     const screenWidth =
         typeof window !== "undefined" ? window.innerWidth : 1024;
     const screenHeight =
         typeof window !== "undefined" ? window.innerHeight : 768;
     const targetX =
         screenWidth / 2 +
-        (dockIndex !== -1 ? dockIndex - 2.5 : 0) * 54;
+        (dockIndex !== -1 ? dockIndex - (dockAppIds.length - 1) / 2 : 0) * 54;
     const windowWidth = maximized
         ? screenWidth
-        : Math.min(app.window.width, screenWidth - 48);
+        : Math.min(
+              app.window.width,
+              screenWidth - GUI_WINDOW_MAX_WIDTH_OFFSET_PX,
+          );
     const windowHeight = maximized
-        ? screenHeight - 36
-        : Math.min(app.window.height, screenHeight - WINDOW_CHROME_RESERVE_PX);
+        ? screenHeight - GUI_SYSTEM_BAR_HEIGHT_PX
+        : Math.min(
+              app.window.height,
+              screenHeight - GUI_WINDOW_CHROME_RESERVE_PX,
+          );
     const minimizeX = shouldReduceMotion
         ? 0
         : targetX - (currentLeft + windowWidth / 2);
@@ -348,7 +321,9 @@ export function GuiWindowFrame({
                     className={`gui-window${maximized ? " gui-window-maximized" : ""}`}
                     data-active={active}
                     data-window-id={appId}
-                    data-app-type={appId.startsWith("project:") ? "project" : appId}
+                    data-app-type={
+                        appId.startsWith("project:") ? "project" : appId
+                    }
                     data-window-visibility={windowVisibility}
                     onPointerDownCapture={(event) => {
                         if (event.button === 0 && !active && !navigationBusy) {
@@ -443,9 +418,7 @@ export function GuiWindowFrame({
                         className="gui-window-content"
                         inert={!active ? true : undefined}
                     >
-                        <AppRuntimeBoundary
-                            windowVisibility={windowVisibility}
-                        >
+                        <AppRuntimeBoundary windowVisibility={windowVisibility}>
                             <WindowErrorBoundary appId={appId}>
                                 <GuiAppRenderer
                                     windowId={win.windowId}

@@ -6,7 +6,7 @@ export const webPianoAppConfig = defineAppConfig({
   appId: "project:webpiano",
   url: { app: "project", slug: "webpiano" },
   titles: { ko: "웹 피아노", en: "WebPiano" },
-  icon: publicAssetPath("/icons/webpiano.png"),
+  icon: publicAssetPath("/icons/optimized/webpiano.png"),
   order: 170,
   window: { width: 840, height: 640 },
 });

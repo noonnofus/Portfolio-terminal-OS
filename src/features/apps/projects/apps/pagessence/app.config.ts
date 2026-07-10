@@ -6,7 +6,7 @@ export const pageSsenceAppConfig = defineAppConfig({
   appId: "project:pagessence",
   url: { app: "project", slug: "pagessence" },
   titles: { ko: "pageSsence", en: "PageSsence" },
-  icon: publicAssetPath("/icons/pagessence.png"),
+  icon: publicAssetPath("/icons/optimized/pagessence.png"),
   order: 140,
   window: { width: 840, height: 640 },
 });

@@ -12,7 +12,7 @@ export default function AppProjcetWebPiano({}: AppProjectWebPianoProps) {
     const { t } = useTranslation(['WebPiano', 'common']);
     return (
         <div
-            className="overflow-scroll bg-white rounded-b-pen-lg text-black"
+            className="gui-app-surface h-full overflow-y-auto"
         >
             <div className="my-8 mx-4 md:mx-36">
                 <div

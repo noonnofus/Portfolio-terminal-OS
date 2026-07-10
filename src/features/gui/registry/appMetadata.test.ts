@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
-    appCatalog,
-    appCatalogKeys,
-} from "@/features/gui/registry/appCatalog";
+    appMetadata,
+    appMetadataKeys,
+} from "@/features/gui/registry/appMetadata";
 import { appLoaderRegistryKeys } from "@/features/gui/registry/appLoaderRegistry";
+import { dockAppIds } from "@/features/gui/registry/dockApps";
 import {
     externalUrl,
     folderAppIds,
@@ -19,16 +20,32 @@ import {
 describe("GUI app boundaries", () => {
     it("keeps leaf loaders and folder IDs aligned", () => {
         expect(appLoaderRegistryKeys).toEqual(
-            appCatalogKeys.filter((key) => key !== "projects"),
+            appMetadataKeys.filter((key) => key !== "projects"),
         );
         expect(collectFolderAppIds().toSorted()).toEqual(
             [...folderAppIds].toSorted(),
         );
-        expect(Object.keys(appCatalog)).toHaveLength(13);
-        expect(appCatalog.contact.window).toEqual({
+        expect(Object.keys(appMetadata)).toHaveLength(14);
+        expect(appMetadata.contact.window).toEqual({
             width: 600,
             height: 370,
         });
+    });
+
+    it("derives Dock apps from app metadata", () => {
+        expect(dockAppIds).toEqual([
+            "about",
+            "projects",
+            "resume",
+            "terminal",
+            "contact",
+            "notes",
+            "settings",
+        ]);
+
+        for (const appId of dockAppIds) {
+            expect(appMetadata[appId].dock?.visible).toBe(true);
+        }
     });
 
     it("keeps wallpaper IDs catalog-driven", () => {
@@ -58,6 +75,10 @@ describe("GUI app boundaries", () => {
             }),
         ).toBe("/gui?app=project&slug=wchms&lang=en");
         expect(serializeGuiUrl({ app: "about", lang: "ko" })).toBe("/gui");
+        expect(parseGuiUrl(new URLSearchParams("app=notes"))).toEqual({
+            app: "notes",
+            lang: "ko",
+        });
     });
 
     it("falls back through the allowlist for invalid values", () => {

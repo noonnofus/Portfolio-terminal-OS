@@ -4,7 +4,6 @@ import {
     createContext,
     useContext,
     useEffect,
-    useMemo,
     useRef,
     type ReactNode,
 } from "react";
@@ -41,20 +40,12 @@ export function AppRuntimeBoundary({
         windowVisibility,
         pageVisibility,
     );
-    const value = useMemo(
-        () => ({
-            windowVisibility,
-            pageVisibility,
-            effectiveVisibility,
-            resumeEpoch,
-        }),
-        [
-            effectiveVisibility,
-            pageVisibility,
-            resumeEpoch,
-            windowVisibility,
-        ],
-    );
+    const value = {
+        windowVisibility,
+        pageVisibility,
+        effectiveVisibility,
+        resumeEpoch,
+    };
 
     useEffect(() => {
         if (effectiveVisibility === "active") {

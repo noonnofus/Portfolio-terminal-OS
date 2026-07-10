@@ -49,6 +49,7 @@ export type GuiAppId =
     | "resume"
     | "terminal"
     | "contact"
+    | "notes"
     | "settings"
     | ProjectAppId;
 
@@ -65,6 +66,7 @@ export type GuiAppParamsMap = {
     resume: EmptyParams;
     terminal: EmptyParams;
     contact: EmptyParams;
+    notes: EmptyParams;
     settings: EmptyParams;
 } & {
     [K in ProjectAppId]: {
@@ -86,6 +88,7 @@ export type GuiAppUrlTargetMap = {
     resume: { app: "resume" };
     terminal: { app: "terminal" };
     contact: { app: "contact" };
+    notes: { app: "notes" };
     settings: { app: "settings" };
 } & {
     [K in ProjectAppId]: {
@@ -100,6 +103,10 @@ export type GuiAppCatalogEntry<K extends GuiAppId> = {
     titles: Record<Language, string>;
     icon: PublicAssetPath;
     order: number;
+    dock?: {
+        visible: true;
+        order: number;
+    };
     window: {
         width: number;
         height: number;
@@ -143,6 +150,7 @@ export type GuiUrlState =
     | { app: "resume"; lang: Language }
     | { app: "terminal"; lang: Language }
     | { app: "contact"; lang: Language }
+    | { app: "notes"; lang: Language }
     | { app: "settings"; lang: Language }
     | { app: "desktop"; lang: Language }
     | { app: "project"; slug: ProjectSlug; lang: Language };
@@ -162,6 +170,7 @@ export function createOpenAppCommand(appId: GuiAppId): OpenAppCommand {
         case "resume":
         case "terminal":
         case "contact":
+        case "notes":
         case "settings":
             return { type: "open-app", appId, params: {} };
         case "project:wchms":

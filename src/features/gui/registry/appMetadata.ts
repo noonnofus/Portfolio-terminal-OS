@@ -1,5 +1,6 @@
 import { aboutAppConfig } from "@/features/apps/about/app.config";
 import { contactAppConfig } from "@/features/apps/contact/app.config";
+import { notesAppConfig } from "@/features/apps/notes/app.config";
 import { diceRollerAppConfig } from "@/features/apps/projects/apps/diceroller/app.config";
 import { flareAppConfig } from "@/features/apps/projects/apps/flare/app.config";
 import { mejuBotAppConfig } from "@/features/apps/projects/apps/mejubot/app.config";
@@ -13,12 +14,13 @@ import { settingsAppConfig } from "@/features/apps/settings/app.config";
 import { terminalAppConfig } from "@/features/apps/terminal/app.config";
 import type { AppConfigMap } from "@/features/gui/registry/appTypes";
 
-export const appCatalog = {
+export const appMetadata = {
   about: aboutAppConfig,
   projects: projectsAppConfig,
   resume: resumeAppConfig,
   terminal: terminalAppConfig,
   contact: contactAppConfig,
+  notes: notesAppConfig,
   settings: settingsAppConfig,
   "project:wchms": wchmsAppConfig,
   "project:flare": flareAppConfig,
@@ -29,4 +31,4 @@ export const appCatalog = {
   "project:webpiano": webPianoAppConfig,
 } satisfies AppConfigMap;
 
-export const appCatalogKeys = Object.keys(appCatalog).sort();
+export const appMetadataKeys = Object.keys(appMetadata).sort();

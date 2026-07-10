@@ -6,7 +6,7 @@ export const flareAppConfig = defineAppConfig({
   appId: "project:flare",
   url: { app: "project", slug: "flare" },
   titles: { ko: "Flare", en: "Flare" },
-  icon: publicAssetPath("/icons/flare.png"),
+  icon: publicAssetPath("/icons/optimized/flare.png"),
   order: 120,
   window: { width: 840, height: 640 },
 });

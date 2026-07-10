@@ -2,23 +2,15 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { appCatalog } from "@/features/gui/registry/appCatalog";
+import { appMetadata } from "@/features/gui/registry/appMetadata";
 import {
     createOpenAppCommand,
     type GuiAppId,
 } from "@/features/gui/registry/appTypes";
+import { dockAppIds } from "@/features/gui/registry/dockApps";
 import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
 import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 import { GuiAppIcon } from "@/features/gui/components/GuiAppIcon";
-
-const dockAppIds = [
-    "about",
-    "projects",
-    "resume",
-    "terminal",
-    "contact",
-    "settings",
-] as const satisfies readonly GuiAppId[];
 
 export function GuiDock() {
     const language = useGuiStore((state) => state.language);
@@ -48,7 +40,7 @@ export function GuiDock() {
             data-auto-hide={dockAutoHide}
         >
             {dockAppIds.map((appId) => {
-                const app = appCatalog[appId];
+                const app = appMetadata[appId];
                 const isOpen = windows.some((w) => w.appId === appId);
                 const isActive = activeWindowId === appId;
 
@@ -67,7 +59,7 @@ export function GuiDock() {
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: 8, scale: 0.9 }}
                                     transition={{ duration: 0.15, ease: "easeOut" }}
-                                    className="absolute -top-12 px-3 py-1 bg-slate-900/90 dark:bg-slate-800/90 text-white text-[11px] font-semibold rounded-lg shadow-md border border-slate-700/30 whitespace-nowrap backdrop-blur-md z-[110]"
+                                    className="gui-dock-tooltip absolute -top-12 z-[110] whitespace-nowrap rounded-lg border px-3 py-1 text-[11px] font-semibold shadow-md backdrop-blur-md"
                                 >
                                     {app.titles[language]}
                                 </motion.div>

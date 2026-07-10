@@ -1,4 +1,5 @@
 import { createStore } from "zustand/vanilla";
+import type { Viewer } from "@/features/auth/model/viewer";
 import type { GuiAppId, GuiUrlState } from "@/features/gui/registry/appTypes";
 import type {
     GuiWindowSnapshot,
@@ -17,6 +18,7 @@ export type GuiState = GuiWorkspaceState & {
     urlReady: boolean;
     wallpaper: WallpaperId;
     dockAutoHide: boolean;
+    viewer: Viewer;
 };
 
 export type GuiActions = {
@@ -92,6 +94,7 @@ function activateApp(
 
 export function createGuiStore(
     urlBasePath: "/gui" = "/gui",
+    initialViewer: Viewer = { status: "guest" },
 ) {
     return createStore<GuiStore>()((set) => ({
         windows: [],
@@ -105,6 +108,7 @@ export function createGuiStore(
         urlReady: false,
         wallpaper: "golden_gate_light",
         dockAutoHide: false,
+        viewer: initialViewer,
         dispatch: (command) =>
             set((state) => {
                 switch (command.type) {

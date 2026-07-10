@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  useCallback,
   type KeyboardEvent,
   type RefObject,
 } from "react";
@@ -14,7 +13,7 @@ import type {
   DesktopNode,
   DesktopNodeId,
 } from "@/features/gui/directory/directoryTypes";
-import { appCatalog } from "@/features/gui/registry/appCatalog";
+import { appMetadata } from "@/features/gui/registry/appMetadata";
 import type { Language } from "@/shared/lib/i18n/useLanguageStore";
 import { orderedProjectSummaries } from "@/shared/content/portfolio/projectSummaries";
 
@@ -54,7 +53,7 @@ export function DesktopItem({
     element: HTMLButtonElement | null,
   ) => void;
 }) {
-  const app = appCatalog[node.appId];
+  const app = appMetadata[node.appId];
   const projectSummary = orderedProjectSummaries.find(
     (project) => `project:${project.slug}` === node.appId,
   );
@@ -73,13 +72,10 @@ export function DesktopItem({
     onOpen,
     onSelect,
   });
-  const setRef = useCallback(
-    (element: HTMLButtonElement | null) => {
-      ref.current = element;
-      registerElement(node.nodeId, element);
-    },
-    [node.nodeId, ref, registerElement],
-  );
+  const setRef = (element: HTMLButtonElement | null) => {
+    ref.current = element;
+    registerElement(node.nodeId, element);
+  };
 
   return (
     <button
