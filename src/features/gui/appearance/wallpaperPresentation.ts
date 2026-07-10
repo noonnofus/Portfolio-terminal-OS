@@ -31,11 +31,3 @@ export function getWallpaperStyle(
     "--gui-wallpaper-position": positionPresets[wallpaper.positionPreset],
   };
 }
-
-export function getWallpaperPreviewStyle(
-  wallpaperId: WallpaperId,
-): CSSProperties {
-  return {
-    backgroundImage: `url("${wallpaperCatalog[wallpaperId].preview}")`,
-  };
-}

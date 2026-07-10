@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  useCallback,
   type KeyboardEvent,
   type RefObject,
 } from "react";
@@ -73,13 +72,10 @@ export function DesktopItem({
     onOpen,
     onSelect,
   });
-  const setRef = useCallback(
-    (element: HTMLButtonElement | null) => {
-      ref.current = element;
-      registerElement(node.nodeId, element);
-    },
-    [node.nodeId, ref, registerElement],
-  );
+  const setRef = (element: HTMLButtonElement | null) => {
+    ref.current = element;
+    registerElement(node.nodeId, element);
+  };
 
   return (
     <button

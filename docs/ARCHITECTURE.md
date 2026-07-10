@@ -10,7 +10,8 @@ Portfolio-terminal-OS is a Next.js App Router application with two primary exper
 - `/gui`: an OS-style desktop portfolio
 
 The application is bilingual, authentication-aware, and backed by Supabase for
-GitHub login, guestbook notes, wallpapers, and user preferences.
+GitHub login, guestbook notes, and the wallpaper catalog. GUI preferences are
+local browser state.
 
 ## Current runtime
 
@@ -38,7 +39,7 @@ flowchart TD
 - `src/app/gui/page.tsx` reads the current Supabase user on the server and passes a serializable viewer into `GuiEntry`.
 - `src/app/layout.tsx` loads Pretendard, global styles, xterm styles, metadata, and `ClientProvider`.
 - API routes under `src/app/api/*` provide read endpoints and account lifecycle operations.
-- Server Actions provide in-app authenticated mutations for notes and preferences.
+- Server Actions provide in-app authenticated mutations for notes.
 
 ## Internationalization
 
@@ -93,6 +94,8 @@ GUI apps                  → shared UI/content/i18n/query helpers
 - Window visibility and page visibility are independent. Effective resource activity is derived from both.
 - The URL restores active view and language, not the complete workspace.
 - Theme, Dock auto-hide, wallpaper, and viewer state are surfaced through the GUI store.
+- Language, Dock auto-hide, and wallpaper selection are persisted in `gui:preferences` localStorage.
+- Theme is persisted by the shared color-mode provider.
 - Server state is held in TanStack Query, not in the GUI Zustand store.
 
 ### App registry rules
@@ -126,7 +129,8 @@ flowchart TD
 ### Supabase responsibilities
 
 - Supabase Auth handles GitHub OAuth sessions.
-- Supabase Postgres stores `user_accounts`, `notes`, `wallpapers`, and `user_preferences`.
+- Supabase Postgres stores `user_accounts`, `notes`, and `wallpapers`.
+- The old `user_preferences` table remains in migrations but is not on the current GUI critical path.
 - The browser does not directly mutate private tables.
 - Public DTOs avoid exposing internal account identifiers where they are not required.
 
@@ -138,13 +142,13 @@ flowchart TD
 - Note mutation actions re-check the current user server-side.
 - React Query owns notes list cache and invalidation.
 
-### User preferences
+### GUI preferences
 
-- Settings reads wallpapers and authenticated preferences through query hooks.
-- Preference writes go through a Server Action.
-- The successful mutation response updates the exact React Query cache entry with `setQueryData()` instead of forcing an extra refetch.
-- Wallpaper existence is enforced by the `user_preferences.wallpaper_id` foreign key.
-- Disabled wallpaper enforcement is intentionally not part of the v1 save path.
+- Settings reads the wallpaper catalog through a query hook.
+- Preference changes update Zustand/color-mode immediately.
+- Language, Dock auto-hide, and wallpaper selection persist to localStorage through `GuiNavigationProvider`.
+- Theme persists to localStorage through the shared color-mode provider.
+- No preference save waits for Supabase.
 
 ### GUI icons and image loading
 
@@ -157,8 +161,8 @@ flowchart TD
 1. Terminal and GUI routes are active.
 2. Typed catalog/loader boundaries and the pure navigation planner are active.
 3. About, Projects, Resume, Terminal, Contact, Guestbook, and Settings apps are active under `/gui`.
-4. GitHub OAuth, Notes, server-backed wallpapers, and user preferences are integrated.
-5. React Query is the client server-state layer for notes, wallpapers, and preferences.
+4. GitHub OAuth, Notes, server-backed wallpapers, and local GUI preferences are integrated.
+5. React Query is the client server-state layer for notes and wallpapers.
 6. GUI icon loading and guest notes reads have been optimized for the current Vercel/Supabase deployment shape.
 
 ## Verification

@@ -32,9 +32,9 @@
 }
 
 .gui-system-clock {
-  font-family: "SF Mono", "Menlo", "Monaco", "Cascadia Code", monospace;
-  font-size: 12px;
-  font-weight: 500;
+  font-family: var(--gui-font-mono);
+  font-size: var(--gui-text-callout);
+  font-weight: var(--gui-weight-medium);
   font-variant-numeric: tabular-nums;
   color: #334155;
   letter-spacing: 0.02em;
@@ -90,9 +90,10 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  border-radius: 12px;
+  border-radius: var(--gui-radius-panel);
   padding: 8px;
-  font-size: 12px;
+  font-size: var(--gui-text-callout);
+  line-height: var(--gui-leading-tight);
   outline: none;
 }
 
@@ -102,7 +103,7 @@
   justify-content: center;
   width: 70px;
   height: 70px;
-  border-radius: 3px;
+  border-radius: var(--gui-border-radius);
   border: 1px solid transparent;
   transition:
     background-color 150ms ease,
@@ -112,7 +113,7 @@
 
 .desktop-app-name {
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: var(--gui-border-radius);
   text-align: center;
   transition:
     background-color 150ms ease,
@@ -222,8 +223,9 @@
 /* Centered title text */
 .gui-title-text {
   text-align: center;
-  font-size: 13px;
-  font-weight: 500;
+  font-family: var(--gui-font-text);
+  font-size: var(--gui-text-body);
+  font-weight: var(--gui-weight-medium);
   color: #374151;
   white-space: nowrap;
   overflow: hidden;
@@ -271,7 +273,7 @@
   background: #0f172a;
   padding: 8px 12px;
   color: white;
-  font-size: 12px;
+  font-size: var(--gui-text-callout);
 }
 
 .gui-projects {
@@ -679,18 +681,54 @@
   background: rgba(255, 255, 255, 0.15);
 }
 
-/* ── 2026 macOS-inspired adaptive material system ───────── */
+/* ── adaptive material system ───────── */
 
 .gui-shell {
+  --gui-font-text:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    "Helvetica Neue", Arial, sans-serif;
+  --gui-font-display:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Helvetica Neue", Arial, sans-serif;
+  --gui-font-mono:
+    "SF Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, "Cascadia Code",
+    monospace;
+  --gui-font-ui: var(--gui-font-text);
+  --gui-text-large-title: 26px;
+  --gui-text-title-1: 22px;
+  --gui-text-title-2: 18px;
+  --gui-text-title-3: 17px;
+  --gui-text-body: 13px;
+  --gui-text-callout: 12px;
+  --gui-text-control: 12px;
+  --gui-text-footnote: 11px;
+  --gui-text-label: 11px;
+  --gui-text-caption: 10px;
+  --gui-text-mini: 9px;
+  --gui-leading-tight: 1.18;
+  --gui-leading-body: 1.38;
+  --gui-leading-note: 1.75;
+  --gui-weight-regular: 400;
+  --gui-weight-medium: 510;
+  --gui-weight-semibold: 590;
+  --gui-weight-bold: 700;
   --gui-system-bar-height: 36px;
   --gui-titlebar-height: 42px;
-  --gui-window-radius: 18px;
+  --gui-radius-control: 5px;
+  --gui-radius-panel: 5px;
+  --gui-radius-window: 12px;
+  --gui-radius-dock: 22px;
+  --gui-window-radius: var(--gui-radius-window);
+  --gui-border-radius: var(--gui-radius-control);
   --gui-window-border-width: 1px;
   --gui-window-edge-gap: 24px;
   --gui-window-mobile-edge-gap: 12px;
   --gui-window-max-width-offset: 48px;
   --gui-window-chrome-reserve: 44px;
-  --gui-titlebar-bg: rgb(252 250 248);
+  --gui-settings-sidebar-width: 220px;
+  --gui-settings-content-padding: 28px;
+  --gui-accent: #0a84ff;
+  --gui-titlebar-bg: rgb(236 235 234 / 86%);
   --gui-titlebar-border: color-mix(
     in srgb,
     var(--gui-text-secondary) 13%,
@@ -698,7 +736,7 @@
   );
   --gui-titlebar-text: #1d1d1f;
   --gui-app-header: var(--gui-titlebar-bg);
-  --gui-app-surface-bg: rgb(246 245 244);
+  --gui-app-surface-bg: #f5f5f7;
   --gui-app-surface-text: #1d1d1f;
   --gui-app-surface-muted: #616166;
   --gui-app-divider: rgb(0 0 0 / 10%);
@@ -706,15 +744,17 @@
   --gui-app-content-text: var(--gui-app-surface-text);
   --gui-text: #182230;
   --gui-text-secondary: #5d6878;
-  --gui-border: rgb(255 255 255 / 58%);
-  --gui-window: rgb(250 252 255 / 88%);
+  --gui-border: rgb(0 0 0 / 12%);
+  --gui-window: rgb(246 246 248 / 82%);
   --gui-window-bg: var(--gui-window);
   --gui-window-border: var(--gui-border);
   --gui-window-shadow: var(--gui-shadow);
-  --gui-glass: rgb(249 251 255 / 66%);
-  --gui-control: rgb(255 255 255 / 52%);
-  --gui-control-hover: rgb(255 255 255 / 82%);
-  --gui-shadow: 0 28px 80px rgb(31 43 68 / 22%);
+  --gui-glass: rgb(255 255 255 / 58%);
+  --gui-control: rgb(255 255 255 / 42%);
+  --gui-control-hover: rgb(255 255 255 / 66%);
+  --gui-shadow:
+    0 24px 70px rgb(0 0 0 / 22%), 0 1px 0 rgb(255 255 255 / 32%) inset;
+  --gui-settings-group-bg: rgb(255 255 255 / 40%);
   --gui-directory-bg: #09090b;
   --gui-directory-bg-light: #f7f9fc;
   --gui-directory-grid-line: rgb(255 255 255 / 2%);
@@ -752,12 +792,17 @@
   --notes-link: #a56a00;
   --notes-link-decoration: rgb(217 165 0 / 45%);
   isolation: isolate;
+  font-family: var(--gui-font-ui);
+  font-size: var(--gui-text-body);
+  font-weight: var(--gui-weight-regular);
+  line-height: var(--gui-leading-body);
+  letter-spacing: -0.01em;
   color: var(--gui-text);
   background-color: #dfe7f2;
 }
 
 .gui-shell[data-theme="dark"] {
-  --gui-titlebar-bg: rgb(70 68 67);
+  --gui-titlebar-bg: rgb(70 68 67 / 92%);
   --gui-titlebar-text: #f5f5f7;
   --gui-app-header: var(--gui-titlebar-bg);
   --gui-app-surface-bg: rgb(30 30 30);
@@ -769,14 +814,16 @@
   --gui-text: #f4f7fb;
   --gui-text-secondary: #aeb8c8;
   --gui-border: rgb(255 255 255 / 14%);
-  --gui-window: rgb(25 29 38 / 88%);
+  --gui-window: rgb(48 46 45 / 82%);
   --gui-window-bg: var(--gui-window);
   --gui-window-border: var(--gui-border);
   --gui-window-shadow: var(--gui-shadow);
-  --gui-glass: rgb(22 27 36 / 62%);
-  --gui-control: rgb(255 255 255 / 8%);
-  --gui-control-hover: rgb(255 255 255 / 15%);
-  --gui-shadow: 0 34px 90px rgb(0 0 0 / 48%);
+  --gui-glass: rgb(54 52 51 / 68%);
+  --gui-control: rgb(255 255 255 / 9%);
+  --gui-control-hover: rgb(255 255 255 / 16%);
+  --gui-shadow:
+    0 28px 82px rgb(0 0 0 / 46%), 0 1px 0 rgb(255 255 255 / 10%) inset;
+  --gui-settings-group-bg: rgb(255 255 255 / 7%);
   --notes-text: #f5f5f7;
   --notes-muted: rgb(255 255 255 / 42%);
   --notes-muted-soft: rgb(255 255 255 / 55%);
@@ -852,8 +899,8 @@
   border-bottom-color: var(--gui-border);
   background: var(--gui-glass);
   color: var(--gui-text);
-  box-shadow: 0 1px 0 rgb(255 255 255 / 22%);
-  backdrop-filter: blur(24px) saturate(145%);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 18%);
+  backdrop-filter: blur(34px) saturate(170%);
 }
 
 .gui-system-identity {
@@ -872,33 +919,33 @@
   background: color-mix(in srgb, var(--gui-text-secondary) 24%, transparent);
 }
 
-.gui-window {
+.gui-shell[data-theme] .gui-window {
   border-color: var(--gui-window-border);
   border-radius: var(--gui-window-radius);
   background: var(--gui-window-bg);
   box-shadow: var(--gui-window-shadow);
-  backdrop-filter: blur(30px) saturate(132%);
+  backdrop-filter: blur(40px) saturate(160%);
 }
 
 .gui-window[data-active="false"] {
   filter: saturate(0.78) brightness(0.96);
-  box-shadow: 0 20px 58px rgb(22 31 48 / 16%);
+  box-shadow: 0 18px 52px rgb(0 0 0 / 22%);
 }
 
-.gui-title-bar {
+.gui-shell[data-theme] .gui-title-bar {
   border-bottom-color: var(--gui-titlebar-border);
   background: var(--gui-titlebar-bg);
-  backdrop-filter: blur(24px) saturate(145%);
+  backdrop-filter: blur(34px) saturate(170%);
 }
 
 .gui-title-text {
   color: var(--gui-titlebar-text);
 }
 
-.gui-window-content,
-.gui-projects,
-.gui-resume,
-.gui-app-surface,
+.gui-shell[data-theme] .gui-window-content,
+.gui-shell[data-theme] .gui-projects,
+.gui-shell[data-theme] .gui-resume,
+.gui-shell[data-theme] .gui-app-surface,
 .gui-shell[data-theme="dark"] .gui-app-surface {
   background: var(--gui-app-surface-bg);
   color: var(--gui-app-surface-text);
@@ -935,7 +982,7 @@
 
 .gui-project-card {
   border-color: color-mix(in srgb, var(--gui-text-secondary) 13%, transparent);
-  border-radius: 16px;
+  border-radius: var(--gui-radius-panel);
   background: var(--gui-control);
   color: var(--gui-text);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 32%);
@@ -957,17 +1004,17 @@
 
 .gui-dock {
   border-color: var(--gui-border);
-  border-radius: 24px;
+  border-radius: var(--gui-radius-dock);
   background: var(--gui-glass);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 42%),
     0 18px 46px rgb(17 30 54 / 24%);
-  backdrop-filter: blur(28px) saturate(155%);
+  backdrop-filter: blur(34px) saturate(175%);
 }
 
 .dock-app {
   cursor: pointer;
-  border-radius: 15px;
+  border-radius: var(--gui-radius-panel);
 }
 
 .dock-app:hover,
@@ -1206,12 +1253,7 @@
 
 .gui-system-bar {
   justify-content: space-between;
-  font-family:
-    var(--font-sans),
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Text",
-    sans-serif;
+  font-family: var(--gui-font-text);
 }
 
 .gui-system-title {
@@ -1220,8 +1262,8 @@
   max-width: 40vw;
   overflow: hidden;
   color: var(--gui-text);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: var(--gui-text-callout);
+  font-weight: var(--gui-weight-semibold);
   letter-spacing: -0.01em;
   text-overflow: ellipsis;
   transform: translateX(-50%);
@@ -1266,7 +1308,7 @@
 .gui-project-card strong {
   max-width: 100%;
   overflow: hidden;
-  font-size: 13px;
+  font-size: var(--gui-text-body);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1274,15 +1316,11 @@
 .gui-wallpaper-preview {
   width: 100%;
   aspect-ratio: 16 / 10;
-  border-radius: 8px;
-  background-position: center;
-  background-size: cover;
+  height: auto;
+  object-fit: cover;
+  border-radius: var(--gui-border-radius);
+  border: 1px solid transparent;
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 18%);
-  transition: transform 180ms ease;
-}
-
-.group:hover .gui-wallpaper-preview {
-  transform: scale(1.02);
 }
 
 @media (width < 1024px) {
@@ -1320,8 +1358,8 @@
 
 .gui-viewer-name {
   color: var(--gui-text);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: var(--gui-text-callout);
+  font-weight: var(--gui-weight-semibold);
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
@@ -1401,9 +1439,9 @@
   background: rgb(59 130 246 / 90%);
   padding: 2px 4px;
   color: white;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 9px;
-  font-weight: 700;
+  font-family: var(--gui-font-mono);
+  font-size: var(--gui-text-mini);
+  font-weight: var(--gui-weight-bold);
   line-height: 1;
   text-transform: uppercase;
 }
@@ -1414,9 +1452,9 @@
   overflow: hidden;
   padding-inline: 4px;
   color: inherit;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 12px;
-  font-weight: 400;
+  font-family: var(--gui-font-mono);
+  font-size: var(--gui-text-callout);
+  font-weight: var(--gui-weight-regular);
   line-height: 16px;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1437,8 +1475,8 @@
   background: var(--gui-directory-footer-bg);
   padding: 8px 16px;
   color: var(--gui-directory-footer-text);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 12px;
+  font-family: var(--gui-font-mono);
+  font-size: var(--gui-text-callout);
   line-height: 16px;
   backdrop-filter: blur(4px);
 }
@@ -1477,40 +1515,195 @@
   color: var(--gui-directory-footer-text-light);
 }
 
+.gui-settings-surface {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  color: inherit;
+}
+
+.gui-settings-sidebar {
+  width: var(--gui-settings-sidebar-width);
+  flex: 0 0 var(--gui-settings-sidebar-width);
+  min-height: 0;
+  padding: 20px 12px;
+  overflow: hidden;
+  border-right: 1px solid rgb(255 255 255 / 8%);
+  background: color-mix(in srgb, var(--gui-glass) 82%, transparent);
+  backdrop-filter: blur(34px) saturate(165%);
+}
+
+.gui-settings-sidebar-item {
+  width: 100%;
+  border: 0;
+  border-radius: var(--gui-border-radius);
+  padding: 7px 10px;
+  background: transparent;
+  color: inherit;
+  font-size: var(--gui-text-control);
+  font-weight: var(--gui-weight-semibold);
+  line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gui-settings-sidebar-item:hover {
+  background: var(--gui-control);
+}
+
+.gui-settings-sidebar-item[data-active="true"] {
+  background: var(--gui-accent);
+  color: #fff;
+  box-shadow: 0 6px 18px rgb(10 132 255 / 22%);
+}
+
+.gui-settings-detail {
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  padding: var(--gui-settings-content-padding);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.gui-settings-section-title {
+  margin: 0 0 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgb(255 255 255 / 8%);
+  font-family: var(--gui-font-display);
+  font-size: var(--gui-text-title-2);
+  font-weight: var(--gui-weight-bold);
+  letter-spacing: -0.022em;
+}
+
+.gui-settings-card {
+  border: 1px solid;
+  border-radius: var(--gui-radius-panel);
+  padding: 12px 14px;
+  background: var(--gui-settings-group-bg);
+}
+
+.gui-settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.gui-shell[data-theme="light"] .gui-settings-sidebar {
+  border-right-color: rgb(24 34 48 / 10%);
+  background: rgb(242 242 247 / 78%);
+}
+
+.gui-shell[data-theme="light"] .gui-settings-sidebar-item:hover {
+  background: rgb(24 34 48 / 6%);
+}
+
+.gui-shell[data-theme="light"]
+  .gui-settings-sidebar-item[data-active="true"]:hover {
+  background: var(--gui-accent);
+  color: #fff;
+}
+
+.gui-shell[data-theme="light"] .gui-settings-section-title {
+  border-bottom-color: rgb(24 34 48 / 10%);
+}
+
+.gui-wallpaper-option {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.gui-wallpaper-name {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: var(--gui-text-label);
+  font-weight: var(--gui-weight-semibold);
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .gui-shell[data-theme="light"] .gui-settings-panel,
-.gui-shell[data-theme="light"] .gui-wallpaper-option {
+.gui-shell[data-theme="light"] .gui-settings-card {
   border-color: rgb(24 34 48 / 10%);
-  background: #f8fafc;
+  background: var(--gui-settings-group-bg);
   color: #182230;
 }
 
 .gui-shell[data-theme="dark"] .gui-settings-panel,
-.gui-shell[data-theme="dark"] .gui-wallpaper-option {
+.gui-shell[data-theme="dark"] .gui-settings-card {
   border-color: rgb(255 255 255 / 8%);
-  background: #272730;
+  background: var(--gui-settings-group-bg);
   color: #f4f7fb;
 }
 
-.gui-shell[data-theme="light"] .gui-wallpaper-option:hover {
-  border-color: rgb(24 34 48 / 22%);
-  background: #eef2f7;
+@media (max-width: 639px) {
+  .gui-settings-surface {
+    flex-direction: column;
+  }
+
+  .gui-settings-sidebar {
+    width: auto;
+    flex-basis: auto;
+    flex-shrink: 0;
+    padding: 16px 16px 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-right: 0;
+    border-bottom: 1px solid rgb(255 255 255 / 8%);
+  }
+
+  .gui-settings-sidebar-item {
+    width: auto;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  .gui-settings-detail {
+    padding: 18px;
+  }
+
+  .gui-settings-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
 }
 
-.gui-shell[data-theme="dark"] .gui-wallpaper-option:hover {
-  border-color: rgb(255 255 255 / 16%);
-  background: #30303a;
+.gui-wallpaper-option:hover .gui-wallpaper-name {
+  color: #e5e7eb;
 }
 
-.gui-shell[data-theme] .gui-wallpaper-option[aria-pressed="true"] {
-  border-color: #2563eb;
+.gui-shell[data-theme="light"] .gui-wallpaper-option:hover .gui-wallpaper-name {
+  color: #182230;
 }
 
-.gui-shell[data-theme="light"] .gui-wallpaper-option[aria-pressed="true"] {
-  background: rgb(239 246 255 / 86%);
+.gui-wallpaper-option[aria-pressed="true"] .gui-wallpaper-preview {
+  border-color: var(--gui-accent);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 18%),
+    0 0 0 2px color-mix(in srgb, var(--gui-accent) 72%, transparent);
 }
 
-.gui-shell[data-theme="dark"] .gui-wallpaper-option[aria-pressed="true"] {
-  background: rgb(30 58 138 / 22%);
+.gui-wallpaper-option[aria-pressed="true"] .gui-wallpaper-name {
+  color: #f4f7fb;
+}
+
+.gui-shell[data-theme="light"]
+  .gui-wallpaper-option[aria-pressed="true"]
+  .gui-wallpaper-name {
+  color: #182230;
 }
 
 .gui-shell[data-theme][data-wallpaper] {
@@ -1669,7 +1862,7 @@
 }
 
 .directory-action-menu button {
-  border-radius: 5px;
+  border-radius: var(--gui-border-radius);
   padding: 4px 7px;
 }
 
@@ -1704,7 +1897,7 @@
 }
 
 .directory-item:is(:focus-visible, [data-selected="true"]) .desktop-app-name {
-  border-radius: 5px;
+  border-radius: var(--gui-border-radius);
   background: var(--directory-selection-label) !important;
   color: #fff !important;
   font-weight: 600;
@@ -1717,8 +1910,8 @@
   background: rgb(255 255 255 / 18%);
   padding: 3px 8px;
   color: inherit;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: var(--gui-text-footnote);
+  font-weight: var(--gui-weight-bold);
   line-height: 1;
   text-decoration: none;
 }
@@ -1731,8 +1924,9 @@
   min-height: 7rem;
   background: transparent;
   color: var(--gui-app-surface-text);
+  font-family: var(--gui-font-text);
   font-size: 15px;
-  line-height: 1.75;
+  line-height: var(--gui-leading-note);
   letter-spacing: -0.005em;
   outline: none;
   white-space: normal;
@@ -1756,22 +1950,25 @@
 
 .notes-tiptap-editor .ProseMirror h1 {
   margin: 1.25rem 0 0.75rem;
-  font-size: 24px;
-  font-weight: 700;
+  font-family: var(--gui-font-display);
+  font-size: var(--gui-text-large-title);
+  font-weight: var(--gui-weight-bold);
   letter-spacing: -0.02em;
 }
 
 .notes-tiptap-editor .ProseMirror h2 {
   margin: 1.25rem 0 0.5rem;
-  font-size: 20px;
-  font-weight: 600;
+  font-family: var(--gui-font-display);
+  font-size: var(--gui-text-title-1);
+  font-weight: var(--gui-weight-semibold);
   letter-spacing: -0.015em;
 }
 
 .notes-tiptap-editor .ProseMirror h3 {
   margin: 1rem 0 0.5rem;
-  font-size: 17px;
-  font-weight: 600;
+  font-family: var(--gui-font-display);
+  font-size: var(--gui-text-title-3);
+  font-weight: var(--gui-weight-semibold);
 }
 
 .notes-tiptap-editor .ProseMirror ul,
@@ -1813,7 +2010,8 @@
   border-radius: 0.75rem;
   background: var(--notes-code-bg);
   padding: 0.75rem;
-  font-size: 13px;
+  font-family: var(--gui-font-mono);
+  font-size: var(--gui-text-body);
 }
 
 .dark .notes-tiptap-editor .ProseMirror {

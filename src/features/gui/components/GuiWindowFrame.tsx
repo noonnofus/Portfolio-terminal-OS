@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { appMetadata } from "@/features/gui/registry/appMetadata";
 import { dockAppIds } from "@/features/gui/registry/dockApps";
@@ -136,12 +136,12 @@ export function GuiWindowFrame({
     /* ── Maximize state ─────────────────────────────────── */
     const [maximized, setMaximized] = useState(false);
 
-    const handleMinimize = useCallback(() => {
+    const handleMinimize = () => {
         navigate({
             type: "minimize-window",
             windowId: appId,
         });
-    }, [appId, navigate]);
+    };
 
     /* ── Drag state (desktop ≥1024px only) ──────────────── */
     const sectionRef = useRef<HTMLElement>(null);
@@ -160,68 +160,62 @@ export function GuiWindowFrame({
     const currentLeft = pos?.left ?? defaultLeft;
     const currentTop = pos?.top ?? defaultTop;
 
-    const handlePointerDown = useCallback(
-        (e: React.PointerEvent<HTMLDivElement>) => {
-            // Only primary button, desktop viewport, not maximized
-            const usesTouchWindowLayout =
-                globalThis.matchMedia("(pointer: coarse)").matches;
-            if (e.button !== 0 || usesTouchWindowLayout || maximized) return;
-            // Don't drag if clicking on a button
-            if ((e.target as HTMLElement).closest("button")) return;
+    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+        // Only primary button, desktop viewport, not maximized
+        const usesTouchWindowLayout =
+            globalThis.matchMedia("(pointer: coarse)").matches;
+        if (e.button !== 0 || usesTouchWindowLayout || maximized) return;
+        // Don't drag if clicking on a button
+        if ((e.target as HTMLElement).closest("button")) return;
 
-            if (!active) {
-                navigate(createOpenAppCommand(appId));
-            }
+        if (!active) {
+            navigate(createOpenAppCommand(appId));
+        }
 
-            const el = sectionRef.current;
-            if (!el) return;
+        const el = sectionRef.current;
+        if (!el) return;
 
-            dragState.current = {
-                startX: e.clientX,
-                startY: e.clientY,
-                origLeft: currentLeft,
-                origTop: currentTop,
-            };
+        dragState.current = {
+            startX: e.clientX,
+            startY: e.clientY,
+            origLeft: currentLeft,
+            origTop: currentTop,
+        };
 
-            el.setPointerCapture(e.pointerId);
-        },
-        [active, appId, currentLeft, currentTop, maximized, navigate],
-    );
+        el.setPointerCapture(e.pointerId);
+    };
 
-    const handlePointerMove = useCallback(
-        (e: React.PointerEvent<HTMLElement>) => {
-            if (!dragState.current) return;
-            const dx = e.clientX - dragState.current.startX;
-            const dy = e.clientY - dragState.current.startY;
+    const handlePointerMove = (e: React.PointerEvent<HTMLElement>) => {
+        if (!dragState.current) return;
+        const dx = e.clientX - dragState.current.startX;
+        const dy = e.clientY - dragState.current.startY;
 
-            const element = sectionRef.current;
-            if (element === null) return;
+        const element = sectionRef.current;
+        if (element === null) return;
 
-            const rect = element.getBoundingClientRect();
-            const maxLeft = Math.max(0, globalThis.innerWidth - rect.width);
-            const maxTop = Math.max(
+        const rect = element.getBoundingClientRect();
+        const maxLeft = Math.max(0, globalThis.innerWidth - rect.width);
+        const maxTop = Math.max(
+            0,
+            globalThis.innerHeight -
+                GUI_WINDOW_CHROME_RESERVE_PX -
+                rect.height,
+        );
+        setPos({
+            left: Math.max(
                 0,
-                globalThis.innerHeight -
-                    GUI_WINDOW_CHROME_RESERVE_PX -
-                    rect.height,
-            );
-            setPos({
-                left: Math.max(
-                    0,
-                    Math.min(maxLeft, dragState.current.origLeft + dx),
-                ),
-                top: Math.max(
-                    0,
-                    Math.min(maxTop, dragState.current.origTop + dy),
-                ),
-            });
-        },
-        [],
-    );
+                Math.min(maxLeft, dragState.current.origLeft + dx),
+            ),
+            top: Math.max(
+                0,
+                Math.min(maxTop, dragState.current.origTop + dy),
+            ),
+        });
+    };
 
-    const handlePointerUp = useCallback(() => {
+    const handlePointerUp = () => {
         dragState.current = null;
-    }, []);
+    };
 
     useEffect(() => {
         if (active && !wasActiveRef.current) {

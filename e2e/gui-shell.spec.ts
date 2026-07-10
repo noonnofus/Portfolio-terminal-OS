@@ -607,6 +607,13 @@ test.describe("GUI shell", () => {
     });
 
     test("restores saved GUI preferences after a reload", async ({ page }) => {
+        const preferenceRequests: string[] = [];
+        page.on("request", (request) => {
+            if (request.url().includes("/api/user/preferences")) {
+                preferenceRequests.push(request.url());
+            }
+        });
+
         await page.goto("/gui?app=settings");
 
         await page.getByRole("button", { name: "English" }).click();
@@ -628,6 +635,7 @@ test.describe("GUI shell", () => {
         await expect(
             page.getByRole("navigation", { name: "Applications" }),
         ).toHaveAttribute("data-auto-hide", "true");
+        expect(preferenceRequests).toEqual([]);
     });
 
     test("restores Settings from the URL and keeps language canonical", async ({
@@ -983,7 +991,12 @@ test.describe("GUI visual parity", () => {
         await settings.getByRole("button", { name: "다크 모드" }).click();
         await expectGuiScreenshot(page, "settings-dark.png");
 
-        await settings.getByRole("button", { name: "자동 숨김" }).click();
+        const autoHideButton = settings.getByRole("button", {
+            name: "자동 숨김",
+        });
+        if ((await autoHideButton.getAttribute("aria-pressed")) !== "true") {
+            await autoHideButton.click();
+        }
         await page.mouse.move(720, 899);
         const dock = page.getByRole("navigation", {
             name: "Applications",

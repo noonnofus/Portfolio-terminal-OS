@@ -1,11 +1,12 @@
+export type NoteSortDirection = "asc" | "desc";
+
 export type PublicNote = {
   id: string;
+  authorAccountId: string | null;
   authorName: string;
   content: string;
   createdAt: string;
   updatedAt: string;
-  canEdit: boolean;
-  canDelete: boolean;
 };
 
 export type NoteRow = {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import type { Terminal } from "@xterm/xterm";
 import type { Language } from "@/shared/lib/i18n/useLanguageStore";
 import { TERMINAL_BOOT_TIMING, TERMINAL_WAKE_TIMING } from "../lib/bootSequence";
@@ -48,141 +48,126 @@ export function useTerminalSession({
     startBootRef.current = startBoot;
   }, [startBoot]);
 
-  const onReady = useCallback(
-    (terminal: Terminal) => {
-      terminalRef.current = terminal;
-      previousLanguageRef.current = language;
+  const onReady = (terminal: Terminal) => {
+    terminalRef.current = terminal;
+    previousLanguageRef.current = language;
+    modeRef.current = "running";
+    transitionGenerationRef.current += 1;
+    startBootRef.current(terminal);
+  };
+
+  const reboot = (terminal: Terminal, message: string) => {
+    const transitionGeneration = transitionGenerationRef.current + 1;
+    transitionGenerationRef.current = transitionGeneration;
+    modeRef.current = "rebooting";
+    terminalRef.current = terminal;
+    sequence.cancel();
+    terminal.reset();
+    terminal.clear();
+
+    const steps: TerminalSequenceStep[] = [
+      {
+        type: "type",
+        value: message,
+        delayMs: TERMINAL_BOOT_TIMING.character,
+      },
+      { type: "line-break" },
+      { type: "wait", delayMs: TERMINAL_HOLD },
+    ];
+
+    void sequence.run(terminal, steps).then((completed) => {
+      if (transitionGenerationRef.current !== transitionGeneration) return;
+      if (!completed || modeRef.current !== "rebooting") return;
+
       modeRef.current = "running";
-      transitionGenerationRef.current += 1;
       startBootRef.current(terminal);
-    },
-    [language],
-  );
+    });
+  };
 
-  const reboot = useCallback(
-    (terminal: Terminal, message: string) => {
-      const transitionGeneration = transitionGenerationRef.current + 1;
-      transitionGenerationRef.current = transitionGeneration;
-      modeRef.current = "rebooting";
-      terminalRef.current = terminal;
-      sequence.cancel();
-      terminal.reset();
+  const shutdown = (terminal: Terminal, lines: string[]) => {
+    const transitionGeneration = transitionGenerationRef.current + 1;
+    transitionGenerationRef.current = transitionGeneration;
+    modeRef.current = "shutting-down";
+    terminalRef.current = terminal;
+    sequence.cancel();
+    terminal.reset();
+    terminal.clear();
+
+    const steps: TerminalSequenceStep[] = [];
+
+    lines.forEach((line) => {
+      steps.push({
+        type: "type",
+        value: line,
+        delayMs: 35,
+      });
+      steps.push({ type: "line-break" });
+    });
+    steps.push({ type: "wait", delayMs: TERMINAL_HOLD });
+
+    void sequence.run(terminal, steps).then((completed) => {
+      if (transitionGenerationRef.current !== transitionGeneration) return;
+      if (!completed || modeRef.current !== "shutting-down") return;
+
       terminal.clear();
+      modeRef.current = "off";
+    });
+  };
 
-      const steps: TerminalSequenceStep[] = [
-        {
-          type: "type",
-          value: message,
-          delayMs: TERMINAL_BOOT_TIMING.character,
-        },
-        { type: "line-break" },
-        { type: "wait", delayMs: TERMINAL_HOLD },
-      ];
+  const startWake = (terminal: Terminal) => {
+    const transitionGeneration = transitionGenerationRef.current + 1;
+    transitionGenerationRef.current = transitionGeneration;
+    modeRef.current = "waking";
+    terminalRef.current = terminal;
 
-      void sequence.run(terminal, steps).then((completed) => {
-        if (transitionGenerationRef.current !== transitionGeneration) return;
-        if (!completed || modeRef.current !== "rebooting") return;
+    const content = getTerminalContent(language);
+    const steps: TerminalSequenceStep[] = [
+      { type: "write", value: " ." },
+      { type: "wait", delayMs: TERMINAL_WAKE_TIMING.dot },
+      { type: "write", value: " ." },
+      { type: "wait", delayMs: TERMINAL_WAKE_TIMING.dot },
+      { type: "write", value: " ." },
+      { type: "wait", delayMs: TERMINAL_HOLD },
+      { type: "line-break" },
+      { type: "type", value: content.messages.welcomeBack, delayMs: 35 },
+      { type: "wait", delayMs: TERMINAL_HOLD },
+    ];
 
+    void sequence.run(terminal, steps).then((completed) => {
+      if (transitionGenerationRef.current !== transitionGeneration) return;
+      if (!completed || modeRef.current !== "waking") return;
+
+      modeRef.current = "running";
+      startBootRef.current(terminal);
+    });
+  };
+
+  const consumeInput = (data: string, terminal: Terminal) => {
+    if (modeRef.current === "rebooting") {
+      return true;
+    }
+
+    if (modeRef.current === "shutting-down") {
+      return true;
+    }
+
+    if (modeRef.current === "off") {
+      startWake(terminal);
+      return true;
+    }
+
+    if (modeRef.current === "waking") {
+      if (data === " ") {
+        transitionGenerationRef.current += 1;
+        sequence.cancel();
         modeRef.current = "running";
         startBootRef.current(terminal);
-      });
-    },
-    [sequence],
-  );
-
-  const shutdown = useCallback(
-    (terminal: Terminal, lines: string[]) => {
-      const transitionGeneration = transitionGenerationRef.current + 1;
-      transitionGenerationRef.current = transitionGeneration;
-      modeRef.current = "shutting-down";
-      terminalRef.current = terminal;
-      sequence.cancel();
-      terminal.reset();
-      terminal.clear();
-
-      const steps: TerminalSequenceStep[] = [];
-
-      lines.forEach((line) => {
-        steps.push({
-          type: "type",
-          value: line,
-          delayMs: 35,
-        });
-        steps.push({ type: "line-break" });
-      });
-      steps.push({ type: "wait", delayMs: TERMINAL_HOLD });
-
-      void sequence.run(terminal, steps).then((completed) => {
-        if (transitionGenerationRef.current !== transitionGeneration) return;
-        if (!completed || modeRef.current !== "shutting-down") return;
-
-        terminal.clear();
-        modeRef.current = "off";
-      });
-    },
-    [sequence],
-  );
-
-  const startWake = useCallback(
-    (terminal: Terminal) => {
-      const transitionGeneration = transitionGenerationRef.current + 1;
-      transitionGenerationRef.current = transitionGeneration;
-      modeRef.current = "waking";
-      terminalRef.current = terminal;
-
-      const content = getTerminalContent(language);
-      const steps: TerminalSequenceStep[] = [
-        { type: "write", value: " ." },
-        { type: "wait", delayMs: TERMINAL_WAKE_TIMING.dot },
-        { type: "write", value: " ." },
-        { type: "wait", delayMs: TERMINAL_WAKE_TIMING.dot },
-        { type: "write", value: " ." },
-        { type: "wait", delayMs: TERMINAL_HOLD },
-        { type: "line-break" },
-        { type: "type", value: content.messages.welcomeBack, delayMs: 35 },
-        { type: "wait", delayMs: TERMINAL_HOLD },
-      ];
-
-      void sequence.run(terminal, steps).then((completed) => {
-        if (transitionGenerationRef.current !== transitionGeneration) return;
-        if (!completed || modeRef.current !== "waking") return;
-
-        modeRef.current = "running";
-        startBootRef.current(terminal);
-      });
-    },
-    [language, sequence],
-  );
-
-  const consumeInput = useCallback(
-    (data: string, terminal: Terminal) => {
-      if (modeRef.current === "rebooting") {
-        return true;
       }
+      return true;
+    }
 
-      if (modeRef.current === "shutting-down") {
-        return true;
-      }
-
-      if (modeRef.current === "off") {
-        startWake(terminal);
-        return true;
-      }
-
-      if (modeRef.current === "waking") {
-        if (data === " ") {
-          transitionGenerationRef.current += 1;
-          sequence.cancel();
-          modeRef.current = "running";
-          startBootRef.current(terminal);
-        }
-        return true;
-      }
-
-      return false;
-    },
-    [sequence, startWake],
-  );
+    return false;
+  };
 
   useEffect(() => {
     if (previousLanguageRef.current === null) {

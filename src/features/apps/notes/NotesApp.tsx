@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { Markdown } from "@tiptap/markdown";
 import StarterKit from "@tiptap/starter-kit";
@@ -16,6 +16,7 @@ import {
   useUpdateNoteMutation,
 } from "@/features/notes/client/useNoteMutations";
 import { useNotesQuery } from "@/features/notes/client/useNotesQuery";
+import { getNotePermissions } from "@/features/notes/model/notePermissions";
 import type { PublicNote } from "@/features/notes/model/types";
 
 const AUTOSAVE_DELAY_MS = 700;
@@ -391,6 +392,7 @@ function NoteEditor({
 
 function NoteBlock({
   note,
+  canEdit,
   createNote,
   updateNote,
   deleteNote,
@@ -398,6 +400,7 @@ function NoteBlock({
   t,
 }: {
   note: PublicNote;
+  canEdit: boolean;
   createNote: (content: string) => Promise<PublicNote>;
   updateNote: (noteId: string, content: string) => Promise<PublicNote>;
   deleteNote: (noteId: string) => Promise<unknown>;
@@ -437,18 +440,18 @@ function NoteBlock({
           />
         ) : (
           <div
-            role={note.canEdit ? "button" : undefined}
-            tabIndex={note.canEdit ? 0 : undefined}
+            role={canEdit ? "button" : undefined}
+            tabIndex={canEdit ? 0 : undefined}
             className={
-              note.canEdit
+              canEdit
                 ? "cursor-text rounded-md outline-none focus-visible:bg-[var(--notes-focus-bg)] focus-visible:ring-2 focus-visible:ring-[var(--notes-accent)]/70"
                 : undefined
             }
             onClick={() => {
-              if (note.canEdit) setIsEditing(true);
+              if (canEdit) setIsEditing(true);
             }}
             onKeyDown={(event) => {
-              if (!note.canEdit) return;
+              if (!canEdit) return;
               if (event.key === "Enter" || event.key === " ") {
                 event.preventDefault();
                 setIsEditing(true);
@@ -466,9 +469,7 @@ function NoteBlock({
 export default function NotesApp({}: GuiAppComponentProps<"notes">) {
   const { t } = useTranslation(["Notes"]);
   const viewer = useGuiStore((state) => state.viewer);
-  const viewerKey =
-    viewer.status === "authenticated" ? viewer.accountId : "guest";
-  const notesQuery = useNotesQuery(viewerKey);
+  const notesQuery = useNotesQuery();
   const createNoteMutation = useCreateNoteMutation();
   const updateNoteMutation = useUpdateNoteMutation();
   const deleteNoteMutation = useDeleteNoteMutation();
@@ -476,21 +477,12 @@ export default function NotesApp({}: GuiAppComponentProps<"notes">) {
   const [composerRevision, setComposerRevision] = useState(0);
   const [composerNoteId, setComposerNoteId] = useState<string | null>(null);
 
-  const notes = useMemo(
-    () =>
-      [...(notesQuery.data ?? [])]
-        .filter((note) => note.id !== composerNoteId)
-        .sort((left, right) => {
-          const byDate =
-            new Date(left.createdAt).getTime() -
-            new Date(right.createdAt).getTime();
-          return byDate === 0 ? left.id.localeCompare(right.id) : byDate;
-        }),
-    [composerNoteId, notesQuery.data],
+  const notes = (notesQuery.data ?? []).filter(
+    (note) => note.id !== composerNoteId,
   );
 
   return (
-    <div className="flex min-h-full w-full flex-col overflow-hidden bg-[var(--gui-app-surface-bg)] text-[var(--gui-app-surface-text)]">
+    <div className="flex min-h-full w-full flex-col overflow-hidden bg-(--gui-app-surface-bg) text-(--gui-app-surface-text)">
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-6 py-6 sm:px-8">
         <header className="mb-7 grid grid-cols-1 gap-2 sm:grid-cols-[150px_1fr] sm:gap-6">
           <div className="hidden sm:block" aria-hidden="true" />
@@ -536,23 +528,28 @@ export default function NotesApp({}: GuiAppComponentProps<"notes">) {
               {t("empty")}
             </p>
           ) : (
-            notes.map((note) => (
-              <NoteBlock
-                key={note.id}
-                note={note}
-                createNote={(content) =>
-                  createNoteMutation.mutateAsync({ content })
-                }
-                updateNote={(noteId, content) =>
-                  updateNoteMutation.mutateAsync({ noteId, content })
-                }
-                deleteNote={(noteId) =>
-                  deleteNoteMutation.mutateAsync({ noteId })
-                }
-                onError={setMessage}
-                t={t}
-              />
-            ))
+            notes.map((note) => {
+              const { canEdit } = getNotePermissions(viewer, note);
+
+              return (
+                <NoteBlock
+                  key={note.id}
+                  note={note}
+                  canEdit={canEdit}
+                  createNote={(content) =>
+                    createNoteMutation.mutateAsync({ content })
+                  }
+                  updateNote={(noteId, content) =>
+                    updateNoteMutation.mutateAsync({ noteId, content })
+                  }
+                  deleteNote={(noteId) =>
+                    deleteNoteMutation.mutateAsync({ noteId })
+                  }
+                  onError={setMessage}
+                  t={t}
+                />
+              );
+            })
           )}
 
           {viewer.status === "authenticated" ? (

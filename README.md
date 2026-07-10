@@ -29,10 +29,10 @@ Live site: [hyunho.vercel.app](https://hyunho.vercel.app/)
 - Built-in About, Projects, Resume, Terminal, Contact, Guestbook, and Settings apps.
 - GitHub OAuth through Supabase Auth.
 - Server-backed guestbook notes with GitHub-authenticated writes, 1,000 character validation, per-account rate limiting, owner/admin permissions, and deleted-account anonymization.
-- User preferences for language, theme, dock auto-hide, and wallpaper.
+- Local GUI preferences for language, theme, dock auto-hide, and wallpaper.
 - Server-backed wallpaper catalog with light/dark wallpaper presets.
 - TanStack Query for client server-state reads, mutations, and invalidation.
-- Server Actions for note and preference writes.
+- Server Actions for note writes.
 - TipTap Markdown editing and Markdown rendering for notes.
 - Supabase migrations for accounts, notes, wallpapers, preferences, RLS, and service-role grants.
 
@@ -106,7 +106,10 @@ Main tables:
 - `user_accounts`
 - `notes`
 - `wallpapers`
-- `user_preferences`
+
+The database still has a `user_preferences` table from earlier migrations, but
+the current GUI keeps language, theme, Dock auto-hide, and wallpaper selection
+in local browser storage.
 
 Notes policy:
 
@@ -204,8 +207,6 @@ src/features/apps           GUI app implementations
 src/features/gui            GUI shell, registry, navigation, windowing, styles
 src/features/auth           Supabase viewer and auth helpers
 src/features/notes          Guestbook client, server actions, repository, schemas
-src/features/user-preferences
-                            Preference query/action/repository code
 src/features/wallpapers     Wallpaper query and repository code
 src/shared                  Shared UI, content, i18n, Supabase clients, utilities
 supabase/migrations         Database migrations

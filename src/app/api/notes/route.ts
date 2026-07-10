@@ -1,26 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { requireViewer } from "@/features/auth/server/requireUser";
+import type { NoteSortDirection } from "@/features/notes/model/types";
 import { listNotes } from "@/features/notes/server/noteRepository";
 
 export const dynamic = "force-dynamic";
 
-function hasSupabaseAuthCookie(request: NextRequest): boolean {
-  return request.cookies
-    .getAll()
-    .some(
-      ({ name }) => name.startsWith("sb-") && name.includes("-auth-token"),
-    );
+function parseSortDirection(request: NextRequest): NoteSortDirection {
+  return request.nextUrl.searchParams.get("sort") === "asc" ? "asc" : "desc";
 }
 
 export async function GET(request: NextRequest) {
-  const viewer = hasSupabaseAuthCookie(request)
-    ? await requireViewer(request)
-    : null;
   const notes = await listNotes({
-    actor: viewer,
     cursor: null,
     limit: 50,
+    sortDirection: parseSortDirection(request),
   });
 
   return NextResponse.json(

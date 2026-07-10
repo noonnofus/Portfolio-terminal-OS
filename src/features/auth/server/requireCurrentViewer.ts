@@ -31,6 +31,7 @@ export async function requireCurrentViewer(): Promise<
     status: "authenticated",
     accountId: account.id,
     displayName: account.display_name,
+    email: user.email ?? null,
     avatarUrl: null,
     role: account.role,
   };

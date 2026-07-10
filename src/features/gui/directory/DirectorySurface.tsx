@@ -3,7 +3,6 @@
 import {
   useCallback,
   useLayoutEffect,
-  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -65,25 +64,19 @@ export function DirectorySurface({
     1,
     Math.floor((contentWidth + COLUMN_GAP) / (MIN_ITEM_WIDTH + COLUMN_GAP)),
   );
-  const rows = useMemo(
-    () => chunkRows(directory.children, columnCount),
-    [columnCount, directory.children],
-  );
+  const rows = chunkRows(directory.children, columnCount);
 
-  const registerElement = useCallback(
-    (nodeId: DesktopNodeId, element: HTMLButtonElement | null) => {
-      if (element === null) itemElements.current.delete(nodeId);
-      else itemElements.current.set(nodeId, element);
-    },
-    [],
-  );
+  const registerElement = (
+    nodeId: DesktopNodeId,
+    element: HTMLButtonElement | null,
+  ) => {
+    if (element === null) itemElements.current.delete(nodeId);
+    else itemElements.current.set(nodeId, element);
+  };
 
-  const updatePosition = useCallback(
-    (nodeId: DesktopNodeId, point: Point) => {
-      setPositions((current) => ({ ...current, [nodeId]: point }));
-    },
-    [],
-  );
+  const updatePosition = (nodeId: DesktopNodeId, point: Point) => {
+    setPositions((current) => ({ ...current, [nodeId]: point }));
+  };
 
   const reclampAll = useCallback(() => {
     const bounds = (

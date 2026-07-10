@@ -15,7 +15,7 @@ import { getWallpaperStyle } from "@/features/gui/appearance/wallpaperPresentati
 export function GuiShell() {
   const urlReady = useGuiStore((state) => state.urlReady);
   const wallpaper = useGuiStore((state) => state.wallpaper);
-  const { colorMode } = useColorMode();
+  const { resolvedColorMode } = useColorMode();
   const themeMounted = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -27,7 +27,7 @@ export function GuiShell() {
       <div
         className="gui-shell"
         data-wallpaper={wallpaper}
-        data-theme={themeMounted ? colorMode : undefined}
+        data-theme={themeMounted ? resolvedColorMode : undefined}
         style={getWallpaperStyle(wallpaper)}
       >
         <PageVisibilityController />

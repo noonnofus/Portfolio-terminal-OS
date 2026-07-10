@@ -1,7 +1,11 @@
 import "server-only";
 
 import { createSupabaseAdminClient } from "@/shared/lib/supabase/admin";
-import type { NoteRow, PublicNote } from "@/features/notes/model/types";
+import type {
+  NoteRow,
+  NoteSortDirection,
+  PublicNote,
+} from "@/features/notes/model/types";
 
 export type NoteActor = {
   accountId: string;
@@ -12,15 +16,10 @@ export type NoteActor = {
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX_NOTES = 10;
 
-function toPublicNote(row: NoteRow, actor: NoteActor | null): PublicNote {
-  const isOwner =
-    row.author_account_id !== null &&
-    actor !== null &&
-    row.author_account_id === actor.accountId;
-  const isAdmin = actor?.role === "admin";
-
+function toPublicNote(row: NoteRow): PublicNote {
   return {
     id: row.id,
+    authorAccountId: row.author_account_id,
     authorName:
       row.author_account_id === null
         ? "[DELETED]"
@@ -28,39 +27,40 @@ function toPublicNote(row: NoteRow, actor: NoteActor | null): PublicNote {
     content: row.content,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
-    canEdit: isOwner,
-    canDelete: isOwner || isAdmin,
   };
 }
 
 export async function listNotes({
-  actor,
   cursor,
   limit,
+  sortDirection,
 }: {
-  actor: NoteActor | null;
   cursor: string | null;
   limit: number;
+  sortDirection: NoteSortDirection;
 }) {
   const supabase = createSupabaseAdminClient();
   const safeLimit = Math.min(Math.max(limit, 1), 50);
+  const ascending = sortDirection === "asc";
   let query = supabase
     .from("notes")
     .select(
       "id, author_account_id, author_name_snapshot, content, created_at, updated_at",
     )
-    .order("created_at", { ascending: false })
-    .order("id", { ascending: false })
+    .order("created_at", { ascending })
+    .order("id", { ascending })
     .limit(safeLimit);
 
   if (cursor !== null && cursor.length <= 64) {
-    query = query.lt("created_at", cursor);
+    query = ascending
+      ? query.gt("created_at", cursor)
+      : query.lt("created_at", cursor);
   }
 
   const { data, error } = await query;
   if (error) throw new Error("Failed to list notes");
 
-  return (data as NoteRow[]).map((row) => toPublicNote(row, actor));
+  return (data as NoteRow[]).map((row) => toPublicNote(row));
 }
 
 export async function assertCreateRateLimit(accountId: string) {
@@ -91,7 +91,7 @@ export async function createNote(actor: NoteActor, content: string) {
     .single();
 
   if (error || data === null) throw new Error("Failed to create note");
-  return toPublicNote(data as NoteRow, actor);
+  return toPublicNote(data as NoteRow);
 }
 
 export async function updateNote(
@@ -119,7 +119,7 @@ export async function updateNote(
     .single();
 
   if (error || data === null) throw new Error("Failed to update note");
-  return { status: "ok" as const, note: toPublicNote(data as NoteRow, actor) };
+  return { status: "ok" as const, note: toPublicNote(data as NoteRow) };
 }
 
 export async function deleteNote(actor: NoteActor, noteId: string) {

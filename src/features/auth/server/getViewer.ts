@@ -130,6 +130,7 @@ export async function getViewerForUser(user: User | null): Promise<Viewer> {
     status: "authenticated",
     accountId: account.id,
     displayName: account.display_name,
+    email: user.email ?? null,
     avatarUrl: getAvatarUrlFromUser(user),
     role: account.role,
   };
