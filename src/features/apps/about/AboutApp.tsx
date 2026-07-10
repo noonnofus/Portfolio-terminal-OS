@@ -1,39 +1,32 @@
 'use client';
 
 import {
-    Box,
-    Braces,
-    Cable,
-    ClipboardList,
-    CodeXml,
     Component,
-    Database,
-    DatabaseZap,
-    FileCode,
-    FileCode2,
-    FileText,
-    Flame,
-    GitBranch,
-    Hash,
-    Kanban,
-    Package,
-    Palette,
     PanelsTopLeft,
-    PenTool,
-    RadioTower,
-    RefreshCw,
-    Rocket,
     Route,
-    Server,
-    ServerCog,
     ShieldCheck,
-    Triangle,
-    Workflow,
     Zap,
-    Orbit,
-    Cloud,
 } from "lucide-react";
+import {
+    siDrizzle,
+    siI18next,
+    siMysql,
+    siNextdotjs,
+    siPostgresql,
+    siReact,
+    siShadcnui,
+    siSupabase,
+    siTailwindcss,
+    siTanstack,
+    siTypescript,
+    siVercel,
+} from "simple-icons";
 import StackIcon from "@/shared/components/StackIcon";
+import {
+    createOpenAppCommand,
+    type GuiAppId,
+} from "@/features/gui/registry/appTypes";
+import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
 import { useTranslation } from 'react-i18next';
 import { Language } from "@/shared/lib/i18n/useLanguageStore";
 
@@ -41,109 +34,183 @@ interface AboutAppProps {
     language: Language;
 }
 
+const technologyGroups = [
+    {
+        id: "coreFrontend",
+        items: [
+            { label: "React", icon: siReact },
+            {
+                label: "Next.js",
+                icon: siNextdotjs,
+                color: "var(--gui-app-surface-text)",
+            },
+            { label: "TypeScript", icon: siTypescript },
+            { label: "Tailwind CSS", icon: siTailwindcss },
+        ],
+    },
+    {
+        id: "frontendSystems",
+        items: [
+            { label: "Zustand", icon: Component, color: "#443E38" },
+            { label: "TanStack Query", icon: siTanstack },
+            { label: "i18next", icon: siI18next },
+            { label: "Tiptap", icon: PanelsTopLeft, color: "#7C3AED" },
+        ],
+    },
+    {
+        id: "fullStackFoundations",
+        items: [
+            { label: "Supabase", icon: siSupabase },
+            { label: "PostgreSQL", icon: siPostgresql },
+            { label: "MySQL", icon: siMysql },
+            { label: "Drizzle ORM", icon: siDrizzle },
+            { label: "shadcn/ui", icon: siShadcnui },
+            { label: "Vercel", icon: siVercel, color: "var(--gui-app-surface-text)" },
+        ],
+    },
+] as const;
+
+const selectedWork: ReadonlyArray<{
+    appId?: GuiAppId;
+    id: "portfolioOs" | "wchms" | "flare";
+}> = [
+    { id: "portfolioOs" },
+    { appId: "project:wchms", id: "wchms" },
+    { appId: "project:flare", id: "flare" },
+];
+
 export default function AboutApp({}: AboutAppProps) {
     const { t } = useTranslation(['About', 'common']);
+    const { navigate, navigationBusy } = useGuiNavigation();
+
     return (
-        <div className="gui-app-surface min-h-full w-full overflow-y-auto">
-            <div className="my-8 mx-4 md:mx-36">
-                <div className="mb-8">
-                    <h2 className="font-bold text-3xl text-pen-gray-800">
+        <div className="gui-app-surface h-full w-full overflow-y-auto">
+            <article className="mx-auto w-full max-w-5xl px-5 py-8 md:px-12 md:py-12">
+                <header className="border-b border-[var(--gui-border)] pb-8 md:pb-10">
+                    <p className="text-[length:var(--gui-text-caption)] font-semibold uppercase tracking-[0.16em] text-[var(--gui-accent)]">
+                        {t('eyebrow')}
+                    </p>
+                    <h2 className="mt-3 font-bold text-3xl tracking-tight text-[var(--gui-app-surface-text)] md:text-4xl">
                         {t('title')}
                     </h2>
-                    <p className="mt-2 text-md text-pen-gray-700">
+                    <p className="mt-4 max-w-3xl text-[length:var(--gui-text-body)] leading-7 text-[var(--gui-muted)]">
                         {t('description')}
                     </p>
-                    <p className="mt-1 text-md text-pen-gray-600">
+                    <p className="mt-3 text-[length:var(--gui-text-control)] text-[var(--gui-muted)]">
                         {t('education')}
                     </p>
-                </div>
+                </header>
 
-
-                <div className="mb-8">
-                    <h2 className="mb-4 font-bold text-2xl">
-                        {t('techStackTitle')}
-                    </h2>
-
-                    <h3 className="mt-6 mb-2 text-lg font-semibold">{t('languages')}</h3>
-                    <div className="grid grid-cols-3 gap-5 mb-12">
-                        <StackIcon label="HTML5" icon={CodeXml} color="#E34F26" />
-                        <StackIcon label="CSS3" icon={Palette} color="#1572B6" />
-                        <StackIcon label="JavaScript" icon={Braces} color="#F7DF1E" />
-                        <StackIcon label="TypeScript" icon={FileCode2} color="#3178C6" />
-                        <StackIcon label="C#" icon={Hash} color="#8D74E4" />
-                        <StackIcon label="PHP" icon={FileCode} color="#777BB4" />
-                        <StackIcon label="Markdown" icon={FileText} color="#000000" />
+                <section className="border-b border-[var(--gui-border)] py-8 md:py-10" aria-labelledby="about-focus-title">
+                    <div className="flex flex-col gap-2">
+                        <p className="text-[length:var(--gui-text-caption)] font-semibold uppercase tracking-[0.14em] text-[var(--gui-muted)]">
+                            {t('frontendFocusEyebrow')}
+                        </p>
+                        <h3 id="about-focus-title" className="text-2xl font-semibold tracking-tight text-[var(--gui-app-surface-text)]">
+                            {t('frontendFocusTitle')}
+                        </h3>
                     </div>
-                    <h3 className="mt-6 mb-2 text-lg font-semibold">{t('frontendFrameworks')}</h3>
-                    <div className="grid grid-cols-3 gap-1 mb-12">
-                        <StackIcon label="React" icon={Orbit} color="#61DAFB" />
-                        <StackIcon label="Next.js" icon={Triangle} color="black" />
-                        <StackIcon label="Vue.js" icon={Component} color="#42b883" />
-                        <StackIcon label="Vite" icon={Zap} color="#646CFF" />
-                        <StackIcon label="Redux" icon={Workflow} color="#764abc" />
-                        <StackIcon label="EJS" icon={FileCode} color="black" />
-                        <StackIcon label="TailwindCSS" icon={Palette} color="#38B2AC" />
-                        <StackIcon label="shadcn/ui" icon={PanelsTopLeft} color="black" />
-                        <StackIcon label="Chakra UI" icon={Palette} color="#4ED1C5" />
+                    <div className="mt-6 grid gap-5 md:grid-cols-3">
+                        {[
+                            { icon: Component, title: 'uiArchitecture', description: 'uiArchitectureDescription' },
+                            { icon: Route, title: 'stateData', description: 'stateDataDescription' },
+                            { icon: ShieldCheck, title: 'quality', description: 'qualityDescription' },
+                        ].map(({ icon: Icon, title, description }) => (
+                            <div key={title} className="border-l-2 border-[var(--gui-accent)] pl-4">
+                                <Icon aria-hidden="true" className="size-5 text-[var(--gui-accent)]" />
+                                <h4 className="mt-3 font-semibold text-[var(--gui-app-surface-text)]">
+                                    {t(title)}
+                                </h4>
+                                <p className="mt-2 text-[length:var(--gui-text-control)] leading-6 text-[var(--gui-muted)]">
+                                    {t(description)}
+                                </p>
+                            </div>
+                        ))}
                     </div>
+                </section>
 
-                    <h3 className="mt-6 mb-2 text-lg font-semibold">{t('backendFrameworks')}</h3>
-                    <div className="grid grid-cols-3 gap-2 mb-12">
-                        <StackIcon label="Express.js" icon={ServerCog} color="#404d59" />
-                        <StackIcon label="Hono" icon={Flame} color="#FF9859" />
-                        <StackIcon label="Laravel" icon={Box} color="#FF2D20" />
-                        <StackIcon label=".NET" icon={Package} color="#5C2D91" />
-                    </div>
-
-                    <h3 className="mt-6 mb-2 text-lg font-semibold">{t('stateManagement')}</h3>
-                    <div className="grid grid-cols-3 gap-2 mb-12">
-                        <StackIcon label="React Router" icon={Route} color="#CA4245" />
-                        <StackIcon label="React Query" icon={RefreshCw} color="#FF4154" />
-                        <StackIcon label="Zod" icon={ShieldCheck} color="#3068b7" />
+                <section className="border-b border-[var(--gui-border)] py-8 md:py-10" aria-labelledby="about-stack-title">
+                    <div className="flex items-baseline justify-between gap-4">
+                        <h3 id="about-stack-title" className="text-2xl font-semibold tracking-tight text-[var(--gui-app-surface-text)]">
+                            {t('techStackTitle')}
+                        </h3>
+                        <Zap aria-hidden="true" className="size-5 text-[var(--gui-muted)]" />
                     </div>
 
-                    <h3 className="mt-6 mb-2 text-lg font-semibold">{t('webTechnologies')}</h3>
-                    <div className="grid grid-cols-3 gap-2 mb-12">
-                        <StackIcon label="WebRTC" icon={RadioTower} color="#333" />
-                        <StackIcon label="Socket.IO" icon={Cable} color="black" />
+                    <div className="mt-7 space-y-8">
+                        {technologyGroups.map((group) => (
+                            <div key={group.id}>
+                                <h4 className="text-[length:var(--gui-text-control)] font-semibold text-[var(--gui-app-surface-text)]">
+                                    {t(group.id)}
+                                </h4>
+                                <div className="mt-4 grid grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+                                    {group.items.map((item) => (
+                                        <StackIcon key={item.label} {...item} />
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
                     </div>
+                </section>
 
-                    <h3 className="mt-6 mb-2 text-lg font-semibold">{t('runtimeEnvironments')}</h3>
-                    <div className="grid grid-cols-3 gap-2 mb-12">
-                        <StackIcon label="Node.js" icon={Server} color="#339933" />
-                        <StackIcon label="Bun" icon={Package} color="black" />
+                <section className="py-8 md:py-10" aria-labelledby="about-selected-work-title">
+                    <p className="text-[length:var(--gui-text-caption)] font-semibold uppercase tracking-[0.14em] text-[var(--gui-muted)]">
+                        {t('selectedWorkEyebrow')}
+                    </p>
+                    <h3 id="about-selected-work-title" className="mt-2 text-2xl font-semibold tracking-tight text-[var(--gui-app-surface-text)]">
+                        {t('selectedWorkTitle')}
+                    </h3>
+                    <div className="mt-6 border-y border-[var(--gui-border)]">
+                        {selectedWork.map((work, index) => {
+                            const appId = work.appId;
+                            const content = (
+                                <>
+                                    <span className="pt-0.5 font-mono text-sm text-[var(--gui-muted)]">
+                                        {String(index + 1).padStart(2, '0')}
+                                    </span>
+                                    <span className="min-w-0 flex-1">
+                                        <span className="block font-semibold text-[var(--gui-app-surface-text)]">
+                                            {t(`${work.id}Title`)}
+                                        </span>
+                                        <span className="mt-1 block text-[length:var(--gui-text-control)] leading-6 text-[var(--gui-muted)]">
+                                            {t(`${work.id}Description`)}
+                                        </span>
+                                    </span>
+                                </>
+                            );
+
+                            if (appId === undefined) {
+                                return (
+                                    <div
+                                        key={work.id}
+                                        className="flex items-start gap-4 border-b border-[var(--gui-border)] px-1 py-5"
+                                    >
+                                        {content}
+                                        <span className="pt-0.5 text-[length:var(--gui-text-caption)] font-medium text-[var(--gui-muted)]">
+                                            {t('currentProject')}
+                                        </span>
+                                    </div>
+                                );
+                            }
+
+                            return (
+                                <button
+                                    key={work.id}
+                                    type="button"
+                                    disabled={navigationBusy}
+                                    onClick={() => navigate(createOpenAppCommand(appId))}
+                                    className="group flex w-full items-start gap-4 border-b border-[var(--gui-border)] px-1 py-5 text-left last:border-b-0 disabled:cursor-wait disabled:opacity-60"
+                                >
+                                    {content}
+                                    <span aria-hidden="true" className="pt-0.5 text-[var(--gui-muted)] transition-transform group-hover:translate-x-1 group-focus-visible:translate-x-1">
+                                        ↗
+                                    </span>
+                                </button>
+                            );
+                        })}
                     </div>
-
-                    <h3 className="mt-6 mb-2 text-lg font-semibold">{t('databasesORMs')}</h3>
-                    <div className="grid grid-cols-3 gap-2 mb-12">
-                        <StackIcon label="MySQL" icon={Database} color="#00758F" />
-                        <StackIcon label="PostgreSQL" icon={Database} color="#336791" />
-                        <StackIcon label="MongoDB" icon={Database} color="#4ea94b" />
-                        <StackIcon label="SQLite" icon={Database} color="#07405e" />
-                        <StackIcon label="Turso" icon={Database} color="black" />
-                        <StackIcon label="Drizzle" icon={DatabaseZap} color="#C5F74F" />
-                        <StackIcon label="Prisma" icon={Database} color="#3982CE" />
-                    </div>
-
-                    <h3 className="mt-6 mb-2 text-lg font-semibold">{t('devopsDeployment')}</h3>
-                    <div className="grid grid-cols-3 gap-2 mb-12">
-                        <StackIcon label="NPM" icon={Package} color="#CB3837" />
-                        <StackIcon label="Vercel" icon={Rocket} color="black" />
-                        <StackIcon label="Heroku" icon={Rocket} color="#430098" />
-                        <StackIcon label="Render" icon={Cloud} color="black" />
-                        <StackIcon label="GitHub Pages" icon={GitBranch} color="black" />
-                    </div>
-
-                    <h3 className="mt-6 mb-2 text-lg font-semibold">{t('toolsCollaborations')}</h3>
-                    <div className="grid grid-cols-3 gap-2 mb-12">
-                        <StackIcon label="Git" icon={GitBranch} color="#F05033" />
-                        <StackIcon label="Jira" icon={ClipboardList} color="#0A0FFF" />
-                        <StackIcon label="Trello" icon={Kanban} color="#026AA7" />
-                        <StackIcon label="Figma" icon={PenTool} color="#F24E1E" />
-                    </div>
-
-                </div>
-            </div>
+                </section>
+            </article>
         </div>
     );
 }
