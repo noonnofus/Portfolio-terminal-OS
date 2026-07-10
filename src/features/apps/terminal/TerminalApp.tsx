@@ -9,6 +9,7 @@ import { useTerminalSession } from "./hooks/useTerminalSession";
 import { executeCommand } from "./lib/commandParser";
 import useIsTouchDevice from "@/shared/hooks/useIsTouchDevice";
 import { useLanguageStore } from "@/shared/lib/i18n/useLanguageStore";
+import type { Language } from "@/shared/lib/i18n/useLanguageStore";
 import type { TerminalAction } from "./lib/terminalActions";
 import {
   formatTerminalPrompt,
@@ -19,10 +20,12 @@ export default function TerminalApp({
   active = true,
   promptIdentity,
   resumeSignal = 0,
+  onLanguageChange,
 }: {
   active?: boolean;
   promptIdentity: TerminalPromptIdentity;
   resumeSignal?: number;
+  onLanguageChange?: (language: Language) => void;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -59,6 +62,11 @@ export default function TerminalApp({
 
     if (action.type === "open-portfolio") {
       router.push("/gui");
+      return;
+    }
+
+    if (onLanguageChange !== undefined) {
+      onLanguageChange(action.language);
       return;
     }
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
+import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
 import TerminalApp from "./TerminalApp";
 
 export default function TerminalWindowApp({
@@ -11,6 +12,7 @@ export default function TerminalWindowApp({
     resumeSignal?: number;
 }) {
     const viewer = useGuiStore((state) => state.viewer);
+    const { navigate } = useGuiNavigation();
     const promptIdentity =
         viewer.status === "authenticated"
             ? {
@@ -27,6 +29,9 @@ export default function TerminalWindowApp({
                 active={active}
                 promptIdentity={promptIdentity}
                 resumeSignal={resumeSignal}
+                onLanguageChange={(language) => {
+                    navigate({ type: "change-language", language });
+                }}
             />
         </div>
     );
