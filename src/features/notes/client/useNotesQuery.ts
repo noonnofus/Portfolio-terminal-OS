@@ -11,6 +11,6 @@ export function useNotesQuery(
 ) {
   return useQuery({
     queryKey: noteQueryKeys.list(sortDirection),
-    queryFn: () => listNotes(sortDirection),
+    queryFn: ({ signal }) => listNotes(sortDirection, signal),
   });
 }
