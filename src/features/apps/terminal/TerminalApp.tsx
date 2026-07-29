@@ -9,7 +9,7 @@ import { useTerminalSession } from "./hooks/useTerminalSession";
 import { executeCommand } from "./lib/commandParser";
 import useIsTouchDevice from "@/shared/hooks/useIsTouchDevice";
 import { useLanguageStore } from "@/shared/lib/i18n/useLanguageStore";
-import type { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { Language } from "@/shared/i18n/language";
 import type { TerminalAction } from "./lib/terminalActions";
 import {
   formatTerminalPrompt,

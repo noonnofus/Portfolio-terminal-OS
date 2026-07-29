@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
 import type { GuiAppComponentProps } from "@/features/gui/registry/appTypes";
 import { getPortfolioContent } from "@/shared/content/portfolio/getPortfolioContent";
 
@@ -7,13 +8,14 @@ export default function ResumeApp({
     language,
 }: GuiAppComponentProps<"resume">) {
     const content = getPortfolioContent(language);
+    const { t } = useTranslation("Resume");
 
     return (
         <article
             aria-labelledby="resume-heading"
-            className="gui-resume"
+            className="application-resume"
         >
-            <header className="gui-resume-hero">
+            <header className="application-resume-hero">
                 <div>
                     <p className="text-sm font-medium text-slate-500">
                         {content.profile.location}
@@ -31,29 +33,31 @@ export default function ResumeApp({
                 <button
                     type="button"
                     onClick={() => window.print()}
-                    className="gui-resume-print-action"
+                    className="application-resume-print-action"
                 >
-                    {content.labels.print}
+                    {t("print")}
                 </button>
-                <p className="mt-5 max-w-3xl text-sm leading-6 text-slate-700">
-                    {content.profile.summary}
-                </p>
+                <div className="mt-5 max-w-3xl space-y-2 text-sm leading-6 text-slate-700">
+                    {content.profile.summary.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                    ))}
+                </div>
             </header>
 
-            <div className="gui-resume-layout">
+            <div className="application-resume-layout">
                 <div className="space-y-8">
                     <section aria-labelledby="resume-experience">
                         <h4
                             id="resume-experience"
-                            className="gui-resume-section-title"
+                            className="application-resume-section-title"
                         >
-                            {content.labels.experience}
+                            {t("experience")}
                         </h4>
                         <div className="mt-4 space-y-5">
                             {content.experience.map((experience) => (
                                 <article
                                     key={experience.title}
-                                    className="gui-resume-block"
+                                    className="application-resume-block"
                                 >
                                     <div className="flex flex-wrap items-start justify-between gap-2">
                                         <div>
@@ -68,15 +72,20 @@ export default function ResumeApp({
                                             {experience.period}
                                         </span>
                                     </div>
-                                    <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm leading-6 text-slate-700">
-                                        {experience.highlights.map(
-                                            (highlight) => (
-                                                <li key={highlight}>
-                                                    {highlight}
-                                                </li>
-                                            ),
-                                        )}
-                                    </ul>
+                                    <div className="mt-4 space-y-4">
+                                        {experience.highlights.map((highlight) => (
+                                            <section key={highlight.title}>
+                                                <h6 className="text-sm font-semibold">
+                                                    {highlight.title}
+                                                </h6>
+                                                <ul className="mt-1.5 list-disc space-y-1.5 pl-5 text-sm leading-6 text-slate-700">
+                                                    {highlight.items.map((item) => (
+                                                        <li key={item}>{item}</li>
+                                                    ))}
+                                                </ul>
+                                            </section>
+                                        ))}
+                                    </div>
                                 </article>
                             ))}
                         </div>
@@ -85,15 +94,15 @@ export default function ResumeApp({
                     <section aria-labelledby="resume-projects">
                         <h4
                             id="resume-projects"
-                            className="gui-resume-section-title"
+                            className="application-resume-section-title"
                         >
-                            {content.labels.projects}
+                            {t("projects")}
                         </h4>
                         <div className="mt-4 grid gap-3">
                             {content.projects.map((project) => (
                                 <article
                                     key={project.slug}
-                                    className="gui-resume-block"
+                                    className="application-resume-block"
                                 >
                                     <h5 className="font-semibold">
                                         {project.title}
@@ -114,9 +123,9 @@ export default function ResumeApp({
                     <section aria-labelledby="resume-skills">
                         <h4
                             id="resume-skills"
-                            className="gui-resume-section-title"
+                            className="application-resume-section-title"
                         >
-                            {content.labels.skills}
+                            {t("skills")}
                         </h4>
                         <dl className="mt-4 space-y-4">
                             {content.skills.map((group) => (
@@ -135,9 +144,9 @@ export default function ResumeApp({
                     <section aria-labelledby="resume-education">
                         <h4
                             id="resume-education"
-                            className="gui-resume-section-title"
+                            className="application-resume-section-title"
                         >
-                            {content.labels.education}
+                            {t("education")}
                         </h4>
                         <div className="mt-4 space-y-3">
                             {content.education.map((education) => (
@@ -159,14 +168,14 @@ export default function ResumeApp({
                     <section aria-labelledby="resume-contact">
                         <h4
                             id="resume-contact"
-                            className="gui-resume-section-title"
+                            className="application-resume-section-title"
                         >
-                            {content.labels.contact}
+                            {t("contact")}
                         </h4>
                         <address className="mt-4 space-y-2 text-sm not-italic">
                             <a
                                 href={`mailto:${content.contact.email}`}
-                                className="gui-resume-link"
+                                className="application-resume-link"
                             >
                                 {content.contact.email}
                             </a>
@@ -174,7 +183,7 @@ export default function ResumeApp({
                                 href={content.contact.github}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="gui-resume-link"
+                                className="application-resume-link"
                             >
                                 github.com/noonnofus
                             </a>
@@ -182,7 +191,7 @@ export default function ResumeApp({
                                 href={content.contact.linkedin}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="gui-resume-link"
+                                className="application-resume-link"
                             >
                                 linkedin.com/in/kevin-hyun-ho-kim
                             </a>

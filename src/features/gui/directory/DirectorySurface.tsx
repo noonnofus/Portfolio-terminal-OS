@@ -19,7 +19,7 @@ import {
 import { createOpenAppCommand } from "@/features/gui/registry/appTypes";
 import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
 import type { WindowId } from "@/features/gui/navigation/navigationTypes";
-import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
+import { useTranslation } from "react-i18next";
 
 const ZERO_POINT: Point = { x: 0, y: 0 };
 const MIN_ITEM_WIDTH = 88;
@@ -45,7 +45,7 @@ export function DirectorySurface({
   directory: DesktopFolderNode;
   variant: "desktop" | "window";
 }) {
-  const language = useGuiStore((state) => state.language);
+  const { t } = useTranslation("appShell");
   const { navigate, navigationBusy } = useGuiNavigation();
   const surfaceRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -201,9 +201,6 @@ export function DirectorySurface({
     requestAnimationFrame(reclampAll);
   };
 
-  const itemLabel = language === "ko" ? "개 항목" : "items";
-  const emptyLabel =
-    language === "ko" ? "이 폴더는 비어 있습니다." : "This folder is empty.";
   const rowStyle = {
     "--directory-columns": columnCount,
   } as CSSProperties;
@@ -213,14 +210,12 @@ export function DirectorySurface({
       ref={surfaceRef}
       role={variant === "desktop" ? "navigation" : undefined}
       className={`directory-surface directory-surface--${variant} ${
-        variant === "desktop" ? "desktop-apps" : "gui-folder-view"
+        variant === "desktop" ? "desktop-apps" : "application-folder-view"
       }`}
       aria-label={
         variant === "desktop"
-          ? "Desktop shortcuts"
-          : language === "ko"
-            ? "폴더"
-            : "Folder"
+          ? t("desktop.shortcutsAria")
+          : t("desktop.folderAria")
       }
       onPointerDown={(event) => {
         const target = event.target as HTMLElement;
@@ -235,7 +230,7 @@ export function DirectorySurface({
     >
       {directory.children.length === 0 ? (
         <div role="grid" tabIndex={0} className="directory-empty">
-          {emptyLabel}
+          {t("desktop.emptyFolder")}
         </div>
       ) : (
         <div
@@ -244,7 +239,7 @@ export function DirectorySurface({
           aria-rowcount={rows.length}
           aria-colcount={columnCount}
           className={`directory-grid ${
-            variant === "window" ? "gui-project-grid" : ""
+            variant === "window" ? "application-project-grid" : ""
           }`}
         >
           {rows.map((row, rowIndex) => (
@@ -265,7 +260,6 @@ export function DirectorySurface({
                     <DesktopItem
                       node={node}
                       variant={variant}
-                      language={language}
                       selected={selectedNodeId === node.nodeId}
                       focused={focusedNodeId === node.nodeId}
                       navigationBusy={navigationBusy}
@@ -294,7 +288,7 @@ export function DirectorySurface({
                       <div
                         role="menu"
                         aria-label={
-                          language === "ko" ? "위치 변경" : "Move item"
+                          t("desktop.moveItem")
                         }
                         className="directory-action-menu"
                       >
@@ -321,7 +315,7 @@ export function DirectorySurface({
                             setMenuNodeId(null);
                           }}
                         >
-                          {language === "ko" ? "초기화" : "Reset"}
+                          {t("desktop.reset")}
                         </button>
                       </div>
                     ) : null}
@@ -333,11 +327,11 @@ export function DirectorySurface({
         </div>
       )}
       {variant === "window" ? (
-        <footer className="gui-folder-footer">
-          {directory.children.length} {itemLabel}
+        <footer className="application-folder-footer">
+          {t("desktop.itemCount", { count: directory.children.length })}
         </footer>
       ) : null}
-      <span className="sr-only">window {windowId}</span>
+      <span className="sr-only">{t("desktop.activeWindow", { id: windowId })}</span>
     </section>
   );
 }

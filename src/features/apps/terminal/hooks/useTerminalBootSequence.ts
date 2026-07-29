@@ -2,7 +2,7 @@ import { useRef } from "react";
 import type { Terminal } from "@xterm/xterm";
 import chooseASCII from "../lib/ascii";
 import { TERMINAL_BOOT_TIMING } from "../lib/bootSequence";
-import type { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { Language } from "@/shared/i18n/language";
 import {
   getTerminalContent,
   type TerminalSegment,

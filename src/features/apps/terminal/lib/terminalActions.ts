@@ -1,4 +1,4 @@
-import type { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { Language } from "@/shared/i18n/language";
 
 export type TerminalAction =
   | { type: "open-portfolio" }

@@ -17,7 +17,7 @@ function WifiIcon() {
             strokeLinecap="round"
             strokeLinejoin="round"
             aria-hidden="true"
-            className="gui-system-icon"
+            className="application-system-icon"
         >
             <path d="M12 20h.01" />
             <path d="M2 8.82a15 15 0 0 1 20 0" />
@@ -37,7 +37,7 @@ function BatteryIcon() {
             strokeLinecap="round"
             strokeLinejoin="round"
             aria-hidden="true"
-            className="gui-system-icon gui-system-icon-battery"
+            className="application-system-icon application-system-icon-battery"
         >
             <rect x="2" y="7" width="16" height="10" rx="2" />
             <path d="M22 11v2" />
@@ -75,7 +75,7 @@ function SystemClock() {
 
     return (
         <time
-            className="gui-system-clock"
+            className="application-system-clock"
             aria-label="Current time"
         >
             {time}
@@ -134,36 +134,36 @@ export function GuiSystemBar() {
     }, [focus, navigate, windows]);
 
     return (
-        <header className="gui-system-bar">
-            <div className="gui-system-identity">
-                <span className="gui-viewer-name">{viewerName}</span>
+        <header className="application-system-bar">
+            <div className="application-system-identity">
+                <span className="application-viewer-name">{viewerName}</span>
             </div>
 
-            <strong className="gui-system-title">
+            <strong className="application-system-title">
                 Hyunho&apos;s Portfolio
             </strong>
 
             <nav
                 aria-label="System controls"
-                className="gui-system-controls"
+                className="application-system-controls"
             >
 
 
                 <div
-                    className="gui-system-divider"
+                    className="application-system-divider"
                     aria-hidden="true"
                 />
 
                 {/* dineshd.dev style: status icons + clock */}
                 <output
-                    className="gui-system-status"
+                    className="application-system-status"
                     aria-label="Wifi connected"
                 >
                     <WifiIcon />
                 </output>
 
                 <output
-                    className="gui-system-status"
+                    className="application-system-status"
                     aria-label="Battery full"
                 >
                     <BatteryIcon />

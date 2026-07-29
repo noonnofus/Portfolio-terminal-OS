@@ -11,9 +11,11 @@ import { dockAppIds } from "@/features/gui/registry/dockApps";
 import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
 import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 import { GuiAppIcon } from "@/features/gui/components/GuiAppIcon";
+import { getAppTitle } from "@/features/gui/registry/getAppTitle";
+import { useTranslation } from "react-i18next";
 
 export function GuiDock() {
-    const language = useGuiStore((state) => state.language);
+    const { t } = useTranslation("appShell");
     const activeWindowId = useGuiStore((state) =>
         state.focus.mode === "windows" ? state.focus.activeWindowId : null,
     );
@@ -36,11 +38,12 @@ export function GuiDock() {
     return (
         <nav
             aria-label="Applications"
-            className="gui-dock"
+            className="application-dock"
             data-auto-hide={dockAutoHide}
         >
             {dockAppIds.map((appId) => {
                 const app = appMetadata[appId];
+                const title = getAppTitle(app, t);
                 const isOpen = windows.some((w) => w.appId === appId);
                 const isActive = activeWindowId === appId;
 
@@ -59,9 +62,9 @@ export function GuiDock() {
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: 8, scale: 0.9 }}
                                     transition={{ duration: 0.15, ease: "easeOut" }}
-                                    className="gui-dock-tooltip absolute -top-12 z-[110] whitespace-nowrap rounded-lg border px-3 py-1 text-[11px] font-semibold shadow-md backdrop-blur-md"
+                                    className="application-dock-tooltip absolute -top-12 z-[110] whitespace-nowrap rounded-lg border px-3 py-1 text-[11px] font-semibold shadow-md backdrop-blur-md"
                                 >
-                                    {app.titles[language]}
+                                    {title}
                                 </motion.div>
                             )}
                         </AnimatePresence>
@@ -70,7 +73,7 @@ export function GuiDock() {
                         <motion.button
                             type="button"
                             disabled={navigationBusy}
-                            aria-label={app.titles[language]}
+                            aria-label={title}
                             aria-pressed={isActive}
                             onClick={() => handleButtonClick(appId)}
                             className="dock-app relative"
@@ -107,7 +110,7 @@ export function GuiDock() {
                             </motion.div>
 
                             <span className="sr-only">
-                                {app.titles[language]}
+                                {title}
                             </span>
 
                             {/* ── Running / Open Indicator Dot ── */}

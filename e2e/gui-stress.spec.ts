@@ -2,39 +2,29 @@ import { expect, test } from "@playwright/test";
 
 const projects = [
     {
+        appId: "project:portfolio",
+        listTitle: "인터랙티브 포트폴리오 웹",
+        windowTitle: "인터랙티브 포트폴리오 웹",
+    },
+    {
+        appId: "project:optigen",
+        listTitle: "B2B AI 지식·업무 플랫폼",
+        windowTitle: "B2B AI 지식·업무 플랫폼",
+    },
+    {
+        appId: "project:kepco",
+        listTitle: "B2B AICC 플랫폼",
+        windowTitle: "B2B AICC 플랫폼",
+    },
+    {
         appId: "project:wchms",
-        listTitle: "WCHMS",
-        windowTitle: "WCHMS",
+        listTitle: "다국어 학습 지원 플랫폼",
+        windowTitle: "다국어 학습 지원 플랫폼",
     },
     {
         appId: "project:flare",
-        listTitle: "Flare",
-        windowTitle: "Flare",
-    },
-    {
-        appId: "project:weconnect",
-        listTitle: "WeConnect",
-        windowTitle: "WeConnect",
-    },
-    {
-        appId: "project:pagessence",
-        listTitle: "PageSsence",
-        windowTitle: "pageSsence",
-    },
-    {
-        appId: "project:diceroller",
-        listTitle: "DiceRoller",
-        windowTitle: "다이스롤러",
-    },
-    {
-        appId: "project:mejubot",
-        listTitle: "MejuBot",
-        windowTitle: "디스코드 봇",
-    },
-    {
-        appId: "project:webpiano",
-        listTitle: "WebPiano",
-        windowTitle: "웹 피아노",
+        listTitle: "실시간 재난 정보 플랫폼",
+        windowTitle: "실시간 재난 정보 플랫폼",
     },
 ] as const;
 

@@ -1,41 +1,25 @@
-import i18n from "@/shared/lib/i18n";
+import i18n from "@/shared/i18n/client";
 
 const projectNamespaceLoaders = {
+    Portfolio: {
+        ko: () => import("@/shared/i18n/resources/ko/Portfolio.json"),
+        en: () => import("@/shared/i18n/resources/en/Portfolio.json"),
+    },
+    Optigen: {
+        ko: () => import("@/shared/i18n/resources/ko/Optigen.json"),
+        en: () => import("@/shared/i18n/resources/en/Optigen.json"),
+    },
+    Kepco: {
+        ko: () => import("@/shared/i18n/resources/ko/Kepco.json"),
+        en: () => import("@/shared/i18n/resources/en/Kepco.json"),
+    },
     WCHMS: {
-        ko: () => import("../../../../public/locales/ko/WCHMS.json"),
-        en: () => import("../../../../public/locales/en/WCHMS.json"),
+        ko: () => import("@/shared/i18n/resources/ko/WCHMS.json"),
+        en: () => import("@/shared/i18n/resources/en/WCHMS.json"),
     },
     Flare: {
-        ko: () => import("../../../../public/locales/ko/Flare.json"),
-        en: () => import("../../../../public/locales/en/Flare.json"),
-    },
-    WeConnect: {
-        ko: () =>
-            import("../../../../public/locales/ko/WeConnect.json"),
-        en: () =>
-            import("../../../../public/locales/en/WeConnect.json"),
-    },
-    PageSsence: {
-        ko: () =>
-            import("../../../../public/locales/ko/PageSsence.json"),
-        en: () =>
-            import("../../../../public/locales/en/PageSsence.json"),
-    },
-    DiceRoller: {
-        ko: () =>
-            import("../../../../public/locales/ko/DiceRoller.json"),
-        en: () =>
-            import("../../../../public/locales/en/DiceRoller.json"),
-    },
-    Mejubot: {
-        ko: () => import("../../../../public/locales/ko/Mejubot.json"),
-        en: () => import("../../../../public/locales/en/Mejubot.json"),
-    },
-    WebPiano: {
-        ko: () =>
-            import("../../../../public/locales/ko/WebPiano.json"),
-        en: () =>
-            import("../../../../public/locales/en/WebPiano.json"),
+        ko: () => import("@/shared/i18n/resources/ko/Flare.json"),
+        en: () => import("@/shared/i18n/resources/en/Flare.json"),
     },
 } as const;
 
@@ -45,6 +29,7 @@ export async function ensureProjectNamespace(
     namespace: ProjectNamespace,
 ): Promise<void> {
     if (
+        process.env.NODE_ENV === "production" &&
         i18n.hasResourceBundle("ko", namespace) &&
         i18n.hasResourceBundle("en", namespace)
     ) {

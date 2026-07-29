@@ -27,7 +27,7 @@ export function GuiWindowLayer() {
 
     return (
         <main
-            className="gui-window-layer"
+            className="application-window-layer"
             data-workspace-mode={focus.mode}
         >
             {windows.map((window, index) => (

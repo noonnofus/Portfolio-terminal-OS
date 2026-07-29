@@ -9,7 +9,7 @@ import { GuiWindowLayer } from "@/features/gui/components/GuiWindowLayer";
 import { PageVisibilityController } from "@/features/gui/runtime/PageVisibilityController";
 import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 import { useColorMode } from "@/shared/ui/color-mode";
-import "@/features/gui/styles/gui.css";
+import "@/features/gui/styles/application.css";
 import { getWallpaperStyle } from "@/features/gui/appearance/wallpaperPresentation";
 
 export function GuiShell() {
@@ -25,13 +25,13 @@ export function GuiShell() {
   return (
     <MotionConfig reducedMotion="user">
       <div
-        className="gui-shell"
+        className="application-shell"
         data-wallpaper={wallpaper}
         data-theme={themeMounted ? resolvedColorMode : undefined}
         style={getWallpaperStyle(wallpaper)}
       >
         <PageVisibilityController />
-        <div aria-hidden="true" className="gui-wallpaper-art">
+        <div aria-hidden="true" className="application-wallpaper-art">
           <span />
           <span />
           <span />

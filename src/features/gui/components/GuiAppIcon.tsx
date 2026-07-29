@@ -13,7 +13,7 @@ const coreIcons: Record<CoreAppId, (size: number) => React.ReactNode> = {
   about: (s) => (
     <Image
       src="/icons/optimized/about.png"
-      alt="나에 대해서"
+      alt="소개 아이콘"
       width={s}
       height={s}
       className="w-full h-full object-contain"
@@ -95,7 +95,7 @@ export function GuiAppIcon({
   if (isProjectAppId(appId)) {
     return (
       <span
-        className="gui-app-icon"
+        className="application-app-icon"
         data-app-icon={appId}
         data-size={size}
         aria-hidden="true"
@@ -105,7 +105,7 @@ export function GuiAppIcon({
           alt=""
           width={iconSize}
           height={iconSize}
-          className="gui-app-icon-image"
+          className="application-app-icon-image"
           unoptimized
         />
       </span>
@@ -114,7 +114,7 @@ export function GuiAppIcon({
 
   return (
     <span
-      className="gui-app-icon"
+      className="application-app-icon"
       data-app-icon={appId}
       data-size={size}
       aria-hidden="true"

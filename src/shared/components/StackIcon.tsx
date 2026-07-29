@@ -1,51 +1,91 @@
-import type { LucideIcon } from "lucide-react";
-import type { SimpleIcon } from "simple-icons";
+"use client";
 
-type StackIconProps = {
-    label: string;
-    icon: LucideIcon | SimpleIcon;
-    color?: string;
+/* eslint-disable @next/next/no-img-element -- local brand SVGs are already optimized and need their original fills and gradients */
+
+import type { LucideIcon } from "lucide-react";
+
+import { useColorMode } from "@/shared/ui/color-mode";
+
+type LucideStackIconProps = {
+  label: string;
+  icon: LucideIcon;
+  color?: string;
+  src?: never;
+  darkSrc?: never;
+  invertOnDark?: never;
 };
 
-function isSimpleIcon(icon: LucideIcon | SimpleIcon): icon is SimpleIcon {
-    return "path" in icon;
+type BrandStackIconProps = {
+  label: string;
+  src: string;
+  darkSrc?: string;
+  invertOnDark?: boolean;
+  icon?: never;
+  color?: never;
+};
+
+type StackIconProps = LucideStackIconProps | BrandStackIconProps;
+
+function isBrandStackIcon(
+  props: StackIconProps,
+): props is BrandStackIconProps {
+  return typeof props.src === "string";
 }
 
-export default function StackIcon({ label, icon, color }: StackIconProps) {
-    return (
-        <div className="flex min-w-0 flex-col items-center gap-2 text-center">
-            {isSimpleIcon(icon) ? (
-                <svg
-                    aria-hidden="true"
-                    className="size-8 shrink-0"
-                    fill={color ?? `#${icon.hex}`}
-                    viewBox="0 0 24 24"
-                >
-                    <path d={icon.path} />
-                </svg>
-            ) : (
-                <LucideStackIcon icon={icon} color={color} />
-            )}
-            <p className="text-[length:var(--gui-text-control)] leading-tight text-[var(--gui-app-surface-text)]">
-                {label}
-            </p>
-        </div>
-    );
+function StackIconLabel({ label }: { label: string }) {
+  return (
+    <p className="text-[length:var(--application-text-control)] leading-tight text-[var(--application-app-surface-text)]">
+      {label}
+    </p>
+  );
+}
+
+export default function StackIcon(props: StackIconProps) {
+  if (isBrandStackIcon(props)) return <BrandStackIcon {...props} />;
+
+  return <LucideStackIcon {...props} />;
+}
+
+function BrandStackIcon({
+  label,
+  src,
+  darkSrc,
+  invertOnDark = false,
+}: BrandStackIconProps) {
+  const { resolvedColorMode } = useColorMode();
+  const iconSrc = resolvedColorMode === "dark" ? (darkSrc ?? src) : src;
+  const shouldInvert = invertOnDark && resolvedColorMode === "dark";
+
+  return (
+    <div className="flex min-w-0 flex-col items-center gap-2 text-center">
+      <img
+        aria-hidden="true"
+        alt=""
+        className={`size-8 shrink-0 object-contain${shouldInvert ? " invert" : ""}`}
+        draggable={false}
+        height={32}
+        src={iconSrc}
+        width={32}
+      />
+      <StackIconLabel label={label} />
+    </div>
+  );
 }
 
 function LucideStackIcon({
-    icon: Icon,
-    color,
-}: {
-    icon: LucideIcon;
-    color?: string;
-}) {
-    return (
-        <Icon
-            aria-hidden="true"
-            className="size-8 shrink-0"
-            color={color}
-            strokeWidth={2}
-        />
-    );
+  label,
+  icon: Icon,
+  color,
+}: LucideStackIconProps) {
+  return (
+    <div className="flex min-w-0 flex-col items-center gap-2 text-center">
+      <Icon
+        aria-hidden="true"
+        className="size-8 shrink-0"
+        color={color}
+        strokeWidth={2}
+      />
+      <StackIconLabel label={label} />
+    </div>
+  );
 }

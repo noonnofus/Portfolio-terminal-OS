@@ -1,13 +1,11 @@
 import { aboutAppConfig } from "@/features/apps/about/app.config";
 import { contactAppConfig } from "@/features/apps/contact/app.config";
 import { notesAppConfig } from "@/features/apps/notes/app.config";
-import { diceRollerAppConfig } from "@/features/apps/projects/apps/diceroller/app.config";
 import { flareAppConfig } from "@/features/apps/projects/apps/flare/app.config";
-import { mejuBotAppConfig } from "@/features/apps/projects/apps/mejubot/app.config";
-import { pageSsenceAppConfig } from "@/features/apps/projects/apps/pagessence/app.config";
+import { kepcoAppConfig } from "@/features/apps/projects/apps/kepco/app.config";
+import { optigenAppConfig } from "@/features/apps/projects/apps/optigen/app.config";
+import { portfolioAppConfig } from "@/features/apps/projects/apps/portfolio/app.config";
 import { wchmsAppConfig } from "@/features/apps/projects/apps/wchms/app.config";
-import { webPianoAppConfig } from "@/features/apps/projects/apps/webpiano/app.config";
-import { weConnectAppConfig } from "@/features/apps/projects/apps/weconnect/app.config";
 import { projectsAppConfig } from "@/features/apps/projects/app.config";
 import { resumeAppConfig } from "@/features/apps/resume/app.config";
 import { settingsAppConfig } from "@/features/apps/settings/app.config";
@@ -22,13 +20,11 @@ export const appMetadata = {
   contact: contactAppConfig,
   notes: notesAppConfig,
   settings: settingsAppConfig,
+  "project:portfolio": portfolioAppConfig,
+  "project:optigen": optigenAppConfig,
+  "project:kepco": kepcoAppConfig,
   "project:wchms": wchmsAppConfig,
   "project:flare": flareAppConfig,
-  "project:weconnect": weConnectAppConfig,
-  "project:pagessence": pageSsenceAppConfig,
-  "project:diceroller": diceRollerAppConfig,
-  "project:mejubot": mejuBotAppConfig,
-  "project:webpiano": webPianoAppConfig,
 } satisfies AppConfigMap;
 
 export const appMetadataKeys = Object.keys(appMetadata).sort();

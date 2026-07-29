@@ -4,7 +4,7 @@ import { publicAssetPath } from "@/features/gui/registry/appTypes";
 export const contactAppConfig = defineAppConfig({
   appId: "contact",
   url: { app: "contact" },
-  titles: { ko: "연락처", en: "Contact" },
+  titleKey: "appNames.contact",
   icon: publicAssetPath("/icons/optimized/contact.png"),
   order: 50,
   dock: { visible: true, order: 50 },

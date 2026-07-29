@@ -9,7 +9,7 @@ test.describe("route compatibility", () => {
 
         await page.goto("/gui");
         await expect(
-            page.getByRole("dialog", { name: "나에 대해서" }),
+            page.getByRole("dialog", { name: "김현호" }),
         ).toBeVisible();
         await expect(page).toHaveURL(/\/gui$/);
     });
@@ -20,13 +20,13 @@ test.describe("route compatibility", () => {
         await page.goto("/gui?app=projects");
         await page
             .getByRole("button", {
-                name: "WCHMS 프로젝트 열기",
+                name: "다국어 학습 지원 플랫폼 프로젝트 열기",
             })
             .dblclick();
 
         await expect(
             page.getByRole("heading", {
-                name: "WCHMS - 클라이언트 프로젝트",
+                name: "다국어 학습 지원 플랫폼",
             }),
         ).toBeVisible();
     });

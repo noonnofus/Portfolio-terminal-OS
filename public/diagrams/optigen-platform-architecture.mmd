@@ -1,0 +1,41 @@
+flowchart TB
+    Admin["Administrator: organizations, roles, bots, documents"]
+    Chat["User: bot-specific AI chat"]
+
+    subgraph Frontend["OptiGen Chat · Next.js frontend"]
+        Auth["JWT httpOnly cookie and refresh path"]
+        Data["Server Actions · React Query prefetch and hydration"]
+        UI["Feature-local Zustand UI state"]
+        ChatSettings["Scoped chat settings context"]
+    end
+
+    API["OptiGen API · Spring Boot"]
+    DB["MySQL: organization, bot, chat data"]
+    AI["OptiGen AI · FastAPI RAG service"]
+    RAG["LangGraph: query enhancement and hybrid retrieval"]
+    Vector["Qdrant: dense, sparse, and reranked search"]
+    LLM["LLM providers"]
+    Agent["AI agent or RAG client"]
+    subgraph MCP["OptiGen MCP server · Express and MCP SDK"]
+        McpHttp["Stateless Streamable HTTP tools"]
+        McpSession["Session transport and SSE progress"]
+        McpCapabilities["Business tools · resources · prompts"]
+    end
+
+    Admin --> Auth
+    Chat --> ChatSettings
+    Auth --> Data
+    Data --> UI
+    Data --> API
+    ChatSettings --> API
+    API --> DB
+    API -. SSE chat completion .-> Chat
+    API --> AI
+    AI --> RAG
+    RAG --> Vector
+    RAG --> LLM
+    Agent -->|JSON-RPC over HTTP| McpHttp
+    Agent -->|meeting progress| McpSession
+    McpHttp --> McpCapabilities
+    McpSession --> McpCapabilities
+    McpCapabilities -->|HTTP API client| API

@@ -4,7 +4,7 @@ import { publicAssetPath } from "@/features/gui/registry/appTypes";
 export const resumeAppConfig = defineAppConfig({
   appId: "resume",
   url: { app: "resume" },
-  titles: { ko: "이력서", en: "Resume" },
+  titleKey: "appNames.resume",
   icon: publicAssetPath("/icons/optimized/pdf_file.png"),
   order: 30,
   dock: { visible: true, order: 30 },

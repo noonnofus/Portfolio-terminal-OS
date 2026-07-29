@@ -1,6 +1,6 @@
 import { Contact, ExternalLink, GitBranch, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { Language } from "@/shared/i18n/language";
 
 interface ContactAppProps {
     language: Language;
@@ -10,7 +10,7 @@ export default function ContactApp({}: ContactAppProps) {
     const { t } = useTranslation(["Contact", "common"]);
     return (
         <div
-            className="gui-app-surface min-h-full w-full overflow-y-auto"
+            className="application-app-surface min-h-full w-full overflow-y-auto"
         >
             <div className="my-8 mx-4 md:mx-36">
                 <div className="px-6 py-4">

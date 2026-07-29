@@ -5,7 +5,7 @@ import { publicAssetPath } from "@/features/gui/registry/appTypes";
 export const notesAppConfig = defineAppConfig({
   appId: "notes",
   url: { app: "notes" },
-  titles: { ko: "방명록", en: "Guestbook" },
+  titleKey: "appNames.notes",
   icon: publicAssetPath("/icons/optimized/note.png"),
   order: 55,
   dock: { visible: true, order: 55 },

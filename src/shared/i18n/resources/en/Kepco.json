@@ -1,0 +1,103 @@
+{
+  "eyebrow": "External SI · Private project",
+  "title": "B2B AICC Platform",
+  "stackLabel": "Technology stack",
+  "summary": "An internal web service where contact-center agents follow live STT transcription during a call, then review AI analysis and consultation history after it ends.",
+  "stack": ["React 19", "TypeScript", "Vite", "TanStack Query", "Zustand", "SSE"],
+  "ownership": {
+    "label": "My role",
+    "description": "I designed and implemented the agent and manager web UI, call state, SSE transcription, and connection-recovery experience."
+  },
+  "outcome": {
+    "label": "What changed",
+    "description": "Agents keep their transcription context and move to the next task even as call, network, and analysis state change."
+  },
+  "projectIntro": {
+    "title": "Project overview",
+    "description": "Agents and managers work with the same call information through different screens. Live transcription and connection status matter during a call; durable history and AI analysis matter after it ends. I designed the frontend screens and state flow so that transition stays continuous."
+  },
+  "projectContext": {
+    "service": {
+      "label": "Service",
+      "description": "An internal web service that supports contact-center consultation work"
+    },
+    "users": {
+      "label": "Users",
+      "description": "Agents handling live calls and managers reviewing consultation status and history"
+    },
+    "role": {
+      "label": "My scope",
+      "description": "Designed and implemented agent and manager web UI, call state, SSE transcription, and connection recovery"
+    },
+    "constraint": {
+      "label": "Disclosure",
+      "description": "External SI and private project; customer data, operational data, internal screens, and performance figures are not disclosed"
+    }
+  },
+  "workflow": {
+    "title": "Primary user flow",
+    "description": "Agents follow transcription from the moment a call starts, then review analysis and history in the same context when it ends.",
+    "steps": {
+      "signIn": "Sign in",
+      "detectCall": "Detect active call",
+      "followTranscript": "Follow live transcription",
+      "reviewAfterCall": "Review AI analysis and history"
+    }
+  },
+  "problemEyebrow": "Frontend problem",
+  "problemTitle": "The consultation context had to survive disconnected or out-of-order real-time data.",
+  "problemDescription": "Call detection, transcription, reconnection, analysis, and role-specific UI affect one another. Building each feature separately makes screen state drift. I connected them through one call-state transition.",
+  "implementationEyebrow": "My frontend work",
+  "implementationTitle": "I designed call-state transitions before I designed the screens.",
+  "implementationDescription": "These four decisions determine how the live consultation UI behaves. Each one explains the problem, the design, and the resulting screen behavior.",
+  "frontendFlowAlt": "Frontend state flow from active-call polling through call state, SSE, transcript reducer, and consultation UI",
+  "frontendFlowCaption": "This is the frontend state flow. The UI uses SSE alone while a call is live, then resumes polling after the call ends to find the next call.",
+  "labels": {
+    "problem": "Problem",
+    "decision": "Decision",
+    "result": "Result"
+  },
+  "frontendCases": {
+    "callState": {
+      "title": "I switched between polling and SSE through call state.",
+      "context": "Agents need to find a new call quickly, then follow transcription with no delay once a call begins.",
+      "problem": "Continuing one-second polling during a call requests data that SSE has already delivered. Two paths can then compete to change the same screen state.",
+      "decision": "I stored the current and ended call in Zustand and modeled idle, live, and ended. React Query polling runs only while idle or ended; call-scoped SSE owns the latest state while live.",
+      "result": "The UI finds a new call quickly and uses one real-time path while it is active. It resumes polling when the call ends or recovery fails.",
+      "flow": "one-second active-call polling → Zustand: idle / live / ended → stop polling while live → call-scoped SSE → resume polling after the call"
+    },
+    "streamState": {
+      "title": "I translated SSE events into explicit UI state with a reducer.",
+      "context": "Partial and finalized speech, call completion, and AI analysis arrive on the consultation screen at different times.",
+      "problem": "When partial speech, finalized speech, call completion, and AI analysis arrive through one path, messages can duplicate and ordering or display timing can drift.",
+      "decision": "I modeled SNAPSHOT, PARTIAL, FINAL_DISPLAY, CALL_END, and ANALYSIS_COMPLETED or FAILED as reducer events. Partials use speaker-specific temporary slots; finals are deduplicated by conversation ID and sorted by start time.",
+      "result": "A newly opened screen restores current state from a snapshot. During a call, it distinguishes partial from finalized speech, while call completion and analysis results use the same state model.",
+      "flow": "SSE event → reducer → partial slot or final timeline → CALL_END → analysis pending → completed / failed UI"
+    },
+    "recovery": {
+      "title": "I made a disconnected stream recoverable for the user.",
+      "context": "When the network drops during a call, agents need both the transcription they have already read and a clear connection status.",
+      "problem": "SSE can close because of tab changes, network loss, expired authentication, or server termination. Resetting the screen before reconnecting loses transcription the agent has already seen.",
+      "decision": "I implemented heartbeat monitoring, staged retry delays with jitter, and manual reconnect. A 401 refreshes the token once before reconnecting, while 403 and 404 become fatal immediately. Reconnect keeps finalized utterances until the next snapshot reconciles them.",
+      "result": "Agents can see connection and retry state, and the recovery point stays in the timeline. An unrecoverable close does not leave the UI stuck in live state, so next-call detection continues.",
+      "flow": "watchdog heartbeat → retry with jitter → reconnect preserves finals → snapshot reconciliation → recovered marker or terminal handling"
+    },
+    "roleUi": {
+      "title": "I separated role-specific UI from data responsibilities.",
+      "context": "Agents and managers work with the same call information, but the scope they need to view and control is different.",
+      "problem": "Agents, managers, and administrators use one product but need different access to calls, monitoring, history, and settings. Spreading role conditions through every screen makes later changes difficult.",
+      "decision": "I separated entry through React Router loaders and protected routes. Role-specific slots compose side panels, tabs, and main panels. TanStack Query owns server data, while Zustand owns UI state such as the current call and selections. Each panel also has a skeleton and error boundary.",
+      "result": "The same layout composes the correct UI for each role. A data failure in one panel does not replace the whole screen. Agent and manager capabilities can evolve as separate domains.",
+      "flow": "route loader and role guard → role slots → TanStack Query server state + Zustand UI state → panel-level skeleton and error boundary"
+    }
+  },
+  "architectureEyebrow": "System context",
+  "architectureTitle": "I handled live consultation data and durable history through separate paths.",
+  "architectureDescription": "The agent screen finds an active call with an authenticated request, then subscribes to call-scoped SSE. After a call ends, it continues with REST-backed analysis and history. The manager screen uses monitoring and history within the same authorization boundary.",
+  "architectureAlt": "System architecture connecting React agent and manager screens, an internal API, Redis and MariaDB, STT, and external AI analysis",
+  "architectureCaption": "This is the system context. The frontend separates the live SSE path from the post-call history path so each handles its own kind of data.",
+  "resultEyebrow": "Result",
+  "resultTitle": "I kept the consultation flow continuous as screen state changed.",
+  "resultDescription": "Agents review transcription, connection recovery, analysis, and history in one flow. I built this experience by making polling, SSE, the reducer, and role-specific UI follow the same state model.",
+  "footer": "This is a private project. Operational data, customer information, internal screens, and performance figures are not disclosed."
+}

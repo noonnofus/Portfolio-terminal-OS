@@ -1,0 +1,26 @@
+{
+  "appNames": {
+    "about": "About",
+    "projects": "Projects",
+    "resume": "Resume",
+    "terminal": "Terminal",
+    "contact": "Contact",
+    "notes": "Guestbook",
+    "settings": "Settings",
+    "portfolio": "Interactive Portfolio Web",
+    "optigen": "B2B AI Knowledge & Workflow Platform",
+    "kepco": "B2B AICC Platform",
+    "wchms": "Multilingual Learning Support Platform",
+    "flare": "Real-time Disaster Information Platform"
+  },
+  "desktop": {
+    "shortcutsAria": "Desktop shortcuts",
+    "folderAria": "Folder",
+    "emptyFolder": "This folder is empty.",
+    "moveItem": "Move item",
+    "reset": "Reset",
+    "itemCount": "{{count}} items",
+    "activeWindow": "window {{id}}",
+    "openProject": "open project"
+  }
+}

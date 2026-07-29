@@ -3,7 +3,7 @@ import type {
   ProjectSlug,
   PublicAssetPath,
 } from "@/features/gui/registry/appTypes";
-import type { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { Language } from "@/shared/i18n/language";
 
 export type ProjectStatus = "live" | "archived" | "private";
 
@@ -20,21 +20,10 @@ export type ProjectCatalogEntry = {
   media: readonly PublicAssetPath[];
 };
 
-export type LocalizedProjectSummary = {
-  title: string;
-  summary: string;
-  kind: string;
-  fileIcon: string;
-};
-
-export type ProjectSummary = ProjectCatalogEntry & {
-  content: Record<Language, LocalizedProjectSummary>;
-};
-
 export type ProfileContent = {
   name: string;
   role: string;
-  summary: string;
+  summary: readonly string[];
   location: string;
 };
 
@@ -42,7 +31,13 @@ export type ExperienceContent = {
   title: string;
   role: string;
   period: string;
-  highlights: readonly string[];
+  highlights: readonly ExperienceHighlight[];
+  logo?: PublicAssetPath;
+};
+
+export type ExperienceHighlight = {
+  title: string;
+  items: readonly string[];
 };
 
 export type SkillGroup = {
@@ -54,6 +49,7 @@ export type EducationContent = {
   institution: string;
   program: string;
   period: string;
+  logo?: PublicAssetPath;
 };
 
 export type ContactContent = {
@@ -76,14 +72,6 @@ export type PortfolioContent = {
   projects: readonly ResumeProjectContent[];
   education: readonly EducationContent[];
   contact: ContactContent;
-  labels: {
-    experience: string;
-    skills: string;
-    projects: string;
-    education: string;
-    contact: string;
-    print: string;
-  };
 };
 
 export type PortfolioContentByLanguage = Record<Language, PortfolioContent>;

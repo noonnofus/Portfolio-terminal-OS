@@ -14,6 +14,8 @@ import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvide
 import type { GuiWindowSnapshot } from "@/features/gui/navigation/navigationTypes";
 import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 import { AppRuntimeBoundary } from "@/features/gui/runtime/AppRuntimeContext";
+import { getAppTitle } from "@/features/gui/registry/getAppTitle";
+import { useTranslation } from "react-i18next";
 
 /* ── macOS-style traffic-light SVG icons ────────────────── */
 
@@ -121,11 +123,12 @@ export function GuiWindowFrame({
     clampEpoch: number;
 }) {
     const language = useGuiStore((state) => state.language);
+    const { t } = useTranslation("appShell");
     const { navigate, navigationBusy } = useGuiNavigation();
     const shouldReduceMotion = useReducedMotion();
     const appId: GuiAppId = win.appId;
     const app = appMetadata[appId];
-    const title = app.titles[language];
+    const title = getAppTitle(app, t);
     const headingId = `gui-window-${appId.replace(":", "-")}`;
     const windowVisibility = win.minimized
         ? "minimized"
@@ -318,7 +321,7 @@ export function GuiWindowFrame({
                     ref={sectionRef as React.Ref<HTMLElement>}
                     role="dialog"
                     aria-labelledby={headingId}
-                    className={`gui-window${maximized ? " gui-window-maximized" : ""}`}
+                    className={`application-window${maximized ? " application-window-maximized" : ""}`}
                     data-active={active}
                     data-window-id={appId}
                     data-app-type={
@@ -354,11 +357,11 @@ export function GuiWindowFrame({
                 >
                     {/* ── macOS-style title bar ──────────── */}
                     <div
-                        className="gui-title-bar"
+                        className="application-title-bar"
                         onPointerDown={handlePointerDown}
                     >
                         {/* Traffic lights (left side) */}
-                        <div className="gui-traffic-lights">
+                        <div className="application-traffic-lights">
                             <button
                                 type="button"
                                 aria-label={`${title} close`}
@@ -369,18 +372,18 @@ export function GuiWindowFrame({
                                         windowId: appId,
                                     })
                                 }
-                                className="gui-traffic-light gui-traffic-close"
+                                className="application-traffic-light application-traffic-close"
                             >
-                                <MacCloseIcon className="gui-traffic-icon" />
+                                <MacCloseIcon className="application-traffic-icon" />
                             </button>
                             <button
                                 type="button"
                                 aria-label={`${title} minimize`}
                                 disabled={navigationBusy}
                                 onClick={handleMinimize}
-                                className="gui-traffic-light gui-traffic-minimize"
+                                className="application-traffic-light application-traffic-minimize"
                             >
-                                <MacMinimizeIcon className="gui-traffic-icon" />
+                                <MacMinimizeIcon className="application-traffic-icon" />
                             </button>
                             <button
                                 type="button"
@@ -390,12 +393,12 @@ export function GuiWindowFrame({
                                         : `${title} maximize`
                                 }
                                 onClick={() => setMaximized((v) => !v)}
-                                className="gui-traffic-light gui-traffic-maximize"
+                                className="application-traffic-light application-traffic-maximize"
                             >
                                 {maximized ? (
-                                    <MacRestoreIcon className="gui-traffic-icon" />
+                                    <MacRestoreIcon className="application-traffic-icon" />
                                 ) : (
-                                    <MacMaximizeIcon className="gui-traffic-icon" />
+                                    <MacMaximizeIcon className="application-traffic-icon" />
                                 )}
                             </button>
                         </div>
@@ -405,17 +408,17 @@ export function GuiWindowFrame({
                             ref={headingRef}
                             id={headingId}
                             tabIndex={-1}
-                            className="gui-title-text"
+                            className="application-title-text"
                         >
                             {title}
                         </h2>
 
-                        <div className="gui-title-spacer" aria-hidden="true" />
+                        <div className="application-title-spacer" aria-hidden="true" />
                     </div>
 
                     {/* ── Window content ─────────────────── */}
                     <div
-                        className="gui-window-content"
+                        className="application-window-content"
                         inert={!active ? true : undefined}
                     >
                         <AppRuntimeBoundary windowVisibility={windowVisibility}>

@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import type { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { Language } from "@/shared/i18n/language";
 
 declare const externalUrlBrand: unique symbol;
 declare const publicAssetPathBrand: unique symbol;
@@ -31,13 +31,11 @@ export function publicAssetPath(value: string): PublicAssetPath {
 }
 
 export const projectSlugs = [
+    "portfolio",
+    "optigen",
+    "kepco",
     "wchms",
     "flare",
-    "weconnect",
-    "pagessence",
-    "diceroller",
-    "mejubot",
-    "webpiano",
 ] as const;
 
 export type ProjectSlug = (typeof projectSlugs)[number];
@@ -52,6 +50,14 @@ export type GuiAppId =
     | "notes"
     | "settings"
     | ProjectAppId;
+
+type AppNameId<K extends GuiAppId> = K extends `project:${
+    infer Slug extends ProjectSlug
+}`
+    ? Slug
+    : K;
+
+export type AppTitleKey<K extends GuiAppId> = `appNames.${AppNameId<K>}`;
 
 export type EmptyParams = {
     readonly __emptyParams?: never;
@@ -100,7 +106,7 @@ export type GuiAppUrlTargetMap = {
 export type GuiAppCatalogEntry<K extends GuiAppId> = {
     appId: K;
     url: GuiAppUrlTargetMap[K];
-    titles: Record<Language, string>;
+    titleKey: AppTitleKey<K>;
     icon: PublicAssetPath;
     order: number;
     dock?: {
@@ -173,6 +179,24 @@ export function createOpenAppCommand(appId: GuiAppId): OpenAppCommand {
         case "notes":
         case "settings":
             return { type: "open-app", appId, params: {} };
+        case "project:portfolio":
+            return {
+                type: "open-app",
+                appId,
+                params: { slug: "portfolio" },
+            };
+        case "project:optigen":
+            return {
+                type: "open-app",
+                appId,
+                params: { slug: "optigen" },
+            };
+        case "project:kepco":
+            return {
+                type: "open-app",
+                appId,
+                params: { slug: "kepco" },
+            };
         case "project:wchms":
             return {
                 type: "open-app",
@@ -184,36 +208,6 @@ export function createOpenAppCommand(appId: GuiAppId): OpenAppCommand {
                 type: "open-app",
                 appId,
                 params: { slug: "flare" },
-            };
-        case "project:weconnect":
-            return {
-                type: "open-app",
-                appId,
-                params: { slug: "weconnect" },
-            };
-        case "project:pagessence":
-            return {
-                type: "open-app",
-                appId,
-                params: { slug: "pagessence" },
-            };
-        case "project:diceroller":
-            return {
-                type: "open-app",
-                appId,
-                params: { slug: "diceroller" },
-            };
-        case "project:mejubot":
-            return {
-                type: "open-app",
-                appId,
-                params: { slug: "mejubot" },
-            };
-        case "project:webpiano":
-            return {
-                type: "open-app",
-                appId,
-                params: { slug: "webpiano" },
             };
     }
 }

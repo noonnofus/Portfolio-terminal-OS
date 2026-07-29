@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
     Brain,
     Cable,
@@ -6,7 +5,6 @@ import {
     Cloud,
     Database,
     DatabaseZap,
-    ExternalLink,
     FileCode2,
     FileText,
     GitBranch,
@@ -17,7 +15,10 @@ import {
 } from "lucide-react";
 import StackIcon from "@/shared/components/StackIcon";
 import { useTranslation } from "react-i18next";
-import { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { Language } from "@/shared/i18n/language";
+import { projectManifest } from "@/shared/content/portfolio/projectManifest";
+import { ProjectTechBadges } from "../../components/ProjectTechBadges";
+import styles from "../../styles/ProjectContent.module.css";
 
 interface AppProjectWCHMSProps {
     language: Language;
@@ -27,36 +28,25 @@ export default function AppProjcetWCHMS({}: AppProjectWCHMSProps) {
     const { t } = useTranslation(["WCHMS", "common"]);
     return (
         <div
-            className="gui-app-surface h-full overflow-y-auto"
+            className="application-app-surface h-full overflow-y-auto"
         >
-            <div className="my-8 mx-4 md:mx-36">
+            <div className={styles.readingFrame}>
                 <div
                     className="flex flex-col items-center mt-8 mb-3"
                 >
                     <h2
-                        className="font-bold text-3xl text-pen-gray-800 mb-6"
+                        className="font-bold text-3xl text-pen-gray-800 mb-5"
                     >
                         {t("title")}
                     </h2>
+                    <div className={`${styles.readingStack} mb-7`}>
+                        <ProjectTechBadges
+                            label={t("common:techStack")}
+                            items={projectManifest.wchms.stack}
+                        />
+                    </div>
 
-                    <Image
-                        src="/icons/wchms.png"
-                        alt="project WCHMS logo image"
-                        width={150}
-                        height={150}
-                        className="mb-4 w-[150px] h-auto object-cover"
-                    />
-                    
-                    <a
-                        href="https://wchms-idsp4.fly.dev/"
-                        className="underline mb-4 flex items-center gap-1"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        {t("linkAction")} <ExternalLink />
-                    </a>
-
-                    <div className="max-w-[700px] flex flex-col ml-1 mr-1">
+                    <div className={styles.readingProse}>
                         <div className="mb-6">
                             <h3
                                 className="font-semibold text-xl text-pen-gray-800"

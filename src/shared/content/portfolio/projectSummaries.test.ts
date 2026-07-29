@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { projectSlugs } from "@/features/gui/registry/appTypes";
-import { projectCatalog } from "@/shared/content/portfolio/catalog";
+import { projectManifest } from "@/shared/content/portfolio/projectManifest";
+import { getPortfolioContent } from "@/shared/content/portfolio/getPortfolioContent";
 import { projectSummaries } from "@/shared/content/portfolio/projectSummaries";
+import { languages } from "@/shared/i18n/language";
 
 describe("portfolio project summaries", () => {
     it("covers the exact project slug allowlist once", () => {
@@ -11,29 +13,35 @@ describe("portfolio project summaries", () => {
 
         expect(summarySlugs).toEqual(projectSlugs.toSorted());
         expect(new Set(summarySlugs).size).toBe(summarySlugs.length);
-        expect(Object.keys(projectCatalog).toSorted()).toEqual(
+        expect(Object.keys(projectManifest).toSorted()).toEqual(
             projectSlugs.toSorted(),
         );
     });
 
-    it("has complete localized list content and compact stacks", () => {
+    it("keeps compact manifest stacks and complete localized resume content", () => {
         for (const project of projectSummaries) {
-            expect(project.content.ko.title).not.toBe("");
-            expect(project.content.ko.summary).not.toBe("");
-            expect(project.content.en.title).not.toBe("");
-            expect(project.content.en.summary).not.toBe("");
             expect(project.stack.length).toBeGreaterThan(0);
             expect(project.stack.length).toBeLessThanOrEqual(4);
         }
+
+        for (const language of languages) {
+            const projects = getPortfolioContent(language).projects;
+
+            expect(projects.map((project) => project.slug).toSorted()).toEqual(
+                projectSlugs.toSorted(),
+            );
+            for (const project of projects) {
+                expect(project.title).not.toBe("");
+                expect(project.summary).not.toBe("");
+            }
+        }
     });
 
-    it("keeps full media as paths rather than loading detail modules", () => {
-        const media = projectSummaries.flatMap(
-            (project) => project.media,
-        );
-
-        expect(media.every((path) => path.startsWith("/videos/"))).toBe(
-            true,
-        );
+    it("does not expose public project links or media", () => {
+        for (const project of projectSummaries) {
+            expect(project.status).toBe("private");
+            expect(project.links).toEqual({});
+            expect(project.media).toEqual([]);
+        }
     });
 });

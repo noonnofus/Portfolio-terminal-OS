@@ -12,6 +12,8 @@ import {
 } from "@/features/gui/registry/appTypes";
 import { collectFolderAppIds } from "@/features/gui/directory/directoryTree";
 import { wallpaperIds } from "@/features/gui/appearance/wallpaperCatalog";
+import enAppShell from "@/shared/i18n/resources/en/appShell.json";
+import koAppShell from "@/shared/i18n/resources/ko/appShell.json";
 import {
     parseGuiUrl,
     serializeGuiUrl,
@@ -25,7 +27,7 @@ describe("GUI app boundaries", () => {
         expect(collectFolderAppIds().toSorted()).toEqual(
             [...folderAppIds].toSorted(),
         );
-        expect(Object.keys(appMetadata)).toHaveLength(14);
+        expect(Object.keys(appMetadata)).toHaveLength(12);
         expect(appMetadata.contact.window).toEqual({
             width: 600,
             height: 370,
@@ -48,6 +50,21 @@ describe("GUI app boundaries", () => {
         }
     });
 
+    it("keeps localized app-title lookups aligned with the catalog", () => {
+        for (const appId of Object.keys(appMetadata) as Array<
+            keyof typeof appMetadata
+        >) {
+            const titleKey = appMetadata[appId].titleKey;
+            const appName = titleKey.replace(
+                "appNames.",
+                "",
+            ) as keyof typeof enAppShell.appNames;
+
+            expect(koAppShell.appNames[appName]).not.toBe("");
+            expect(enAppShell.appNames[appName]).not.toBe("");
+        }
+    });
+
     it("keeps wallpaper IDs catalog-driven", () => {
         expect(wallpaperIds).toHaveLength(8);
         expect(new Set(wallpaperIds).size).toBe(wallpaperIds.length);
@@ -59,9 +76,7 @@ describe("GUI app boundaries", () => {
             lang: "ko",
         });
         expect(
-            parseGuiUrl(
-                new URLSearchParams("app=project&slug=wchms&lang=en"),
-            ),
+            parseGuiUrl(new URLSearchParams("app=project&slug=wchms&lang=en")),
         ).toEqual({
             app: "project",
             slug: "wchms",
@@ -97,9 +112,7 @@ describe("GUI app boundaries", () => {
     });
 
     it("validates external and public asset paths", () => {
-        expect(externalUrl("https://example.com")).toBe(
-            "https://example.com",
-        );
+        expect(externalUrl("https://example.com")).toBe("https://example.com");
         expect(publicAssetPath("/icons/about.png")).toBe("/icons/about.png");
         expect(() => externalUrl("http://example.com")).toThrow();
         expect(() => publicAssetPath("../secret")).toThrow();

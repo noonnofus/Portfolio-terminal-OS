@@ -1,7 +1,11 @@
-import { create } from 'zustand';
+import { create } from "zustand";
+import {
+  DEFAULT_LANGUAGE,
+  type Language,
+} from "@/shared/i18n/language";
 
-export type Language = "ko" | "en";
-export const DEFAULT_LANGUAGE: Language = "ko";
+export type { Language } from "@/shared/i18n/language";
+export { DEFAULT_LANGUAGE } from "@/shared/i18n/language";
 
 interface LanguageState {
     currentLanguage: Language;

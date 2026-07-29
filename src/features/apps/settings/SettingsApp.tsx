@@ -17,14 +17,14 @@ import { useColorMode } from "@/shared/ui/color-mode";
 
 type SettingsSection = "account" | "general" | "appearance";
 
-// border border-[var(--gui-border)] bg-[var(--gui-settings-group-bg)]
+// border border-[var(--application-border)] bg-[var(--application-settings-group-bg)]
 
 function getActiveClass(active: boolean) {
   return [
-    "rounded-[var(--gui-border-radius)] border px-4 py-1.5 text-[length:var(--gui-text-label)] font-semibold transition-colors duration-150",
+    "rounded-[var(--application-border-radius)] border px-4 py-1.5 text-[length:var(--application-text-label)] font-semibold transition-colors duration-150",
     active
-      ? "border-[var(--gui-accent)] bg-transparent text-[var(--gui-text)]"
-      : "border border-[var(--gui-border)] bg-[var(--gui-settings-group-bg)]",
+      ? "border-[var(--application-accent)] bg-transparent text-[var(--application-text)]"
+      : "border border-[var(--application-border)] bg-[var(--application-settings-group-bg)]",
   ].join(" ");
 }
 
@@ -102,9 +102,9 @@ export default function SettingsApp({
   }
 
   return (
-    <div className="gui-settings-surface">
-      <aside className="gui-settings-sidebar">
-        <h3 className="px-2 text-[length:var(--gui-text-control)] font-bold text-slate-500 dark:text-slate-400">
+    <div className="application-settings-surface">
+      <aside className="application-settings-sidebar">
+        <h3 className="px-2 text-[length:var(--application-text-control)] font-bold text-slate-500 dark:text-slate-400">
           {t("title")}
         </h3>
         <nav
@@ -117,7 +117,7 @@ export default function SettingsApp({
               type="button"
               aria-current={activeSection === section.id ? "page" : undefined}
               data-active={activeSection === section.id}
-              className="gui-settings-sidebar-item"
+              className="application-settings-sidebar-item"
               onClick={() => {
                 setAccountMessage(null);
                 setActiveSection(section.id);
@@ -129,8 +129,8 @@ export default function SettingsApp({
         </nav>
       </aside>
 
-      <main className="gui-settings-detail">
-        <h3 className="gui-settings-section-title">{activeSectionTitle}</h3>
+      <main className="application-settings-detail">
+        <h3 className="application-settings-section-title">{activeSectionTitle}</h3>
 
         {activeSection === "account" ? (
           <section className="space-y-4">
@@ -181,16 +181,16 @@ export default function SettingsApp({
             </div>
 
             {viewer.status === "authenticated" ? (
-              <div className="gui-settings-card">
-                <div className="gui-settings-row">
+              <div className="application-settings-card">
+                <div className="application-settings-row">
                   <div>
-                    <p className="text-[length:var(--gui-text-control)] font-semibold">
+                    <p className="text-[length:var(--application-text-control)] font-semibold">
                       {t("deleteAccount")}
                     </p>
                   </div>
                   <button
                     type="button"
-                    className="rounded-[var(--gui-radius-panel)] border border-[var(--gui-border)] bg-[var(--gui-settings-group-bg)] px-2 py-0.5 text-[length:var(--gui-text-control)] font-semibold text-[var(--gui-text)] shadow-[inset_0_1px_0_rgb(0_0_0/6%)] transition-colors"
+                    className="rounded-[var(--application-radius-panel)] border border-[var(--application-border)] bg-[var(--application-settings-group-bg)] px-2 py-0.5 text-[length:var(--application-text-control)] font-semibold text-[var(--application-text)] shadow-[inset_0_1px_0_rgb(0_0_0/6%)] transition-colors"
                     onClick={() => void deleteAccount()}
                   >
                     {t("deleteAccount")}
@@ -202,13 +202,13 @@ export default function SettingsApp({
               {viewer.status === "authenticated" ? (
                 <a
                   href="/auth/logout"
-                  className="rounded-[var(--gui-radius-panel)] border border-[var(--gui-border)] bg-[var(--gui-settings-group-bg)] px-2 py-0.5 text-[length:var(--gui-text-control)] font-semibold text-[var(--gui-text)] shadow-[inset_0_1px_0_rgb(0_0_0/6%)] transition-colors"
+                  className="rounded-[var(--application-radius-panel)] border border-[var(--application-border)] bg-[var(--application-settings-group-bg)] px-2 py-0.5 text-[length:var(--application-text-control)] font-semibold text-[var(--application-text)] shadow-[inset_0_1px_0_rgb(0_0_0/6%)] transition-colors"
                 >
                   {t("logout")}
                 </a>
               ) : (
                   <a href="/auth/github"
-                    className="rounded-[var(--gui-radius-panel)] border border-[var(--gui-border)] bg-[var(--gui-settings-group-bg)] px-2 py-0.5 text-[length:var(--gui-text-control)] font-semibold text-[var(--gui-text)] shadow-[inset_0_1px_0_rgb(0_0_0/6%)] transition-colors"
+                    className="rounded-[var(--application-radius-panel)] border border-[var(--application-border)] bg-[var(--application-settings-group-bg)] px-2 py-0.5 text-[length:var(--application-text-control)] font-semibold text-[var(--application-text)] shadow-[inset_0_1px_0_rgb(0_0_0/6%)] transition-colors"
                   >GitHub로 로그인</a>
               )}
             </div>
@@ -223,10 +223,10 @@ export default function SettingsApp({
 
         {activeSection === "general" ? (
           <section className="space-y-3">
-            <div className="gui-settings-card">
-              <div className="gui-settings-row">
+            <div className="application-settings-card">
+              <div className="application-settings-row">
                 <div>
-                  <p className="text-[length:var(--gui-text-control)] font-semibold">{t("languageLabel")}</p>
+                  <p className="text-[length:var(--application-text-control)] font-semibold">{t("languageLabel")}</p>
                 </div>
                 <div className="flex gap-2">
                   <button
@@ -259,10 +259,10 @@ export default function SettingsApp({
               </div>
             </div>
 
-            <div className="gui-settings-card">
-              <div className="gui-settings-row">
+            <div className="application-settings-card">
+              <div className="application-settings-row">
                 <div>
-                  <p className="text-[length:var(--gui-text-control)] font-semibold">{t("dockLabel")}</p>
+                  <p className="text-[length:var(--application-text-control)] font-semibold">{t("dockLabel")}</p>
                 </div>
                 <div className="flex gap-2">
                   <button
@@ -299,10 +299,10 @@ export default function SettingsApp({
 
         {activeSection === "appearance" ? (
           <section className="space-y-4">
-            <div className="gui-settings-card">
-              <div className="gui-settings-row">
+            <div className="application-settings-card">
+              <div className="application-settings-row">
                 <div>
-                  <p className="text-[length:var(--gui-text-control)] font-semibold">{t("themeLabel")}</p>
+                  <p className="text-[length:var(--application-text-control)] font-semibold">{t("themeLabel")}</p>
                 </div>
                 <div className="flex gap-2">
                   <button
@@ -343,20 +343,20 @@ export default function SettingsApp({
                   alt="선택된 배경화면"
                   width={196}
                   height={105}
-                  className="gui-wallpaper-preview h-26.25! w-49! max-w-full! aspect-auto!"
+                  className="application-wallpaper-preview h-26.25! w-49! max-w-full! aspect-auto!"
                   priority
                 />
               ) : null}
-              <div className="flex min-h-12 w-full items-center rounded-[var(--gui-radius-panel)] border border-[var(--gui-border)] bg-[var(--gui-settings-group-bg)] px-4.5">
-                <div className="gui-wallpaper-name">
+              <div className="flex min-h-12 w-full items-center rounded-[var(--application-radius-panel)] border border-[var(--application-border)] bg-[var(--application-settings-group-bg)] px-4.5">
+                <div className="application-wallpaper-name">
                   {selectedWallpaper?.labels[language] ?? t("wallpaperLabel")}
                 </div>
               </div>
             </div>
 
-            <div className="border-t border-[var(--gui-border)] pt-6.5">
+            <div className="border-t border-[var(--application-border)] pt-6.5">
               <div className="mb-3">
-                <p className="text-[length:var(--gui-text-title-3)] font-bold">
+                <p className="text-[length:var(--application-text-title-3)] font-bold">
                   {t("wallpaperLabel")}
                 </p>
               </div>
@@ -373,16 +373,16 @@ export default function SettingsApp({
                         wallpaper: id,
                       });
                     }}
-                    className="gui-wallpaper-option"
+                    className="application-wallpaper-option"
                   >
                     <Image
                       src={preview}
                       alt=""
                       width={180}
                       height={102}
-                      className="gui-wallpaper-preview"
+                      className="application-wallpaper-preview"
                     />
-                    <span className="gui-wallpaper-name">
+                    <span className="application-wallpaper-name">
                       {labels[language]}
                     </span>
                   </button>

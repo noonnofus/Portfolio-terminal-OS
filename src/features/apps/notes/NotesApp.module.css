@@ -1,0 +1,206 @@
+.root {
+  --app-notes-color-accent: #ffd54a;
+  --app-notes-color-accent-hover: #ffca24;
+  --app-notes-color-text: #1d1d1f;
+  --app-notes-color-muted: #958a6b;
+  --app-notes-color-muted-soft: #766f5f;
+  --app-notes-color-muted-placeholder: #9a8f72;
+  --app-notes-color-muted-strong: #5f583f;
+  --app-notes-color-code-background: #f0e6bd;
+  --app-notes-color-focus-background: #fff7cf;
+  --app-notes-color-quote-border: #d9c46f;
+  --app-notes-color-link: #a56a00;
+  --app-notes-color-link-decoration: rgb(217 165 0 / 45%);
+  --app-notes-size-content-max-width: 62.5rem;
+  --app-notes-size-entry-label-width: 9.375rem;
+  --app-notes-space-entry-gap: 0.5rem;
+  --app-notes-space-entry-wide-gap: 1.5rem;
+  --app-notes-font-size-reading: 1rem;
+  --app-notes-line-height-reading: 1.8;
+  --app-notes-letter-spacing-reading: -0.005em;
+  --app-notes-font-size-title: 1.75rem;
+  --app-notes-letter-spacing-title: -0.03em;
+  --app-notes-font-size-rich-heading-1: 1.5rem;
+  --app-notes-letter-spacing-rich-heading-1: -0.02em;
+  --app-notes-font-size-rich-heading-2: 1.25rem;
+  --app-notes-letter-spacing-rich-heading-2: -0.015em;
+  --app-notes-font-size-rich-heading-3: var(--application-text-title-3);
+  --app-notes-font-size-code: 0.92em;
+  --app-notes-size-editor-min-height: 7rem;
+  --app-notes-space-editor-placeholder-offset: -1.8rem;
+}
+
+.content {
+  width: 100%;
+  max-width: var(--app-notes-size-content-max-width);
+  margin-inline: auto;
+  padding: 1.5rem;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-notes-space-entry-gap);
+}
+
+.readingContent,
+.editorPlaceholder {
+  font-size: var(--app-notes-font-size-reading);
+  line-height: var(--app-notes-line-height-reading);
+  letter-spacing: var(--app-notes-letter-spacing-reading);
+}
+
+.readingContent {
+  color: var(--app-notes-color-text);
+}
+
+.editorPlaceholder {
+  margin-top: var(--app-notes-space-editor-placeholder-offset);
+  color: var(--app-notes-color-muted-placeholder);
+}
+
+.title {
+  font-size: var(--app-notes-font-size-title);
+  letter-spacing: var(--app-notes-letter-spacing-title);
+}
+
+.richHeading1 {
+  font-size: var(--app-notes-font-size-rich-heading-1);
+  letter-spacing: var(--app-notes-letter-spacing-rich-heading-1);
+}
+
+.richHeading2 {
+  font-size: var(--app-notes-font-size-rich-heading-2);
+  letter-spacing: var(--app-notes-letter-spacing-rich-heading-2);
+}
+
+.richHeading3 {
+  font-size: var(--app-notes-font-size-rich-heading-3);
+}
+
+.richCode {
+  font-size: var(--app-notes-font-size-code);
+}
+
+.editor :global(.ProseMirror) {
+  min-height: var(--app-notes-size-editor-min-height);
+  background: transparent;
+  color: var(--application-app-surface-text);
+  font-family: var(--application-font-text);
+  font-size: var(--app-notes-font-size-reading);
+  line-height: var(--app-notes-line-height-reading);
+  letter-spacing: var(--app-notes-letter-spacing-reading);
+  outline: none;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.editor :global(.ProseMirror p) {
+  margin: 0.5rem 0;
+}
+
+.editor :global(.ProseMirror p:first-child),
+.editor :global(.ProseMirror h1:first-child),
+.editor :global(.ProseMirror h2:first-child),
+.editor :global(.ProseMirror h3:first-child) {
+  margin-top: 0;
+}
+
+.editor :global(.ProseMirror p:last-child) {
+  margin-bottom: 0;
+}
+
+.editor :global(.ProseMirror h1) {
+  margin: 1.25rem 0 0.75rem;
+  font-family: var(--application-font-display);
+  font-size: var(--application-text-large-title);
+  font-weight: var(--application-weight-bold);
+  letter-spacing: -0.02em;
+}
+
+.editor :global(.ProseMirror h2) {
+  margin: 1.25rem 0 0.5rem;
+  font-family: var(--application-font-display);
+  font-size: var(--application-text-title-1);
+  font-weight: var(--application-weight-semibold);
+  letter-spacing: -0.015em;
+}
+
+.editor :global(.ProseMirror h3) {
+  margin: 1rem 0 0.5rem;
+  font-family: var(--application-font-display);
+  font-size: var(--application-text-title-3);
+  font-weight: var(--application-weight-semibold);
+}
+
+.editor :global(.ProseMirror ul),
+.editor :global(.ProseMirror ol) {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+
+.editor :global(.ProseMirror ul) {
+  list-style: disc;
+}
+
+.editor :global(.ProseMirror ol) {
+  list-style: decimal;
+}
+
+.editor :global(.ProseMirror li) {
+  margin: 0.25rem 0;
+  padding-left: 0.25rem;
+}
+
+.editor :global(.ProseMirror blockquote) {
+  margin: 0.75rem 0;
+  border-left: 2px solid var(--app-notes-color-quote-border);
+  padding-left: 0.75rem;
+  color: var(--app-notes-color-muted-strong);
+}
+
+.editor :global(.ProseMirror code) {
+  border-radius: 0.375rem;
+  background: var(--app-notes-color-code-background);
+  padding: 0.125rem 0.375rem;
+  font-size: var(--app-notes-font-size-code);
+}
+
+.editor :global(.ProseMirror pre) {
+  margin: 0.75rem 0;
+  overflow-x: auto;
+  border-radius: 0.75rem;
+  background: var(--app-notes-color-code-background);
+  padding: 0.75rem;
+  font-family: var(--application-font-mono);
+  font-size: var(--application-text-body);
+}
+
+:global(.application-shell[data-theme="dark"]) .root {
+  --app-notes-color-text: #f5f5f7;
+  --app-notes-color-muted: rgb(255 255 255 / 42%);
+  --app-notes-color-muted-soft: rgb(255 255 255 / 55%);
+  --app-notes-color-muted-placeholder: rgb(255 255 255 / 38%);
+  --app-notes-color-muted-strong: rgb(255 255 255 / 72%);
+  --app-notes-color-code-background: rgb(255 255 255 / 10%);
+  --app-notes-color-focus-background: rgb(255 255 255 / 5%);
+  --app-notes-color-quote-border: rgb(255 213 74 / 50%);
+  --app-notes-color-link: #ffd54a;
+  --app-notes-color-link-decoration: rgb(255 213 74 / 45%);
+}
+
+:global(.dark) .editor :global(.ProseMirror) {
+  background: var(--application-app-surface-bg);
+  color: var(--application-app-surface-text);
+}
+
+@media (min-width: 640px) {
+  .content {
+    padding-inline: 2rem;
+  }
+
+  .entry {
+    grid-template-columns: var(--app-notes-size-entry-label-width) minmax(0, 1fr);
+    gap: var(--app-notes-space-entry-wide-gap);
+  }
+}

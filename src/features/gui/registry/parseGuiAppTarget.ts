@@ -5,7 +5,7 @@ import {
     type GuiUrlState,
     type OpenAppCommand,
 } from "@/features/gui/registry/appTypes";
-import type { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { Language } from "@/shared/i18n/language";
 
 const MAX_QUERY_LENGTH = 256;
 

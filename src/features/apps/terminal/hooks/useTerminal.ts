@@ -58,7 +58,8 @@ export function useTerminal({
       const nextTerm = new XTerm({
         cursorBlink: true,
         fontSize,
-        fontFamily: 'Menlo, Monaco, "Courier New", monospace',
+        fontFamily:
+            '"SF Mono", SFMono-Regular, Menlo, Monaco, ui-monospace, "Cascadia Code", monospace',
         lineHeight: 1.2,
         theme: {
           background: "#000000",

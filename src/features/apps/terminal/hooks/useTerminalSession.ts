@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import type { Terminal } from "@xterm/xterm";
-import type { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { Language } from "@/shared/i18n/language";
 import { TERMINAL_BOOT_TIMING, TERMINAL_WAKE_TIMING } from "../lib/bootSequence";
 import type {
   TerminalSequenceController,

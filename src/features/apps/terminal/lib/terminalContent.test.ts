@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { TERMINAL_COMMANDS } from "../command";
 import { getTerminalContent } from "./terminalContent";
-import koTerminal from "../../../../../public/locales/ko/Terminal.json";
-import enTerminal from "../../../../../public/locales/en/Terminal.json";
+import koTerminal from "@/shared/i18n/resources/ko/Terminal.json";
+import enTerminal from "@/shared/i18n/resources/en/Terminal.json";
 
 describe("getTerminalContent", () => {
   it("creates Korean boot content with an English language link", () => {

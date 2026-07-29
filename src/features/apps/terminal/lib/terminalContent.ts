@@ -1,7 +1,7 @@
-import type { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { Language } from "@/shared/i18n/language";
 import { TERMINAL_COMMANDS } from "../command";
 import type { TerminalAction } from "./terminalActions";
-import i18n from "../../../../shared/lib/i18n";
+import i18n from "@/shared/i18n/client";
 
 export type TerminalSegment =
   | { type: "text"; value: string }

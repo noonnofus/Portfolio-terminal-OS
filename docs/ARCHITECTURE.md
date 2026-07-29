@@ -1,6 +1,6 @@
 # Portfolio-terminal-OS Architecture
 
-> 최종 업데이트: 2026-07-09
+> 최종 업데이트: 2026-07-29
 
 ## Overview
 
@@ -48,12 +48,14 @@ flowchart LR
     LanguageStore["useLanguageStore"] --> I18nWrapper
     I18nWrapper --> I18next["i18n.changeLanguage"]
     I18nWrapper --> HtmlLang["document.documentElement.lang"]
-    LocaleJSON["public/locales/{ko,en}"] --> I18next
+    LocaleJSON["src/shared/i18n/resources/{ko,en}"] --> I18next
     I18next --> Apps["Terminal and GUI Apps"]
 ```
 
 The GUI URL can carry language state, but the active language is still owned by
 the shared language store and synchronized to i18next and `<html lang>`.
+Core namespaces are registered in `src/shared/i18n/client.ts`; project-specific
+namespaces are loaded by their allowlisted app loaders.
 
 ## GUI runtime
 
@@ -86,6 +88,15 @@ browserHistoryAdapter     → pure navigation planner
 GUI apps                  → shared UI/content/i18n/query helpers
 ```
 
+### Style ownership
+
+- `src/app/globals.css` owns site-wide reset and design tokens.
+- `src/features/gui/styles/application.css` owns shared OS application chrome,
+  `.application-*` selectors, and `--application-*` tokens.
+- App-specific presentation stays co-located in CSS Modules, including Notes and
+  project reading content. This keeps shared shell changes separate from app
+  content styling.
+
 ### State rules
 
 - A GUI store is created through `zustand/vanilla` for each mounted shell and supplied through React Context.
@@ -105,6 +116,9 @@ GUI apps                  → shared UI/content/i18n/query helpers
 - Catalog and loader key sets must match through mapped types and unit tests.
 - URL values select allowlisted app IDs and project slugs. They never become dynamic import paths.
 - Folder apps render through `DirectorySurface`; they do not define custom folder renderers.
+- Project metadata such as stack badges and visibility is centralized in
+  `shared/content/portfolio/projectManifest.ts`; app configs retain only
+  typed runtime metadata.
 
 ### Navigation rules
 

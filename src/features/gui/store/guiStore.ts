@@ -7,7 +7,7 @@ import type {
     StoreCommand,
     WorkspaceFocus,
 } from "@/features/gui/navigation/navigationTypes";
-import type { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { Language } from "@/shared/i18n/language";
 import type { PageVisibility } from "@/features/gui/runtime/appVisibility";
 import type { WallpaperId } from "@/features/gui/appearance/wallpaperCatalog";
 

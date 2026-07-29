@@ -5,8 +5,8 @@ import { defineFileNode } from "@/features/gui/directory/directoryTypes";
 export const flareAppConfig = defineAppConfig({
   appId: "project:flare",
   url: { app: "project", slug: "flare" },
-  titles: { ko: "Flare", en: "Flare" },
-  icon: publicAssetPath("/icons/optimized/flare.png"),
+  titleKey: "appNames.flare",
+  icon: publicAssetPath("/icons/optimized/document.png"),
   order: 120,
   window: { width: 840, height: 640 },
 });

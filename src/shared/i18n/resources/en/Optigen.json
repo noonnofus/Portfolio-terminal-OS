@@ -1,0 +1,36 @@
+{
+  "title": "B2B AI Knowledge & Workflow Platform",
+  "stackLabel": "Technology stack",
+  "summary": "An internal enterprise AI platform for managing organizations, roles, bots, and documents with RAG-powered chat and MCP tool integration. I built the Next.js frontend and MCP server from scratch as the sole developer for both.",
+  "projectIntro": {
+    "title": "Project overview",
+    "description": "Administrators configure organizations, roles, bots, and documents; users select a bot for their task and converse with it. Responses are generated through document-grounded retrieval and model calls, while agents can invoke MCP tools when needed. I designed the frontend and MCP-connected UI so those steps read as one product flow."
+  },
+  "projectContext": {
+    "service": {"label": "Service", "description": "An internal AI platform for organization-specific bots, document-grounded RAG chat, and MCP business tools"},
+    "users": {"label": "Users", "description": "Administrators managing organizations, permissions, bots, and documents, and internal users resolving work questions"},
+    "role": {"label": "My scope", "description": "Built the Next.js frontend and UI/UX, chat and administration screens, MCP server, and integration UI from scratch as the sole developer"},
+    "constraint": {"label": "Disclosure", "description": "Internal private product; operational data, customer information, internal screens, and performance figures are not disclosed"}
+  },
+  "workflow": {
+    "title": "Primary user flow",
+    "description": "After an administrator configures bots and document context, users select a bot, ask a question, and follow streaming responses and tool output in one conversation.",
+    "steps": {"configure": "Configure organization, bot, and documents", "selectBot": "Select a task-specific bot", "chat": "Ask and receive RAG-based answers", "useTool": "Review MCP tool output"}
+  },
+  "architecture": {
+    "title": "I separated administration, AI chat, and MCP tools into role-specific services.",
+    "description": "The frontend delivers server data through App Router rendering and React Query hydration, while feature-local Zustand stores hold UI-only state. The API owns authentication, organizations, roles, bots, and chat history; the AI service owns RAG and LLM response generation; the MCP server exposes tools, resources, and prompts to AI agents.",
+    "alt": "Platform architecture connecting the Next.js frontend, internal API, AI RAG service, MCP server, Qdrant, and LLM providers",
+    "caption": "The overall structure separates the user product path from the AI agent's MCP tool-call path."
+  },
+  "implementation": {"title": "I made AI features understandable and operable as one product flow.", "description": "Administration, bot-specific chat, UI state, and MCP execution each have distinct responsibilities. These four cases explain how I designed and implemented those frontend boundaries."},
+  "labels": {"problem": "Problem", "decision": "Decision", "result": "Result"},
+  "cases": {
+    "admin": {"title": "I organized organization, role, and bot administration by feature.", "context": "Administrators need to manage organization-specific permissions, AI bots, prompts, and documents while understanding the scope of each change.", "problem": "When operational targets and permission conditions are spread across many screens, it becomes difficult to understand which feature controls which data and access.", "decision": "I separated organizations, permissions, bots, prompts, and documents into feature-based administration surfaces. Authentication and authorization stay in the server-data path, while each view centers on its operational target.", "result": "Administrators can manage each setting in role-appropriate views, and frontend capabilities can grow by domain.", "flow": "Authentication → organization and permission check → administration feature → manage bots, prompts, and documents"},
+    "chat": {"title": "I rendered bot-specific AI generation as a continuous conversation.", "context": "Users select a bot for a work task and need to follow both generated output and the final response in the same conversation context.", "problem": "Mixing settings and chat state for multiple bots globally can leave the wrong bot configuration behind or make streaming timing inconsistent across screens.", "decision": "I scoped chat settings to dynamic bot routes and appended API SSE responses to the generated answer on screen. Chat history and bot-specific settings stay behind separate boundaries.", "result": "Users follow generated and finalized responses in the context of the bot they selected, while each bot chat stays independent.", "flow": "Select bot → bot-scoped route and settings → receive SSE → render generating answer → conversation history"},
+    "content": {"title": "I separated server data from UI state.", "context": "Administration and chat screens use organization, bot, and document data from the server alongside filters, selections, and panel state in the current view.", "problem": "Putting server data and temporary UI state in one store makes cache updates and screen interaction affect each other, making state harder to trace as features grow.", "decision": "Server Actions and React Query prefetching and hydration deliver server state. Feature-local Zustand stores hold view-only state such as filters, selections, and panels.", "result": "Data refresh and screen-interaction responsibilities are separate and traceable by feature. Server rendering and client interaction work inside their respective boundaries.", "flow": "Server Actions → React Query prefetch and hydration → server data → feature-local UI store → view interaction"},
+    "mcp": {"title": "I built the MCP server and progress-aware tool experience from scratch.", "context": "When AI agents call business tools, users need to understand not only the result but also the progress of longer-running work.", "problem": "Short general tool calls and long pipelines such as meeting minutes require different connection lifecycles and progress delivery.", "decision": "I built the server with Express and the MCP SDK: stateless transport for general tools, and session-specific transport with SSE progress for the meeting-minutes pipeline. Tools, resources, and prompts use an extensible registration structure.", "result": "AI agents can call business capabilities through standard MCP paths, while users can follow progress and final output for long-running work inside the product flow.", "flow": "AI agent → choose MCP transport → tools, resources, and prompts → SSE progress or immediate result → product UI"}
+  },
+  "result": {"title": "I connected AI and administration capabilities into one product flow.", "description": "Administration, RAG-powered bot chat, and MCP execution each operate behind explicit responsibility boundaries. I also completed web-standard, accessibility, and performance improvements and added axe-based Playwright checks for core screens at desktop and mobile viewports."},
+  "footer": "This is an internal private product. Operational data, customer information, internal screens, and performance figures are not disclosed."
+}

@@ -14,13 +14,12 @@ import type {
   DesktopNodeId,
 } from "@/features/gui/directory/directoryTypes";
 import { appMetadata } from "@/features/gui/registry/appMetadata";
-import type { Language } from "@/shared/lib/i18n/useLanguageStore";
-import { orderedProjectSummaries } from "@/shared/content/portfolio/projectSummaries";
+import { getAppTitle } from "@/features/gui/registry/getAppTitle";
+import { useTranslation } from "react-i18next";
 
 export function DesktopItem({
   node,
   variant,
-  language,
   selected,
   focused,
   navigationBusy,
@@ -36,7 +35,6 @@ export function DesktopItem({
 }: {
   node: DesktopNode;
   variant: "desktop" | "window";
-  language: Language;
   selected: boolean;
   focused: boolean;
   navigationBusy: boolean;
@@ -53,12 +51,9 @@ export function DesktopItem({
     element: HTMLButtonElement | null,
   ) => void;
 }) {
+  const { t } = useTranslation("appShell");
   const app = appMetadata[node.appId];
-  const projectSummary = orderedProjectSummaries.find(
-    (project) => `project:${project.slug}` === node.appId,
-  );
-  const title =
-    projectSummary?.content[language].title ?? app.titles[language];
+  const title = getAppTitle(app, t);
   const {
     ref,
     isDragging,
@@ -87,12 +82,12 @@ export function DesktopItem({
         variant === "desktop"
           ? title
           : `${title} ${
-              language === "ko" ? "프로젝트 열기" : "open project"
+              t("desktop.openProject")
             }`
       }
       data-node-id={node.nodeId}
       className={`desktop-app directory-item ${
-        variant === "window" ? "gui-project-card" : ""
+        variant === "window" ? "application-project-card" : ""
       }`}
       data-appearance={node.appearance}
       data-selected={selected}

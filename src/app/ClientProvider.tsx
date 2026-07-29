@@ -2,7 +2,7 @@
 
 import { Provider } from '@/shared/ui/provider';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '@/shared/lib/i18n';
+import i18n from '@/shared/i18n/client';
 import { useEffect } from 'react';
 import { useLanguageStore } from '@/shared/lib/i18n/useLanguageStore';
 

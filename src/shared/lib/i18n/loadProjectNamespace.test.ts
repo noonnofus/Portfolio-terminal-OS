@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import i18n from "@/shared/lib/i18n";
+import i18n from "@/shared/i18n/client";
 import { ensureProjectNamespace } from "@/shared/lib/i18n/loadProjectNamespace";
 
 describe("project i18n namespaces", () => {
@@ -15,7 +15,7 @@ describe("project i18n namespaces", () => {
         expect(i18n.hasResourceBundle("ko", "WCHMS")).toBe(true);
         expect(i18n.hasResourceBundle("en", "WCHMS")).toBe(true);
         expect(i18n.getResource("ko", "WCHMS", "title")).toBe(
-            "WCHMS - 클라이언트 프로젝트",
+            "다국어 학습 지원 플랫폼",
         );
     });
 });

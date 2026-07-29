@@ -1,0 +1,46 @@
+flowchart LR
+    stt["STT 인바운드"]
+
+    subgraph client["사용자 화면"]
+        agent["상담사 화면 · React 19 · SSE 구독 및 전사 표시"]
+        manager["관리자·매니저 화면 · 권한 범위 이력·감청"]
+    end
+
+    subgraph api["KEPCO CAS API · Spring Boot"]
+        auth["JWT 인증 및 권한 범위"]
+        live["실시간 상담 경로 · 활성 콜 조회 · Transcript SSE"]
+        history["상담 종료 후 경로 · 이력·녹취·요약·분류 조회"]
+        analysis["AI 분석 · 요약 · 상담 유형 분류"]
+    end
+
+    subgraph data["상태 및 이력 저장소"]
+        redis[("Redis · 활성 콜 · partial transcript")]
+        mariadb[("MariaDB · 콜 · 대화 · 분석 이력")]
+    end
+
+    subgraph integration["외부 연동"]
+        ai["외부 AI · 요약 · 분류"]
+        external["ITN · 마스킹 · 녹취"]
+    end
+
+    agent -->|"인증된 상담 요청"| auth
+    manager -->|"권한 범위 요청"| auth
+    auth --> live
+    auth --> history
+    stt -->|"발화 이벤트"| live
+    live --> redis
+    live --> mariadb
+    live --> analysis
+    history --> mariadb
+    history --> external
+    analysis --> mariadb
+    analysis --> ai
+
+    classDef client fill:#e8f1ff,stroke:#2563eb,color:#172554,stroke-width:2px
+    classDef api fill:#ecfdf5,stroke:#059669,color:#064e3b,stroke-width:2px
+    classDef store fill:#fff7ed,stroke:#ea580c,color:#7c2d12,stroke-width:2px
+    classDef external fill:#faf5ff,stroke:#9333ea,color:#581c87,stroke-width:2px
+    class agent,manager client
+    class auth,live,history,analysis api
+    class redis,mariadb store
+    class stt,ai,external external

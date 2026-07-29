@@ -1,0 +1,19 @@
+{
+    "title": "Multilingual Learning Support Platform",
+    "tooltipContent": "App may take over 30 seconds to load on first visit.",
+
+    "description": "A full-stack web application built with a team to support dementia prevention programs. It provides registration, AI-powered self-study tools for math and reading exercises, Japanese and English localization, and real-time in-app notifications.",
+    "descriptionContinued": "On the admin side, I created a management interface that allows admins to generate course materials using AI in PDF format, as well as a dashboard where they can efficiently manage users, staff, courses, and rooms.",
+
+    "myRoleDescription": "As a Full-Stack Web Developer, I designed and implemented the platform's key AI-assisted learning and course-material workflows.",
+    "aiPoweredSelfStudy": "AI-Powered Self-Study",
+    "aiPoweredSelfStudyDesc": "Developed an interactive learning feature that enables seniors to practice basic and intermediate-level math and reading exercises using AI.",
+    "automatedCourseMaterial": "Automated Course Material Generation",
+    "automatedCourseMaterialDesc": "Implemented a system that allows administrators and staff to generate course materials in PDF format, aligned with the same difficulty levels as the self-study module.",
+    "adminManagementSystem": "Admin Management System",
+    "adminManagementSystemDesc": "Built CRUD functionality for managing participants and staff, ensuring seamless administrative control over users and course management.",
+
+
+    "appWalkthroughDescription": "Watch how seniors can practice math and reading exercises interactively with AI-generated content.",
+    "videoNotSupported": "Your browser does not support the video tag."
+}

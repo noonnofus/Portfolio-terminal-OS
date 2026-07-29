@@ -16,9 +16,9 @@ const positionPresets = {
 } as const;
 
 export type WallpaperCSSProperties = CSSProperties & {
-  "--gui-wallpaper-image": string;
-  "--gui-wallpaper-overlay": string;
-  "--gui-wallpaper-position": string;
+  "--application-wallpaper-image": string;
+  "--application-wallpaper-overlay": string;
+  "--application-wallpaper-position": string;
 };
 
 export function getWallpaperStyle(
@@ -26,8 +26,8 @@ export function getWallpaperStyle(
 ): WallpaperCSSProperties {
   const wallpaper = wallpaperCatalog[wallpaperId];
   return {
-    "--gui-wallpaper-image": `url("${wallpaper.image}")`,
-    "--gui-wallpaper-overlay": overlayPresets[wallpaper.overlayPreset],
-    "--gui-wallpaper-position": positionPresets[wallpaper.positionPreset],
+    "--application-wallpaper-image": `url("${wallpaper.image}")`,
+    "--application-wallpaper-overlay": overlayPresets[wallpaper.overlayPreset],
+    "--application-wallpaper-position": positionPresets[wallpaper.positionPreset],
   };
 }

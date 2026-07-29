@@ -1,6 +1,5 @@
 'use client';
 
-import Image from "next/image";
 import {
     Bell,
     Brain,
@@ -8,9 +7,7 @@ import {
     Cloud,
     Database,
     DatabaseZap,
-    ExternalLink,
     FileCode2,
-    GitBranch,
     Network,
     Orbit,
     Palette,
@@ -18,7 +15,10 @@ import {
 } from "lucide-react";
 import StackIcon from "@/shared/components/StackIcon";
 import { useTranslation } from 'react-i18next';
-import { Language } from "@/shared/lib/i18n/useLanguageStore";
+import type { Language } from "@/shared/i18n/language";
+import { projectManifest } from "@/shared/content/portfolio/projectManifest";
+import { ProjectTechBadges } from "../../components/ProjectTechBadges";
+import styles from "../../styles/ProjectContent.module.css";
 
 interface AppProjectFlareProps {
     language: Language;
@@ -27,38 +27,19 @@ interface AppProjectFlareProps {
 export default function AppProjectFlare({}: AppProjectFlareProps) {
     const { t } = useTranslation(['Flare', 'common']);
     return (
-        <div className="gui-app-surface w-full h-full overflow-y-auto">
-            <div className="my-8 mx-4 md:mx-36">
+        <div className="application-app-surface w-full h-full overflow-y-auto">
+            <div className={styles.readingFrame}>
                 <div className="flex flex-col items-center mt-8 mb-3">
-                    <h2 className="text-3xl font-bold text-pen-gray-800 mb-6">
+                    <h2 className="text-3xl font-bold text-pen-gray-800 mb-5">
                         {t('title')}
                     </h2>
-
-                    <Image
-                        src="/icons/flare.png"
-                        alt="project flare logo image"
-                        width={150}
-                        height={150}
-                        className="w-[150px] h-auto object-cover mb-4"
-                    />
-                    <a
-                        href="https://www.flare-bc.com/"
-                        className="underline mb-4 inline-flex items-center gap-1"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        {t('linkAction')} <ExternalLink />
-                    </a>
-                    <a
-                        href="https://github.com/noonnofus/Flare_IDSP"
-                        className="underline mb-4 inline-flex items-center gap-1"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <GitBranch size={20} />
-                        {t('common:sourceCode')} <ExternalLink />
-                    </a>
-                    <div className="max-w-[700px] flex flex-col mx-1">
+                    <div className={`${styles.readingStack} mb-7`}>
+                        <ProjectTechBadges
+                            label={t('common:techStack')}
+                            items={projectManifest.flare.stack}
+                        />
+                    </div>
+                    <div className={styles.readingProse}>
                         <div className="mb-6">
                             <h3 className="text-xl font-semibold text-pen-gray-800">
                                 {t('common:overview')}
@@ -102,7 +83,7 @@ export default function AppProjectFlare({}: AppProjectFlareProps) {
                                 Tech Stack
                             </h3>
 
-                            <h4 className="mt-6 mb-2 text-lg font-semibold text-[var(--gui-app-surface-text)]">Frontend</h4>
+                            <h4 className="mt-6 mb-2 text-lg font-semibold text-[var(--application-app-surface-text)]">Frontend</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon label="Next.js" icon={Triangle} color="black" />
                                 <StackIcon label="React" icon={Orbit} color="#61DAFB" />
@@ -110,13 +91,13 @@ export default function AppProjectFlare({}: AppProjectFlareProps) {
                                 <StackIcon label="Tailwind CSS" icon={Palette} color="#38B2AC" />
                             </div>
 
-                            <h4 className="mt-6 mb-2 text-lg font-semibold text-[var(--gui-app-surface-text)]">{t('backendDatabase')}</h4>
+                            <h4 className="mt-6 mb-2 text-lg font-semibold text-[var(--application-app-surface-text)]">{t('backendDatabase')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon label="PostgreSQL" icon={Database} color="#336791" />
                                 <StackIcon label="Drizzle ORM" icon={DatabaseZap} color="#C5F74F" />
                             </div>
 
-                            <h4 className="mt-6 mb-2 text-lg font-semibold text-[var(--gui-app-surface-text)]">{t('cloudAPIs')}</h4>
+                            <h4 className="mt-6 mb-2 text-lg font-semibold text-[var(--application-app-surface-text)]">{t('cloudAPIs')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon label="AWS S3" icon={Cloud} color="#FF9900" />
                                 <StackIcon label="OpenAI API" icon={Brain} color="#7fdbff" />
@@ -124,7 +105,7 @@ export default function AppProjectFlare({}: AppProjectFlareProps) {
                                 <StackIcon label="Firebase" icon={Cloud} color="#FFCA28" />
                             </div>
 
-                            <h4 className="mt-6 mb-2 text-lg font-semibold text-[var(--gui-app-surface-text)]">{t('pwaRealtime')}</h4>
+                            <h4 className="mt-6 mb-2 text-lg font-semibold text-[var(--application-app-surface-text)]">{t('pwaRealtime')}</h4>
                             <div className="grid grid-cols-3 gap-5 mb-12">
                                 <StackIcon label="Next.js PWA" icon={Triangle} color="black" />
                                 <StackIcon label="Push Notifications" icon={Bell} color="#f59e0b" />

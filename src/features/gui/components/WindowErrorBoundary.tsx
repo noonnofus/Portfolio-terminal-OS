@@ -85,7 +85,7 @@ export class WindowErrorBoundary extends Component<
     render() {
         if (this.state.error !== null) {
             return (
-                <div role="alert" className="gui-window-error">
+                <div role="alert" className="application-window-error">
                     <strong>Unable to open this window.</strong>
                     <p>{this.state.error.message}</p>
                     <div>
