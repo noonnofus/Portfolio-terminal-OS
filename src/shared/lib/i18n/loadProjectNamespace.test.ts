@@ -4,18 +4,24 @@ import { ensureProjectNamespace } from "@/shared/lib/i18n/loadProjectNamespace";
 
 describe("project i18n namespaces", () => {
     it("loads project translations only when requested", async () => {
-        i18n.removeResourceBundle("ko", "WCHMS");
-        i18n.removeResourceBundle("en", "WCHMS");
+        const namespaces = [
+            ["WCHMS", "WCHMS"],
+            ["Mcp", "OptiGen MCP 서버"],
+            ["VoiceGateway", "AICC Voice Gateway"],
+        ] as const;
 
-        expect(i18n.hasResourceBundle("ko", "WCHMS")).toBe(false);
-        expect(i18n.hasResourceBundle("en", "WCHMS")).toBe(false);
+        for (const [namespace, title] of namespaces) {
+            i18n.removeResourceBundle("ko", namespace);
+            i18n.removeResourceBundle("en", namespace);
 
-        await ensureProjectNamespace("WCHMS");
+            expect(i18n.hasResourceBundle("ko", namespace)).toBe(false);
+            expect(i18n.hasResourceBundle("en", namespace)).toBe(false);
 
-        expect(i18n.hasResourceBundle("ko", "WCHMS")).toBe(true);
-        expect(i18n.hasResourceBundle("en", "WCHMS")).toBe(true);
-        expect(i18n.getResource("ko", "WCHMS", "title")).toBe(
-            "다국어 학습 지원 플랫폼",
-        );
+            await ensureProjectNamespace(namespace);
+
+            expect(i18n.hasResourceBundle("ko", namespace)).toBe(true);
+            expect(i18n.hasResourceBundle("en", namespace)).toBe(true);
+            expect(i18n.getResource("ko", namespace, "title")).toBe(title);
+        }
     });
 });

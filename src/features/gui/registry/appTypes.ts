@@ -33,6 +33,8 @@ export function publicAssetPath(value: string): PublicAssetPath {
 export const projectSlugs = [
     "portfolio",
     "optigen",
+    "mcp",
+    "voice-gateway",
     "kepco",
     "wchms",
     "flare",
@@ -190,6 +192,18 @@ export function createOpenAppCommand(appId: GuiAppId): OpenAppCommand {
                 type: "open-app",
                 appId,
                 params: { slug: "optigen" },
+            };
+        case "project:mcp":
+            return {
+                type: "open-app",
+                appId,
+                params: { slug: "mcp" },
+            };
+        case "project:voice-gateway":
+            return {
+                type: "open-app",
+                appId,
+                params: { slug: "voice-gateway" },
             };
         case "project:kepco":
             return {

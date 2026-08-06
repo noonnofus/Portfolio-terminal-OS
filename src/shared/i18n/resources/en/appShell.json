@@ -1,17 +1,19 @@
 {
   "appNames": {
-    "about": "About",
+    "about": "Career",
     "projects": "Projects",
     "resume": "Resume",
     "terminal": "Terminal",
     "contact": "Contact",
     "notes": "Guestbook",
     "settings": "Settings",
-    "portfolio": "Interactive Portfolio Web",
-    "optigen": "B2B AI Knowledge & Workflow Platform",
-    "kepco": "B2B AICC Platform",
-    "wchms": "Multilingual Learning Support Platform",
-    "flare": "Real-time Disaster Information Platform"
+    "portfolio": "Portfolio",
+    "optigen": "OptiGen AI Platform",
+    "mcp": "OptiGen MCP Server",
+    "voice-gateway": "AICC Voice Gateway",
+    "kepco": "Public-Sector Contact Center Advisor",
+    "wchms": "WCHMS",
+    "flare": "Flare"
   },
   "desktop": {
     "shortcutsAria": "Desktop shortcuts",

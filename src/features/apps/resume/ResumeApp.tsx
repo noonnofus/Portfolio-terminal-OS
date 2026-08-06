@@ -111,7 +111,7 @@ export default function ResumeApp({
                                         {project.summary}
                                     </p>
                                     <p className="mt-2 text-xs text-slate-500">
-                                        {project.stack.join(" · ")}
+                                        {project.stack.join(", ")}
                                     </p>
                                 </article>
                             ))}

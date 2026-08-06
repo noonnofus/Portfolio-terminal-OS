@@ -62,6 +62,14 @@ export function GuiAppRenderer({
             const App = appLoaderRegistry["project:optigen"];
             return <App language={language} slug="optigen" />;
         }
+        case "project:mcp": {
+            const App = appLoaderRegistry["project:mcp"];
+            return <App language={language} slug="mcp" />;
+        }
+        case "project:voice-gateway": {
+            const App = appLoaderRegistry["project:voice-gateway"];
+            return <App language={language} slug="voice-gateway" />;
+        }
         case "project:kepco": {
             const App = appLoaderRegistry["project:kepco"];
             return <App language={language} slug="kepco" />;

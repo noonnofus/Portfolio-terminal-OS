@@ -18,17 +18,23 @@
     "infra": "Infra",
     "toolingAndQuality": "개발 도구 및 품질",
     "collaboration": "협업",
-    "selectedWorkEyebrow": "Projects",
-    "selectedWorkTitle": "프로젝트",
-    "currentProject": "현재 보고 있는 프로젝트",
-    "portfolioOsTitle": "인터랙티브 포트폴리오 웹",
-    "portfolioOsDescription": "브라우저 안에서 동작하는 OS형 포트폴리오. 창 관리, 상태 모델, 접근성, 디자인 시스템을 직접 설계했습니다.",
-    "optigenTitle": "B2B AI 지식·업무 플랫폼",
-    "optigenDescription": "사내 엔터프라이즈 AI 플랫폼의 Next.js 프런트엔드와 MCP 서버를 처음부터 단독 구축하고, 관리자·AI 채팅·도구 연동 경험을 설계했습니다.",
-    "kepcoTitle": "B2B AICC 플랫폼",
-    "kepcoDescription": "실시간 STT 전사, 상담 종료 후 AI 분석, 상담 이력 조회를 연결한 상담사 지원 시스템을 구현했습니다.",
-    "wchmsTitle": "다국어 학습 지원 플랫폼",
-    "wchmsDescription": "다국어 학습 지원 제품에서 AI 기반 학습 UI와 코스 자료 생성 경험을 구현했습니다.",
-    "flareTitle": "실시간 재난 정보 플랫폼",
-    "flareDescription": "PWA와 알림 흐름을 포함한 재난 정보 제품의 반응형 인터페이스를 구현했습니다."
+    "viewCaseStudy": "사례 보기",
+    "viewCaseStudyLabel": "{{title}} 사례 연구 열기",
+    "caseStudiesEyebrow": "Case Studies",
+    "caseStudiesTitle": "경력을 증명하는 프로젝트 사례",
+    "caseStudiesDescription": "경력과 프로젝트를 분리해서 나열하지 않고, 담당 업무에서 이어지는 대표 사례와 기술 사례를 함께 구성했습니다.",
+    "projectGroups": {
+        "featured": {
+            "title": "대표 사례",
+            "description": "문제 정의, 프론트엔드 설계 판단, 구현과 검증 과정을 상세하게 확인할 수 있습니다."
+        },
+        "related": {
+            "title": "OptiGen 연관 기술 사례",
+            "description": "OptiGen AI 플랫폼을 업무 실행과 음성 채널로 확장한 시스템입니다."
+        },
+        "earlier": {
+            "title": "이전 팀 프로젝트",
+            "description": "팀 프로젝트에서 담당한 제품 기능과 풀스택 구현 범위를 정리했습니다."
+        }
+    }
 }

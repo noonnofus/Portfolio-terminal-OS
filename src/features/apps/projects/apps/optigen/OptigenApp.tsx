@@ -1,151 +1,96 @@
 "use client";
 
-import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import type { Language } from "@/shared/i18n/language";
 import { projectManifest } from "@/shared/content/portfolio/projectManifest";
-import { ProjectTechBadges } from "../../components/ProjectTechBadges";
-import styles from "../../styles/ProjectContent.module.css";
+import { ProjectCaseStudyPage } from "../../components/ProjectCaseStudyPage";
+import { escapeMermaidLabel } from "../../components/ProjectArchitectureDiagram";
 
 type OptigenAppProps = {
   language: Language;
 };
 
-const projectContextIds = ["service", "users", "role", "constraint"] as const;
-const workflowStepIds = ["configure", "selectBot", "chat", "useTool"] as const;
-const caseIds = ["admin", "chat", "content", "mcp"] as const;
+const projectContextIds = ["category", "service", "users", "role"] as const;
+const caseStudySections = [
+  {
+    id: "problem",
+    itemIds: ["administration", "conversation", "extension"],
+  },
+  {
+    id: "design",
+    itemIds: ["informationArchitecture", "stateBoundary", "streaming", "qualityFoundation"],
+  },
+  {
+    id: "implementation",
+    itemIds: ["chatExperience", "responseFlow", "accessibility", "responsive"],
+  },
+  {
+    id: "outcome",
+    itemIds: ["newProduct", "extensionPath", "qualityBaseline"],
+  },
+  {
+    id: "verification",
+    itemIds: ["accessibility", "streaming"],
+  },
+] as const;
+
+
 export default function OptigenApp({ language }: OptigenAppProps) {
   const { t } = useTranslation("Optigen");
+  const diagram = `flowchart LR
+    web(["${escapeMermaidLabel(t("architecture.diagram.webUser"))}"]) --> chat["${escapeMermaidLabel(t("architecture.diagram.chat"))}"]
+    chat <-->|"${escapeMermaidLabel(t("architecture.diagram.requestResponse"))}"| api["${escapeMermaidLabel(t("architecture.diagram.api"))}"]
+    api <-->|"${escapeMermaidLabel(t("architecture.diagram.orchestration"))}"| ai["${escapeMermaidLabel(t("architecture.diagram.ai"))}"]
+    ai -. "${escapeMermaidLabel(t("architecture.diagram.toolExtension"))}" .-> mcp["${escapeMermaidLabel(t("architecture.diagram.mcp"))}"]
+    phone(["${escapeMermaidLabel(t("architecture.diagram.phoneCall"))}"]) --> vg["${escapeMermaidLabel(t("architecture.diagram.vg"))}"]
+    vg -. "${escapeMermaidLabel(t("architecture.diagram.voiceExtension"))}" .-> api
+
+    classDef primary fill:#e8f1ff,stroke:#2563eb,stroke-width:3px,color:#111827,font-weight:bold
+    classDef extension fill:#f0fdf4,stroke:#16a34a,stroke-width:2px,color:#14532d
+    classDef support fill:#f3f4f6,stroke:#9ca3af,stroke-width:1.5px,color:#374151
+    classDef actor fill:#ffffff,stroke:#cbd5e1,stroke-width:1.5px,color:#475569
+    class chat primary
+    class mcp,vg extension
+    class api,ai support
+    class web,phone actor`;
+
+  const contexts = projectContextIds.map((id) => ({
+    id,
+    label: t(`projectContext.${id}.label`),
+    description: t(`projectContext.${id}.description`),
+  }));
+  const sections = caseStudySections.map(({ id, itemIds }) => ({
+    id,
+    title: t(`caseStudy.${id}.title`),
+    description: t(`caseStudy.${id}.description`),
+    items: itemIds.map((itemId) => ({
+      id: itemId,
+      title: t(`caseStudy.${id}.items.${itemId}.title`),
+      description: t(`caseStudy.${id}.items.${itemId}.description`),
+    })),
+  }));
 
   return (
-    <div className="application-app-surface h-full w-full overflow-y-auto">
-      <article lang={language} className={styles.readingArticle}>
-        <header>
-          <h2 className="text-3xl font-bold tracking-tight text-[var(--application-app-surface-text)] md:text-4xl">
-            {t("title")}
-          </h2>
-          <p className="mt-4 text-[length:var(--application-text-reading)] leading-7 text-[var(--application-app-surface-muted)]">
-            {t("summary")}
-          </p>
-          <div className="mt-5">
-            <ProjectTechBadges
-              label={t("stackLabel")}
-              items={projectManifest.optigen.stack}
-            />
-          </div>
-        </header>
-
-        <section className="mt-12" aria-labelledby="optigen-overview-title">
-          <h3 id="optigen-overview-title" className="text-lg font-semibold text-[var(--application-app-surface-text)]">
-            {t("projectIntro.title")}
-          </h3>
-          <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
-            {t("projectIntro.description")}
-          </p>
-          <dl className="mt-7 space-y-4 text-[length:var(--application-text-body)] leading-7">
-            {projectContextIds.map((id) => (
-              <div key={id} className="grid gap-1 sm:grid-cols-[6.5rem_1fr] sm:gap-5">
-                <dt className="font-semibold text-[var(--application-app-surface-text)]">
-                  {t(`projectContext.${id}.label`)}
-                </dt>
-                <dd className="text-[var(--application-app-surface-muted)]">
-                  {t(`projectContext.${id}.description`)}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        <section className="mt-12" aria-labelledby="optigen-workflow-title">
-          <h3 id="optigen-workflow-title" className="text-lg font-semibold text-[var(--application-app-surface-text)]">
-            {t("workflow.title")}
-          </h3>
-          <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
-            {t("workflow.description")}
-          </p>
-          <ol className="mt-6 grid gap-4 sm:grid-cols-4">
-            {workflowStepIds.map((id, index) => (
-              <li key={id} className="border-t border-[var(--application-border)] pt-3">
-                <span className="font-mono text-sm text-[var(--application-accent)]">0{index + 1}</span>
-                <p className="mt-2 text-sm font-semibold leading-6 text-[var(--application-app-surface-text)]">
-                  {t(`workflow.steps.${id}`)}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section className="mt-12" aria-labelledby="optigen-architecture-title">
-          <h3 id="optigen-architecture-title" className="text-lg font-semibold text-[var(--application-app-surface-text)]">
-            {t("architecture.title")}
-          </h3>
-          <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
-            {t("architecture.description")}
-          </p>
-          <figure className="mt-5 bg-white py-2">
-            <Image
-              src="/diagrams/optigen-platform-architecture.svg"
-              alt={t("architecture.alt")}
-              width={1600}
-              height={1100}
-              className="h-auto w-full"
-              unoptimized
-            />
-            <figcaption className="mt-3 text-sm leading-6 text-[var(--application-app-surface-muted)]">
-              {t("architecture.caption")}
-            </figcaption>
-          </figure>
-        </section>
-
-        <section className="mt-14" aria-labelledby="optigen-implementation-title">
-          <h3 id="optigen-implementation-title" className="text-lg font-semibold text-[var(--application-app-surface-text)]">
-            {t("implementation.title")}
-          </h3>
-          <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
-            {t("implementation.description")}
-          </p>
-          <div className="mt-8 space-y-12">
-            {caseIds.map((id, index) => (
-              <section key={id} aria-labelledby={`optigen-${id}-title`}>
-                <h4 id={`optigen-${id}-title`} className="text-lg font-semibold text-[var(--application-app-surface-text)]">
-                  {index + 1}. {t(`cases.${id}.title`)}
-                </h4>
-                <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
-                  {t(`cases.${id}.context`)}
-                </p>
-                <dl className="mt-5 space-y-5 text-[length:var(--application-text-body)] leading-7">
-                  {(["problem", "decision", "result"] as const).map((part) => (
-                    <div key={part}>
-                      <dt className="font-semibold text-[var(--application-app-surface-text)]">
-                        {t(`labels.${part}`)}
-                      </dt>
-                      <dd className="mt-1 text-[var(--application-app-surface-muted)]">
-                        {t(`cases.${id}.${part}`)}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-                <p className="mt-5 text-sm leading-6 text-[var(--application-app-surface-muted)]">
-                  {t(`cases.${id}.flow`)}
-                </p>
-              </section>
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-14" aria-labelledby="optigen-result-title">
-          <h3 id="optigen-result-title" className="text-lg font-semibold text-[var(--application-app-surface-text)]">
-            {t("result.title")}
-          </h3>
-          <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
-            {t("result.description")}
-          </p>
-        </section>
-
-        <footer className="mt-12 text-sm leading-6 text-[var(--application-app-surface-muted)]">
-          {t("footer")}
-        </footer>
-      </article>
-    </div>
+    <ProjectCaseStudyPage
+      projectId="optigen"
+      language={language}
+      title={t("title")}
+      summary={t("summary")}
+      stackLabel={t("stackLabel")}
+      stack={projectManifest.optigen.stack}
+      overviewTitle={t("projectIntro.title")}
+      overviewDescription={t("projectIntro.description")}
+      contexts={contexts}
+      sections={sections}
+      architecture={{
+        title: t("architecture.title"),
+        description: t("architecture.description"),
+        chart: diagram,
+        label: t("architecture.alt"),
+        caption: t("architecture.caption"),
+        loadingLabel: t("architecture.loading"),
+        errorLabel: t("architecture.error"),
+      }}
+    />
   );
 }

@@ -18,17 +18,23 @@
     "infra": "Infra",
     "toolingAndQuality": "Tooling & Quality",
     "collaboration": "Collaboration",
-    "selectedWorkEyebrow": "Projects",
-    "selectedWorkTitle": "Projects",
-    "currentProject": "Current project",
-    "portfolioOsTitle": "Interactive Portfolio Web",
-    "portfolioOsDescription": "An OS-style portfolio in the browser, built around window lifecycle, state modeling, accessibility, and a custom design system.",
-    "optigenTitle": "B2B AI Knowledge & Workflow Platform",
-    "optigenDescription": "Built the Next.js frontend and MCP server for an internal enterprise AI platform from scratch, including its admin, AI chat, and tool-integration experiences.",
-    "kepcoTitle": "B2B AICC Platform",
-    "kepcoDescription": "Built an agent-support system that connects live STT transcription, post-call AI analysis, and call-history search.",
-    "wchmsTitle": "Multilingual Learning Support Platform",
-    "wchmsDescription": "Built AI-assisted study UI and course-material workflows for a multilingual learning-support product.",
-    "flareTitle": "Real-time Disaster Information Platform",
-    "flareDescription": "Built responsive product interfaces for a disaster-information experience with PWA and notification flows."
+    "viewCaseStudy": "View case study",
+    "viewCaseStudyLabel": "Open the {{title}} case study",
+    "caseStudiesEyebrow": "Case Studies",
+    "caseStudiesTitle": "Project evidence connected to my career",
+    "caseStudiesDescription": "Rather than listing career history and projects separately, this section connects my responsibilities to featured case studies and related technical work.",
+    "projectGroups": {
+        "featured": {
+            "title": "Featured case studies",
+            "description": "Detailed examples of problem framing, frontend decisions, implementation, and verification."
+        },
+        "related": {
+            "title": "Technical work related to OptiGen",
+            "description": "Systems that extend the OptiGen AI platform into business execution and voice channels."
+        },
+        "earlier": {
+            "title": "Earlier team projects",
+            "description": "Product features and full-stack implementation I owned in earlier team projects."
+        }
+    }
 }

@@ -26,4 +26,25 @@ describe("portfolio content model", () => {
             }
         }
     });
+
+    it("connects career highlights to the same project allowlist in both languages", () => {
+        const expectedProjectSlugs = [
+            "optigen",
+            "mcp",
+            "voice-gateway",
+            "kepco",
+        ];
+
+        for (const language of ["ko", "en"] as const) {
+            const linkedProjectSlugs = portfolioContent[language].experience
+                .flatMap((experience) => experience.highlights)
+                .flatMap((highlight) =>
+                    highlight.projectSlug === undefined
+                        ? []
+                        : [highlight.projectSlug],
+                );
+
+            expect(linkedProjectSlugs).toEqual(expectedProjectSlugs);
+        }
+    });
 });

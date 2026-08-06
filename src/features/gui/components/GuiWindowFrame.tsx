@@ -123,7 +123,7 @@ export function GuiWindowFrame({
     clampEpoch: number;
 }) {
     const language = useGuiStore((state) => state.language);
-    const { t } = useTranslation("appShell");
+    const { t } = useTranslation("appShell", { lng: language });
     const { navigate, navigationBusy } = useGuiNavigation();
     const shouldReduceMotion = useReducedMotion();
     const appId: GuiAppId = win.appId;

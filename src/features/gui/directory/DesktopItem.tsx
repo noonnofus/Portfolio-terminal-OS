@@ -15,6 +15,7 @@ import type {
 } from "@/features/gui/directory/directoryTypes";
 import { appMetadata } from "@/features/gui/registry/appMetadata";
 import { getAppTitle } from "@/features/gui/registry/getAppTitle";
+import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 import { useTranslation } from "react-i18next";
 
 export function DesktopItem({
@@ -51,7 +52,8 @@ export function DesktopItem({
     element: HTMLButtonElement | null,
   ) => void;
 }) {
-  const { t } = useTranslation("appShell");
+  const language = useGuiStore((state) => state.language);
+  const { t } = useTranslation("appShell", { lng: language });
   const app = appMetadata[node.appId];
   const title = getAppTitle(app, t);
   const {

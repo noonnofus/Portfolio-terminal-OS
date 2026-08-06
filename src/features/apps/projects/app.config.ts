@@ -3,7 +3,9 @@ import { publicAssetPath } from "@/features/gui/registry/appTypes";
 import { defineFolderNode } from "@/features/gui/directory/directoryTypes";
 import { flareNode } from "./apps/flare/app.config";
 import { kepcoNode } from "./apps/kepco/app.config";
+import { mcpNode } from "./apps/mcp/app.config";
 import { optigenNode } from "./apps/optigen/app.config";
+import { voiceGatewayNode } from "./apps/voice-gateway/app.config";
 import { portfolioNode } from "./apps/portfolio/app.config";
 import { wchmsNode } from "./apps/wchms/app.config";
 
@@ -22,5 +24,13 @@ export const projectsNode = defineFolderNode({
   nodeId: "desktop:folder:projects",
   appId: projectsAppConfig.appId,
   appearance: "folder",
-  children: [portfolioNode, optigenNode, kepcoNode, wchmsNode, flareNode],
+  children: [
+    kepcoNode,
+    optigenNode,
+    portfolioNode,
+    mcpNode,
+    voiceGatewayNode,
+    wchmsNode,
+    flareNode,
+  ],
 });

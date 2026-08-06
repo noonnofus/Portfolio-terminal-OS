@@ -1,17 +1,19 @@
 {
   "appNames": {
-    "about": "김현호",
+    "about": "커리어",
     "projects": "프로젝트",
     "resume": "이력서",
     "terminal": "터미널",
     "contact": "연락처",
     "notes": "방명록",
     "settings": "설정",
-    "portfolio": "인터랙티브 포트폴리오 웹",
-    "optigen": "B2B AI 지식·업무 플랫폼",
-    "kepco": "B2B AICC 플랫폼",
-    "wchms": "다국어 학습 지원 플랫폼",
-    "flare": "실시간 재난 정보 플랫폼"
+    "portfolio": "포트폴리오",
+    "optigen": "OptiGen AI 플랫폼",
+    "mcp": "OptiGen MCP 서버",
+    "voice-gateway": "AICC Voice Gateway",
+    "kepco": "공공기관 상담 어드바이저",
+    "wchms": "WCHMS",
+    "flare": "Flare"
   },
   "desktop": {
     "shortcutsAria": "데스크톱 바로가기",

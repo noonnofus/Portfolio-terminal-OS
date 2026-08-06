@@ -21,13 +21,13 @@ test.describe("GUI shell", () => {
         expect(hydrationErrors).toEqual([]);
     });
 
-    test("opens About by default and preserves user-selected history", async ({
+    test("opens Career by default and preserves user-selected history", async ({
         page,
     }) => {
         await page.goto("/gui");
 
         await expect(
-            page.getByRole("dialog", { name: "김현호" }),
+            page.getByRole("dialog", { name: "커리어" }),
         ).toBeVisible();
         await expect(page).toHaveURL(/\/gui$/);
 
@@ -40,7 +40,7 @@ test.describe("GUI shell", () => {
             page.getByRole("dialog", { name: "프로젝트" }),
         ).toBeVisible();
 
-        await dock.getByRole("button", { name: "김현호" }).click();
+        await dock.getByRole("button", { name: "커리어" }).click();
         await expect(page).toHaveURL(/\/gui$/);
 
         await page.goBack();
@@ -54,6 +54,37 @@ test.describe("GUI shell", () => {
         await expect(
             page.getByRole("dialog", { name: "프로젝트" }),
         ).toHaveCount(0);
+    });
+
+    test("connects career responsibilities to grouped project case studies", async ({
+        page,
+    }) => {
+        await page.goto("/gui");
+
+        const careerWindow = page.getByRole("dialog", { name: "커리어" });
+        await expect(
+            careerWindow.getByRole("heading", { name: "대표 사례" }),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByRole("heading", {
+                name: "OptiGen 연관 기술 사례",
+            }),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByRole("heading", { name: "이전 팀 프로젝트" }),
+        ).toBeVisible();
+
+        await careerWindow
+            .getByRole("button", {
+                name: "OptiGen AI 플랫폼 사례 연구 열기",
+                exact: true,
+            })
+            .click();
+
+        await expect(page).toHaveURL(/app=project&slug=optigen/);
+        await expect(
+            page.getByRole("dialog", { name: "OptiGen AI 플랫폼" }),
+        ).toBeVisible();
     });
 
     test("keeps language in the canonical shared URL", async ({ page }) => {
@@ -81,6 +112,12 @@ test.describe("GUI shell", () => {
 
         await expect(page).toHaveURL(/lang=en/);
         await expect(page.locator("html")).toHaveAttribute("lang", "en");
+        await expect(
+            page.getByRole("dialog", { name: "Career" }),
+        ).toBeVisible();
+        await expect(
+            page.getByRole("dialog", { name: "커리어" }),
+        ).toHaveCount(0);
     });
 
     test("focuses a desktop shortcut on one click and opens it on double click", async ({
@@ -147,7 +184,7 @@ test.describe("GUI shell", () => {
         await page.goto("/gui");
 
         const window = page.getByRole("dialog", {
-            name: "김현호",
+            name: "커리어",
         });
         const box = await window.boundingBox();
 
@@ -220,7 +257,7 @@ test.describe("GUI shell", () => {
         ).toBeVisible();
 
         const windowBox = await page
-            .getByRole("dialog", { name: "김현호" })
+            .getByRole("dialog", { name: "커리어" })
             .boundingBox();
         expect(windowBox).not.toBeNull();
         expect(windowBox?.x).toBe(64);
@@ -285,13 +322,13 @@ test.describe("GUI shell", () => {
     }) => {
         await page.goto("/gui?app=projects");
         const projectFile = page.getByRole("button", {
-            name: "다국어 학습 지원 플랫폼 프로젝트 열기",
+            name: "공공기관 상담 어드바이저 프로젝트 열기",
         });
         await expect(projectFile).toHaveCSS("width", "70px");
         const projectGrid = page.locator(".application-project-grid");
         const projectFolder = page.locator(".application-folder-view");
         const hoverTarget = page.getByRole("button", {
-            name: "실시간 재난 정보 플랫폼 프로젝트 열기",
+            name: "Flare 프로젝트 열기",
         });
         const hoverStylesBefore = await hoverTarget.evaluate((element) => ({
             background: getComputedStyle(element).backgroundColor,
@@ -364,7 +401,7 @@ test.describe("GUI shell", () => {
         await expect(page).toHaveURL(/app=projects/);
 
         await projectFile.dblclick();
-        await expect(page).toHaveURL(/app=project&slug=wchms/);
+        await expect(page).toHaveURL(/app=project&slug=kepco/);
     });
 
     test("opens independent project windows without eager media", async ({
@@ -391,17 +428,17 @@ test.describe("GUI shell", () => {
         );
         await expect(
             page.getByRole("button", {
-                name: "다국어 학습 지원 플랫폼 프로젝트 열기",
+                name: "WCHMS 프로젝트 열기",
             }),
         ).toBeVisible();
         expect(mediaRequests).toEqual([]);
 
         await page
-            .getByRole("button", { name: "다국어 학습 지원 플랫폼 프로젝트 열기" })
+            .getByRole("button", { name: "WCHMS 프로젝트 열기" })
             .dblclick();
         await expect(page).toHaveURL(/app=project&slug=wchms/);
         await expect(
-            page.getByRole("dialog", { name: "다국어 학습 지원 플랫폼" }),
+            page.getByRole("dialog", { name: "WCHMS" }),
         ).toBeVisible();
 
         const dock = page.getByRole("navigation", {
@@ -409,24 +446,24 @@ test.describe("GUI shell", () => {
         });
         await dock.getByRole("button", { name: "프로젝트" }).click();
         await page
-            .getByRole("button", { name: "실시간 재난 정보 플랫폼 프로젝트 열기" })
+            .getByRole("button", { name: "Flare 프로젝트 열기" })
             .dblclick();
 
         await expect(page).toHaveURL(/app=project&slug=flare/);
         await expect(
-            page.getByRole("dialog", { name: "다국어 학습 지원 플랫폼" }),
+            page.getByRole("dialog", { name: "WCHMS" }),
         ).toBeVisible();
         await expect(
-            page.getByRole("dialog", { name: "실시간 재난 정보 플랫폼" }),
+            page.getByRole("dialog", { name: "Flare" }),
         ).toBeVisible();
 
         await dock.getByRole("button", { name: "프로젝트" }).click();
         await page
-            .getByRole("button", { name: "다국어 학습 지원 플랫폼 프로젝트 열기" })
+            .getByRole("button", { name: "WCHMS 프로젝트 열기" })
             .dblclick();
 
         await expect(
-            page.getByRole("dialog", { name: "다국어 학습 지원 플랫폼" }),
+            page.getByRole("dialog", { name: "WCHMS" }),
         ).toHaveCount(1);
         await expect(page).toHaveURL(/app=project&slug=wchms/);
     });
@@ -440,7 +477,7 @@ test.describe("GUI shell", () => {
         await expect(terminalRows).toBeVisible();
 
         const dock = page.getByRole("navigation", { name: "Applications" });
-        await dock.getByRole("button", { name: "김현호" }).click();
+        await dock.getByRole("button", { name: "커리어" }).click();
         await expect(terminalWindow).toHaveAttribute("data-active", "false");
 
         const before = await terminalRows.textContent();
@@ -483,7 +520,7 @@ test.describe("GUI shell", () => {
         const dock = page.getByRole("navigation", {
             name: "Applications",
         });
-        await dock.getByRole("button", { name: "김현호" }).click();
+        await dock.getByRole("button", { name: "커리어" }).click();
 
         await expect(terminalRuntime).toHaveAttribute(
             "data-effective-visibility",
@@ -578,7 +615,7 @@ test.describe("GUI shell", () => {
             resumeWindow
                 .getByLabel("Experience", { exact: true })
                 .getByRole("heading", {
-                    name: "B2B AI Knowledge & Workflow Platform",
+                    name: "OptiGen AI Platform",
                     exact: true,
                 }),
         ).toBeVisible();
@@ -839,7 +876,7 @@ test.describe("GUI shell", () => {
         );
         await expect(
             aboutWindow.getByRole("heading", {
-                name: "김현호",
+                name: "커리어",
                 exact: true,
             }),
         ).toBeFocused();
@@ -860,7 +897,7 @@ test.describe("GUI shell", () => {
         const aboutWindow = page.locator('[data-window-id="about"]');
         await expect(
             aboutWindow.getByRole("combobox", {
-                name: "김현호 position",
+                name: "커리어 position",
             }),
         ).toHaveCount(0);
         await expect(
@@ -868,7 +905,7 @@ test.describe("GUI shell", () => {
         ).toHaveCount(0);
 
         const maximizeButton = aboutWindow.getByRole("button", {
-            name: "김현호 maximize",
+            name: "커리어 maximize",
         });
         await maximizeButton.click();
         await expect(aboutWindow).toHaveClass(/application-window-maximized/);
@@ -876,7 +913,7 @@ test.describe("GUI shell", () => {
         expect(maximizedBox).toEqual({ x: 0, y: 36, width: 756, height: 765 });
 
         await aboutWindow
-            .getByRole("button", { name: "김현호 restore" })
+            .getByRole("button", { name: "커리어 restore" })
             .click();
         await aboutWindow.evaluate((dialog) => {
             const startedAt = performance.now();
@@ -894,7 +931,7 @@ test.describe("GUI shell", () => {
         });
         await aboutWindow
             .getByRole("button", {
-                name: "김현호 minimize",
+                name: "커리어 minimize",
             })
             .click();
         await expect(aboutWindow).toBeHidden();
@@ -979,10 +1016,10 @@ test.describe("GUI visual parity", () => {
         await expectGuiScreenshot(page, "projects-idle.png");
 
         await page
-            .getByRole("button", { name: "다국어 학습 지원 플랫폼 프로젝트 열기" })
+            .getByRole("button", { name: "WCHMS 프로젝트 열기" })
             .click();
         const selectedIcon = page
-            .getByRole("button", { name: "다국어 학습 지원 플랫폼 프로젝트 열기" })
+            .getByRole("button", { name: "WCHMS 프로젝트 열기" })
             .locator(".desktop-app-icon-wrapper");
         await expect(selectedIcon).toHaveCSS("outline-width", "1px");
         await expect(selectedIcon).toHaveCSS("outline-style", "solid");
@@ -1000,8 +1037,8 @@ test.describe("GUI visual parity", () => {
         await expectGuiScreenshot(page, "window-normal.png");
 
         await page
-            .getByRole("dialog", { name: "김현호" })
-            .getByRole("button", { name: "김현호 maximize" })
+            .getByRole("dialog", { name: "커리어" })
+            .getByRole("button", { name: "커리어 maximize" })
             .click();
         await expectGuiScreenshot(page, "window-maximized.png");
     });

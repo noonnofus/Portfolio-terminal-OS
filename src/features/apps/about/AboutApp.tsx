@@ -6,7 +6,8 @@ import { Component, Route, ShieldCheck } from "lucide-react";
 import StackIcon from "@/shared/components/StackIcon";
 import {
     createOpenAppCommand,
-    type GuiAppId,
+    type ProjectAppId,
+    type ProjectSlug,
 } from "@/features/gui/registry/appTypes";
 import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
 import { getPortfolioContent } from "@/shared/content/portfolio/getPortfolioContent";
@@ -116,19 +117,21 @@ const technologyGroups = [
 
 type TechnologyGroupId = (typeof technologyGroups)[number]["id"];
 
-const selectedWork: ReadonlyArray<{
-    appId?: GuiAppId;
-    id: "portfolioOs" | "optigen" | "kepco" | "wchms" | "flare";
-}> = [
-    { appId: "project:portfolio", id: "portfolioOs" },
-    { appId: "project:optigen", id: "optigen" },
-    { appId: "project:kepco", id: "kepco" },
-    { appId: "project:wchms", id: "wchms" },
-    { appId: "project:flare", id: "flare" },
-];
+const projectGroups = [
+    { id: "featured", slugs: ["kepco", "optigen", "portfolio"] },
+    { id: "related", slugs: ["mcp", "voice-gateway"] },
+    { id: "earlier", slugs: ["wchms", "flare"] },
+] as const satisfies readonly {
+    id: "featured" | "related" | "earlier";
+    slugs: readonly ProjectSlug[];
+}[];
+
+function getProjectAppId(slug: ProjectSlug): ProjectAppId {
+    return `project:${slug}`;
+}
 
 export default function AboutApp({ language }: AboutAppProps) {
-    const { t } = useTranslation(["About", "common"]);
+    const { t } = useTranslation(["About", "common"], { lng: language });
     const { navigate, navigationBusy } = useGuiNavigation();
     const content = getPortfolioContent(language);
     const [activeTechnologyGroupId, setActiveTechnologyGroupId] =
@@ -138,6 +141,9 @@ export default function AboutApp({ language }: AboutAppProps) {
         technologyGroups.find(
             (group) => group.id === activeTechnologyGroupId,
         ) ?? technologyGroups[0];
+    const projectsBySlug = new Map(
+        content.projects.map((project) => [project.slug, project]),
+    );
 
     const handleTechnologyTabKeyDown = (
         event: KeyboardEvent<HTMLButtonElement>,
@@ -238,25 +244,56 @@ export default function AboutApp({ language }: AboutAppProps) {
                                     </p>
                                     <div className="mt-6 space-y-8 text-left">
                                         {experience.highlights.map(
-                                            (highlight) => (
-                                                <section key={highlight.title}>
-                                                    <h5 className="text-base font-semibold text-[var(--application-app-surface-text)]">
-                                                        {highlight.title}
-                                                    </h5>
-                                                    <ul className="m-0 mt-3 list-none space-y-3 p-0">
-                                                        {highlight.items.map(
-                                                            (item) => (
-                                                                <li
-                                                                    key={item}
-                                                                    className="relative pl-3 text-[length:var(--application-text-reading)] leading-7 text-[var(--application-app-surface-muted)] before:absolute before:left-0 before:top-[0.65em] before:size-1.5 before:rounded-full before:bg-[var(--application-app-surface-text)]"
+                                            (highlight) => {
+                                                const projectSlug =
+                                                    highlight.projectSlug;
+
+                                                return (
+                                                    <section key={highlight.title}>
+                                                        <div className="flex items-start justify-between gap-4">
+                                                            <h5 className="text-base font-semibold text-[var(--application-app-surface-text)]">
+                                                                {highlight.title}
+                                                            </h5>
+                                                            {projectSlug ? (
+                                                                <button
+                                                                    type="button"
+                                                                    disabled={navigationBusy}
+                                                                    onClick={() =>
+                                                                        navigate(
+                                                                            createOpenAppCommand(
+                                                                                getProjectAppId(
+                                                                                    projectSlug,
+                                                                                ),
+                                                                            ),
+                                                                        )
+                                                                    }
+                                                                    aria-label={t(
+                                                                        "viewCaseStudyLabel",
+                                                                        {
+                                                                            title: highlight.title,
+                                                                        },
+                                                                    )}
+                                                                    className="shrink-0 text-[length:var(--application-text-caption)] font-semibold text-[var(--application-accent)] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--application-accent)] disabled:cursor-wait disabled:opacity-60"
                                                                 >
-                                                                    {item}
-                                                                </li>
-                                                            ),
-                                                        )}
-                                                    </ul>
-                                                </section>
-                                            ),
+                                                                    {t("viewCaseStudy")}
+                                                                </button>
+                                                            ) : null}
+                                                        </div>
+                                                        <ul className="m-0 mt-3 list-none space-y-3 p-0">
+                                                            {highlight.items.map(
+                                                                (item) => (
+                                                                    <li
+                                                                        key={item}
+                                                                        className="relative pl-3 text-[length:var(--application-text-reading)] leading-7 text-[var(--application-app-surface-muted)] before:absolute before:left-0 before:top-[0.65em] before:size-1.5 before:rounded-full before:bg-[var(--application-app-surface-text)]"
+                                                                    >
+                                                                        {item}
+                                                                    </li>
+                                                                ),
+                                                            )}
+                                                        </ul>
+                                                    </section>
+                                                );
+                                            },
                                         )}
                                     </div>
                                 </div>
@@ -394,7 +431,7 @@ export default function AboutApp({ language }: AboutAppProps) {
                                 }
                                 type="button"
                             >
-                                {t(group.id)} · {group.items.length}
+                                {t(group.id)}, {group.items.length}
                             </button>
                         ))}
                     </div>
@@ -420,67 +457,76 @@ export default function AboutApp({ language }: AboutAppProps) {
                     aria-labelledby="about-selected-work-title"
                 >
                     <p className="text-[length:var(--application-text-caption)] font-semibold uppercase tracking-[0.14em] text-[var(--application-app-surface-muted)]">
-                        {t("selectedWorkEyebrow")}
+                        {t("caseStudiesEyebrow")}
                     </p>
                     <h3
                         id="about-selected-work-title"
                         className="mt-2 text-2xl font-semibold tracking-tight text-[var(--application-app-surface-text)]"
                     >
-                        {t("selectedWorkTitle")}
+                        {t("caseStudiesTitle")}
                     </h3>
-                    <div className="mt-6 border-y border-[var(--application-border)]">
-                        {selectedWork.map((work, index) => {
-                            const appId = work.appId;
-                            const content = (
-                                <>
-                                    <span className="pt-0.5 font-mono text-sm text-[var(--application-app-surface-muted)]">
-                                        {String(index + 1).padStart(2, "0")}
-                                    </span>
-                                    <span className="min-w-0 flex-1">
-                                        <span className="block font-semibold text-[var(--application-app-surface-text)]">
-                                            {t(`${work.id}Title`)}
-                                        </span>
-                                        <span className="mt-1 block text-[length:var(--application-text-body)] leading-6 text-[var(--application-app-surface-muted)]">
-                                            {t(`${work.id}Description`)}
-                                        </span>
-                                    </span>
-                                </>
-                            );
-
-                            if (appId === undefined) {
-                                return (
-                                    <div
-                                        key={work.id}
-                                        className="flex items-start gap-4 border-b border-[var(--application-border)] px-1 py-5"
-                                    >
-                                        {content}
-                                        <span className="pt-0.5 text-[length:var(--application-text-caption)] font-medium text-[var(--application-app-surface-muted)]">
-                                            {t("currentProject")}
-                                        </span>
-                                    </div>
-                                );
-                            }
-
-                            return (
-                                <button
-                                    key={work.id}
-                                    type="button"
-                                    disabled={navigationBusy}
-                                    onClick={() =>
-                                        navigate(createOpenAppCommand(appId))
-                                    }
-                                    className="group flex w-full items-start gap-4 border-b border-[var(--application-border)] px-1 py-5 text-left last:border-b-0 disabled:cursor-wait disabled:opacity-60"
+                    <p className="mt-3 max-w-2xl text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
+                        {t("caseStudiesDescription")}
+                    </p>
+                    <div className="mt-8 space-y-10">
+                        {projectGroups.map((group) => (
+                            <section
+                                key={group.id}
+                                aria-labelledby={`career-project-group-${group.id}`}
+                            >
+                                <h4
+                                    id={`career-project-group-${group.id}`}
+                                    className="text-lg font-semibold text-[var(--application-app-surface-text)]"
                                 >
-                                    {content}
-                                    <span
-                                        aria-hidden="true"
-                                        className="pt-0.5 text-[var(--application-app-surface-muted)] transition-transform group-hover:translate-x-1 group-focus-visible:translate-x-1"
-                                    >
-                                        ↗
-                                    </span>
-                                </button>
-                            );
-                        })}
+                                    {t(`projectGroups.${group.id}.title`)}
+                                </h4>
+                                <p className="mt-2 text-[length:var(--application-text-body)] leading-6 text-[var(--application-app-surface-muted)]">
+                                    {t(`projectGroups.${group.id}.description`)}
+                                </p>
+                                <div className="mt-4 border-y border-[var(--application-border)]">
+                                    {group.slugs.map((slug) => {
+                                        const project = projectsBySlug.get(slug);
+                                        if (project === undefined) return null;
+
+                                        return (
+                                            <button
+                                                key={project.slug}
+                                                type="button"
+                                                disabled={navigationBusy}
+                                                onClick={() =>
+                                                    navigate(
+                                                        createOpenAppCommand(
+                                                            getProjectAppId(
+                                                                project.slug,
+                                                            ),
+                                                        ),
+                                                    )
+                                                }
+                                                className="group grid w-full gap-2 border-b border-[var(--application-border)] px-1 py-5 text-left last:border-b-0 sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-5 disabled:cursor-wait disabled:opacity-60"
+                                            >
+                                                <span className="min-w-0">
+                                                    <span className="block font-semibold text-[var(--application-app-surface-text)]">
+                                                        {project.title}
+                                                    </span>
+                                                    <span className="mt-1 block text-[length:var(--application-text-body)] leading-6 text-[var(--application-app-surface-muted)]">
+                                                        {project.summary}
+                                                    </span>
+                                                    <span className="mt-3 block text-[length:var(--application-text-caption)] text-[var(--application-app-surface-muted)]">
+                                                        {project.stack.join(", ")}
+                                                    </span>
+                                                </span>
+                                                <span
+                                                    aria-hidden="true"
+                                                    className="text-[var(--application-app-surface-muted)] transition-transform group-hover:translate-x-1 group-focus-visible:translate-x-1"
+                                                >
+                                                    ↗
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </section>
+                        ))}
                     </div>
                 </section>
             </article>

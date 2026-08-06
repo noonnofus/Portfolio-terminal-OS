@@ -1,70 +1,144 @@
 {
-  "title": "B2B AI 지식·업무 플랫폼",
+  "title": "OptiGen AI 플랫폼",
   "stackLabel": "개발 스택",
-  "summary": "조직·권한·봇·문서를 관리하고 RAG 기반 AI 채팅과 MCP 도구 연동을 제공하는 사내 엔터프라이즈 AI 플랫폼입니다. Next.js 프런트엔드와 MCP 서버를 처음부터 단독으로 구축했습니다.",
+  "summary": "고객의 조직, 권한, AI 봇, 문서를 관리하고 RAG 기반 대화를 제공하는 B2B AI 플랫폼입니다. 프론트엔드와 UI/UX를 처음부터 설계하고 구현했으며, MCP와 Voice Gateway를 연결해 업무 실행과 음성 채널로 확장했습니다.",
   "projectIntro": {
-    "title": "프로젝트 소개",
-    "description": "관리자는 조직과 권한, 봇, 문서를 설정하고 사용자는 목적에 맞는 봇과 대화합니다. AI 답변은 문서 기반 검색과 모델 호출을 거쳐 생성되며, 필요한 경우 에이전트는 MCP 도구를 실행합니다. 이 여러 단계를 사용자가 하나의 제품 흐름으로 이해할 수 있도록 프런트엔드와 MCP 연동 화면을 설계했습니다."
+    "title": "프로젝트 배경",
+    "description": "기존 시스템을 개선한 프로젝트가 아니라 처음부터 구축한 신규 제품입니다. 관리자가 조직과 권한, AI 봇, 문서를 설정하면 사용자는 목적에 맞는 봇을 선택해 문서에 근거한 답변을 받을 수 있습니다. 관리 기능과 AI 대화가 하나의 제품 경험으로 이어지도록 웹 애플리케이션을 설계했습니다."
   },
   "projectContext": {
-    "service": {"label": "서비스", "description": "조직별 AI 봇, 문서 기반 RAG 채팅, MCP 업무 도구를 제공하는 사내 AI 플랫폼"},
-    "users": {"label": "사용자", "description": "조직·권한·봇·문서를 관리하는 운영자와 업무 질문을 해결하는 내부 사용자"},
-    "role": {"label": "담당 범위", "description": "Next.js 프런트엔드와 UI/UX, 채팅·관리자 화면, MCP 서버와 연동 UI를 처음부터 단독 구축"},
-    "constraint": {"label": "공개 범위", "description": "사내 비공개 프로덕트로 운영 데이터, 고객 정보, 내부 화면, 성과 수치는 공개하지 않음"}
-  },
-  "workflow": {
-    "title": "대표 사용자 흐름",
-    "description": "운영자가 AI 봇과 문서 맥락을 구성하면, 사용자는 봇을 선택해 질문하고 스트리밍 응답과 도구 실행 결과를 같은 대화 흐름에서 확인합니다.",
-    "steps": {"configure": "조직·봇·문서 설정", "selectBot": "업무용 봇 선택", "chat": "RAG 기반 질의·응답", "useTool": "MCP 도구 결과 확인"}
-  },
-  "architecture": {
-    "title": "관리자·AI 채팅·MCP 도구를 역할별 서비스로 분리했습니다.",
-    "description": "프런트엔드는 App Router 렌더링과 React Query hydration으로 서버 데이터를 전달하고, 화면 안에서만 필요한 상태는 feature-local Zustand store로 관리합니다. API는 인증·조직·권한·봇·채팅 이력을, AI 서비스는 RAG와 LLM 응답 생성을, MCP 서버는 AI 에이전트의 도구·리소스·프롬프트 호출을 담당합니다.",
-    "alt": "Next.js 프런트엔드, 내부 API, AI RAG 서비스, MCP 서버, Qdrant 및 LLM 제공자를 연결한 플랫폼 구조도",
-    "caption": "사용자 제품 경로와 AI 에이전트의 MCP 도구 호출 경로를 분리한 전체 구조입니다."
-  },
-  "implementation": {
-    "title": "AI 기능을 사용자가 이해하고 운영할 수 있는 제품 흐름으로 만들었습니다.",
-    "description": "관리자 설정, 봇별 채팅, 화면 상태, MCP 실행은 서로 다른 책임을 갖습니다. 아래 네 사례는 이 경계를 프런트엔드에서 설계하고 구현한 방식입니다."
-  },
-  "labels": {"problem": "문제 원인", "decision": "해결 과정", "result": "결과"},
-  "cases": {
-    "admin": {
-      "title": "조직·권한·봇 관리 화면을 기능 단위로 구성했습니다.",
-      "context": "운영자는 조직별 권한과 AI 봇, 프롬프트, 문서를 관리하고 변경 범위를 이해해야 합니다.",
-      "problem": "운영 대상과 권한 조건이 여러 화면에 흩어지면 어떤 기능이 어떤 데이터와 권한을 다루는지 파악하기 어렵습니다.",
-      "decision": "조직, 권한, 봇, 프롬프트, 문서를 기능 단위 관리자 화면으로 나눴습니다. 인증과 권한 경계를 서버 데이터 흐름에 두고, 각 화면은 필요한 운영 대상을 중심으로 구성했습니다.",
-      "result": "운영자는 역할에 맞는 관리 화면에서 대상별 설정을 처리할 수 있고, 프런트엔드 기능도 도메인 단위로 확장할 수 있게 됐습니다.",
-      "flow": "인증 → 조직·권한 확인 → 관리자 기능 진입 → 봇·프롬프트·문서 관리"
+    "category": {
+      "label": "구분",
+      "description": "대표 사례"
     },
-    "chat": {
-      "title": "봇별 AI 채팅의 생성 과정을 화면에 이어서 표시했습니다.",
-      "context": "사용자는 업무 목적에 맞는 봇을 선택한 뒤, 답변이 생성되는 과정과 최종 응답을 같은 대화 맥락에서 확인해야 합니다.",
-      "problem": "여러 봇의 설정과 대화 상태를 전역으로 섞으면 다른 봇의 설정이 남거나, 스트리밍 응답의 표시 시점이 화면마다 달라질 수 있습니다.",
-      "decision": "동적 봇 경로에 채팅 설정 컨텍스트를 한정하고, API의 SSE 응답을 받아 생성 중인 답변을 화면에 이어서 표시했습니다. 채팅 이력과 봇별 설정의 경계를 분리했습니다.",
-      "result": "사용자는 선택한 봇의 맥락에서 생성 중인 답변과 확정된 대화를 이어서 볼 수 있고, 봇별 채팅 화면도 독립적으로 유지됩니다.",
-      "flow": "봇 선택 → bot-scoped route·settings → SSE 응답 수신 → 생성 중 답변 표시 → 대화 이력"
+    "service": {
+      "label": "제품",
+      "description": "조직별 AI 봇과 문서 기반 RAG 대화를 제공하는 B2B AI 플랫폼"
     },
-    "content": {
-      "title": "서버 데이터와 화면 상태의 책임을 분리했습니다.",
-      "context": "관리자와 채팅 화면은 서버에서 가져오는 조직·봇·문서 데이터와, 화면 안의 필터·선택·패널 상태를 함께 다룹니다.",
-      "problem": "서버 데이터와 일시적인 UI 상태를 같은 저장소에 넣으면 캐시 갱신과 화면 조작이 서로 영향을 주고, 기능이 늘수록 상태를 추적하기 어려워집니다.",
-      "decision": "Server Actions와 React Query의 prefetch·hydration으로 서버 상태를 전달하고, 필터·선택·패널처럼 화면 안에서만 필요한 상태는 feature-local Zustand store로 분리했습니다.",
-      "result": "데이터 갱신 책임과 화면 조작 책임이 분리돼 기능 단위로 상태를 추적할 수 있습니다. 서버 렌더링과 클라이언트 상호작용도 각자의 경계에서 동작합니다.",
-      "flow": "Server Actions → React Query prefetch·hydration → 서버 데이터 → feature-local UI store → 화면 상호작용"
+    "users": {
+      "label": "사용자",
+      "description": "조직, 권한, 봇, 문서를 관리하는 운영자와 AI를 업무에 활용하는 사용자"
     },
-    "mcp": {
-      "title": "MCP 서버와 진행형 도구 경험을 처음부터 구축했습니다.",
-      "context": "AI 에이전트가 단순한 답변을 넘어 업무 도구를 호출할 때, 사용자는 실행 결과뿐 아니라 오래 걸리는 작업의 진행 상태도 이해해야 합니다.",
-      "problem": "일반적인 짧은 도구 호출과 회의록처럼 긴 파이프라인 작업은 연결 방식과 진행 상태 전달 요구가 다릅니다.",
-      "decision": "Express와 MCP SDK로 서버를 구성하고, 일반 도구는 stateless transport, 회의록 파이프라인은 세션별 transport와 SSE 진행 알림으로 분리했습니다. 도구·리소스·프롬프트는 확장 가능한 등록 구조로 관리했습니다.",
-      "result": "AI 에이전트는 표준 MCP 경로로 업무 기능을 호출할 수 있고, 사용자는 장시간 실행되는 작업도 진행 상태와 결과를 제품 흐름 안에서 확인할 수 있습니다.",
-      "flow": "AI agent → MCP transport 선택 → tools·resources·prompts → 진행 상태 SSE 또는 즉시 결과 → 제품 UI"
+    "role": {
+      "label": "담당 범위",
+      "description": "프론트엔드와 UI/UX 설계 및 구현, AI 대화 경험 구축, MCP와 Voice Gateway 연동"
     }
   },
-  "result": {
-    "title": "AI 기능과 운영 기능을 하나의 제품 흐름으로 연결했습니다.",
-    "description": "관리자 설정, RAG 기반 봇 채팅, MCP 도구 실행을 각각의 책임 경계에서 구현했습니다. 웹표준·접근성·성능 개선도 완료하고, 핵심 화면을 데스크톱·모바일 뷰포트에서 검사하는 axe 기반 Playwright 자동 검사를 추가했습니다."
+  "caseStudy": {
+    "problem": {
+      "title": "문제와 요구사항",
+      "description": "관리자가 AI 사용 환경을 구성하는 과정과 사용자가 실제 대화를 수행하는 과정이 하나의 제품 안에서 자연스럽게 연결되어야 했습니다.",
+      "items": {
+        "administration": {
+          "title": "조직별 운영 관리",
+          "description": "조직과 사용자 권한, AI 봇, 프롬프트, 문서를 관리하고 파일을 업로드할 수 있는 운영 화면이 필요했습니다."
+        },
+        "conversation": {
+          "title": "문서 기반 AI 대화",
+          "description": "사용자가 목적에 맞는 봇을 선택하고 문서에 근거한 응답을 스트리밍으로 확인하며 이전 대화를 이어볼 수 있어야 했습니다."
+        },
+        "extension": {
+          "title": "업무와 음성 채널로 확장",
+          "description": "기존 대화 경험을 유지하면서 MCP의 업무 도구 실행과 Voice Gateway의 음성 상담을 연결할 수 있어야 했습니다."
+        }
+      }
+    },
+    "design": {
+      "title": "설계와 기술적 의사결정",
+      "description": "사용자의 작업 흐름에 따라 정보 구조를 나누고, 서버 데이터와 화면 상태, 스트리밍 연결이 서로 다른 책임을 갖도록 설계했습니다.",
+      "items": {
+        "informationArchitecture": {
+          "title": "작업 중심 정보 구조",
+          "description": "조직, 권한, 봇, 프롬프트, 문서, 대화 이력을 기능별 화면으로 구성하고 관리 작업에서 실제 AI 대화로 이어지는 탐색 흐름을 설계했습니다."
+        },
+        "stateBoundary": {
+          "title": "서버 상태와 화면 상태 분리",
+          "description": "서버에서 가져오는 데이터는 React Query로 관리하고 필터와 선택값처럼 화면에 한정된 상태는 기능별 Zustand store로 분리했습니다."
+        },
+        "streaming": {
+          "title": "상태 관리와 SSE 분리",
+          "description": "메시지와 대화 상태는 애플리케이션 상태로 관리하고, SSE는 서버가 전달하는 응답과 실행 이벤트를 처리하는 통신 계층으로 제한했습니다."
+        },
+        "qualityFoundation": {
+          "title": "접근성을 제품 기준으로 적용",
+          "description": "시맨틱 HTML, 접근 가능한 이름, 키보드 조작, 포커스 복원을 구현 단계의 기본 조건으로 적용했습니다."
+        }
+      }
+    },
+    "implementation": {
+      "title": "핵심 구현",
+      "description": "관리 화면부터 스트리밍 대화까지 사용자가 직접 경험하는 흐름을 구현하고, 다양한 상태에서도 다음 행동을 이해할 수 있도록 구성했습니다.",
+      "items": {
+        "chatExperience": {
+          "title": "챗봇 대화 UI와 사용자 경험",
+          "description": "봇 선택, 메시지 작성, 응답 확인, 대화 이력 탐색이 하나의 흐름으로 이어지도록 대화 인터페이스를 구현했습니다."
+        },
+        "responseFlow": {
+          "title": "SSE 기반 응답 스트리밍",
+          "description": "생성 중인 응답을 순차적으로 표시하고 생성, 완료, 중단, 오류 상태를 구분해 현재 처리 상태를 명확하게 전달했습니다."
+        },
+        "accessibility": {
+          "title": "웹 접근성과 웹 표준",
+          "description": "시맨틱 요소와 접근 가능한 이름, 키보드 조작, 모달 포커스 복원을 적용하고 Playwright와 axe로 주요 흐름을 검사했습니다."
+        },
+        "responsive": {
+          "title": "반응형 인터페이스",
+          "description": "화면 크기에 따라 탐색, 대화 목록, 메시지 영역과 입력 도구가 자연스럽게 재배치되도록 구현했습니다."
+        }
+      }
+    },
+    "outcome": {
+      "title": "결과와 회고",
+      "description": "신규 제품의 프론트엔드 기반을 구축하고, 이후 업무 실행과 음성 채널을 같은 대화 경험에서 확장할 수 있도록 했습니다.",
+      "items": {
+        "newProduct": {
+          "title": "신규 제품의 프론트엔드 기반 구축",
+          "description": "관리 기능과 AI 대화를 포함하는 웹 애플리케이션을 초기 정보 구조와 상태 흐름부터 구축했습니다."
+        },
+        "extensionPath": {
+          "title": "동일한 대화 경험에서 기능 확장",
+          "description": "MCP와 Voice Gateway를 별도 시스템으로 연결해 기존 채팅 경험을 업무 실행과 음성 채널로 확장할 수 있도록 했습니다."
+        },
+        "qualityBaseline": {
+          "title": "품질 기준의 조기 적용",
+          "description": "접근성, 웹 표준, 반응형 동작과 테스트를 기능 완료 이후의 보완이 아니라 초기 구현 기준으로 다뤘습니다."
+        }
+      }
+    },
+    "verification": {
+      "title": "검증 기준과 확인 방법",
+      "description": "구현 완료 여부만 나열하지 않고, 사용자가 실제로 겪는 핵심 상태와 접근성 동작을 기준으로 주요 흐름을 확인했습니다.",
+      "items": {
+        "accessibility": {
+          "title": "키보드와 보조 기술 흐름",
+          "description": "주요 화면에서 시맨틱 구조와 접근 가능한 이름을 확인하고, 키보드 조작과 모달 종료 후 포커스 복원을 Playwright와 axe로 검사했습니다."
+        },
+        "streaming": {
+          "title": "스트리밍 상태 전환",
+          "description": "응답 생성, 완료, 사용자 중단과 오류 상태를 구분해 각 단계에서 메시지와 다음 행동이 일관되게 표시되는지 확인했습니다."
+        }
+      }
+    }
   },
-  "footer": "사내 비공개 프로덕트이므로 운영 데이터, 고객 정보, 내부 화면 및 성과 수치는 공개하지 않았습니다."
+  "architecture": {
+    "title": "플랫폼 전체 흐름",
+    "description": "웹 애플리케이션은 API와 AI 서비스를 통해 RAG 기반 응답을 제공합니다. MCP와 Voice Gateway는 각각 업무 실행과 음성 채널을 연결하는 확장 시스템으로 동작합니다.",
+    "alt": "OptiGen 웹 애플리케이션과 API, AI 서비스, MCP, Voice Gateway의 관계를 보여주는 플랫폼 흐름도",
+    "caption": "OptiGen 웹 애플리케이션을 중심으로 MCP와 Voice Gateway가 연결되는 상위 수준의 흐름입니다.",
+    "loading": "구조도를 불러오는 중입니다.",
+    "error": "구조도를 표시하지 못했습니다.",
+    "diagram": {
+      "webUser": "웹 사용자",
+      "chat": "OptiGen 웹 애플리케이션",
+      "phoneCall": "전화 상담",
+      "vg": "Voice Gateway",
+      "api": "API 서버",
+      "ai": "AI 서비스 / RAG",
+      "mcp": "MCP 서버",
+      "requestResponse": "요청 / 스트리밍 응답",
+      "orchestration": "AI 처리",
+      "toolExtension": "업무 실행 확장",
+      "voiceExtension": "음성 채널 확장"
+    }
+  }
 }

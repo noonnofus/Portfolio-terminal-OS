@@ -19,6 +19,7 @@ import {
 import { createOpenAppCommand } from "@/features/gui/registry/appTypes";
 import { useGuiNavigation } from "@/features/gui/navigation/GuiNavigationProvider";
 import type { WindowId } from "@/features/gui/navigation/navigationTypes";
+import { useGuiStore } from "@/features/gui/store/GuiStoreProvider";
 import { useTranslation } from "react-i18next";
 
 const ZERO_POINT: Point = { x: 0, y: 0 };
@@ -45,7 +46,8 @@ export function DirectorySurface({
   directory: DesktopFolderNode;
   variant: "desktop" | "window";
 }) {
-  const { t } = useTranslation("appShell");
+  const language = useGuiStore((state) => state.language);
+  const { t } = useTranslation("appShell", { lng: language });
   const { navigate, navigationBusy } = useGuiNavigation();
   const surfaceRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);

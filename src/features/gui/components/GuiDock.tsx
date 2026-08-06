@@ -15,7 +15,8 @@ import { getAppTitle } from "@/features/gui/registry/getAppTitle";
 import { useTranslation } from "react-i18next";
 
 export function GuiDock() {
-    const { t } = useTranslation("appShell");
+    const language = useGuiStore((state) => state.language);
+    const { t } = useTranslation("appShell", { lng: language });
     const activeWindowId = useGuiStore((state) =>
         state.focus.mode === "windows" ? state.focus.activeWindowId : null,
     );

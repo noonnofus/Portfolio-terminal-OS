@@ -1,0 +1,126 @@
+{
+  "title": "OptiGen MCP 서버",
+  "stackLabel": "개발 스택",
+  "summary": "OptiGen AI가 답변 생성에 그치지 않고 외부 업무 API를 실행할 수 있도록 구축한 MCP 서버입니다. 도구별 계약과 프롬프트를 정의하고, 회의록 작성처럼 처리 시간이 긴 작업의 진행 상태와 결과를 대화 흐름에 연결했습니다.",
+  "projectIntro": {
+    "title": "프로젝트 배경",
+    "description": "OptiGen의 대화 경험을 실제 업무 실행으로 확장하기 위해 별도의 MCP 서버를 구축했습니다. 서로 다른 업무 API를 AI가 이해할 수 있는 도구로 변환하고, 도구 탐색부터 실행 결과 전달까지 일관된 흐름으로 설계했습니다."
+  },
+  "projectContext": {
+    "category": {
+      "label": "구분",
+      "description": "OptiGen 연관 기술 사례"
+    },
+    "service": {
+      "label": "시스템",
+      "description": "OptiGen AI 플랫폼과 외부 업무 시스템 사이에서 도구 탐색과 실행을 담당하는 확장 서버"
+    },
+    "flow": {
+      "label": "사용 흐름",
+      "description": "AI가 필요한 도구를 선택하면 MCP 서버가 업무 API를 실행하고 결과 또는 진행 상태를 대화 화면에 전달"
+    },
+    "role": {
+      "label": "담당 범위",
+      "description": "MCP 서버 설계 및 구현, 업무 API 연동, 도구별 프롬프트, 회의록 도구와 장시간 작업 처리"
+    }
+  },
+  "caseStudy": {
+    "problem": {
+      "title": "문제와 요구사항",
+      "description": "AI가 여러 업무 시스템을 안전하고 예측 가능한 방식으로 실행하려면 API 차이를 감추고, 도구 선택과 장시간 작업을 별도의 실행 문제로 다뤄야 했습니다.",
+      "items": {
+        "apiDiversity": {
+          "title": "서로 다른 업무 API",
+          "description": "업무 시스템마다 입력값, 응답 형식과 오류 규칙이 달라 AI가 직접 API의 차이를 처리하도록 만들 수 없었습니다."
+        },
+        "toolSelection": {
+          "title": "정확한 도구 선택",
+          "description": "AI가 비슷한 도구를 혼동하지 않고 필요한 입력값을 갖춘 상태에서 실행하도록 명확한 도구 설명과 실행 조건이 필요했습니다."
+        },
+        "longRunning": {
+          "title": "장시간 작업의 사용자 피드백",
+          "description": "회의록 작성처럼 즉시 완료되지 않는 작업에서도 사용자가 실행 여부와 현재 처리 단계를 확인할 수 있어야 했습니다."
+        }
+      }
+    },
+    "design": {
+      "title": "설계와 기술적 의사결정",
+      "description": "외부 API, MCP 도구, AI 프롬프트와 장시간 작업의 책임을 분리해 변경 범위를 줄이고 실행 흐름을 명확하게 만들었습니다.",
+      "items": {
+        "toolContract": {
+          "title": "도구 계약과 입력 검증",
+          "description": "각 도구의 입력과 출력 구조를 정의하고 Zod로 입력값을 검증해 불완전한 요청이 업무 API까지 전달되지 않도록 했습니다."
+        },
+        "promptBoundary": {
+          "title": "도구별 설명과 프롬프트",
+          "description": "도구의 목적, 사용 조건, 필수 입력과 예상 결과를 도구별로 작성해 AI가 상황에 맞는 도구를 선택하도록 했습니다."
+        },
+        "executionModel": {
+          "title": "즉시 작업과 장시간 작업 분리",
+          "description": "바로 결과를 반환하는 도구와 별도 처리가 필요한 작업을 구분하고, 장시간 작업은 시작, 진행, 완료와 실패 상태를 전달하도록 설계했습니다."
+        }
+      }
+    },
+    "implementation": {
+      "title": "핵심 구현",
+      "description": "업무 API를 MCP 도구로 연결하고, 회의록 생성과 같은 복합 작업을 대화 인터페이스에서 실행하고 추적할 수 있도록 구현했습니다.",
+      "items": {
+        "apiTools": {
+          "title": "업무 API의 MCP 도구화",
+          "description": "업무 API의 요청과 응답을 MCP 도구 계약에 맞게 변환하고, API 응답을 AI와 사용자가 이해할 수 있는 결과로 정규화했습니다."
+        },
+        "meetingMinutes": {
+          "title": "회의록 작성 도구",
+          "description": "브라우저 녹음과 음성 파일을 입력으로 받아 전사, 화자 분리와 요약을 수행하고 Markdown과 DOCX 회의록을 생성하는 작업을 도구로 연결했습니다."
+        },
+        "streaming": {
+          "title": "진행 상태와 결과 스트리밍",
+          "description": "장시간 작업의 처리 단계를 이벤트로 전달해 사용자가 대화 화면에서 진행 상태와 최종 결과를 이어서 확인할 수 있도록 했습니다."
+        },
+        "errorBoundary": {
+          "title": "실패 범위 분리",
+          "description": "도구 입력 오류, 외부 API 오류와 장시간 작업 실패를 구분해 전체 대화를 중단하지 않고 실패 원인에 맞는 상태를 전달했습니다."
+        }
+      }
+    },
+    "outcome": {
+      "title": "결과와 회고",
+      "description": "MCP 서버를 독립된 실행 계층으로 두면서 OptiGen의 대화 경험과 업무 시스템의 변경 책임을 분리할 수 있었습니다.",
+      "items": {
+        "businessExecution": {
+          "title": "답변에서 업무 실행으로 확장",
+          "description": "사용자가 대화 흐름을 벗어나지 않고 AI를 통해 업무 도구를 탐색하고 실행할 수 있는 기반을 구축했습니다."
+        },
+        "extensionCost": {
+          "title": "도구 추가 범위의 제한",
+          "description": "새 업무 기능을 도구 계약, 프롬프트와 API 어댑터 단위로 추가할 수 있도록 구성해 기존 대화 UI의 변경을 줄였습니다."
+        },
+        "executionVisibility": {
+          "title": "장시간 작업의 가시성",
+          "description": "즉시 완료되지 않는 작업에서도 시작, 진행, 완료와 실패 상태를 제공해 사용자가 처리 흐름을 이해할 수 있도록 했습니다."
+        }
+      }
+    }
+  },
+  "architecture": {
+    "title": "도구 실행 흐름",
+    "description": "OptiGen의 AI 서비스가 필요한 도구를 선택하면 MCP 서버가 업무 API 또는 장시간 작업을 실행합니다. 실행 결과와 진행 상태는 기존 대화 흐름으로 돌아갑니다.",
+    "alt": "OptiGen 대화에서 AI 서비스와 MCP 서버를 거쳐 업무 API와 장시간 작업을 실행하는 흐름도",
+    "caption": "MCP 서버가 대화형 AI와 실제 업무 실행 사이의 독립된 연결 계층으로 동작합니다.",
+    "loading": "구조도를 불러오는 중입니다.",
+    "error": "구조도를 표시하지 못했습니다.",
+    "diagram": {
+      "user": "사용자",
+      "chat": "OptiGen 대화",
+      "ai": "AI 서비스",
+      "mcp": "MCP 서버",
+      "businessApi": "업무 API",
+      "longJob": "장시간 작업",
+      "conversation": "요청 / 응답",
+      "toolCall": "도구 탐색 / 실행",
+      "apiRequest": "검증된 API 요청",
+      "asyncStart": "작업 시작",
+      "progress": "진행 상태 / 결과"
+    }
+  }
+}

@@ -38,6 +38,7 @@ export type ExperienceContent = {
 export type ExperienceHighlight = {
   title: string;
   items: readonly string[];
+  projectSlug?: ProjectSlug;
 };
 
 export type SkillGroup = {

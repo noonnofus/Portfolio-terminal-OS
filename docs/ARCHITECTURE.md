@@ -1,6 +1,6 @@
 # Portfolio-terminal-OS Architecture
 
-> 최종 업데이트: 2026-07-29
+> 최종 업데이트: 2026-08-06
 
 ## Overview
 
@@ -55,7 +55,9 @@ flowchart LR
 The GUI URL can carry language state, but the active language is still owned by
 the shared language store and synchronized to i18next and `<html lang>`.
 Core namespaces are registered in `src/shared/i18n/client.ts`; project-specific
-namespaces are loaded by their allowlisted app loaders.
+namespaces are loaded by their allowlisted app loaders. The current project
+namespace set includes Portfolio, OptiGen, MCP, Voice Gateway, KEPCO Advisor,
+WCHMS, and Flare.
 
 ## GUI runtime
 
@@ -119,6 +121,9 @@ GUI apps                  → shared UI/content/i18n/query helpers
 - Project metadata such as stack badges and visibility is centralized in
   `shared/content/portfolio/projectManifest.ts`; app configs retain only
   typed runtime metadata.
+- Project detail apps compose the shared `ProjectCaseStudyPage`; interactive
+  architecture charts are rendered client-side by
+  `ProjectArchitectureDiagram` with Mermaid strict security mode.
 
 ### Navigation rules
 
@@ -175,9 +180,10 @@ flowchart TD
 1. Terminal and GUI routes are active.
 2. Typed catalog/loader boundaries and the pure navigation planner are active.
 3. About, Projects, Resume, Terminal, Contact, Guestbook, and Settings apps are active under `/gui`.
-4. GitHub OAuth, Notes, server-backed wallpapers, and local GUI preferences are integrated.
-5. React Query is the client server-state layer for notes and wallpapers.
-6. GUI icon loading and guest notes reads have been optimized for the current Vercel/Supabase deployment shape.
+4. Projects exposes seven allowlisted case-study apps, including MCP and Voice Gateway, with bilingual content and architecture diagrams.
+5. GitHub OAuth, Notes, server-backed wallpapers, and local GUI preferences are integrated.
+6. React Query is the client server-state layer for notes and wallpapers.
+7. GUI icon loading and guest notes reads have been optimized for the current Vercel/Supabase deployment shape.
 
 ## Verification
 

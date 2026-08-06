@@ -5,7 +5,9 @@ import { contactAppLoader } from "@/features/apps/contact/app.loader";
 import { notesAppLoader } from "@/features/apps/notes/app.loader";
 import { flareAppLoader } from "@/features/apps/projects/apps/flare/app.loader";
 import { kepcoAppLoader } from "@/features/apps/projects/apps/kepco/app.loader";
+import { mcpAppLoader } from "@/features/apps/projects/apps/mcp/app.loader";
 import { optigenAppLoader } from "@/features/apps/projects/apps/optigen/app.loader";
+import { voiceGatewayAppLoader } from "@/features/apps/projects/apps/voice-gateway/app.loader";
 import { portfolioAppLoader } from "@/features/apps/projects/apps/portfolio/app.loader";
 import { wchmsAppLoader } from "@/features/apps/projects/apps/wchms/app.loader";
 import { resumeAppLoader } from "@/features/apps/resume/app.loader";
@@ -22,6 +24,8 @@ export const appLoaderRegistry = {
   settings: settingsAppLoader,
   "project:portfolio": portfolioAppLoader,
   "project:optigen": optigenAppLoader,
+  "project:mcp": mcpAppLoader,
+  "project:voice-gateway": voiceGatewayAppLoader,
   "project:kepco": kepcoAppLoader,
   "project:wchms": wchmsAppLoader,
   "project:flare": flareAppLoader,

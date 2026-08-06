@@ -11,19 +11,30 @@ type KepcoAppProps = {
   language: Language;
 };
 
-const frontendCaseIds = ["callState", "streamState", "recovery", "roleUi"] as const;
-const projectContextIds = ["service", "users", "role", "constraint"] as const;
-const workflowStepIds = ["signIn", "detectCall", "followTranscript", "reviewAfterCall"] as const;
+const projectContextIds = ["category", "service", "users", "role"] as const;
+const caseStudySections = [
+  {
+    id: "problem",
+    itemIds: ["liveContext", "afterCall", "roleScope"],
+  },
+  {
+    id: "design",
+    itemIds: ["callState", "streamState", "roleUi"],
+  },
+  {
+    id: "decisions",
+    itemIds: ["transport", "reducer", "recovery"],
+  },
+] as const;
+const contributionIds = ["consultation", "history", "roles", "resilience"] as const;
+const verificationIds = ["stateTransition", "eventConsistency", "recovery"] as const;
 
 export default function KepcoApp({ language }: KepcoAppProps) {
   const { t } = useTranslation("Kepco");
 
   return (
     <div className="application-app-surface h-full w-full overflow-y-auto">
-      <article
-        lang={language}
-        className={styles.readingArticle}
-      >
+      <article lang={language} className={styles.readingArticle}>
         <header>
           <h2 className="text-3xl font-bold tracking-tight text-[var(--application-app-surface-text)] md:text-4xl">
             {t("title")}
@@ -40,7 +51,10 @@ export default function KepcoApp({ language }: KepcoAppProps) {
         </header>
 
         <section className="mt-12" aria-labelledby="kepco-overview-title">
-          <h3 id="kepco-overview-title" className="text-lg font-semibold text-[var(--application-app-surface-text)]">
+          <h3
+            id="kepco-overview-title"
+            className="text-lg font-semibold text-[var(--application-app-surface-text)]"
+          >
             {t("projectIntro.title")}
           </h3>
           <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
@@ -48,7 +62,10 @@ export default function KepcoApp({ language }: KepcoAppProps) {
           </p>
           <dl className="mt-7 space-y-4 text-[length:var(--application-text-body)] leading-7">
             {projectContextIds.map((id) => (
-              <div key={id} className="grid gap-1 sm:grid-cols-[6.5rem_1fr] sm:gap-5">
+              <div
+                key={id}
+                className="grid gap-1 sm:grid-cols-[6.5rem_1fr] sm:gap-5"
+              >
                 <dt className="font-semibold text-[var(--application-app-surface-text)]">
                   {t(`projectContext.${id}.label`)}
                 </dt>
@@ -60,111 +77,117 @@ export default function KepcoApp({ language }: KepcoAppProps) {
           </dl>
         </section>
 
-        <section className="mt-12" aria-labelledby="kepco-workflow-title">
-          <h3 id="kepco-workflow-title" className="text-lg font-semibold text-[var(--application-app-surface-text)]">
-            {t("workflow.title")}
+        {caseStudySections.map(({ id, itemIds }) => (
+          <section
+            key={id}
+            className="mt-12"
+            aria-labelledby={`kepco-${id}-title`}
+          >
+            <h3
+              id={`kepco-${id}-title`}
+              className="text-lg font-semibold text-[var(--application-app-surface-text)]"
+            >
+              {t(`caseStudy.${id}.title`)}
+            </h3>
+            <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
+              {t(`caseStudy.${id}.description`)}
+            </p>
+            <ul className="mt-7 grid gap-x-8 gap-y-7 sm:grid-cols-2">
+              {itemIds.map((itemId) => (
+                <li
+                  key={itemId}
+                  className="border-t border-[var(--application-border)] pt-4"
+                >
+                  <h4 className="font-semibold text-[var(--application-app-surface-text)]">
+                    {t(`caseStudy.${id}.items.${itemId}.title`)}
+                  </h4>
+                  <p className="mt-2 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
+                    {t(`caseStudy.${id}.items.${itemId}.description`)}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+
+        <section className="mt-12" aria-labelledby="kepco-contributions-title">
+          <h3
+            id="kepco-contributions-title"
+            className="text-lg font-semibold text-[var(--application-app-surface-text)]"
+          >
+            {t("contributions.title")}
           </h3>
           <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
-            {t("workflow.description")}
+            {t("contributions.description")}
           </p>
-          <ol className="mt-6 grid gap-4 sm:grid-cols-4">
-            {workflowStepIds.map((id, index) => (
-              <li key={id} className="border-t border-[var(--application-border)] pt-3">
-                <span className="font-mono text-sm text-[var(--application-accent)]">0{index + 1}</span>
-                <p className="mt-2 text-sm font-semibold leading-6 text-[var(--application-app-surface-text)]">
-                  {t(`workflow.steps.${id}`)}
+          <ul className="mt-7 grid gap-x-8 gap-y-7 sm:grid-cols-2">
+            {contributionIds.map((id) => (
+              <li
+                key={id}
+                className="border-t border-[var(--application-border)] pt-4"
+              >
+                <h4 className="font-semibold text-[var(--application-app-surface-text)]">
+                  {t(`contributions.items.${id}.title`)}
+                </h4>
+                <p className="mt-2 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
+                  {t(`contributions.items.${id}.description`)}
                 </p>
               </li>
             ))}
-          </ol>
+          </ul>
         </section>
 
-        <section className="mt-12" aria-labelledby="kepco-architecture-title">
-          <h3 id="kepco-architecture-title" className="text-lg font-semibold text-[var(--application-app-surface-text)]">
-            {t("architectureTitle")}
+        <section className="mt-12" aria-labelledby="kepco-verification-title">
+          <h3
+            id="kepco-verification-title"
+            className="text-lg font-semibold text-[var(--application-app-surface-text)]"
+          >
+            {t("verification.title")}
           </h3>
           <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
-            {t("architectureDescription")}
+            {t("verification.description")}
+          </p>
+          <ul className="mt-7 grid gap-x-8 gap-y-7 sm:grid-cols-2">
+            {verificationIds.map((id) => (
+              <li
+                key={id}
+                className="border-t border-[var(--application-border)] pt-4"
+              >
+                <h4 className="font-semibold text-[var(--application-app-surface-text)]">
+                  {t(`verification.items.${id}.title`)}
+                </h4>
+                <p className="mt-2 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
+                  {t(`verification.items.${id}.description`)}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="mt-12" aria-labelledby="kepco-flow-title">
+          <h3
+            id="kepco-flow-title"
+            className="text-lg font-semibold text-[var(--application-app-surface-text)]"
+          >
+            {t("flow.title")}
+          </h3>
+          <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
+            {t("flow.description")}
           </p>
           <figure className="mt-5 bg-white py-2">
             <Image
-              src="/diagrams/kepco-advisor-architecture.svg"
-              alt={t("architectureAlt")}
-              width={1600}
-              height={1100}
-              className="h-auto w-full"
-              unoptimized
-            />
-            <figcaption className="mt-3 text-sm leading-6 text-[var(--application-app-surface-muted)]">
-              {t("architectureCaption")}
-            </figcaption>
-          </figure>
-        </section>
-
-        <section className="mt-14" aria-labelledby="kepco-implementation-title">
-          <h3 id="kepco-implementation-title" className="text-lg font-semibold text-[var(--application-app-surface-text)]">
-            {t("implementationTitle")}
-          </h3>
-          <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
-            {t("implementationDescription")}
-          </p>
-          <figure className="mt-6 bg-white py-2">
-            <Image
               src="/diagrams/kepco-advisor-frontend-flow.svg"
-              alt={t("frontendFlowAlt")}
+              alt={t("flow.alt")}
               width={1400}
               height={700}
               className="h-auto w-full"
               unoptimized
             />
             <figcaption className="mt-3 text-sm leading-6 text-[var(--application-app-surface-muted)]">
-              {t("frontendFlowCaption")}
+              {t("flow.caption")}
             </figcaption>
           </figure>
-          <div className="mt-8 space-y-12">
-            {frontendCaseIds.map((id, index) => (
-              <section key={id} aria-labelledby={`kepco-${id}-title`}>
-                <h4
-                  id={`kepco-${id}-title`}
-                  className="text-lg font-semibold text-[var(--application-app-surface-text)]"
-                >
-                  {index + 1}. {t(`frontendCases.${id}.title`)}
-                </h4>
-                <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
-                  {t(`frontendCases.${id}.context`)}
-                </p>
-                <dl className="mt-5 space-y-5 text-[length:var(--application-text-body)] leading-7">
-                  {(["problem", "decision", "result"] as const).map((part) => (
-                    <div key={part}>
-                      <dt className="font-semibold text-[var(--application-app-surface-text)]">
-                        {t(`labels.${part}`)}
-                      </dt>
-                      <dd className="mt-1 text-[var(--application-app-surface-muted)]">
-                        {t(`frontendCases.${id}.${part}`)}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-                <p className="mt-5 text-sm leading-6 text-[var(--application-app-surface-muted)]">
-                  {t(`frontendCases.${id}.flow`)}
-                </p>
-              </section>
-            ))}
-          </div>
         </section>
-
-        <section className="mt-14" aria-labelledby="kepco-result-title">
-          <h3 id="kepco-result-title" className="text-lg font-semibold text-[var(--application-app-surface-text)]">
-            {t("resultTitle")}
-          </h3>
-          <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
-            {t("resultDescription")}
-          </p>
-        </section>
-
-        <footer className="mt-12 text-sm leading-6 text-[var(--application-app-surface-muted)]">
-          {t("footer")}
-        </footer>
       </article>
     </div>
   );

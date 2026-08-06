@@ -13,6 +13,7 @@ type PortfolioAppProps = {
 
 const focusIds = ["interaction", "state", "accessibility", "content"] as const;
 const caseIds = ["navigation", "directory", "content", "accessibility"] as const;
+const verificationIds = ["structure", "navigation", "interaction"] as const;
 export default function PortfolioApp({ language }: PortfolioAppProps) {
   const { t } = useTranslation("Portfolio");
 
@@ -102,6 +103,27 @@ export default function PortfolioApp({ language }: PortfolioAppProps) {
           </div>
         </section>
 
+        <section className="mt-14" aria-labelledby="portfolio-verification-title">
+          <h3 id="portfolio-verification-title" className="text-lg font-semibold text-[var(--application-app-surface-text)]">
+            {t("verification.title")}
+          </h3>
+          <p className="mt-3 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
+            {t("verification.description")}
+          </p>
+          <ul className="mt-7 grid gap-x-8 gap-y-7 sm:grid-cols-2">
+            {verificationIds.map((id) => (
+              <li key={id} className="border-t border-[var(--application-border)] pt-4">
+                <h4 className="font-semibold text-[var(--application-app-surface-text)]">
+                  {t(`verification.items.${id}.title`)}
+                </h4>
+                <p className="mt-2 text-[length:var(--application-text-body)] leading-7 text-[var(--application-app-surface-muted)]">
+                  {t(`verification.items.${id}.description`)}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         <section className="mt-14" aria-labelledby="portfolio-result-title">
           <h3 id="portfolio-result-title" className="text-lg font-semibold text-[var(--application-app-surface-text)]">
             {t("result.title")}
@@ -111,9 +133,6 @@ export default function PortfolioApp({ language }: PortfolioAppProps) {
           </p>
         </section>
 
-        <footer className="mt-12 text-sm leading-6 text-[var(--application-app-surface-muted)]">
-          {t("footer")}
-        </footer>
       </article>
     </div>
   );

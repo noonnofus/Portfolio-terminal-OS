@@ -2,7 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element -- local technology SVGs preserve their brand fills */
 
-import { Brain } from "lucide-react";
+import { Brain, Network, PhoneCall, Radio, type LucideIcon } from "lucide-react";
 import styles from "../styles/ProjectContent.module.css";
 import { useColorMode } from "@/shared/ui/color-mode";
 
@@ -26,6 +26,7 @@ const technologyIcons: Record<
   "React Query": { src: "/tech-icons/tanstack-query.svg" },
   "TanStack Query": { src: "/tech-icons/tanstack-query.svg" },
   TypeScript: { src: "/tech-icons/typescript.svg" },
+  Zod: { src: "/tech-icons/zod.svg" },
   "Tailwind CSS": { src: "/tech-icons/tailwindcss.svg" },
   Zustand: { src: "/tech-icons/zustand.svg" },
   PostgreSQL: { src: "/tech-icons/postgresql.svg" },
@@ -33,6 +34,16 @@ const technologyIcons: Record<
     src: "/tech-icons/mysql-light.svg",
     darkSrc: "/tech-icons/mysql-dark.svg",
   },
+  OpenAI: {
+    src: "/tech-icons/openai.svg",
+    invertOnDark: true,
+  },
+};
+
+const technologyFallbackIcons: Record<string, LucideIcon> = {
+  "MCP SDK": Network,
+  Twilio: PhoneCall,
+  WebSocket: Radio,
 };
 
 export function ProjectTechBadges({
@@ -45,6 +56,7 @@ export function ProjectTechBadges({
     <ul className={styles.techBadges} role="list" aria-label={label}>
       {items.map((item) => {
         const icon = technologyIcons[item];
+        const FallbackIcon = technologyFallbackIcons[item] ?? Brain;
         const src =
           resolvedColorMode === "dark" ? (icon?.darkSrc ?? icon?.src) : icon?.src;
 
@@ -65,7 +77,7 @@ export function ProjectTechBadges({
                 width={16}
               />
             ) : (
-              <Brain
+              <FallbackIcon
                 aria-hidden="true"
                 className={styles.techBadgeIcon}
                 strokeWidth={2}

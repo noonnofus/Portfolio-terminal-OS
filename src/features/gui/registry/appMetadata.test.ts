@@ -27,7 +27,7 @@ describe("GUI app boundaries", () => {
         expect(collectFolderAppIds().toSorted()).toEqual(
             [...folderAppIds].toSorted(),
         );
-        expect(Object.keys(appMetadata)).toHaveLength(12);
+        expect(Object.keys(appMetadata)).toHaveLength(14);
         expect(appMetadata.contact.window).toEqual({
             width: 600,
             height: 370,

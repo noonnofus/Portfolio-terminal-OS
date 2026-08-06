@@ -9,6 +9,7 @@ import type {
     ContactContent,
     EducationContent,
     ExperienceContent,
+    ExperienceHighlight,
     PortfolioContent,
     PortfolioContentByLanguage,
 } from "@/shared/content/portfolio/types";
@@ -17,6 +18,15 @@ import enPortfolioContent from "@/shared/i18n/resources/en/PortfolioContent.json
 import enAppShell from "@/shared/i18n/resources/en/appShell.json";
 import koPortfolioContent from "@/shared/i18n/resources/ko/PortfolioContent.json";
 import koAppShell from "@/shared/i18n/resources/ko/appShell.json";
+
+type PortfolioLocaleExperience = Omit<
+    ExperienceContent,
+    "logo" | "highlights"
+> & {
+    highlights: readonly (Omit<ExperienceHighlight, "projectSlug"> & {
+        projectSlug?: string;
+    })[];
+};
 
 type PortfolioLocaleResource = Omit<
     PortfolioContent,
@@ -28,7 +38,7 @@ type PortfolioLocaleResource = Omit<
         linkedin: string;
     };
     education: readonly Omit<EducationContent, "logo">[];
-    experience: readonly Omit<ExperienceContent, "logo">[];
+    experience: readonly PortfolioLocaleExperience[];
     projects: readonly {
         slug: string;
         summary: string;
@@ -48,6 +58,8 @@ const appShellResources = {
 const projectAppNameKeys = {
     portfolio: "portfolio",
     optigen: "optigen",
+    mcp: "mcp",
+    "voice-gateway": "voice-gateway",
     kepco: "kepco",
     wchms: "wchms",
     flare: "flare",
@@ -81,6 +93,14 @@ function toPortfolioContent(
         profile: resource.profile,
         experience: resource.experience.map((experience, index) => ({
             ...experience,
+            highlights: experience.highlights.map(
+                ({ projectSlug, ...highlight }) => ({
+                    ...highlight,
+                    ...(projectSlug === undefined
+                        ? {}
+                        : { projectSlug: parseProjectSlug(projectSlug) }),
+                }),
+            ),
             ...(index === 0
                 ? { logo: publicAssetPath("/organizations/logosai.svg") }
                 : {}),

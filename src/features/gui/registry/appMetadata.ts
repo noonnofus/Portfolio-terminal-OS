@@ -3,7 +3,9 @@ import { contactAppConfig } from "@/features/apps/contact/app.config";
 import { notesAppConfig } from "@/features/apps/notes/app.config";
 import { flareAppConfig } from "@/features/apps/projects/apps/flare/app.config";
 import { kepcoAppConfig } from "@/features/apps/projects/apps/kepco/app.config";
+import { mcpAppConfig } from "@/features/apps/projects/apps/mcp/app.config";
 import { optigenAppConfig } from "@/features/apps/projects/apps/optigen/app.config";
+import { voiceGatewayAppConfig } from "@/features/apps/projects/apps/voice-gateway/app.config";
 import { portfolioAppConfig } from "@/features/apps/projects/apps/portfolio/app.config";
 import { wchmsAppConfig } from "@/features/apps/projects/apps/wchms/app.config";
 import { projectsAppConfig } from "@/features/apps/projects/app.config";
@@ -22,6 +24,8 @@ export const appMetadata = {
   settings: settingsAppConfig,
   "project:portfolio": portfolioAppConfig,
   "project:optigen": optigenAppConfig,
+  "project:mcp": mcpAppConfig,
+  "project:voice-gateway": voiceGatewayAppConfig,
   "project:kepco": kepcoAppConfig,
   "project:wchms": wchmsAppConfig,
   "project:flare": flareAppConfig,

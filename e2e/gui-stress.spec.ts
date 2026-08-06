@@ -3,28 +3,38 @@ import { expect, test } from "@playwright/test";
 const projects = [
     {
         appId: "project:portfolio",
-        listTitle: "인터랙티브 포트폴리오 웹",
-        windowTitle: "인터랙티브 포트폴리오 웹",
+        listTitle: "포트폴리오",
+        windowTitle: "포트폴리오",
     },
     {
         appId: "project:optigen",
-        listTitle: "B2B AI 지식·업무 플랫폼",
-        windowTitle: "B2B AI 지식·업무 플랫폼",
+        listTitle: "OptiGen AI 플랫폼",
+        windowTitle: "OptiGen AI 플랫폼",
+    },
+    {
+        appId: "project:mcp",
+        listTitle: "OptiGen MCP 서버",
+        windowTitle: "OptiGen MCP 서버",
+    },
+    {
+        appId: "project:voice-gateway",
+        listTitle: "AICC Voice Gateway",
+        windowTitle: "AICC Voice Gateway",
     },
     {
         appId: "project:kepco",
-        listTitle: "B2B AICC 플랫폼",
-        windowTitle: "B2B AICC 플랫폼",
+        listTitle: "공공기관 상담 어드바이저",
+        windowTitle: "공공기관 상담 어드바이저",
     },
     {
         appId: "project:wchms",
-        listTitle: "다국어 학습 지원 플랫폼",
-        windowTitle: "다국어 학습 지원 플랫폼",
+        listTitle: "WCHMS",
+        windowTitle: "WCHMS",
     },
     {
         appId: "project:flare",
-        listTitle: "실시간 재난 정보 플랫폼",
-        windowTitle: "실시간 재난 정보 플랫폼",
+        listTitle: "Flare",
+        windowTitle: "Flare",
     },
 ] as const;
 

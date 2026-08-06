@@ -4,7 +4,7 @@ import type { ProjectCatalogEntry } from "@/shared/content/portfolio/types";
 export const projectManifest = {
     portfolio: {
         slug: "portfolio",
-        order: 10,
+        order: 14,
         status: "private",
         stack: ["Next.js", "TypeScript", "Zustand", "Tailwind CSS"],
         icon: publicAssetPath("/icons/optimized/document.png"),
@@ -20,9 +20,27 @@ export const projectManifest = {
         links: {},
         media: [],
     },
+    mcp: {
+        slug: "mcp",
+        order: 20,
+        status: "private",
+        stack: ["TypeScript", "MCP SDK", "Zod"],
+        icon: publicAssetPath("/icons/optimized/document.png"),
+        links: {},
+        media: [],
+    },
+    "voice-gateway": {
+        slug: "voice-gateway",
+        order: 21,
+        status: "private",
+        stack: ["TypeScript", "Twilio", "WebSocket", "OpenAI"],
+        icon: publicAssetPath("/icons/optimized/document.png"),
+        links: {},
+        media: [],
+    },
     kepco: {
         slug: "kepco",
-        order: 15,
+        order: 10,
         status: "private",
         stack: ["React 19", "TypeScript", "TanStack Query", "Zustand"],
         icon: publicAssetPath("/icons/optimized/document.png"),
@@ -31,7 +49,7 @@ export const projectManifest = {
     },
     wchms: {
         slug: "wchms",
-        order: 20,
+        order: 30,
         status: "private",
         stack: ["Next.js", "TypeScript", "MySQL", "OpenAI"],
         icon: publicAssetPath("/icons/optimized/document.png"),
@@ -40,7 +58,7 @@ export const projectManifest = {
     },
     flare: {
         slug: "flare",
-        order: 30,
+        order: 40,
         status: "private",
         stack: ["Next.js", "TypeScript", "PostgreSQL", "OpenAI"],
         icon: publicAssetPath("/icons/optimized/document.png"),

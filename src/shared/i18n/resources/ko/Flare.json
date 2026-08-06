@@ -1,20 +1,110 @@
 {
-    "title": "실시간 재난 정보 플랫폼",
-
-    "description": "산불 정보를 쉽게 얻기 힘든 지역 사회가 실시간 재난 정보에 접근할 수 있도록 구축한 플랫폼입니다. 현재 산불 위치, 위험 수준 지표, 최신 관련 뉴스를 표시하고, 정보가 더 필요한 경우를 위해 산불 관련 질문에 답하는 챗봇을 제공했습니다. 접근성을 위해 모바일과 데스크톱 기기 모두에 설치할 수 있도록 구성했습니다.",
-
-    "myRoleDescription": "풀스택 개발자로서 다음 주요 기능을 설계하고 구현했습니다:",
-    "pwaIntegration": "PWA 통합",
-    "pwaIntegrationDesc": "Nextjs PWA를 이용하여 마치 apk 앱과 같이 안드로이드와 iOS 모두에서 브라우저로부터 앱을 설치할 수 있도록 하여 오프라인 접근과 네이티브와 같은 경험을 지원했습니다. 이러한 경험은 쉽게 언제 어디서든 산불에 대한 정보를 얻을 수 있게끔 만들었습니다.",
-    "chatbotDevelopment": "챗봇 개발",
-    "chatbotDevelopmentDesc": "사용자가 산불 관련 질문을 하고 OpenAI API를 통하여 즉시 관련된 응답을 받을 수 있는 AI 기반 챗봇을 구축했습니다. 해당 봇은 오직 산불 관련된 질문에만 답변을 할수 있도록 프롬프팅 되어있습니다.",
-    "realtimeNotifications": "실시간 알림",
-    "realtimeNotificationsDesc": "사용자의 위치 근처 산불 위협에 대해 실시간으로 경고하는 푸시 알림을 구현했습니다.",
-
-    "backendDatabase": "백엔드 및 데이터베이스",
-    "cloudAPIs": "클라우드 및 API",
-    "pwaRealtime": "PWA 및 실시간",
-
-    "appWalkthroughDescription": "",
-    "videoNotSupported": "브라우저가 비디오 태그를 지원하지 않습니다."
+  "title": "Flare",
+  "stackLabel": "개발 스택",
+  "summary": "지역 사회가 흩어진 산불 정보를 한곳에서 탐색할 수 있도록 만든 팀 프로젝트입니다. 지도, 위험 지표, 관련 뉴스, 산불 질문에 집중한 AI 챗봇과 웹 푸시 알림을 설치 가능한 웹 애플리케이션으로 구성했습니다.",
+  "projectIntro": {
+    "title": "프로젝트 배경",
+    "description": "산불 위치와 위험 정보, 관련 뉴스가 서로 다른 경로에 흩어져 있으면 사용자가 현재 상황을 파악하기 어렵습니다. 핵심 정보를 한 화면에 모으고, 추가 질문과 알림까지 같은 서비스에서 이어지도록 설계했습니다."
+  },
+  "projectContext": {
+    "category": {
+      "label": "구분",
+      "description": "이전 팀 프로젝트"
+    },
+    "product": {
+      "label": "제품",
+      "description": "산불 정보 탐색과 관련 질문을 지원하는 설치 가능한 웹 애플리케이션"
+    },
+    "users": {
+      "label": "사용자",
+      "description": "산불 위치, 위험 지표와 관련 뉴스를 한곳에서 확인하려는 지역 사용자"
+    },
+    "role": {
+      "label": "담당 범위",
+      "description": "PWA 설치 경험, 산불 전용 AI 챗봇, 웹 푸시 알림을 포함한 주요 풀스택 기능 설계 및 구현"
+    }
+  },
+  "caseStudy": {
+    "problem": {
+      "title": "문제와 요구사항",
+      "description": "여러 출처의 산불 정보를 빠르게 이해하고, 필요할 때 모바일 기기에서도 다시 접근할 수 있는 흐름이 필요했습니다.",
+      "items": {
+        "fragmentedInformation": {
+          "title": "흩어진 산불 정보",
+          "description": "산불 위치와 위험 지표, 관련 뉴스가 분리되어 있으면 사용자가 여러 경로를 오가며 상황을 조합해야 했습니다."
+        },
+        "deviceAccess": {
+          "title": "기기별 접근",
+          "description": "데스크톱뿐 아니라 모바일 환경에서도 같은 기능을 사용하고 브라우저에서 애플리케이션을 설치할 수 있어야 했습니다."
+        },
+        "focusedQuestions": {
+          "title": "추가 정보 탐색",
+          "description": "지도와 뉴스만으로 해결되지 않는 질문을 산불이라는 주제 안에서 이어서 물어볼 수 있는 보조 수단이 필요했습니다."
+        }
+      }
+    },
+    "design": {
+      "title": "설계와 기술적 의사결정",
+      "description": "정보 탐색, 설치 경험과 질문 흐름을 각각 분리하지 않고 하나의 재난 정보 인터페이스 안에 배치했습니다.",
+      "items": {
+        "unifiedView": {
+          "title": "지도 중심의 통합 화면",
+          "description": "산불 위치와 위험 지표를 지도에 배치하고 관련 뉴스를 같은 탐색 흐름에서 확인할 수 있도록 구성했습니다."
+        },
+        "installableWeb": {
+          "title": "PWA 기반 설치 경험",
+          "description": "별도 네이티브 앱 없이 웹 기술을 유지하면서 지원되는 모바일과 데스크톱 브라우저에서 설치할 수 있도록 PWA로 구성했습니다."
+        },
+        "scopedAssistant": {
+          "title": "산불 주제로 제한한 챗봇",
+          "description": "범용 챗봇 대신 산불 관련 질문에 집중하도록 프롬프트의 역할과 응답 범위를 제한했습니다."
+        }
+      }
+    },
+    "implementation": {
+      "title": "핵심 구현",
+      "description": "지도와 뉴스 데이터, AI 대화, 설치와 알림 기능을 하나의 풀스택 애플리케이션으로 연결했습니다.",
+      "items": {
+        "mapAndRisk": {
+          "title": "산불 지도와 위험 지표",
+          "description": "사용자가 위치와 위험 수준을 함께 파악할 수 있도록 산불 정보를 지도 인터페이스에 표시했습니다."
+        },
+        "newsPipeline": {
+          "title": "관련 뉴스 수집",
+          "description": "Bing News API와 웹 크롤러로 수집한 관련 뉴스를 애플리케이션에서 함께 탐색할 수 있도록 연결했습니다."
+        },
+        "chatbot": {
+          "title": "산불 전용 AI 챗봇",
+          "description": "OpenAI API를 이용해 사용자가 산불 관련 질문을 이어갈 수 있는 대화 기능을 구현했습니다."
+        },
+        "notifications": {
+          "title": "웹 푸시 알림",
+          "description": "Firebase를 이용해 산불 관련 알림을 지원되는 브라우저로 전달하는 기능을 구현했습니다."
+        }
+      }
+    },
+    "outcome": {
+      "title": "구현 결과",
+      "description": "산불 상황 탐색에 필요한 주요 기능을 한 서비스에 모으고, 데스크톱과 모바일에서 이어서 접근할 수 있는 형태로 구현했습니다.",
+      "items": {
+        "consolidatedAccess": {
+          "title": "정보 탐색 경로 통합",
+          "description": "지도, 위험 지표와 관련 뉴스를 한 화면 흐름에서 확인할 수 있도록 구성했습니다."
+        },
+        "installableExperience": {
+          "title": "설치 가능한 웹 경험",
+          "description": "웹 애플리케이션을 유지하면서 지원되는 브라우저에서 홈 화면이나 애플리케이션 목록에 설치할 수 있도록 했습니다."
+        },
+        "focusedSupport": {
+          "title": "질문과 알림으로 확장",
+          "description": "정적인 정보 열람에서 끝나지 않고 산불 관련 질문과 웹 푸시 알림으로 사용 흐름을 확장했습니다."
+        }
+      }
+    }
+  },
+  "walkthrough": {
+    "title": "기능 시연",
+    "description": "웹과 설치 환경에서 구현한 주요 화면과 사용자 흐름을 확인할 수 있습니다.",
+    "unsupported": "브라우저가 비디오 재생을 지원하지 않습니다."
+  }
 }

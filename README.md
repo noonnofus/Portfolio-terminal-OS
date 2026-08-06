@@ -25,7 +25,8 @@ Live site: [hyunho.vercel.app](https://hyunho.vercel.app/)
 - Typed app registry that keeps app IDs, URL targets, loaders, metadata, and project slugs correlated at compile time.
 - Shareable GUI URLs for desktop, apps, project detail windows, and language state.
 - Bilingual portfolio content in Korean and English.
-- Project folder with WCHMS, Flare, WeConnect, PageSsence, DiceRoller, Discord Bot, and WebPiano detail apps.
+- Project folder with KEPCO Advisor, OptiGen, Portfolio, MCP, Voice Gateway, WCHMS, and Flare case-study apps.
+- Shared case-study layouts with bilingual evidence sections and Mermaid architecture diagrams.
 - Built-in About, Projects, Resume, Terminal, Contact, Guestbook, and Settings apps.
 - GitHub OAuth through Supabase Auth.
 - Server-backed guestbook notes with GitHub-authenticated writes, 1,000 character validation, per-account rate limiting, owner/admin permissions, and deleted-account anonymization.
@@ -48,7 +49,7 @@ Live site: [hyunho.vercel.app](https://hyunho.vercel.app/)
 | Auth and data | Supabase SSR, Supabase Auth, Supabase Postgres, GitHub OAuth |
 | Terminal | xterm.js, `@xterm/addon-fit` |
 | Editor and Markdown | TipTap, `@tiptap/markdown`, `react-markdown`, `remark-gfm`, `rehype-raw` |
-| UI libraries | Radix UI primitives, Framer Motion, lucide-react |
+| UI libraries | Radix UI primitives, Framer Motion, lucide-react, Mermaid |
 | Testing | Vitest, Playwright |
 | Deployment target | Vercel |
 

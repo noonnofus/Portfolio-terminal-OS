@@ -1,7 +1,7 @@
 {
   "boot": {
     "introduction": "안녕하세요, Node.js 기반 주니어 풀스택 웹 개발자 김현호입니다.",
-    "experience": "AI 에이전트 플랫폼의 프론트엔드를 스크래치부터 구축하고, AICC 솔루션의 실시간 음성 처리를 담당하는 Voice Gateway를 설계·구축했습니다.",
+    "experience": "AI 에이전트 플랫폼의 프론트엔드를 스크래치부터 구축하고, AICC 솔루션의 실시간 음성 처리를 담당하는 Voice Gateway를 설계, 구축했습니다.",
     "aiApproach": "AI를 단순히 활용하는 것을 넘어, 직접 검증하고 여러 에이전트를 조합해 더 나은 결과를 만들어냅니다.",
     "helpHint": "사용 가능한 명령어를 확인하려면 \"help\"를 입력하세요.",
     "portfolioPrefix": "포트폴리오를 둘러보려면 ",

@@ -9,6 +9,14 @@ const projectNamespaceLoaders = {
         ko: () => import("@/shared/i18n/resources/ko/Optigen.json"),
         en: () => import("@/shared/i18n/resources/en/Optigen.json"),
     },
+    Mcp: {
+        ko: () => import("@/shared/i18n/resources/ko/Mcp.json"),
+        en: () => import("@/shared/i18n/resources/en/Mcp.json"),
+    },
+    VoiceGateway: {
+        ko: () => import("@/shared/i18n/resources/ko/VoiceGateway.json"),
+        en: () => import("@/shared/i18n/resources/en/VoiceGateway.json"),
+    },
     Kepco: {
         ko: () => import("@/shared/i18n/resources/ko/Kepco.json"),
         en: () => import("@/shared/i18n/resources/en/Kepco.json"),
