@@ -12,50 +12,32 @@
   },
   "experience": [
     {
-      "title": "LogosAI",
-      "role": "AI Development Team, Full-Stack Web Developer",
+      "title": "LOGOS AI",
+      "role": "Full-Stack Developer",
       "period": "Aug 2025 ~ Present",
       "highlights": [
         {
-          "title": "OptiGen AI Platform",
-          "projectSlug": "optigen",
+          "title": "KEPCO Contact Center Advisor",
           "items": [
-            "Designed and implemented the frontend and UI/UX for the OptiGen AI platform from the ground up.",
-            "Implemented chat streaming, agent settings, conversation history, file uploads, and administrative views as one product flow.",
-            "Delivered server data through Server Actions and React Query, separated UI state into feature-scoped Zustand stores, and extended the product into business execution and voice channels through MCP and Voice Gateway."
+            "I designed and implemented the agent and manager frontend from live STT transcription through post-call AI analysis and consultation history.",
+            "During the pilot, I trained agents and turned their feedback into name search, favorites, and a dedicated favorites tab.",
+            "In an environment averaging about 50,000 calls a day, the system was used by 60% of all agents, and average customer wait time decreased by about 30% after the project entered operation."
           ]
         },
         {
-          "title": "Meeting Minutes AI Pipeline",
-          "projectSlug": "mcp",
+          "title": "OptiGen AI Platform",
           "items": [
-            "Built meeting-minute generation from browser-based live recording and audio-file uploads.",
-            "Split long audio into 20-minute chunks with 3-minute overlap and processed them in parallel to reduce LLM request limits and timeouts.",
-            "Combined transcription, diarization, and summaries into Markdown and DOCX meeting minutes."
+            "I designed and implemented the frontend and UI/UX from the ground up, including chat, agent settings, conversation history, documents, and administrative features.",
+            "I aligned SSE event rules with the backend and connected response generation, MCP tool execution, completion, and error states to the conversation flow.",
+            "I connected WebGPU local STT with the meeting-minutes MCP and automated shared-UI verification with 40 Storybook stories and Vitest."
           ]
         },
         {
           "title": "AICC Voice Gateway",
-          "projectSlug": "voice-gateway",
           "items": [
-            "Built a Twilio SIP Trunk-based voice gateway.",
-            "Abstracted provider-specific STT/TTS settings and audio processing so providers can be selected from platform configuration.",
-            "Implemented VAD-based silence and background-noise handling, DTMF input, call sessions, and reconnection flows."
-          ]
-        },
-        {
-          "title": "Public-Sector Contact Center Advisor",
-          "projectSlug": "kepco",
-          "items": [
-            "Implemented the frontend for live STT transcription, post-call AI summaries, and call-history lookup for contact-center agents.",
-            "Added search, favorites, and a dedicated favorites tab after feedback that finding agents was difficult in large contact centers."
-          ]
-        },
-        {
-          "title": "Deployment Environment",
-          "items": [
-            "Built a container deployment path for dev and POC environments with GitHub Actions, Amazon ECR, and AWS SSM.",
-            "Reduced publicly exposed SSH access by moving to remote-command-based deployment and result checks."
+            "I implemented an AICC Voice Gateway connecting PBX and SIP integration, per-call Workers, and multiple Voice AI backends.",
+            "Transport, Factory, Strategy, and Codec boundaries isolate provider protocol and audio differences, while WorkerContext was reduced from 1,114 lines to 658 as its responsibilities moved into focused modules.",
+            "I implemented VAD-based silence and background-noise handling, DTMF input, call sessions, and reconnection flows."
           ]
         }
       ]
@@ -73,7 +55,7 @@
     { "slug": "portfolio", "summary": "An OS-style portfolio for the browser that keeps window state, URLs, folder interactions, and preferences in one consistent model." },
     { "slug": "optigen", "summary": "A B2B AI platform for managing organizations, permissions, AI bots, and documents with RAG-grounded conversations, extended through MCP and Voice Gateway." },
     { "slug": "mcp", "summary": "An MCP server that connects OptiGen AI to external business APIs and reports progress and results for long-running work such as meeting-minute generation." },
-    { "slug": "voice-gateway", "summary": "A real-time voice gateway connecting Twilio calls with OptiGen AI through interchangeable STT and TTS providers." },
+    { "slug": "voice-gateway", "summary": "A real-time voice gateway connecting PBX and SIP calls with multiple Voice AI backends while isolating provider protocol and audio differences." },
     { "slug": "kepco", "summary": "A contact-center support system that connects live STT transcription, post-call AI analysis, and call-history search for agents." },
     { "slug": "wchms", "summary": "An AI-assisted self-study and course management platform supporting dementia prevention programs for Japanese seniors in Vancouver." },
     { "slug": "flare", "summary": "A wildfire information PWA combining live maps, risk indicators, news, notifications, and a focused AI chatbot." }
@@ -82,7 +64,7 @@
     {
       "institution": "British Columbia Institute of Technology (BCIT)",
       "program": "Full-Stack Web Development",
-      "period": "Graduated June 2025"
+      "period": "Aug 2023 ~ Jun 2025"
     }
   ],
   "contact": {

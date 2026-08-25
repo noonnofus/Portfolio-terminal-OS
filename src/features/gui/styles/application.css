@@ -1,3 +1,4 @@
+/* Hallmark: design-system = The Evidence Desktop; target = GUI shell */
 /* Shared OS application-shell styles. */
 .application-shell {
   position: relative;
@@ -178,7 +179,7 @@
 }
 
 .application-traffic-light:focus-visible {
-  outline: 2px solid #2563eb;
+  outline: 2px solid var(--application-focus-blue);
   outline-offset: 2px;
 }
 
@@ -273,7 +274,7 @@
   border-radius: 8px;
   background: #0f172a;
   padding: 8px 12px;
-  color: white;
+  color: var(--application-paper-white);
   font-size: var(--application-text-callout);
 }
 
@@ -298,7 +299,7 @@
 }
 
 .application-project-card:focus-visible {
-  border-color: #2563eb;
+  border-color: var(--application-focus-blue);
   outline: 3px solid rgb(37 99 235 / 30%);
   outline-offset: 2px;
 }
@@ -330,7 +331,7 @@
   border-radius: 9px;
   background: #0f172a;
   padding: 9px 13px;
-  color: white;
+  color: var(--application-paper-white);
   font-size: 12px;
   font-weight: 600;
 }
@@ -423,7 +424,7 @@
 }
 
 .dock-app:focus-visible {
-  outline-color: #2563eb;
+  outline-color: var(--application-focus-blue);
 }
 
 @media (width < 1024px) {
@@ -724,6 +725,10 @@
   --application-settings-sidebar-width: 220px;
   --application-settings-content-padding: 28px;
   --application-accent: #0a84ff;
+  --application-accent-strong: #0b61e8;
+  --application-accent-text: #0b61e8;
+  --application-focus-blue: #2563eb;
+  --application-paper-white: #ffffff;
   --application-titlebar-bg: rgb(236 235 234 / 86%);
   --application-titlebar-border: color-mix(
     in srgb,
@@ -760,7 +765,7 @@
   --application-directory-icon-bg: rgb(255 255 255 / 3%);
   --application-directory-icon-bg-light: rgb(24 34 48 / 4%);
   --application-directory-icon-text: rgb(96 165 250 / 80%);
-  --application-directory-icon-text-light: #2563eb;
+  --application-directory-icon-text-light: var(--application-accent);
   --application-directory-footer-border: rgb(255 255 255 / 6%);
   --application-directory-footer-border-light: rgb(24 34 48 / 9%);
   --application-directory-footer-bg: rgb(0 0 0 / 40%);
@@ -774,7 +779,7 @@
   --application-app-icon-project-size: 70px;
   --directory-selection-tile: rgb(91 76 68 / 42%);
   --directory-selection-border: rgb(255 255 255 / 38%);
-  --directory-selection-label: #0b61e8;
+  --directory-selection-label: var(--application-accent-strong);
   isolation: isolate;
   font-family: var(--application-font-ui);
   font-size: var(--application-text-body);
@@ -786,6 +791,7 @@
 }
 
 .application-shell[data-theme="dark"] {
+  --application-accent-text: #58a6ff;
   --application-titlebar-bg: rgb(70 68 67 / 92%);
   --application-titlebar-text: #f5f5f7;
   --application-app-header: var(--application-titlebar-bg);
@@ -1010,7 +1016,7 @@
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 58%),
     0 7px 14px rgb(20 32 58 / 24%);
-  color: white;
+  color: var(--application-paper-white);
 }
 
 .application-app-icon::after {
@@ -1350,7 +1356,7 @@
     linear-gradient(var(--application-directory-grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--application-directory-grid-line) 1px, transparent 1px);
   background-size: 24px 24px;
-  color: white;
+  color: var(--application-paper-white);
   padding: 16px 16px 42px;
 }
 
@@ -1412,7 +1418,7 @@
   border-radius: 3px;
   background: rgb(59 130 246 / 90%);
   padding: 2px 4px;
-  color: white;
+  color: var(--application-paper-white);
   font-family: var(--application-font-mono);
   font-size: var(--application-text-mini);
   font-weight: var(--application-weight-bold);
@@ -1528,8 +1534,8 @@
 }
 
 .application-settings-sidebar-item[data-active="true"] {
-  background: var(--application-accent);
-  color: #fff;
+  background: var(--application-accent-strong);
+  color: var(--application-paper-white);
   box-shadow: 0 6px 18px rgb(10 132 255 / 22%);
 }
 
@@ -1577,8 +1583,8 @@
 
 .application-shell[data-theme="light"]
   .application-settings-sidebar-item[data-active="true"]:hover {
-  background: var(--application-accent);
-  color: #fff;
+  background: var(--application-accent-strong);
+  color: var(--application-paper-white);
 }
 
 .application-shell[data-theme="light"] .application-settings-section-title {
@@ -1714,7 +1720,7 @@
     linear-gradient(var(--application-directory-grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--application-directory-grid-line) 1px, transparent 1px);
   background-size: 24px 24px;
-  color: white;
+  color: var(--application-paper-white);
 }
 
 .application-shell[data-theme="light"] .directory-surface--window {
@@ -1835,7 +1841,7 @@
   border-radius: 8px;
   background: rgb(15 23 42 / 92%);
   padding: 6px;
-  color: white;
+  color: var(--application-paper-white);
   box-shadow: 0 12px 32px rgb(0 0 0 / 28%);
   transform: translateX(-50%);
 }
@@ -1846,7 +1852,7 @@
 }
 
 .directory-action-menu button:focus-visible {
-  outline: 2px solid #60a5fa;
+  outline: 2px solid var(--application-focus-blue);
   outline-offset: 1px;
 }
 
@@ -1886,7 +1892,7 @@
 .directory-item:is(:focus-visible, [data-selected="true"]) .desktop-app-name {
   border-radius: var(--application-border-radius);
   background: var(--directory-selection-label) !important;
-  color: #fff !important;
+  color: var(--application-paper-white) !important;
   font-weight: 600;
   text-shadow: none !important;
 }

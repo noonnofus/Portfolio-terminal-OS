@@ -17,24 +17,5 @@
     "uiAndDesign": "UI & Design",
     "infra": "Infra",
     "toolingAndQuality": "Tooling & Quality",
-    "collaboration": "Collaboration",
-    "viewCaseStudy": "View case study",
-    "viewCaseStudyLabel": "Open the {{title}} case study",
-    "caseStudiesEyebrow": "Case Studies",
-    "caseStudiesTitle": "Project evidence connected to my career",
-    "caseStudiesDescription": "Rather than listing career history and projects separately, this section connects my responsibilities to featured case studies and related technical work.",
-    "projectGroups": {
-        "featured": {
-            "title": "Featured case studies",
-            "description": "Detailed examples of problem framing, frontend decisions, implementation, and verification."
-        },
-        "related": {
-            "title": "Technical work related to OptiGen",
-            "description": "Systems that extend the OptiGen AI platform into business execution and voice channels."
-        },
-        "earlier": {
-            "title": "Earlier team projects",
-            "description": "Product features and full-stack implementation I owned in earlier team projects."
-        }
-    }
+    "collaboration": "Collaboration"
 }

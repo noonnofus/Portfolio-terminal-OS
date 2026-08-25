@@ -87,7 +87,7 @@ export function ProjectArchitectureDiagram({
 
   return (
     <div
-      className="overflow-x-auto rounded-xl border border-[var(--application-border)] bg-white p-3 sm:p-5 [&_svg]:mx-auto [&_svg]:h-auto [&_svg]:min-w-[42rem]"
+      className="mx-auto max-w-[30rem] overflow-x-auto rounded-xl border border-[var(--application-border)] bg-white p-3 sm:p-5 [&_svg]:mx-auto [&_svg]:h-auto [&_svg]:w-full [&_svg]:min-w-[26rem]"
     >
       <div
         ref={containerRef}

@@ -1,7 +1,13 @@
 {
   "title": "OptiGen AI Platform",
   "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
   "summary": "A B2B AI platform for managing organizations, permissions, AI bots, and documents while providing RAG-grounded conversations. I designed and implemented the frontend and UI/UX from the ground up, then extended it into business execution and voice channels through MCP and Voice Gateway.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Automated browser verification across 40 shared UI stories",
+    "description": "The design system and its verification environment were built alongside the product from the start."
+  },
   "projectIntro": {
     "title": "Project background",
     "description": "This was a new product built from the ground up, not an improvement to an existing system. Administrators configure organizations, permissions, AI bots, and documents, while users select the right bot and receive document-grounded answers. I designed the web application so administration and AI conversations work as one product experience."
@@ -9,7 +15,7 @@
   "projectContext": {
     "category": {
       "label": "Category",
-      "description": "Featured case study"
+      "description": "Company work, Frontend"
     },
     "service": {
       "label": "Product",
@@ -25,6 +31,28 @@
     }
   },
   "caseStudy": {
+    "streamingLayout": {
+      "title": "A chat layout that preserves reading position as streamed responses grow",
+      "description": "I addressed the screen shift caused by live LLM responses through the layout structure itself.",
+      "items": {
+        "growingResponse": {
+          "title": "Increasing screen movement during long responses",
+          "description": "As SSE content expanded the response block, a conventional bottom-scroll layout pushed the sentence a user was reading out of view."
+        },
+        "spacerLayout": {
+          "title": "A flexible spacer below the response",
+          "description": "I placed each LLM response in its own block and added an empty block that occupied the remaining viewport height. As the response grew, the spacer shrank by the same amount, keeping existing messages in place."
+        },
+        "streamState": {
+          "title": "Layout behavior tied to stream state",
+          "description": "Generating, completed, interrupted, and error states were modeled explicitly so the spacer and final scroll behavior followed the same rules."
+        },
+        "readingPosition": {
+          "title": "Reading position preserved",
+          "description": "Users could continue reading existing content while a long response was generated without the screen jumping as new content arrived."
+        }
+      }
+    },
     "problem": {
       "title": "Problem and requirements",
       "description": "The process of configuring an AI workspace and the process of using it in real conversations had to connect naturally within one product.",
@@ -66,8 +94,8 @@
       }
     },
     "implementation": {
-      "title": "Core implementation",
-      "description": "I implemented the user-facing flow from administration to streamed conversations and made the next action clear across loading, completion, interruption, and error states.",
+      "title": "Other Contributions",
+      "description": "Beyond the featured chat UX case, I owned the work required to build the product into an operable web application from scratch.",
       "items": {
         "chatExperience": {
           "title": "Chat UI and conversation experience",
@@ -84,6 +112,32 @@
         "responsive": {
           "title": "Responsive interface",
           "description": "Navigation, conversation lists, message content, and input tools reflow according to the available screen size."
+        }
+      }
+    },
+    "localStt": {
+      "title": "Experiment: WebGPU local transcription path",
+      "description": "This was a POC to test whether recording and transcription could run in the browser. It is presented only as a verified execution path, not as an operating feature or a cost-reduction result.",
+      "items": {
+        "problem": {
+          "title": "Problem and constraints",
+          "description": "Calling server STT for every meeting accumulated processing cost, while creating a recording in another app and uploading it broke the product flow. Browser GPU support and the initial preparation time of a large model also had to be represented in the interface."
+        },
+        "workerBoundary": {
+          "title": "Separate VAD and Whisper workers",
+          "description": "Silero VAD and Whisper run in separate Workers connected directly through MessageChannel. This boundary prevents transcription work from delaying voice-segment detection."
+        },
+        "fallback": {
+          "title": "Execution paths by browser capability",
+          "description": "Browsers without WebGPU use a WASM path, while local STT is disabled on mobile where stability could not be guaranteed. Model download, readiness, recording, and transcription appear as distinct UI states."
+        },
+        "lifecycle": {
+          "title": "Worker lifecycle and text safety",
+          "description": "Message ports close with AudioWorklet and Worker shutdown so events cannot reach terminated workers. Transcription state is also released for silence or empty output, and results enter the editor as text nodes rather than HTML."
+        },
+        "verification": {
+          "title": "Verified scope",
+          "description": "The merged change confirms dual Workers, the WASM fallback, mobile disablement, silent-result recovery, and safe text insertion. The PR's browser checklist was not marked complete, so this portfolio does not claim validation across every browser."
         }
       }
     },

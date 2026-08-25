@@ -21,11 +21,9 @@ import koAppShell from "@/shared/i18n/resources/ko/appShell.json";
 
 type PortfolioLocaleExperience = Omit<
     ExperienceContent,
-    "logo" | "highlights"
+    "logo"
 > & {
-    highlights: readonly (Omit<ExperienceHighlight, "projectSlug"> & {
-        projectSlug?: string;
-    })[];
+    highlights: readonly ExperienceHighlight[];
 };
 
 type PortfolioLocaleResource = Omit<
@@ -93,14 +91,6 @@ function toPortfolioContent(
         profile: resource.profile,
         experience: resource.experience.map((experience, index) => ({
             ...experience,
-            highlights: experience.highlights.map(
-                ({ projectSlug, ...highlight }) => ({
-                    ...highlight,
-                    ...(projectSlug === undefined
-                        ? {}
-                        : { projectSlug: parseProjectSlug(projectSlug) }),
-                }),
-            ),
             ...(index === 0
                 ? { logo: publicAssetPath("/organizations/logosai.svg") }
                 : {}),

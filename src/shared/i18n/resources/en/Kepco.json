@@ -1,7 +1,13 @@
 {
   "title": "Public-Sector Contact Center Advisor",
   "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
   "summary": "An internal web service that helps public-sector contact-center agents follow live STT transcription during a call, then review AI analysis and consultation history after it ends. I designed and implemented the frontend across agent and manager workflows.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Used by 60% of agents, with average customer wait time reduced by 30%",
+    "description": "These are project-level operating results and are not attributed to the SSE case alone."
+  },
   "projectIntro": {
     "title": "Project overview",
     "description": "Live transcription and connection status matter during a call, while durable consultation history and AI analysis matter after it ends. I designed the screens and state flow so agents retain the same context as call state changes."
@@ -9,7 +15,7 @@
   "projectContext": {
     "category": {
       "label": "Category",
-      "description": "Featured case study"
+      "description": "Company work, Frontend"
     },
     "service": {
       "label": "Service",
@@ -25,64 +31,62 @@
     }
   },
   "caseStudy": {
-    "problem": {
-      "title": "Problem and requirements",
-      "description": "Live call data and durable post-call data arrive at different times, but the consultation context had to remain one continuous screen flow.",
+    "sttRecovery": {
+      "title": "Rendering live STT reliably with SSE",
+      "description": "I translated SSE events into screen state so agents could follow new transcription during a call while retaining their reading context as connection and scroll state changed.",
       "items": {
-        "liveContext": {
-          "title": "Preserve live consultation context",
-          "description": "Agents needed to detect active calls quickly and follow speaker-specific STT transcription and current connection state without delay during a call."
+        "problem": {
+          "title": "Problem",
+          "description": "Connection closure, a stalled heartbeat, and expired authentication were handled as if they were the same failure. Returning to a tab could also reconnect to an already-ended call, receive a 404, and incorrectly turn a recoverable state into a fatal one."
         },
-        "afterCall": {
-          "title": "Continue work after the call",
-          "description": "After a call ended, agents needed to review AI analysis and durable consultation history in the context of the same consultation."
+        "errorPolicy": {
+          "title": "Error classification and five-stage retry",
+          "description": "With fetchEventSource, I separated retryable errors from failures that should stop immediately. Connection attempts run at 0, 500, 1000, 2000, and 3000ms with a 60-second heartbeat monitor, while the reducer owns open, retrying, recovered, exhausted, and fatal states."
         },
-        "roleScope": {
-          "title": "Role-appropriate screens",
-          "description": "Agents and managers use the same call information but require different scopes across live consultation, monitoring, history, and settings."
+        "authRecovery": {
+          "title": "Authentication recovery for SSE",
+          "description": "I applied proactive token refresh to SSE, which runs outside Axios. A 401 during onopen triggers one in-band refresh before reconnecting, and a one-shot guard prevents an infinite refresh loop. openWhenHidden keeps the connection alive while the tab is hidden."
+        },
+        "scrollOwnership": {
+          "title": "One owner for transcript scrolling",
+          "description": "ResizeObserver detects transcript growth. Automatic following pauses when an agent scrolls upward to read earlier content and resumes after returning to the bottom, preventing live, playback, and search scrolling from competing."
+        },
+        "verification": {
+          "title": "Outcome",
+          "description": "Agents could follow new transcription in real time while seeing the current connection state. Automatic scrolling no longer took control while they read earlier content, and a temporary disconnect no longer led directly to a fatal-error screen."
         }
       }
     },
-    "design": {
-      "title": "Frontend design",
-      "description": "I modeled call-state and transcription-event transitions before individual screens, then built role-specific UI and data responsibilities on that state model.",
+    "multiTabAuth": {
+      "title": "Removing forced logout caused by multi-tab refresh-token races",
+      "description": "Multiple tabs could consume a single-use Refresh Token at the same time and turn a valid session into a logout. I resolved it by serializing refreshes across tabs and separating failure policies.",
       "items": {
-        "callState": {
-          "title": "Call-state model",
-          "description": "I modeled the current call as idle, live, or ended so new-call detection, live transcription, and post-call history transition according to explicit state."
+        "problem": {
+          "title": "Problem",
+          "description": "When several tabs refreshed the same token simultaneously, only the first request succeeded and the others received 401 responses. Those failures were treated as invalid authentication and deleted an otherwise valid session."
         },
-        "streamState": {
-          "title": "Transcription-event model",
-          "description": "Snapshot, partial and final speech, call completion, and analysis completion or failure become reducer events that translate differently timed data into consistent UI state."
+        "rootCause": {
+          "title": "Root cause",
+          "description": "Each browser tab ran its refresh flow independently, and transient timeout, network, and 5xx failures shared the same logout path as an actually invalid session."
         },
-        "roleUi": {
-          "title": "Role-specific UI composition",
-          "description": "Protected routes and role-specific layout regions separate agent and manager screens. TanStack Query owns server data, while Zustand owns the current call and selection state."
-        }
-      }
-    },
-    "decisions": {
-      "title": "Technical decisions",
-      "description": "To balance real-time behavior with recoverability, I switched data paths by call state and managed stream events and connection state explicitly.",
-      "items": {
-        "transport": {
-          "title": "Switch between polling and SSE",
-          "description": "Polling runs only while finding a new call, while call-scoped SSE owns the latest state during a call. Polling resumes after the call ends to find the next call."
+        "serialization": {
+          "title": "Cross-tab refresh serialization",
+          "description": "Web Locks allows only one tab to refresh at a time. Waiting tabs read the shared updated authentication state after the lock is released, with the previous flow retained as a fallback where Web Locks is unavailable."
         },
-        "reducer": {
-          "title": "Separate partial and final speech",
-          "description": "Partial speech uses speaker-specific temporary regions. Final speech is deduplicated by conversation identifier and sorted by start time so the UI does not depend on stream arrival order."
+        "failurePolicy": {
+          "title": "Session policy by failure type",
+          "description": "The session is cleared only when authentication is genuinely invalid. Network and server failures preserve the user session and remain retryable."
         },
-        "recovery": {
-          "title": "Recover without losing context",
-          "description": "Heartbeat monitoring, staged retries, and manual reconnection preserve finalized transcription until a new snapshot reconciles current state."
+        "verification": {
+          "title": "Verification",
+          "description": "Tests cover simultaneous refresh requests, reuse after another tab succeeds, and session preservation during network and server failures to prevent forced logout from returning."
         }
       }
     }
   },
   "contributions": {
-    "title": "Core implementation",
-    "description": "I implemented the agent-facing frontend flow from live consultation through post-call analysis and history, along with role-specific management screens.",
+    "title": "Other Contributions",
+    "description": "Beyond the featured problem-solving case, I implemented the main frontend workflows used by agents and administrators.",
     "items": {
       "consultation": {
         "title": "Live consultation screen",
@@ -124,6 +128,17 @@
     "title": "I switched between live and durable data paths through call state.",
     "description": "While idle, the frontend looks for an active call. Once a call begins, reducer-managed SSE events drive the UI. After the call ends, the live connection closes and the flow continues into AI analysis and consultation history.",
     "alt": "Frontend state flow from active-call detection through call state, SSE, transcription reducer, and consultation UI",
-    "caption": "SSE owns live state during a call; next-call detection and durable history continue after it ends."
+    "caption": "SSE owns live state during a call; next-call detection and durable history continue after it ends.",
+    "loading": "Loading the architecture diagram.",
+    "error": "The architecture diagram could not be displayed.",
+    "diagram": {
+      "polling": "1-second active-call polling",
+      "callState": "Zustand call state, idle → live → ended",
+      "live": "live",
+      "stream": "Call-scoped SSE, openWhenHidden",
+      "reducer": "Transcript reducer, SNAPSHOT, PARTIAL, FINAL",
+      "ui": "Consultation UI, transcript, connection state, analysis",
+      "terminal": "CALL_END, fatal, exhausted, resume polling"
+    }
   }
 }

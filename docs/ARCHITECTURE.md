@@ -1,6 +1,6 @@
 # Portfolio-terminal-OS Architecture
 
-> 최종 업데이트: 2026-08-06
+> 최종 업데이트: 2026-08-24
 
 ## Overview
 
@@ -121,9 +121,9 @@ GUI apps                  → shared UI/content/i18n/query helpers
 - Project metadata such as stack badges and visibility is centralized in
   `shared/content/portfolio/projectManifest.ts`; app configs retain only
   typed runtime metadata.
-- Project detail apps compose the shared `ProjectCaseStudyPage`; interactive
-  architecture charts are rendered client-side by
-  `ProjectArchitectureDiagram` with Mermaid strict security mode.
+- Project detail apps compose the shared `ProjectCaseStudyPage`; architecture
+  sections use either reviewed static content or client-rendered
+  `ProjectArchitectureDiagram` charts with Mermaid strict security mode.
 
 ### Navigation rules
 

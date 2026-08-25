@@ -26,7 +26,7 @@ Live site: [hyunho.vercel.app](https://hyunho.vercel.app/)
 - Shareable GUI URLs for desktop, apps, project detail windows, and language state.
 - Bilingual portfolio content in Korean and English.
 - Project folder with KEPCO Advisor, OptiGen, Portfolio, MCP, Voice Gateway, WCHMS, and Flare case-study apps.
-- Shared case-study layouts with bilingual evidence sections and Mermaid architecture diagrams.
+- Shared case-study layouts with bilingual evidence sections and Mermaid or reviewed static architecture diagrams.
 - Built-in About, Projects, Resume, Terminal, Contact, Guestbook, and Settings apps.
 - GitHub OAuth through Supabase Auth.
 - Server-backed guestbook notes with GitHub-authenticated writes, 1,000 character validation, per-account rate limiting, owner/admin permissions, and deleted-account anonymization.

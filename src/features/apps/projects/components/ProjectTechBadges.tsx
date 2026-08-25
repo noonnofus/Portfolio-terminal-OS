@@ -2,7 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element -- local technology SVGs preserve their brand fills */
 
-import { Brain, Network, PhoneCall, Radio, type LucideIcon } from "lucide-react";
+import { Brain, Cpu, Network, Radio, Server, type LucideIcon } from "lucide-react";
 import styles from "../styles/ProjectContent.module.css";
 import { useColorMode } from "@/shared/ui/color-mode";
 
@@ -38,12 +38,17 @@ const technologyIcons: Record<
     src: "/tech-icons/openai.svg",
     invertOnDark: true,
   },
+  "Express.js": {
+    src: "/tech-icons/express-light.svg",
+    darkSrc: "/tech-icons/express-dark.svg",
+  },
 };
 
 const technologyFallbackIcons: Record<string, LucideIcon> = {
   "MCP SDK": Network,
-  Twilio: PhoneCall,
+  "Node.js": Server,
   WebSocket: Radio,
+  "Worker Threads": Cpu,
 };
 
 export function ProjectTechBadges({

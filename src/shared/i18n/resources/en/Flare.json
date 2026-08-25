@@ -1,7 +1,13 @@
 {
   "title": "Flare",
   "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
   "summary": "A team project that helps local communities explore fragmented wildfire information in one place. It combines a map, risk indicators, related news, a wildfire-focused AI chatbot, and web push notifications in an installable web application.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Combined maps, risk indicators, news, questions, and alerts in one PWA",
+    "description": "The evidence is the implemented user flow and web and installed-environment demos rather than an unverified metric."
+  },
   "projectIntro": {
     "title": "Project overview",
     "description": "When wildfire locations, risk information, and related news live in separate channels, users have to assemble the situation themselves. I helped design one experience that connects the core information, follow-up questions, and notifications."
@@ -25,6 +31,28 @@
     }
   },
   "caseStudy": {
+    "informationFlow": {
+      "title": "Unified fragmented wildfire information around a map-first flow",
+      "description": "I helped bring information from separate sources into one view where users could understand the situation and continue with follow-up questions.",
+      "items": {
+        "fragmentedInformation": {
+          "title": "Information spread across separate channels",
+          "description": "Wildfire locations, risk indicators, and related news were separated, leaving users to assemble the current situation themselves."
+        },
+        "unifiedView": {
+          "title": "A map-centered unified view",
+          "description": "Wildfire locations and risk levels were placed on the map, with related news available in the same exploration flow."
+        },
+        "installableWeb": {
+          "title": "An installable web path",
+          "description": "PWA installation and web push notifications supported repeat access on mobile and desktop without a separate native application."
+        },
+        "consolidatedAccess": {
+          "title": "One exploration flow",
+          "description": "Users could move through the map, risk indicators, news, wildfire questions, and notifications in one web application."
+        }
+      }
+    },
     "problem": {
       "title": "Problem and requirements",
       "description": "Users needed a quicker way to understand wildfire information from several sources and return to the service from mobile devices.",
@@ -62,8 +90,8 @@
       }
     },
     "implementation": {
-      "title": "Core implementation",
-      "description": "I connected map and news data, AI conversation, installation, and notifications in one full-stack application.",
+      "title": "Other Contributions",
+      "description": "Beyond the featured information-flow case, I connected news collection, AI conversation, and notification features across the stack.",
       "items": {
         "mapAndRisk": {
           "title": "Wildfire map and risk indicators",

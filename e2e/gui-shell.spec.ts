@@ -56,35 +56,49 @@ test.describe("GUI shell", () => {
         ).toHaveCount(0);
     });
 
-    test("connects career responsibilities to grouped project case studies", async ({
+    test("renders company work as complete inline timeline content", async ({
         page,
     }) => {
         await page.goto("/gui");
 
         const careerWindow = page.getByRole("dialog", { name: "커리어" });
         await expect(
-            careerWindow.getByRole("heading", { name: "대표 사례" }),
+            careerWindow.getByRole("heading", { name: "KEPCO 상담 어드바이저" }),
         ).toBeVisible();
+        await expect(
+            careerWindow.getByText(
+                "하루 평균 약 5만 콜 환경에서 전체 상담사의 60%가 사용했고, 프로젝트 운영 후 고객의 평균 대기 시간은 약 30% 줄었습니다.",
+            ),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByText(
+                /실시간 STT 전사부터 통화 종료 후 AI 분석과 상담 이력/,
+            ),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByRole("heading", { name: "OptiGen AI 플랫폼" }),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByText(
+                "WebGPU 로컬 STT와 회의록 MCP를 연결하고, Storybook 40개 스토리와 Vitest로 공통 UI 검증을 자동화했습니다.",
+            ),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByRole("heading", { name: "AICC Voice Gateway" }),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByText(
+                /Transport, Factory, Strategy와 Codec으로 Provider별 통신과 오디오 차이/,
+            ),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByRole("button", { name: /사례 보기|사례 연구/ }),
+        ).toHaveCount(0);
         await expect(
             careerWindow.getByRole("heading", {
-                name: "OptiGen 연관 기술 사례",
+                name: "경력을 증명하는 프로젝트 사례",
             }),
-        ).toBeVisible();
-        await expect(
-            careerWindow.getByRole("heading", { name: "이전 팀 프로젝트" }),
-        ).toBeVisible();
-
-        await careerWindow
-            .getByRole("button", {
-                name: "OptiGen AI 플랫폼 사례 연구 열기",
-                exact: true,
-            })
-            .click();
-
-        await expect(page).toHaveURL(/app=project&slug=optigen/);
-        await expect(
-            page.getByRole("dialog", { name: "OptiGen AI 플랫폼" }),
-        ).toBeVisible();
+        ).toHaveCount(0);
     });
 
     test("keeps language in the canonical shared URL", async ({ page }) => {

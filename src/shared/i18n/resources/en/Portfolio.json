@@ -1,7 +1,19 @@
 {
   "title": "Portfolio",
   "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
   "summary": "This portfolio presents my résumé and projects while serving as a frontend work sample for interaction design, state management, accessibility, and content architecture. I built windows, folders, a Dock, and a terminal in the browser, then connected URLs, browser history, keyboard interaction, and preferences into one experience.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Unified URL, History, and GUI state in one navigation model",
+    "description": "Shared links, refreshes, and browser Back restore the same project view."
+  },
+  "projectContext": {
+    "category": {"label": "Category", "description": "Personal project, Frontend"},
+    "product": {"label": "Product", "description": "A bilingual portfolio explored through a terminal and OS-style GUI"},
+    "users": {"label": "Users", "description": "Recruiters and engineering interviewers reviewing career evidence and technical decisions"},
+    "role": {"label": "My scope", "description": "Product concept, design, frontend architecture, accessibility, testing, and content model"}
+  },
   "intent": {
     "title": "What I wanted to demonstrate",
     "description": "I treated the portfolio itself as a frontend work sample. Beyond expressing an OS-style concept, I designed complex interaction to behave predictably in a real browser environment.",
@@ -20,7 +32,8 @@
     "content": {"title": "I separated content from user preferences.", "context": "Portfolio facts and the UI should remain consistent even when visitors change language, wallpaper, or Dock preferences.", "problem": "Korean and English content, UI labels, app metadata, and theme or wallpaper preferences can diverge when they live across many components.", "decision": "I separated reusable portfolio facts into a content model and UI labels into locale JSON. Server-safe metadata and client-side loaders are separate, while preferences persist in localStorage.", "result": "Career and Resume reuse the same experience, skill, and contact data. Localized content remains separate from UI labels, and language, wallpaper, and Dock preferences survive refreshes.", "flow": "Shared content → locale → GUI metadata → client loader → Career, Resume, and project views"},
     "accessibility": {"title": "I made the OS-style UI navigable by keyboard.", "context": "OS-style UI can easily depend on mouse dragging, but every visitor should be able to explore the portfolio.", "problem": "When icons and windows only respond to mouse actions, keyboard users cannot easily find their current position or perform the same actions.", "decision": "I made folders and icons operable with arrow keys, Enter, Escape, and a context menu. Focus position is separate from selection state, and a move menu provides an alternative to dragging.", "result": "The visual concept remains intact while the interface can be explored without a mouse. Visitors can distinguish focus and selection as they follow the same project flow.", "flow": "Roving focus → arrow-key navigation → Enter to open → Escape to clear selection → context menu to move"}
   },
-  "architecture": {"alt": "Interactive portfolio architecture showing the terminal and GUI shell, navigation planner, GUI store, browser URL and History API, DirectorySurface, content, and preferences", "caption": "Window state and browser effects are separate, while repeated navigation interaction and content preferences are managed through shared boundaries."},
+  "architecture": {"title": "Navigation architecture for the OS-style portfolio", "description": "The terminal and GUI share the same app registry and content, while a navigation planner connects window state with browser history.", "alt": "Interactive portfolio architecture showing the terminal and GUI shell, navigation planner, GUI store, browser URL and History API, DirectorySurface, content, and preferences", "caption": "Window state and browser effects are separate, while repeated navigation interaction and content preferences are managed through shared boundaries."},
+  "otherContributions": {"title": "Other Contributions", "description": "Beyond the featured navigation cases, localized content and keyboard accessibility are managed within the same product structure."},
   "verification": {
     "title": "Verification evidence",
     "description": "I check structural contracts, browser navigation, and real interaction at separate levels so the OS-style UI keeps the same rules after changes.",

@@ -1,7 +1,13 @@
 {
   "title": "OptiGen MCP Server",
   "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
   "summary": "An MCP server that lets OptiGen AI execute external business APIs instead of stopping at generated answers. I defined tool contracts and tool-specific prompts, then connected progress and results from long-running work such as meeting-minute generation back into the conversation flow.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Reduced processing for a 1-hour, 30 MB audio file from 371.9s to 291.0s",
+    "description": "That is a 21.8% reduction on the same test file."
+  },
   "projectIntro": {
     "title": "Project background",
     "description": "I built a separate MCP server to extend OptiGen conversations into real business execution. It translates different business APIs into tools the AI can understand and provides one consistent path from tool discovery to execution results."
@@ -9,7 +15,7 @@
   "projectContext": {
     "category": {
       "label": "Category",
-      "description": "Technical case study related to OptiGen"
+      "description": "Company work, Backend"
     },
     "service": {
       "label": "System",
@@ -25,6 +31,28 @@
     }
   },
   "caseStudy": {
+    "performance": {
+      "title": "Reduced one-hour meeting audio processing from 371.9 seconds to 291.0 seconds",
+      "description": "I reduced file-limit risk and end-to-end wait time through chunking, parallel work, and staged merging.",
+      "items": {
+        "longAudio": {
+          "title": "File constraints and sequential work on long audio",
+          "description": "An approximately one-hour, 30 MB recording created file-size and long-context constraints, while waiting for transcription, diarization, and summarization in sequence extended total processing time."
+        },
+        "chunkBoundary": {
+          "title": "Twenty-minute chunks with three-minute overlap",
+          "description": "Audio was split into twenty-minute chunks, with each next chunk starting at minute seventeen. The three-minute overlap protected speech at boundaries, and duplicated transcript segments were removed during merging."
+        },
+        "parallelPipeline": {
+          "title": "Parallel transcription, diarization, and summarization",
+          "description": "Transcription and diarization ran together, while per-chunk summaries were extracted in parallel under a concurrency limit and then consolidated. If one stage failed, remaining work was aborted and temporary files were cleaned up."
+        },
+        "measuredResult": {
+          "title": "21.8% faster on the same file",
+          "description": "In an E2E measurement of the one-hour, 30 MB test file, total processing fell from 371.9 seconds to 291.0 seconds."
+        }
+      }
+    },
     "problem": {
       "title": "Problem and requirements",
       "description": "For AI to execute multiple business systems safely and predictably, the server had to hide API differences and treat tool selection and long-running work as separate execution problems.",
@@ -62,8 +90,8 @@
       }
     },
     "implementation": {
-      "title": "Core implementation",
-      "description": "I exposed business APIs as MCP tools and made complex work such as meeting-minute generation executable and traceable from the conversation interface.",
+      "title": "Other Contributions",
+      "description": "Beyond the featured cases, I built the server path that turns business APIs into MCP tools and returns execution results to the conversation.",
       "items": {
         "apiTools": {
           "title": "Business APIs as MCP tools",
@@ -80,6 +108,32 @@
         "errorBoundary": {
           "title": "Separated failure boundaries",
           "description": "Tool input errors, external API failures, and long-running job failures are distinguished so one failed tool does not stop the entire conversation."
+        }
+      }
+    },
+    "progressProtocol": {
+      "title": "Session-based SSE from a long-running MCP job to the conversation UI",
+      "description": "To explain why a long-running tool such as meeting-minute generation is still active, I connected MCP server session lifetime, SSE events, frontend state, and final rendering under one protocol.",
+      "items": {
+        "rootCause": {
+          "title": "Why progress could not reach the UI",
+          "description": "Stateless JSON response mode could not write progress notifications into an SSE stream. Replacing the transport on one shared McpServer for each request could also swap the active connection during concurrent work and cause a Not connected error."
+        },
+        "sessionBoundary": {
+          "title": "A server and transport per session",
+          "description": "I moved the meeting-minutes endpoint to session-based SSE and isolated McpServer and transport instances per session. A session Map reuses connections and disposes them together so concurrent requests cannot overwrite one another's transport."
+        },
+        "eventContract": {
+          "title": "Separate contracts for status and progress",
+          "description": "The frontend gained progress as a distinct event type. status explains the current execution stage, while progress carries the latest tool-specific percentage, keeping their responsibilities and payload shapes separate."
+        },
+        "uiState": {
+          "title": "Temporary conversation state and final content",
+          "description": "Progress for the same tool replaces the previous value instead of accumulating. When final arrives, temporary status and progress entries are removed and only final content remains, preventing repeated progress text from filling the conversation."
+        },
+        "verification": {
+          "title": "Verification",
+          "description": "I added 12 progress unit tests and four pipeline integration tests, then verified one-percent progress updates and temporary-UI cleanup during real meeting-minute generation on the development server."
         }
       }
     },

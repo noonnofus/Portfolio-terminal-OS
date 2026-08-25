@@ -13,31 +13,42 @@ type OptigenAppProps = {
 const projectContextIds = ["category", "service", "users", "role"] as const;
 const caseStudySections = [
   {
-    id: "problem",
-    itemIds: ["administration", "conversation", "extension"],
-  },
-  {
-    id: "design",
-    itemIds: ["informationArchitecture", "stateBoundary", "streaming", "qualityFoundation"],
+    id: "streamingLayout",
+    items: [
+      { id: "growingResponse", phase: "problem" },
+      { id: "spacerLayout", phase: "process" },
+      { id: "streamState", phase: "process" },
+      { id: "readingPosition", phase: "result" },
+    ],
+    isProblemSolving: true,
   },
   {
     id: "implementation",
-    itemIds: ["chatExperience", "responseFlow", "accessibility", "responsive"],
+    items: [
+      { id: "chatExperience" },
+      { id: "responseFlow" },
+      { id: "accessibility" },
+      { id: "responsive" },
+    ],
   },
   {
-    id: "outcome",
-    itemIds: ["newProduct", "extensionPath", "qualityBaseline"],
+    id: "localStt",
+    items: [
+      { id: "workerBoundary" },
+      { id: "fallback" },
+      { id: "verification" },
+    ],
   },
   {
     id: "verification",
-    itemIds: ["accessibility", "streaming"],
+    items: [{ id: "accessibility" }, { id: "streaming" }],
   },
 ] as const;
 
 
 export default function OptigenApp({ language }: OptigenAppProps) {
   const { t } = useTranslation("Optigen");
-  const diagram = `flowchart LR
+  const diagram = `flowchart TB
     web(["${escapeMermaidLabel(t("architecture.diagram.webUser"))}"]) --> chat["${escapeMermaidLabel(t("architecture.diagram.chat"))}"]
     chat <-->|"${escapeMermaidLabel(t("architecture.diagram.requestResponse"))}"| api["${escapeMermaidLabel(t("architecture.diagram.api"))}"]
     api <-->|"${escapeMermaidLabel(t("architecture.diagram.orchestration"))}"| ai["${escapeMermaidLabel(t("architecture.diagram.ai"))}"]
@@ -59,14 +70,15 @@ export default function OptigenApp({ language }: OptigenAppProps) {
     label: t(`projectContext.${id}.label`),
     description: t(`projectContext.${id}.description`),
   }));
-  const sections = caseStudySections.map(({ id, itemIds }) => ({
+  const sections = caseStudySections.map(({ id, items, ...section }) => ({
     id,
     title: t(`caseStudy.${id}.title`),
     description: t(`caseStudy.${id}.description`),
-    items: itemIds.map((itemId) => ({
-      id: itemId,
-      title: t(`caseStudy.${id}.items.${itemId}.title`),
-      description: t(`caseStudy.${id}.items.${itemId}.description`),
+    isProblemSolving: "isProblemSolving" in section,
+    items: items.map((item) => ({
+      ...item,
+      title: t(`caseStudy.${id}.items.${item.id}.title`),
+      description: t(`caseStudy.${id}.items.${item.id}.description`),
     })),
   }));
 
@@ -81,7 +93,13 @@ export default function OptigenApp({ language }: OptigenAppProps) {
       overviewTitle={t("projectIntro.title")}
       overviewDescription={t("projectIntro.description")}
       contexts={contexts}
+      keyOutcome={{
+        label: t("keyOutcome.label"),
+        value: t("keyOutcome.value"),
+        description: t("keyOutcome.description"),
+      }}
       sections={sections}
+      problemSolvingLabel={t("problemSolvingLabel")}
       architecture={{
         title: t("architecture.title"),
         description: t("architecture.description"),

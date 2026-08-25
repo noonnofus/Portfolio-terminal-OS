@@ -1,7 +1,13 @@
 {
   "title": "WCHMS",
   "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
   "summary": "A multilingual web application that supports older adults participating in dementia-prevention programs and cognitive activities. I designed and implemented full-stack workflows connecting AI-assisted self-study, course-material generation, and program administration.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Connected self-study, course-material generation, and administration in one product flow",
+    "description": "The evidence is the implemented and demonstrable workflow rather than an unverified metric."
+  },
   "projectIntro": {
     "title": "Project overview",
     "description": "Learners needed repeatable math and reading activities, while administrators and staff needed to prepare class materials using the same difficulty model. I connected self-study, material generation, and administration into one product flow."
@@ -25,6 +31,28 @@
     }
   },
   "caseStudy": {
+    "learningMaterialAlignment": {
+      "title": "Aligned difficulty standards across learner practice and staff course materials",
+      "description": "I aligned the content model and generation flow so learner activities and staff materials would not use conflicting standards.",
+      "items": {
+        "separateStandards": {
+          "title": "Learning standards could diverge",
+          "description": "If self-study activities and staff-generated course materials used different difficulty models, the learning experience could become inconsistent within the same program."
+        },
+        "sharedDifficulty": {
+          "title": "A shared difficulty model",
+          "description": "Math and reading self-study and course-material generation were built around the same difficulty structure."
+        },
+        "contentModel": {
+          "title": "A reusable content model",
+          "description": "Generated content, difficulty, and operating information were stored in the database and made reusable as PDF material."
+        },
+        "connectedFlow": {
+          "title": "Learning and operations connected",
+          "description": "Learners could practice against one standard while staff generated and managed materials using that same standard."
+        }
+      }
+    },
     "problem": {
       "title": "Problem and requirements",
       "description": "The product needed both approachable cognitive activities for learners and operational tools for staff preparing and running classes.",
@@ -62,8 +90,8 @@
       }
     },
     "implementation": {
-      "title": "Core implementation",
-      "description": "I implemented the main full-stack workflows spanning learner activities, staff material generation, and administration.",
+      "title": "Other Contributions",
+      "description": "Beyond the featured content-model case, I implemented the main full-stack workflows from learner activities through administration.",
       "items": {
         "selfStudy": {
           "title": "AI-assisted self-study",

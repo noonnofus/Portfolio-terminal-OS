@@ -1,7 +1,13 @@
 {
   "title": "OptiGen AI 플랫폼",
   "stackLabel": "개발 스택",
+  "problemSolvingLabel": "Problem Solving",
   "summary": "고객의 조직, 권한, AI 봇, 문서를 관리하고 RAG 기반 대화를 제공하는 B2B AI 플랫폼입니다. 프론트엔드와 UI/UX를 처음부터 설계하고 구현했으며, MCP와 Voice Gateway를 연결해 업무 실행과 음성 채널로 확장했습니다.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "공통 UI 40개 Story와 브라우저 검증 자동화",
+    "description": "제품 초기부터 디자인 시스템과 검증 환경을 함께 구축했습니다."
+  },
   "projectIntro": {
     "title": "프로젝트 배경",
     "description": "기존 시스템을 개선한 프로젝트가 아니라 처음부터 구축한 신규 제품입니다. 관리자가 조직과 권한, AI 봇, 문서를 설정하면 사용자는 목적에 맞는 봇을 선택해 문서에 근거한 답변을 받을 수 있습니다. 관리 기능과 AI 대화가 하나의 제품 경험으로 이어지도록 웹 애플리케이션을 설계했습니다."
@@ -9,7 +15,7 @@
   "projectContext": {
     "category": {
       "label": "구분",
-      "description": "대표 사례"
+      "description": "회사 실무, 프론트엔드"
     },
     "service": {
       "label": "제품",
@@ -25,6 +31,28 @@
     }
   },
   "caseStudy": {
+    "streamingLayout": {
+      "title": "스트리밍 응답이 길어져도 읽던 위치가 밀리지 않는 채팅 레이아웃",
+      "description": "LLM 응답이 실시간으로 늘어나는 동안 기존 메시지가 화면 위로 밀리는 문제를 레이아웃 구조로 해결했습니다.",
+      "items": {
+        "growingResponse": {
+          "title": "응답이 길어질수록 커지는 화면 이동",
+          "description": "SSE로 내용이 추가될 때 응답 블록의 높이가 계속 늘어났고, 일반적인 하단 스크롤 방식에서는 사용자가 읽던 문장이 화면 밖으로 밀렸습니다."
+        },
+        "spacerLayout": {
+          "title": "응답 아래의 가변 여백",
+          "description": "LLM 메시지를 독립된 블록으로 두고 그 아래에 남은 화면 높이를 차지하는 빈 블록을 배치했습니다. 응답이 커지면 빈 블록이 같은 만큼 줄어들게 해 기존 메시지의 위치를 유지했습니다."
+        },
+        "streamState": {
+          "title": "스트리밍 상태와 레이아웃 연결",
+          "description": "생성, 완료, 사용자 중단과 오류 상태를 메시지 상태로 구분해 빈 영역과 최종 스크롤 동작이 같은 규칙을 따르게 했습니다."
+        },
+        "readingPosition": {
+          "title": "읽던 위치 유지",
+          "description": "긴 응답이 생성되는 동안에도 사용자는 기존 내용을 계속 읽을 수 있고, 새 콘텐츠 때문에 화면이 갑자기 이동하지 않도록 했습니다."
+        }
+      }
+    },
     "problem": {
       "title": "문제와 요구사항",
       "description": "관리자가 AI 사용 환경을 구성하는 과정과 사용자가 실제 대화를 수행하는 과정이 하나의 제품 안에서 자연스럽게 연결되어야 했습니다.",
@@ -66,8 +94,8 @@
       }
     },
     "implementation": {
-      "title": "핵심 구현",
-      "description": "관리 화면부터 스트리밍 대화까지 사용자가 직접 경험하는 흐름을 구현하고, 다양한 상태에서도 다음 행동을 이해할 수 있도록 구성했습니다.",
+      "title": "기타 기여",
+      "description": "대표 채팅 UX 사례 외에도 제품을 처음부터 운영 가능한 웹 애플리케이션으로 구축하는 범위를 담당했습니다.",
       "items": {
         "chatExperience": {
           "title": "챗봇 대화 UI와 사용자 경험",
@@ -84,6 +112,32 @@
         "responsive": {
           "title": "반응형 인터페이스",
           "description": "화면 크기에 따라 탐색, 대화 목록, 메시지 영역과 입력 도구가 자연스럽게 재배치되도록 구현했습니다."
+        }
+      }
+    },
+    "localStt": {
+      "title": "실험: WebGPU 로컬 전사 경로",
+      "description": "브라우저에서 녹음과 전사를 이어갈 수 있는지 확인한 POC입니다. 운영 기능이나 비용 절감 성과로 표현하지 않고 검증한 실행 경로만 남겼습니다.",
+      "items": {
+        "problem": {
+          "title": "문제와 제약",
+          "description": "사용자가 회의를 만들 때마다 서버 STT를 호출하면 처리 비용이 누적되고, 녹음 파일을 별도 앱에서 만든 뒤 다시 업로드하면 제품 흐름도 끊겼습니다. 브라우저별 GPU 지원과 큰 모델의 초기 준비 시간도 함께 다뤄야 했습니다."
+        },
+        "workerBoundary": {
+          "title": "VAD와 Whisper Worker 분리",
+          "description": "Silero VAD와 Whisper를 서로 다른 Worker에서 실행하고 MessageChannel로 직접 연결했습니다. 전사가 연산 자원을 사용해도 음성 구간 감지가 밀리지 않도록 처리 책임을 나눴습니다."
+        },
+        "fallback": {
+          "title": "지원 범위에 따른 실행 경로",
+          "description": "WebGPU를 사용할 수 없는 브라우저에는 WASM 경로를 두고, 안정성을 보장하기 어려운 모바일에서는 로컬 STT를 비활성화했습니다. 모델 다운로드와 준비, 녹음, 전사 상태를 UI에 나눠 표시했습니다."
+        },
+        "lifecycle": {
+          "title": "Worker 생명주기와 텍스트 안전성",
+          "description": "AudioWorklet과 Worker를 종료할 때 메시지 포트도 닫아 종료된 Worker로 이벤트가 들어가지 않게 했습니다. 무음과 빈 결과에서도 전사 상태를 해제하고, 결과는 HTML이 아닌 텍스트 노드로 편집기에 삽입했습니다."
+        },
+        "verification": {
+          "title": "확인된 범위",
+          "description": "병합된 변경에서 듀얼 Worker, WASM 대체 경로, 모바일 비활성화, 무음 상태 복구와 안전한 텍스트 삽입을 확인했습니다. PR의 브라우저별 체크리스트는 완료 표시가 없어 모든 환경에서 검증했다고 단정하지 않았습니다."
         }
       }
     },
