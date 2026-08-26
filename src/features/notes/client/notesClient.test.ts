@@ -22,4 +22,19 @@ describe("listNotes", () => {
       signal,
     });
   });
+
+  it("cancels an error response body before rejecting", async () => {
+    const cancel = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 503,
+        body: { cancel },
+      }),
+    );
+
+    await expect(listNotes()).rejects.toThrow("notes_list_failed:503");
+    expect(cancel).toHaveBeenCalledOnce();
+  });
 });

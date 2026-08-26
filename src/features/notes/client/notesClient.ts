@@ -14,6 +14,7 @@ export async function listNotes(
     signal,
   });
   if (!response.ok) {
+    await response.body?.cancel();
     throw new Error(`notes_list_failed:${response.status}`);
   }
 

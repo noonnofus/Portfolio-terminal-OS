@@ -10,18 +10,28 @@ function parseSortDirection(request: NextRequest): NoteSortDirection {
 }
 
 export async function GET(request: NextRequest) {
-  const notes = await listNotes({
-    cursor: null,
-    limit: 50,
-    sortDirection: parseSortDirection(request),
-  });
+  try {
+    const notes = await listNotes({
+      cursor: null,
+      limit: 50,
+      sortDirection: parseSortDirection(request),
+    });
 
-  return NextResponse.json(
-    { notes },
-    {
-      headers: {
-        "Cache-Control": "private, no-store",
+    return NextResponse.json(
+      { notes },
+      {
+        headers: {
+          "Cache-Control": "private, no-store",
+        },
       },
-    },
-  );
+    );
+  } catch {
+    return NextResponse.json(
+      { error: "notes_unavailable" },
+      {
+        status: 503,
+        headers: { "Cache-Control": "private, no-store" },
+      },
+    );
+  }
 }

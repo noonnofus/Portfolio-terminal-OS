@@ -705,6 +705,84 @@ test.describe("GUI shell", () => {
         expect(preferenceRequests).toEqual([]);
     });
 
+    test("keeps Settings and the GUI available when Supabase APIs fail", async ({
+        page,
+    }) => {
+        await page.route("**/api/auth/viewer", (route) =>
+            route.fulfill({ status: 503, body: "{}" }),
+        );
+        await page.route("**/api/wallpapers", (route) =>
+            route.fulfill({ status: 503, body: "{}" }),
+        );
+
+        await page.goto("/gui?app=settings");
+
+        await expect(page.locator(".application-shell")).toBeVisible();
+        await expect(page.locator(".application-viewer-name")).toHaveText(
+            "Guest",
+        );
+
+        const settings = page.getByRole("dialog", { name: "설정" });
+        await settings.getByRole("button", { name: "화면 모드" }).click();
+        await expect(
+            settings.getByRole("button", { name: /Golden Gate Light/ }),
+        ).toBeVisible();
+        await settings.getByRole("button", { name: "다크 모드" }).click();
+
+        await expect(page.locator(".application-shell")).toHaveAttribute(
+            "data-theme",
+            "dark",
+        );
+        await expect
+            .poll(() =>
+                page.evaluate(() => localStorage.getItem("theme")),
+            )
+            .toBe("dark");
+    });
+
+    test("isolates a Notes API outage and offers an accessible retry", async ({
+        page,
+    }) => {
+        let notesRequests = 0;
+        await page.route("**/api/auth/viewer", (route) =>
+            route.fulfill({
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify({
+                    status: "authenticated",
+                    accountId: "account-1",
+                    displayName: "Hyunho",
+                    email: null,
+                    avatarUrl: null,
+                    role: "user",
+                }),
+            }),
+        );
+        await page.route("**/api/notes?*", (route) => {
+            notesRequests += 1;
+            return route.fulfill({ status: 503, body: "{}" });
+        });
+
+        await page.goto("/gui?app=notes");
+
+        const notes = page.getByRole("dialog", { name: "방명록" });
+        await expect(notes.getByRole("alert")).toContainText(
+            "노트를 불러오지 못했습니다.",
+        );
+        await expect(
+            notes.getByText("작성하려면 로그인이 필요합니다."),
+        ).toHaveCount(0);
+        await expect(notes.getByText("새 노트")).toHaveCount(0);
+        await expect(
+            notes.getByRole("textbox", { name: "새 노트 작성" }),
+        ).toHaveCount(0);
+        const retry = notes.getByRole("button", { name: "다시 시도" });
+        await expect(retry).toBeVisible();
+        await retry.click();
+        await expect.poll(() => notesRequests).toBeGreaterThanOrEqual(3);
+        await expect(retry).toBeEnabled();
+    });
+
     test("restores Settings from the URL and keeps language canonical", async ({
         page,
     }) => {
@@ -999,6 +1077,20 @@ async function expectGuiScreenshot(
 
 test.describe("GUI visual parity", () => {
     test.beforeEach(async ({ page }) => {
+        await page.route("**/api/auth/viewer", (route) =>
+            route.fulfill({
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify({ status: "guest" }),
+            }),
+        );
+        await page.route("**/api/wallpapers", (route) =>
+            route.fulfill({
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify({ wallpapers: [] }),
+            }),
+        );
         await page.setViewportSize({ width: 1440, height: 900 });
     });
 

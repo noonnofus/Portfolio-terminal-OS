@@ -85,4 +85,24 @@ describe("GUI store", () => {
         store.getState().signalPageRestore();
         expect(store.getState().resumeEpoch).toBe(1);
     });
+
+    it("starts as a guest and applies a viewer after client bootstrap", () => {
+        const store = createGuiStore();
+
+        expect(store.getState().viewer).toEqual({ status: "guest" });
+
+        store.getState().setViewer({
+            status: "authenticated",
+            accountId: "account-1",
+            displayName: "Hyunho",
+            email: null,
+            avatarUrl: null,
+            role: "admin",
+        });
+
+        expect(store.getState().viewer).toMatchObject({
+            status: "authenticated",
+            accountId: "account-1",
+        });
+    });
 });

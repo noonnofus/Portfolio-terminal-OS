@@ -12,6 +12,20 @@ import {
   getSupabasePublicEnv,
 } from "@/shared/lib/supabase/env";
 
+const SUPABASE_REQUEST_TIMEOUT_MS = 5_000;
+
+function fetchWithSupabaseTimeout(
+  input: RequestInfo | URL,
+  init?: RequestInit,
+) {
+  const timeoutSignal = AbortSignal.timeout(SUPABASE_REQUEST_TIMEOUT_MS);
+  const signal = init?.signal
+    ? AbortSignal.any([init.signal, timeoutSignal])
+    : timeoutSignal;
+
+  return fetch(input, { ...init, signal });
+}
+
 export function getSupabaseCookieOptions(): CookieOptions {
   return {
     httpOnly: true,
@@ -27,6 +41,9 @@ export function createSupabaseServerClient(
   const { publishableKey, url } = getSupabasePublicEnv();
 
   return createServerClient<Database>(url, publishableKey, {
+    global: {
+      fetch: fetchWithSupabaseTimeout,
+    },
     cookieOptions: getSupabaseCookieOptions(),
     cookies: cookieMethods,
   });

@@ -6,15 +6,36 @@ import { createSupabaseRequestClient } from "@/shared/lib/supabase/server";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
-  const supabase = createSupabaseRequestClient(request);
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const viewer = await getViewerForUser(user);
+  try {
+    const supabase = createSupabaseRequestClient(request);
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
 
-  return NextResponse.json(viewer, {
-    headers: {
-      "Cache-Control": "private, no-store",
-    },
-  });
+    if (error) {
+      return NextResponse.json(
+        { error: "viewer_unavailable" },
+        {
+          status: 503,
+          headers: { "Cache-Control": "private, no-store" },
+        },
+      );
+    }
+
+    const viewer = await getViewerForUser(user);
+    return NextResponse.json(viewer, {
+      headers: {
+        "Cache-Control": "private, no-store",
+      },
+    });
+  } catch {
+    return NextResponse.json(
+      { error: "viewer_unavailable" },
+      {
+        status: 503,
+        headers: { "Cache-Control": "private, no-store" },
+      },
+    );
+  }
 }

@@ -539,6 +539,12 @@ export default function NotesApp({}: GuiAppComponentProps<"notes">) {
   const [composerRevision, setComposerRevision] = useState(0);
   const [composerNoteId, setComposerNoteId] = useState<string | null>(null);
 
+  const notesReadyForWriting =
+    viewer.status === "authenticated" &&
+    notesQuery.isSuccess &&
+    !notesQuery.isFetching &&
+    !notesQuery.isError;
+
   const notes = (notesQuery.data ?? []).filter(
     (note) => note.id !== composerNoteId,
   );
@@ -586,22 +592,40 @@ export default function NotesApp({}: GuiAppComponentProps<"notes">) {
               {t("loading")}
             </p>
           ) : notesQuery.isError ? (
-            <p className="text-[length:var(--application-text-body)] text-[var(--app-notes-color-muted-soft)]">
-              {t("loadError")}
-            </p>
+            <div className="rounded-[var(--application-radius-window)] border border-[var(--application-border)] bg-[var(--application-settings-group-bg)] px-4 py-4">
+              <div role="alert">
+                <p className="text-[length:var(--application-text-body)] font-semibold text-[var(--app-notes-color-text)]">
+                  {t("loadError")}
+                </p>
+                <p className="mt-1 text-[length:var(--application-text-callout)] text-[var(--app-notes-color-muted-soft)]">
+                  {t("loadErrorDescription")}
+                </p>
+              </div>
+              <button
+                type="button"
+                className="mt-3 rounded-full bg-[var(--app-notes-color-accent)] px-3 py-1.5 text-[length:var(--application-text-callout)] font-semibold text-[var(--app-notes-color-text)] shadow-sm transition hover:bg-[var(--app-notes-color-accent-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--app-notes-color-accent)] disabled:cursor-wait disabled:opacity-60"
+                disabled={notesQuery.isFetching}
+                onClick={() => void notesQuery.refetch()}
+              >
+                {notesQuery.isFetching ? t("retrying") : t("retry")}
+              </button>
+            </div>
           ) : notes.length === 0 && composerNoteId === null ? (
             <p className="text-[length:var(--application-text-body)] text-[var(--app-notes-color-muted-soft)]">
               {t("empty")}
             </p>
           ) : (
             notes.map((note) => {
-              const { canEdit } = getNotePermissions(viewer, note);
+              const { canEdit: hasPermissionToEdit } = getNotePermissions(
+                viewer,
+                note,
+              );
 
               return (
                 <NoteBlock
                   key={note.id}
                   note={note}
-                  canEdit={canEdit}
+                  canEdit={notesReadyForWriting && hasPermissionToEdit}
                   createNote={(content) =>
                     createNoteMutation.mutateAsync({ content })
                   }
@@ -618,7 +642,7 @@ export default function NotesApp({}: GuiAppComponentProps<"notes">) {
             })
           )}
 
-          {viewer.status === "authenticated" ? (
+          {notesReadyForWriting ? (
             <article className={`${styles.entry} pt-2`}>
               <aside className="text-left sm:pt-1">
                 <strong className="block truncate text-[length:var(--application-text-body)] font-semibold text-[var(--app-notes-color-muted-strong)]">
@@ -653,11 +677,14 @@ export default function NotesApp({}: GuiAppComponentProps<"notes">) {
                 t={t}
               />
             </article>
-          ) : (
+          ) : viewer.status === "guest" &&
+            notesQuery.isSuccess &&
+            !notesQuery.isFetching &&
+            !notesQuery.isError ? (
             <p className="pt-2 text-[length:var(--application-text-body)] text-[var(--app-notes-color-muted-soft)]">
               {t("guest")}
             </p>
-          )}
+          ) : null}
         </section>
       </div>
     </div>

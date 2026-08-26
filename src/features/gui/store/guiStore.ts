@@ -23,6 +23,7 @@ export type GuiState = GuiWorkspaceState & {
 
 export type GuiActions = {
     dispatch: (command: StoreCommand) => void;
+    setViewer: (viewer: Viewer) => void;
     setPageVisibility: (visibility: PageVisibility) => void;
     signalPageRestore: () => void;
     setUrlReady: (ready: boolean) => void;
@@ -109,6 +110,7 @@ export function createGuiStore(
         wallpaper: "golden_gate_light",
         dockAutoHide: false,
         viewer: initialViewer,
+        setViewer: (viewer) => set({ viewer }),
         dispatch: (command) =>
             set((state) => {
                 switch (command.type) {

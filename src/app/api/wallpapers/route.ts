@@ -5,13 +5,23 @@ import { listEnabledWallpapers } from "@/features/wallpapers/server/wallpaperRep
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const wallpapers = await listEnabledWallpapers();
-  return NextResponse.json(
-    { wallpapers },
-    {
-      headers: {
-        "Cache-Control": "public, max-age=300",
+  try {
+    const wallpapers = await listEnabledWallpapers();
+    return NextResponse.json(
+      { wallpapers },
+      {
+        headers: {
+          "Cache-Control": "public, max-age=300",
+        },
       },
-    },
-  );
+    );
+  } catch {
+    return NextResponse.json(
+      { error: "wallpapers_unavailable" },
+      {
+        status: 503,
+        headers: { "Cache-Control": "private, no-store" },
+      },
+    );
+  }
 }
