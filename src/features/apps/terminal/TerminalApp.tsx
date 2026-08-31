@@ -10,7 +10,10 @@ import { executeCommand } from "./lib/commandParser";
 import useIsTouchDevice from "@/shared/hooks/useIsTouchDevice";
 import { useLanguageStore } from "@/shared/lib/i18n/useLanguageStore";
 import type { Language } from "@/shared/i18n/language";
-import type { TerminalAction } from "./lib/terminalActions";
+import {
+  getGuiEntryUrl,
+  type TerminalAction,
+} from "./lib/terminalActions";
 import {
   formatTerminalPrompt,
   type TerminalPromptIdentity,
@@ -61,7 +64,7 @@ export default function TerminalApp({
     inputRef.current = "";
 
     if (action.type === "open-portfolio") {
-      router.push("/gui");
+      router.push(getGuiEntryUrl(currentLanguage));
       return;
     }
 

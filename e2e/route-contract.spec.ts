@@ -14,6 +14,43 @@ test.describe("route compatibility", () => {
         await expect(page).toHaveURL(/\/gui$/);
     });
 
+    test("keeps the terminal language when startx opens the GUI", async ({
+        page,
+    }) => {
+        await page.addInitScript(() => {
+            window.localStorage.setItem(
+                "gui:preferences",
+                JSON.stringify({
+                    version: 1,
+                    preferences: {
+                        language: "ko",
+                        wallpaper: "golden_gate_light",
+                        dockAutoHide: false,
+                    },
+                }),
+            );
+        });
+        await page.goto("/");
+
+        const terminalInput = page.locator(".xterm-helper-textarea");
+        await terminalInput.focus();
+        await page.keyboard.press("Space");
+        await page.keyboard.type("en");
+        await page.keyboard.press("Enter");
+        await expect(page.locator("html")).toHaveAttribute("lang", "en");
+
+        await terminalInput.focus();
+        await page.keyboard.press("Space");
+        await page.keyboard.type("startx");
+        await page.keyboard.press("Enter");
+
+        await expect(page).toHaveURL(/\/gui\?lang=en$/);
+        await expect(page.locator("html")).toHaveAttribute("lang", "en");
+        await expect(
+            page.getByRole("dialog", { name: "Career" }),
+        ).toBeVisible();
+    });
+
     test("project loaders register their namespace on demand", async ({
         page,
     }) => {

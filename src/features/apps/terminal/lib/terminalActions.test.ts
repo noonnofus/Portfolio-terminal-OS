@@ -1,11 +1,19 @@
 import { describe, expect, it } from "vitest";
 import {
+  getGuiEntryUrl,
   parseTerminalActionUri,
   TERMINAL_ACTION_URI,
   toTerminalActionUri,
 } from "./terminalActions";
 
 describe("terminal actions", () => {
+  it.each(["ko", "en"] as const)(
+    "includes the current %s language in the GUI entry URL",
+    (language) => {
+      expect(getGuiEntryUrl(language)).toBe(`/gui?lang=${language}`);
+    },
+  );
+
   it("converts actions to exact internal URIs", () => {
     expect(toTerminalActionUri({ type: "open-portfolio" })).toBe(
       TERMINAL_ACTION_URI.openPortfolio,

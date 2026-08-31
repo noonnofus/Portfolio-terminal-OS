@@ -13,6 +13,10 @@ export const TERMINAL_ACTION_URI = {
 export type TerminalActionUri =
   (typeof TERMINAL_ACTION_URI)[keyof typeof TERMINAL_ACTION_URI];
 
+export function getGuiEntryUrl(language: Language): string {
+  return `/gui?lang=${language}`;
+}
+
 export function toTerminalActionUri(action: TerminalAction): TerminalActionUri {
   if (action.type === "open-portfolio") {
     return TERMINAL_ACTION_URI.openPortfolio;
