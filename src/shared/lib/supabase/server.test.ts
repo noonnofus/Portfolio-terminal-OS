@@ -35,3 +35,40 @@ describe("getSupabaseCookieOptions", () => {
     });
   });
 });
+
+describe("getApplicationOrigin", () => {
+  beforeEach(() => {
+    vi.resetModules();
+    vi.unstubAllEnvs();
+  });
+
+  it("uses the current Vercel deployment origin for previews", async () => {
+    vi.stubEnv("APP_ORIGIN", "https://hyunhokim.is-a.dev");
+    vi.stubEnv("VERCEL_ENV", "preview");
+    vi.stubEnv(
+      "VERCEL_URL",
+      "hyunho-preview-bcitkevins-projects.vercel.app",
+    );
+
+    const { getApplicationOrigin } =
+      await import("@/shared/lib/supabase/env");
+
+    expect(getApplicationOrigin()).toBe(
+      "https://hyunho-preview-bcitkevins-projects.vercel.app",
+    );
+  });
+
+  it("keeps the configured canonical origin outside previews", async () => {
+    vi.stubEnv("APP_ORIGIN", "https://hyunhokim.is-a.dev");
+    vi.stubEnv("VERCEL_ENV", "production");
+    vi.stubEnv(
+      "VERCEL_URL",
+      "hyunho-preview-bcitkevins-projects.vercel.app",
+    );
+
+    const { getApplicationOrigin } =
+      await import("@/shared/lib/supabase/env");
+
+    expect(getApplicationOrigin()).toBe("https://hyunhokim.is-a.dev");
+  });
+});
