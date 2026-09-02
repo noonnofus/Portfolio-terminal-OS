@@ -16,10 +16,6 @@
     "test:e2e:release": "playwright test"
   },
   "dependencies": {
-    "@radix-ui/react-dialog": "1.1.15",
-    "@radix-ui/react-label": "2.1.8",
-    "@radix-ui/react-popover": "1.1.15",
-    "@radix-ui/react-radio-group": "1.3.8",
     "@supabase/ssr": "0.12.0",
     "@supabase/supabase-js": "2.110.0",
     "@tanstack/react-query": "5.101.2",
@@ -28,13 +24,11 @@
     "@tiptap/starter-kit": "3.27.3",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/xterm": "^5.5.0",
-    "class-variance-authority": "0.7.1",
-    "clsx": "2.1.1",
     "framer-motion": "^11.18.2",
     "i18next": "^25.5.2",
     "lucide-react": "1.17.0",
-    "mermaid": "11.16.0",
-    "next": "16.2.10",
+    "mermaid": "11.17.2",
+    "next": "16.3.4",
     "next-themes": "^0.4.6",
     "react": "19.2.6",
     "react-calendar": "^5.1.0",
@@ -46,7 +40,6 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
     "server-only": "0.0.1",
-    "tailwind-merge": "3.6.0",
     "zustand": "5.0.14"
   },
   "devDependencies": {
@@ -57,9 +50,9 @@
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
-    "eslint-config-next": "16.2.10",
+    "eslint-config-next": "16.3.4",
     "eslint-config-prettier": "10.1.8",
-    "postcss": "8.5.15",
+    "postcss": "8.5.23",
     "supabase": "2.109.0",
     "tailwindcss": "4.3.0",
     "typescript": "^5",
@@ -67,7 +60,7 @@
   },
   "overrides": {
     "next": {
-      "postcss": "8.5.16"
+      "postcss": "8.5.23"
     }
   }
 }
