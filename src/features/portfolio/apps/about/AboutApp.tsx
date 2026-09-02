@@ -2,7 +2,6 @@
 
 import { useId, useState, type KeyboardEvent } from "react";
 import Image from "next/image";
-import { Component, Route, ShieldCheck } from "lucide-react";
 import StackIcon from "@/features/portfolio/components/StackIcon";
 import { getPortfolioContent } from "@/features/portfolio/content/getPortfolioContent";
 import { useTranslation } from "react-i18next";
@@ -279,58 +278,6 @@ export default function AboutApp({ language }: AboutAppProps) {
                             </li>
                         ))}
                     </ol>
-                </section>
-
-                <section
-                    className="border-b border-[var(--application-border)] py-8 md:py-10"
-                    aria-labelledby="about-focus-title"
-                >
-                    <div className="flex flex-col gap-2">
-                        <p className="text-[length:var(--application-text-caption)] font-semibold uppercase tracking-[0.14em] text-[var(--application-app-surface-muted)]">
-                            {t("frontendFocusEyebrow")}
-                        </p>
-                        <h3
-                            id="about-focus-title"
-                            className="text-2xl font-semibold tracking-tight text-[var(--application-app-surface-text)]"
-                        >
-                            {t("frontendFocusTitle")}
-                        </h3>
-                    </div>
-                    <div className="mt-6 grid gap-5 md:grid-cols-3">
-                        {[
-                            {
-                                icon: Component,
-                                title: "uiArchitecture",
-                                description: "uiArchitectureDescription",
-                            },
-                            {
-                                icon: Route,
-                                title: "stateData",
-                                description: "stateDataDescription",
-                            },
-                            {
-                                icon: ShieldCheck,
-                                title: "quality",
-                                description: "qualityDescription",
-                            },
-                        ].map(({ icon: Icon, title, description }) => (
-                            <div
-                                key={title}
-                                className="border-l-2 border-[var(--application-accent)] pl-4"
-                            >
-                                <Icon
-                                    aria-hidden="true"
-                                    className="size-5 text-[var(--application-accent)]"
-                                />
-                                <h4 className="mt-3 font-semibold text-[var(--application-app-surface-text)]">
-                                    {t(title)}
-                                </h4>
-                                <p className="mt-2 text-[length:var(--application-text-body)] leading-6 text-[var(--application-app-surface-muted)]">
-                                    {t(description)}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
                 </section>
 
                 <section
