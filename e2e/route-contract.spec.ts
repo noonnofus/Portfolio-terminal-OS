@@ -51,7 +51,7 @@ test.describe("route compatibility", () => {
         ).toBeVisible();
     });
 
-    test("project loaders register their namespace on demand", async ({
+    test("project loaders render localized content on demand", async ({
         page,
     }) => {
         await page.goto("/gui?app=projects");
@@ -160,7 +160,7 @@ test.describe("route compatibility", () => {
             {
                 slug: "portfolio",
                 dialog: "포트폴리오",
-                heading: "창 상태와 URL을 같은 모델로 관리했습니다.",
+                heading: "창 상태와 URL을 같은 모델로 관리",
                 outcome: "URL, History와 GUI 상태를 하나의 탐색 모델로 통합",
             },
             {

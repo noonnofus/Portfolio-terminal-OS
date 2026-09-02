@@ -67,12 +67,12 @@ test.describe("GUI shell", () => {
         ).toBeVisible();
         await expect(
             careerWindow.getByText(
-                "하루 평균 약 5만 콜 환경에서 전체 상담사의 60%가 사용했고, 프로젝트 운영 후 고객의 평균 대기 시간은 약 30% 줄었습니다.",
+                "하루 평균 약 5만 콜 환경에서 전체 상담사의 60%가 사용했고 프로젝트 운영 후 고객 평균 대기 시간이 약 30% 줄었습니다.",
             ),
         ).toBeVisible();
         await expect(
             careerWindow.getByText(
-                /실시간 STT 전사부터 통화 종료 후 AI 분석과 상담 이력/,
+                /실시간 STT 전사, 통화 후 AI 분석, 상담 이력/,
             ),
         ).toBeVisible();
         await expect(
@@ -80,7 +80,7 @@ test.describe("GUI shell", () => {
         ).toBeVisible();
         await expect(
             careerWindow.getByText(
-                "WebGPU 로컬 STT와 회의록 MCP를 연결하고, Storybook 40개 스토리와 Vitest로 공통 UI 검증을 자동화했습니다.",
+                "WebGPU 로컬 STT와 회의록 MCP를 연결하고 Storybook 40개 스토리와 Vitest를 활용해 공통 UI 검증을 자동화했습니다.",
             ),
         ).toBeVisible();
         await expect(
@@ -88,7 +88,7 @@ test.describe("GUI shell", () => {
         ).toBeVisible();
         await expect(
             careerWindow.getByText(
-                /Transport, Factory, Strategy와 Codec으로 Provider별 통신과 오디오 차이/,
+                /Transport, Factory, Strategy, Codec으로 Provider별 통신과 오디오 차이/,
             ),
         ).toBeVisible();
         await expect(
@@ -195,6 +195,19 @@ test.describe("GUI shell", () => {
             viewport: { width: 390, height: 844 },
         });
         const page = await mobileContext.newPage();
+        await page.addInitScript(() => {
+            globalThis.localStorage.setItem(
+                "gui:preferences",
+                JSON.stringify({
+                    version: 1,
+                    preferences: {
+                        language: "ko",
+                        wallpaper: "golden_gate_light",
+                        dockAutoHide: true,
+                    },
+                }),
+            );
+        });
         await page.goto("/gui");
 
         const window = page.getByRole("dialog", {
@@ -219,6 +232,26 @@ test.describe("GUI shell", () => {
             ),
         );
         expect(windowLayerZ).toBeGreaterThan(shortcutsZ);
+
+        const dock = page.getByRole("navigation", {
+            name: "Applications",
+        });
+        await expect(dock).toHaveAttribute("data-auto-hide", "true");
+        await expect(dock).toBeVisible();
+
+        await dock.getByRole("button", { name: "설정" }).click();
+        const settingsWindow = page.getByRole("dialog", { name: "설정" });
+        await settingsWindow.getByRole("button", { name: "일반" }).click();
+        await expect(
+            settingsWindow.getByText("모바일에서는 Dock이 항상 표시됩니다."),
+        ).toBeVisible();
+        await expect(
+            settingsWindow.getByRole("button", { name: "자동 숨김" }),
+        ).toBeHidden();
+        await expect(
+            settingsWindow.getByRole("button", { name: "항상 표시" }),
+        ).toBeHidden();
+
         await mobileContext.close();
     });
 
