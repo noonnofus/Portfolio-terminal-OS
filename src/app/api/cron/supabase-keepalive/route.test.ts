@@ -8,7 +8,7 @@ const select = vi.hoisted(() => vi.fn(() => ({ limit })));
 const from = vi.hoisted(() => vi.fn(() => ({ select })));
 
 vi.mock("server-only", () => ({}));
-vi.mock("@/shared/lib/supabase/admin", () => ({
+vi.mock("@/lib/supabase/admin", () => ({
   createSupabaseAdminClient: () => ({ from }),
 }));
 

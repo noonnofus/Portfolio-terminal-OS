@@ -7,7 +7,7 @@ const createSupabaseServerClient = vi.hoisted(() =>
 );
 
 vi.mock("server-only", () => ({}));
-vi.mock("@/shared/lib/supabase/server", () => ({
+vi.mock("@/lib/supabase/server", () => ({
   createSupabaseServerClient,
 }));
 

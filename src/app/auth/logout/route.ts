@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getApplicationOrigin } from "@/shared/lib/supabase/env";
-import { createResponseSupabaseClient } from "@/shared/lib/supabase/nextResponse";
+import { getApplicationOrigin } from "@/lib/supabase/env";
+import { createResponseSupabaseClient } from "@/lib/supabase/nextResponse";
 
 export const dynamic = "force-dynamic";
 

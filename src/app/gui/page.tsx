@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { GuiEntry } from "@/features/gui/GuiEntry";
+import { GuiClient } from "@/app/gui/GuiClient";
 
 export const metadata: Metadata = {
   title: "Hyunho Kim | Portfolio",
 };
 
 export default function GuiPage() {
-  return <GuiEntry />;
+  return <GuiClient />;
 }

@@ -2,8 +2,8 @@ import "server-only";
 
 import type { User } from "@supabase/supabase-js";
 
-import type { Viewer } from "@/features/auth/model/viewer";
-import { createSupabaseAdminClient } from "@/shared/lib/supabase/admin";
+import type { Viewer } from "@/features/auth/types/viewer";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 type UserAccountRow = {
   id: string;

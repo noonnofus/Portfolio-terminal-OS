@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { getViewerForUser } from "@/features/auth/server/getViewer";
-import { createSupabaseRequestClient } from "@/shared/lib/supabase/server";
+import { createSupabaseRequestClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 

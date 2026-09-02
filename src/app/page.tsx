@@ -1,4 +1,4 @@
-import TerminalRouteClient from "@/features/apps/terminal/TerminalRouteClient";
+import TerminalRouteClient from "@/features/terminal/components/TerminalRouteClient";
 
 export default function Page() {
   return (

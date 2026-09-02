@@ -1,0 +1,68 @@
+import type { ProjectCatalogEntry } from "@/features/portfolio/content/types";
+import type { ProjectSlug } from "@/features/portfolio/types/projectTypes";
+
+export const projectManifest = {
+    portfolio: {
+        slug: "portfolio",
+        order: 14,
+        status: "private",
+        stack: ["Next.js", "TypeScript", "Zustand", "Tailwind CSS"],
+        icon: "/icons/optimized/document.png",
+        links: {},
+        media: [],
+    },
+    optigen: {
+        slug: "optigen",
+        order: 12,
+        status: "private",
+        stack: ["Next.js", "TypeScript", "React Query", "Zustand"],
+        icon: "/icons/optimized/document.png",
+        links: {},
+        media: [],
+    },
+    mcp: {
+        slug: "mcp",
+        order: 20,
+        status: "private",
+        stack: ["TypeScript", "Express.js", "MCP SDK", "Zod"],
+        icon: "/icons/optimized/document.png",
+        links: {},
+        media: [],
+    },
+    "voice-gateway": {
+        slug: "voice-gateway",
+        order: 21,
+        status: "private",
+        stack: ["TypeScript", "Node.js", "WebSocket", "Worker Threads"],
+        icon: "/icons/optimized/document.png",
+        links: {},
+        media: [],
+    },
+    kepco: {
+        slug: "kepco",
+        order: 10,
+        status: "private",
+        stack: ["React 19", "TypeScript", "TanStack Query", "Zustand"],
+        icon: "/icons/optimized/document.png",
+        links: {},
+        media: [],
+    },
+    wchms: {
+        slug: "wchms",
+        order: 30,
+        status: "private",
+        stack: ["Next.js", "TypeScript", "MySQL", "OpenAI"],
+        icon: "/icons/optimized/document.png",
+        links: {},
+        media: [],
+    },
+    flare: {
+        slug: "flare",
+        order: 40,
+        status: "private",
+        stack: ["Next.js", "TypeScript", "PostgreSQL", "OpenAI"],
+        icon: "/icons/optimized/document.png",
+        links: {},
+        media: [],
+    },
+} satisfies Record<ProjectSlug, ProjectCatalogEntry>;

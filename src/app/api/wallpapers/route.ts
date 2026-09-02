@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { listEnabledWallpapers } from "@/features/wallpapers/server/wallpaperRepository";
+import { listEnabledWallpapers } from "@/features/settings/server/wallpaperRepository";
 
 export const dynamic = "force-dynamic";
 

@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function proxy(request: NextRequest) {
   const isPublicGuiRead =

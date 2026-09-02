@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "@xterm/xterm/css/xterm.css";
 import ClientProvider from "./ClientProvider";
-import { DEFAULT_LANGUAGE } from "@/shared/i18n/language";
+import { DEFAULT_LANGUAGE } from "@/lib/i18n/language";
 
 export const metadata: Metadata = {
   title: "HyunHo Portfolio",

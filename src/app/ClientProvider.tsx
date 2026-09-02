@@ -1,10 +1,10 @@
 'use client';
 
-import { Provider } from '@/shared/ui/provider';
+import { AppProvider } from "@/components/providers/AppProvider";
 import { I18nextProvider } from 'react-i18next';
-import i18n from '@/shared/i18n/client';
+import i18n from '@/app/i18n';
 import { useEffect } from 'react';
-import { useLanguageStore } from '@/shared/lib/i18n/useLanguageStore';
+import { useLanguageStore } from '@/lib/i18n/useLanguageStore';
 
 function I18nWrapper({ children }: { children: React.ReactNode }) {
     const language = useLanguageStore((state) => state.currentLanguage);
@@ -24,11 +24,11 @@ export default function ClientProvider({
 }>) {
     return (
         <I18nextProvider i18n={i18n}>
-            <Provider>
+            <AppProvider>
                 <I18nWrapper>
                     {children}
                 </I18nWrapper>
-            </Provider>
+            </AppProvider>
         </I18nextProvider>
     );
 }

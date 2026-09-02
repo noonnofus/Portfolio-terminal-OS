@@ -7,12 +7,12 @@ const getUser = vi.hoisted(() => vi.fn());
 const getViewerForUser = vi.hoisted(() => vi.fn());
 
 vi.mock("server-only", () => ({}));
-vi.mock("@/features/notes/server/noteRepository", () => ({ listNotes }));
-vi.mock("@/features/wallpapers/server/wallpaperRepository", () => ({
+vi.mock("@/features/guestbook/server/noteRepository", () => ({ listNotes }));
+vi.mock("@/features/settings/server/wallpaperRepository", () => ({
   listEnabledWallpapers,
 }));
 vi.mock("@/features/auth/server/getViewer", () => ({ getViewerForUser }));
-vi.mock("@/shared/lib/supabase/server", () => ({
+vi.mock("@/lib/supabase/server", () => ({
   createSupabaseRequestClient: () => ({ auth: { getUser } }),
 }));
 

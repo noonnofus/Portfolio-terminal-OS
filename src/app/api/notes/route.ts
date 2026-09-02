@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import type { NoteSortDirection } from "@/features/notes/model/types";
-import { listNotes } from "@/features/notes/server/noteRepository";
+import type { NoteSortDirection } from "@/features/guestbook/types/noteTypes";
+import { listNotes } from "@/features/guestbook/server/noteRepository";
 
 export const dynamic = "force-dynamic";
 
