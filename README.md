@@ -34,6 +34,7 @@ Live site: [hyunho.vercel.app](https://hyunho.vercel.app/)
 - Local GUI preferences for language, theme, dock auto-hide, and wallpaper.
 - Server-backed wallpaper catalog with light/dark wallpaper presets.
 - Responsive Next Image delivery for wallpapers and portfolio technology assets.
+- Project technology badges use the centralized manifest and reviewed technology PNG assets.
 - TanStack Query for client server-state reads, mutations, and invalidation.
 - Server Actions for note writes.
 - TipTap Markdown editing and Markdown rendering for notes.

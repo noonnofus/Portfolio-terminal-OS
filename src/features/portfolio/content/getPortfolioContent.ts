@@ -83,7 +83,7 @@ function toPortfolioContent(
                 slug,
                 title: projectTitles[language][slug],
                 summary: project.summary,
-                stack: projectManifest[slug].stack,
+                stack: projectManifest[slug].resumeStack,
             };
         }),
         education: resource.education.map((education, index) => ({

@@ -24,7 +24,7 @@ const technologyGroups = [
             },
             {
                 label: "Next.js",
-                src: "/tech-icons/nextjs.png",
+                src: "/tech-icons/nextjs-official.png",
                 invertOnDark: true,
             },
             { label: "HTML5", src: "/tech-icons/html5.png" },

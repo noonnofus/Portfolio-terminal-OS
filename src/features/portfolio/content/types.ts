@@ -12,6 +12,7 @@ export type ProjectCatalogEntry = {
   order: number;
   status: ProjectStatus;
   stack: readonly string[];
+  resumeStack: readonly string[];
   icon: PortfolioAssetPath;
   links: {
     live?: PortfolioExternalUrl;

@@ -18,10 +18,11 @@ describe("portfolio project summaries", () => {
         );
     });
 
-    it("keeps compact manifest stacks and complete localized resume content", () => {
+    it("keeps project detail stacks and compact localized resume stacks", () => {
         for (const project of projectSummaries) {
             expect(project.stack.length).toBeGreaterThan(0);
-            expect(project.stack.length).toBeLessThanOrEqual(4);
+            expect(project.resumeStack.length).toBeGreaterThan(0);
+            expect(project.resumeStack.length).toBeLessThanOrEqual(4);
         }
 
         for (const language of languages) {
@@ -33,6 +34,7 @@ describe("portfolio project summaries", () => {
             for (const project of projects) {
                 expect(project.title).not.toBe("");
                 expect(project.summary).not.toBe("");
+                expect(project.stack.length).toBeLessThanOrEqual(4);
             }
         }
     });

@@ -176,6 +176,7 @@ flowchart TD
 - Dock/Desktop icon rendering bypasses Next Image optimization for these local tiny assets.
 - Original high-resolution icons remain available for non-runtime or detail-app use cases.
 - Portfolio technology icons use 96px PNG sources with Next Image sizing at their 32px and 16px display sizes.
+- Project detail stacks come from the centralized portfolio manifest, with each mapped badge rendered through the shared Next Image component.
 - The shell wallpaper uses a responsive Next Image source, and Settings uses dedicated 360px wallpaper previews.
 
 ## Delivery status
