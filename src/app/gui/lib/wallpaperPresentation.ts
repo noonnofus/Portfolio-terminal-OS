@@ -16,7 +16,6 @@ const positionPresets = {
 } as const;
 
 export type WallpaperCSSProperties = CSSProperties & {
-  "--application-wallpaper-image": string;
   "--application-wallpaper-overlay": string;
   "--application-wallpaper-position": string;
 };
@@ -26,7 +25,6 @@ export function getWallpaperStyle(
 ): WallpaperCSSProperties {
   const wallpaper = wallpaperCatalog[wallpaperId];
   return {
-    "--application-wallpaper-image": `url("${wallpaper.image}")`,
     "--application-wallpaper-overlay": overlayPresets[wallpaper.overlayPreset],
     "--application-wallpaper-position": positionPresets[wallpaper.positionPreset],
   };

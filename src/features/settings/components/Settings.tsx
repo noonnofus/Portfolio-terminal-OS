@@ -337,7 +337,7 @@ export default function Settings({
                   width={196}
                   height={105}
                   className="application-wallpaper-preview h-26.25! w-49! max-w-full! aspect-auto!"
-                  priority
+                  sizes="196px"
                 />
               ) : null}
               <div className="flex min-h-12 w-full items-center rounded-[var(--application-radius-panel)] border border-[var(--application-border)] bg-[var(--application-settings-group-bg)] px-4.5">
@@ -371,6 +371,7 @@ export default function Settings({
                       width={180}
                       height={102}
                       className="application-wallpaper-preview"
+                      sizes="180px"
                     />
                     <span className="application-wallpaper-name">
                       {labels[language]}

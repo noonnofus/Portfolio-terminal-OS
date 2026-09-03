@@ -15,6 +15,7 @@ function getSupabaseCspOrigin() {
 const nextConfig: NextConfig = {
     reactCompiler: true,
     images: {
+        imageSizes: [16, 32, 48, 64, 96, 128, 180, 196, 256, 384, 400],
         remotePatterns: [
             {
                 protocol: "https",

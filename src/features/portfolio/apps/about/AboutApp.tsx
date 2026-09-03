@@ -15,93 +15,93 @@ const technologyGroups = [
     {
         id: "frontend",
         items: [
-            { label: "JavaScript (ES6+)", src: "/tech-icons/javascript.svg" },
-            { label: "TypeScript", src: "/tech-icons/typescript.svg" },
+            { label: "JavaScript (ES6+)", src: "/tech-icons/javascript.png" },
+            { label: "TypeScript", src: "/tech-icons/typescript.png" },
             {
                 label: "React",
-                src: "/tech-icons/react-light.svg",
-                darkSrc: "/tech-icons/react-dark.svg",
+                src: "/tech-icons/react-light.png",
+                darkSrc: "/tech-icons/react-dark.png",
             },
             {
                 label: "Next.js",
-                src: "/tech-icons/nextjs.svg",
+                src: "/tech-icons/nextjs.png",
                 invertOnDark: true,
             },
-            { label: "HTML5", src: "/tech-icons/html5.svg" },
-            { label: "CSS3", src: "/tech-icons/css3.svg" },
-            { label: "React Router", src: "/tech-icons/react-router.svg" },
+            { label: "HTML5", src: "/tech-icons/html5.png" },
+            { label: "CSS3", src: "/tech-icons/css3.png" },
+            { label: "React Router", src: "/tech-icons/react-router.png" },
         ],
     },
     {
         id: "stateAndApi",
         items: [
-            { label: "TanStack Query", src: "/tech-icons/tanstack-query.svg" },
-            { label: "Zustand", src: "/tech-icons/zustand.svg" },
+            { label: "TanStack Query", src: "/tech-icons/tanstack-query.png" },
+            { label: "Zustand", src: "/tech-icons/zustand.png" },
             {
                 label: "Context API",
-                src: "/tech-icons/react-light.svg",
-                darkSrc: "/tech-icons/react-dark.svg",
+                src: "/tech-icons/react-light.png",
+                darkSrc: "/tech-icons/react-dark.png",
             },
-            { label: "Axios", src: "/tech-icons/axios.svg" },
-            { label: "Zod", src: "/tech-icons/zod.svg" },
+            { label: "Axios", src: "/tech-icons/axios.png" },
+            { label: "Zod", src: "/tech-icons/zod.png" },
         ],
     },
     {
         id: "uiAndDesign",
         items: [
-            { label: "Tailwind CSS", src: "/tech-icons/tailwindcss.svg" },
+            { label: "Tailwind CSS", src: "/tech-icons/tailwindcss.png" },
             {
                 label: "shadcn/ui",
-                src: "/tech-icons/shadcn-ui.svg",
+                src: "/tech-icons/shadcn-ui.png",
                 invertOnDark: true,
             },
-            { label: "Figma", src: "/tech-icons/figma.svg" },
+            { label: "Figma", src: "/tech-icons/figma.png" },
         ],
     },
     {
         id: "infra",
         items: [
-            { label: "PostgreSQL", src: "/tech-icons/postgresql.svg" },
+            { label: "PostgreSQL", src: "/tech-icons/postgresql.png" },
             {
                 label: "MySQL",
-                src: "/tech-icons/mysql-light.svg",
-                darkSrc: "/tech-icons/mysql-dark.svg",
+                src: "/tech-icons/mysql-light.png",
+                darkSrc: "/tech-icons/mysql-dark.png",
             },
-            { label: "AWS", src: "/tech-icons/aws.svg" },
-            { label: "Docker", src: "/tech-icons/docker.svg" },
+            { label: "AWS", src: "/tech-icons/aws.png" },
+            { label: "Docker", src: "/tech-icons/docker.png" },
             {
                 label: "Vercel",
-                src: "/tech-icons/vercel-light.svg",
-                darkSrc: "/tech-icons/vercel-dark.svg",
+                src: "/tech-icons/vercel-light.png",
+                darkSrc: "/tech-icons/vercel-dark.png",
             },
-            { label: "Netlify", src: "/tech-icons/netlify.svg" },
-            { label: "Render", src: "/tech-icons/render.svg" },
+            { label: "Netlify", src: "/tech-icons/netlify.png" },
+            { label: "Render", src: "/tech-icons/render.png" },
         ],
     },
     {
         id: "toolingAndQuality",
         items: [
-            { label: "ESLint", src: "/tech-icons/eslint.svg" },
-            { label: "Prettier", src: "/tech-icons/prettier.svg" },
-            { label: "npm", src: "/tech-icons/npm.svg" },
-            { label: "Postman", src: "/tech-icons/postman.svg" },
-            { label: "Swagger", src: "/tech-icons/swagger.svg" },
+            { label: "ESLint", src: "/tech-icons/eslint.png" },
+            { label: "Prettier", src: "/tech-icons/prettier.png" },
+            { label: "npm", src: "/tech-icons/npm.png" },
+            { label: "Postman", src: "/tech-icons/postman.png" },
+            { label: "Swagger", src: "/tech-icons/swagger.png" },
         ],
     },
     {
         id: "collaboration",
         items: [
-            { label: "Git", src: "/tech-icons/git.svg" },
+            { label: "Git", src: "/tech-icons/git.png" },
             {
                 label: "GitHub",
-                src: "/tech-icons/github.svg",
+                src: "/tech-icons/github.png",
                 invertOnDark: true,
             },
-            { label: "Jira", src: "/tech-icons/jira.svg" },
-            { label: "Confluence", src: "/tech-icons/confluence.svg" },
+            { label: "Jira", src: "/tech-icons/jira.png" },
+            { label: "Confluence", src: "/tech-icons/confluence.png" },
             {
                 label: "Notion",
-                src: "/tech-icons/notion.svg",
+                src: "/tech-icons/notion.png",
                 invertOnDark: true,
             },
         ],
@@ -323,7 +323,7 @@ export default function AboutApp({ language }: AboutAppProps) {
                                 }
                                 type="button"
                             >
-                                {t(group.id)}, {group.items.length}
+                                {t(group.id)} {group.items.length}
                             </button>
                         ))}
                     </div>

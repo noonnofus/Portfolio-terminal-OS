@@ -32,6 +32,7 @@ Live site: [hyunho.vercel.app](https://hyunho.vercel.app/)
 - Server-backed guestbook notes with GitHub-authenticated writes, 1,000 character validation, per-account rate limiting, owner/admin permissions, and deleted-account anonymization.
 - Local GUI preferences for language, theme, dock auto-hide, and wallpaper.
 - Server-backed wallpaper catalog with light/dark wallpaper presets.
+- Responsive Next Image delivery for wallpapers and portfolio technology assets.
 - TanStack Query for client server-state reads, mutations, and invalidation.
 - Server Actions for note writes.
 - TipTap Markdown editing and Markdown rendering for notes.

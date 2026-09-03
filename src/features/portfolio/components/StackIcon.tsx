@@ -1,8 +1,7 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element -- local brand SVGs are already optimized and need their original fills and gradients */
-
 import type { LucideIcon } from "lucide-react";
+import Image from "next/image";
 
 import { useColorMode } from "@/components/providers/color-mode";
 
@@ -58,12 +57,13 @@ function BrandStackIcon({
 
   return (
     <div className="flex min-w-0 flex-col items-center gap-2 text-center">
-      <img
+      <Image
         aria-hidden="true"
         alt=""
         className={`size-8 shrink-0 object-contain${shouldInvert ? " invert" : ""}`}
         draggable={false}
         height={32}
+        sizes="32px"
         src={iconSrc}
         width={32}
       />

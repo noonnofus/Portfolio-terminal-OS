@@ -174,6 +174,8 @@ flowchart TD
 - GUI runtime icons use small files under `public/icons/optimized`.
 - Dock/Desktop icon rendering bypasses Next Image optimization for these local tiny assets.
 - Original high-resolution icons remain available for non-runtime or detail-app use cases.
+- Portfolio technology icons use 96px PNG sources with Next Image sizing at their 32px and 16px display sizes.
+- The shell wallpaper uses a responsive Next Image source, and Settings uses dedicated 360px wallpaper previews.
 
 ## Delivery status
 

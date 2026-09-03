@@ -1,8 +1,7 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element -- local technology SVGs preserve their brand fills */
-
 import { Brain, Cpu, Network, Radio, Server, type LucideIcon } from "lucide-react";
+import Image from "next/image";
 import styles from "./ProjectContent.module.css";
 import { useColorMode } from "@/components/providers/color-mode";
 
@@ -16,31 +15,31 @@ const technologyIcons: Record<
   { src: string; darkSrc?: string; invertOnDark?: boolean }
 > = {
   "Next.js": {
-    src: "/tech-icons/nextjs.svg",
+    src: "/tech-icons/nextjs.png",
     invertOnDark: true,
   },
   "React 19": {
-    src: "/tech-icons/react-light.svg",
-    darkSrc: "/tech-icons/react-dark.svg",
+    src: "/tech-icons/react-light.png",
+    darkSrc: "/tech-icons/react-dark.png",
   },
-  "React Query": { src: "/tech-icons/tanstack-query.svg" },
-  "TanStack Query": { src: "/tech-icons/tanstack-query.svg" },
-  TypeScript: { src: "/tech-icons/typescript.svg" },
-  Zod: { src: "/tech-icons/zod.svg" },
-  "Tailwind CSS": { src: "/tech-icons/tailwindcss.svg" },
-  Zustand: { src: "/tech-icons/zustand.svg" },
-  PostgreSQL: { src: "/tech-icons/postgresql.svg" },
+  "React Query": { src: "/tech-icons/tanstack-query.png" },
+  "TanStack Query": { src: "/tech-icons/tanstack-query.png" },
+  TypeScript: { src: "/tech-icons/typescript.png" },
+  Zod: { src: "/tech-icons/zod.png" },
+  "Tailwind CSS": { src: "/tech-icons/tailwindcss.png" },
+  Zustand: { src: "/tech-icons/zustand.png" },
+  PostgreSQL: { src: "/tech-icons/postgresql.png" },
   MySQL: {
-    src: "/tech-icons/mysql-light.svg",
-    darkSrc: "/tech-icons/mysql-dark.svg",
+    src: "/tech-icons/mysql-light.png",
+    darkSrc: "/tech-icons/mysql-dark.png",
   },
   OpenAI: {
-    src: "/tech-icons/openai.svg",
+    src: "/tech-icons/openai.png",
     invertOnDark: true,
   },
   "Express.js": {
-    src: "/tech-icons/express-light.svg",
-    darkSrc: "/tech-icons/express-dark.svg",
+    src: "/tech-icons/express-light.png",
+    darkSrc: "/tech-icons/express-dark.png",
   },
 };
 
@@ -68,7 +67,7 @@ export function ProjectTechBadges({
         return (
           <li key={item} className={styles.techBadge}>
             {src ? (
-              <img
+              <Image
                 aria-hidden="true"
                 alt=""
                 className={`${styles.techBadgeIcon}${
@@ -78,6 +77,7 @@ export function ProjectTechBadges({
                 }`}
                 draggable={false}
                 height={16}
+                sizes="16px"
                 src={src}
                 width={16}
               />

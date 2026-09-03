@@ -4,7 +4,27 @@
   position: relative;
   min-height: 100dvh;
   overflow: hidden;
-  transition: background 0.5s ease;
+  isolation: isolate;
+}
+
+.application-wallpaper-media,
+.application-wallpaper-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+
+.application-wallpaper-media {
+  z-index: -3;
+}
+
+.application-wallpaper-media img {
+  object-position: var(--application-wallpaper-position);
+}
+
+.application-wallpaper-overlay {
+  z-index: -2;
+  background: var(--application-wallpaper-overlay);
 }
 
 .application-system-bar {
@@ -506,6 +526,9 @@
   .application-system-bar,
   .application-dock,
   .desktop-apps,
+  .application-wallpaper-media,
+  .application-wallpaper-overlay,
+  .application-wallpaper-art,
   .application-background-type,
   .application-title-bar,
   .application-resume-print-action,
@@ -1697,12 +1720,6 @@
   .application-wallpaper-option[aria-pressed="true"]
   .application-wallpaper-name {
   color: #182230;
-}
-
-.application-shell[data-theme][data-wallpaper] {
-  background-image: var(--application-wallpaper-overlay), var(--application-wallpaper-image);
-  background-position: var(--application-wallpaper-position);
-  background-size: cover;
 }
 
 .directory-surface {

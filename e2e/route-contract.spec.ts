@@ -220,7 +220,7 @@ test.describe("route compatibility", () => {
                 .getByText("Express.js", { exact: true }),
         ).toBeVisible();
         await expect(
-            mcpDialog.locator('img[src*="/tech-icons/express-"]'),
+            mcpDialog.locator('img[src*="express-light.png"]'),
         ).toBeVisible();
 
         await page.goto("/gui?app=project&slug=mcp&lang=en");
