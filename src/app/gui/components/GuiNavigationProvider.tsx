@@ -12,6 +12,7 @@ import {
     type GuiUrlState,
 } from "@/app/gui/types/appTypes";
 import {
+    getGuiLanguageFromPathname,
     parseGuiUrl,
     serializeGuiUrl,
 } from "@/app/gui/lib/parseGuiAppTarget";
@@ -37,6 +38,7 @@ import {
 } from "@/app/gui/store/guiPreferences";
 import { GuiNavigationContext } from "@/app/gui/hooks/useGuiNavigation";
 import { useLanguageStore } from "@/lib/i18n/useLanguageStore";
+import type { Language } from "@/lib/i18n/language";
 
 type ExpiredTraversalGuard = {
     entry: GuiHistoryState;
@@ -115,8 +117,10 @@ function mergeHistoryState(entry: GuiHistoryState): object {
 
 export function GuiNavigationProvider({
     children,
+    defaultLanguage = "ko",
 }: {
     children: ReactNode;
+    defaultLanguage?: Language;
 }) {
     const store = useGuiStoreApi();
     const setGlobalLanguage = useLanguageStore(
@@ -320,7 +324,6 @@ export function GuiNavigationProvider({
     }, [navigate]);
 
     useEffect(() => {
-        const urlBasePath = store.getState().urlBasePath;
         const preferences = readGuiPreferences(window.localStorage);
         if (preferences !== null) {
             store.getState().dispatch({
@@ -334,10 +337,20 @@ export function GuiNavigationProvider({
         }
 
         const searchParams = new URLSearchParams(window.location.search);
-        if (!searchParams.has("lang") && preferences !== null) {
+        if (
+            defaultLanguage === "ko" &&
+            !searchParams.has("lang") &&
+            preferences !== null
+        ) {
             searchParams.set("lang", preferences.language);
         }
-        const view = parseGuiUrl(searchParams);
+        const view = parseGuiUrl(
+            searchParams,
+            getGuiLanguageFromPathname(
+                window.location.pathname,
+                defaultLanguage,
+            ),
+        );
         const existingEntry = readGuiHistoryState(window.history.state);
         const entry: GuiHistoryState = {
             gui: {
@@ -346,7 +359,7 @@ export function GuiNavigationProvider({
                 from: existingEntry?.gui.from ?? null,
             },
         };
-        const canonicalUrl = serializeGuiUrl(view, urlBasePath);
+        const canonicalUrl = serializeGuiUrl(view);
 
         window.history.replaceState(
             mergeHistoryState(entry),
@@ -383,10 +396,7 @@ export function GuiNavigationProvider({
                 window.history.replaceState(
                     mergeHistoryState(expiredIntent),
                     "",
-                    serializeGuiUrl(
-                        expiredIntent.gui.view,
-                        store.getState().urlBasePath,
-                    ),
+                    serializeGuiUrl(expiredIntent.gui.view),
                 );
                 executeStoreCommands([
                     {
@@ -406,6 +416,10 @@ export function GuiNavigationProvider({
             const pending = clearPending();
             const nextView = parseGuiUrl(
                 new URLSearchParams(window.location.search),
+                getGuiLanguageFromPathname(
+                    window.location.pathname,
+                    defaultLanguage,
+                ),
             );
             const nextEntry =
                 readGuiHistoryState(popStateEvent.state) ?? {
@@ -446,6 +460,10 @@ export function GuiNavigationProvider({
 
             const restoredView = parseGuiUrl(
                 new URLSearchParams(window.location.search),
+                getGuiLanguageFromPathname(
+                    window.location.pathname,
+                    defaultLanguage,
+                ),
             );
             const historyEntry = readGuiHistoryState(
                 window.history.state,
@@ -459,10 +477,7 @@ export function GuiNavigationProvider({
                     from: historyEntry?.gui.from ?? null,
                 },
             };
-            const canonicalUrl = serializeGuiUrl(
-                restoredView,
-                store.getState().urlBasePath,
-            );
+            const canonicalUrl = serializeGuiUrl(restoredView);
             const currentUrl = `${window.location.pathname}${window.location.search}`;
 
             if (currentUrl !== canonicalUrl) {
@@ -503,6 +518,7 @@ export function GuiNavigationProvider({
         replayQueuedEvents,
         setGlobalLanguage,
         store,
+        defaultLanguage,
     ]);
 
     return (
