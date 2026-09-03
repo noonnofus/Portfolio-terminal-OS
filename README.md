@@ -30,6 +30,7 @@ Live site: [hyunho.vercel.app](https://hyunho.vercel.app/)
 - Built-in About, Projects, Resume, Terminal, Contact, Guestbook, and Settings apps.
 - GitHub OAuth through Supabase Auth.
 - Server-backed guestbook notes with GitHub-authenticated writes, 1,000 character validation, per-account rate limiting, owner/admin permissions, and deleted-account anonymization.
+- Guestbook app and notes data loading share one localized loading surface.
 - Local GUI preferences for language, theme, dock auto-hide, and wallpaper.
 - Server-backed wallpaper catalog with light/dark wallpaper presets.
 - Responsive Next Image delivery for wallpapers and portfolio technology assets.

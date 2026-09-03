@@ -8,6 +8,8 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import { useTranslation } from "react-i18next";
 import remarkGfm from "remark-gfm";
 import styles from "./Guestbook.module.css";
+import { GuestbookLoadingState } from "./GuestbookLoadingState";
+import { GuestbookShell } from "./GuestbookShell";
 
 import {
   useCreateNoteMutation,
@@ -568,36 +570,11 @@ export default function Guestbook({
   );
 
   return (
-    <div className={`${styles.root} flex min-h-full w-full flex-col overflow-hidden bg-(--application-app-surface-bg) text-(--application-app-surface-text)`}>
-      <div className={`${styles.content} flex min-h-0 flex-1 flex-col overflow-y-auto`}>
-        <header className={`${styles.entry} mb-7`}>
-          <div className="hidden sm:block" aria-hidden="true" />
-          <div className="flex min-w-0 items-start justify-between gap-4">
-            <div className="min-w-0">
-              <h1 className={`${styles.title} font-bold leading-tight`}>
-                {t("title")}
-              </h1>
-              {viewer.status === "guest" ? (
-                <p className="mt-2 max-w-xl text-[length:var(--application-text-body)] leading-5 text-[var(--app-notes-color-muted-soft)]">
-                  {t("description")}
-                </p>
-              ) : (
-                <p className="mt-2 text-[length:var(--application-text-callout)] leading-5 text-[var(--app-notes-color-muted-soft)]">
-                  {t("editHint")}
-                </p>
-              )}
-            </div>
-            {viewer.status === "guest" ? (
-              <a
-                className="shrink-0 rounded-full bg-[var(--app-notes-color-accent)] px-3 py-1.5 text-[length:var(--application-text-callout)] font-semibold text-[var(--app-notes-color-text)] shadow-sm transition hover:bg-[var(--app-notes-color-accent-hover)]"
-                href={loginHref}
-              >
-                {t("login")}
-              </a>
-            ) : null}
-          </div>
-        </header>
-
+    <GuestbookShell
+      language={language}
+      loginHref={loginHref}
+      viewer={viewer}
+    >
         {message ? (
           <p className="mb-4 rounded-[var(--application-radius-window)] bg-red-50 px-4 py-3 text-[length:var(--application-text-body)] text-red-700 dark:bg-red-950/30 dark:text-red-200">
             {message}
@@ -606,9 +583,7 @@ export default function Guestbook({
 
         <section className="flex flex-col gap-5">
           {notesQuery.isLoading ? (
-            <p className="text-[length:var(--application-text-body)] text-[var(--app-notes-color-muted-soft)]">
-              {t("loading")}
-            </p>
+            <GuestbookLoadingState language={language} />
           ) : notesQuery.isError ? (
             <div className="rounded-[var(--application-radius-window)] border border-[var(--application-border)] bg-[var(--application-settings-group-bg)] px-4 py-4">
               <div role="alert">
@@ -705,7 +680,6 @@ export default function Guestbook({
             </p>
           ) : null}
         </section>
-      </div>
-    </div>
+    </GuestbookShell>
   );
 }

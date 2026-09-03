@@ -122,6 +122,27 @@ test.describe("route compatibility", () => {
         await expect(
             article.locator('p[class*="evidenceDescription"]').first(),
         ).toHaveCSS("font-size", "15.2px");
+        await expect(
+            article.locator('dl[class*="contextList"]'),
+        ).toHaveCSS("border-top-width", "1px");
+        await expect(
+            article.locator('dl[class*="contextList"]'),
+        ).toHaveCSS("border-bottom-width", "1px");
+        await expect(
+            article.locator('section[class*="architectureSection"]'),
+        ).toHaveCSS("border-top-width", "0px");
+
+        await page.goto("/gui?app=project&slug=wchms");
+        const wchmsArticle = page
+            .getByRole("dialog", { name: "WCHMS" })
+            .getByRole("article");
+
+        await expect(
+            wchmsArticle.locator('dl[class*="contextList"]'),
+        ).toHaveCSS("border-bottom-width", "1px");
+        await expect(
+            wchmsArticle.locator('section[class*="caseSection"]').first(),
+        ).toHaveCSS("border-top-width", "0px");
     });
 
     test("professional project routes expose evidence-backed problem solving", async ({

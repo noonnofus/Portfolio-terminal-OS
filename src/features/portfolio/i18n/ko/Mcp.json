@@ -13,10 +13,6 @@
     "description": "OptiGen의 대화 경험에 실제 업무 실행을 붙이기 위해 별도의 MCP 서버를 구축했습니다. 서로 다른 업무 API를 AI가 이해하는 도구로 변환하고 도구 탐색부터 결과 전달까지 흐름을 일관되게 만들었습니다."
   },
   "projectContext": {
-    "category": {
-      "label": "구분",
-      "description": "회사 실무, 백엔드"
-    },
     "service": {
       "label": "시스템",
       "description": "OptiGen AI 플랫폼과 외부 업무 시스템 사이에서 도구 탐색과 실행을 담당하는 확장 서버"

@@ -5,7 +5,7 @@ import { formatTerminalPrompt } from "./terminalPrompt";
 describe("formatTerminalPrompt", () => {
   it("formats guest prompt", () => {
     expect(formatTerminalPrompt({ status: "guest" })).toBe(
-      "guest@noonnofus.com ~ % ",
+      "guest@hyunhokim.is-a.dev ~ % ",
     );
   });
 
@@ -15,6 +15,6 @@ describe("formatTerminalPrompt", () => {
         status: "authenticated",
         displayName: "Kevin",
       }),
-    ).toBe("kevin@noonnofus.com ~ % ");
+    ).toBe("kevin@hyunhokim.is-a.dev ~ % ");
   });
 });

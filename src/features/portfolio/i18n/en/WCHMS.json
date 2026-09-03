@@ -13,10 +13,6 @@
     "description": "Learners needed repeatable math and reading activities, while administrators and staff needed to prepare class materials using the same difficulty model. I connected self-study, material generation, and administration into one product flow."
   },
   "projectContext": {
-    "category": {
-      "label": "Category",
-      "description": "Earlier team project"
-    },
     "product": {
       "label": "Product",
       "description": "A multilingual web application supporting cognitive activities and program operations for older adults"

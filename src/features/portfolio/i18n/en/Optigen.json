@@ -13,10 +13,6 @@
     "description": "This was a new product built from the ground up, not an improvement to an existing system. Administrators configure organizations, permissions, AI bots, and documents, while users select the right bot and receive document-grounded answers. I designed the web application so administration and AI conversations work as one product experience."
   },
   "projectContext": {
-    "category": {
-      "label": "Category",
-      "description": "Company work, Frontend"
-    },
     "service": {
       "label": "Product",
       "description": "A B2B AI platform providing organization-specific AI bots and document-grounded RAG conversations"

@@ -13,10 +13,6 @@
     "description": "Extending the web-first OptiGen conversation experience into phone calls required a separate layer connecting telephony, real-time audio, AI conversations, and speech providers. Voice Gateway owns call state and audio processing so OptiGen's core conversation logic remains separate from the telephone environment."
   },
   "projectContext": {
-    "category": {
-      "label": "Category",
-      "description": "Company work, Backend"
-    },
     "service": {
       "label": "System",
       "description": "A voice relay system connecting real-time phone audio with OptiGen AI conversation requests and responses"

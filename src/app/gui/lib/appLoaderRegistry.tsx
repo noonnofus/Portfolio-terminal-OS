@@ -2,7 +2,24 @@
 
 import dynamic from "next/dynamic";
 import { WindowLoadingState } from "@/app/gui/components/WindowLoadingState";
+import { GuestbookAppLoadingState } from "@/features/guestbook/components/GuestbookLoadingState";
+import { toGuestbookViewer } from "@/app/gui/lib/toGuestbookViewer";
+import { useGuiStore } from "@/app/gui/store/GuiStoreProvider";
 import type { GuiAppComponentProps, LeafAppLoaderMap } from "@/app/gui/types/appTypes";
+import { useLanguageStore } from "@/lib/i18n/useLanguageStore";
+
+function GuestbookWindowLoadingState() {
+  const language = useLanguageStore((state) => state.currentLanguage);
+  const viewer = useGuiStore((state) => state.viewer);
+
+  return (
+    <GuestbookAppLoadingState
+      language={language}
+      loginHref="/auth/github"
+      viewer={toGuestbookViewer(viewer)}
+    />
+  );
+}
 
 const about = dynamic<GuiAppComponentProps<"about">>(
   async () => {
@@ -34,7 +51,7 @@ const notes = dynamic<GuiAppComponentProps<"notes">>(
     const { default: App } = await import("@/app/gui/components/adapters/GuestbookGuiAdapter");
     return function GuestbookLoader({ language }) { return <App language={language} />; };
   },
-  { loading: WindowLoadingState },
+  { loading: GuestbookWindowLoadingState },
 );
 const settings = dynamic<GuiAppComponentProps<"settings">>(
   async () => {

@@ -255,9 +255,11 @@ export function ProjectCaseStudyPage({
             {keyOutcome.label}
           </p>
           <p className={styles.keyOutcomeValue}>{keyOutcome.value}</p>
-          <p className={styles.keyOutcomeDescription}>
-            {keyOutcome.description}
-          </p>
+          {keyOutcome.description ? (
+            <p className={styles.keyOutcomeDescription}>
+              {keyOutcome.description}
+            </p>
+          ) : null}
         </section>
       </article>
     </div>

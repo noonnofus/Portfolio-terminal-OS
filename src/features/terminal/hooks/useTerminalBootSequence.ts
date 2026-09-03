@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import type { Terminal } from "@xterm/xterm";
 import chooseASCII from "../utils/ascii";
 import { TERMINAL_BOOT_TIMING } from "../utils/bootSequence";
@@ -30,6 +30,11 @@ export function useTerminalBootSequence({
   const isAnimatingRef = useRef(false);
   const terminalRef = useRef<Terminal | null>(null);
   const animationGenerationRef = useRef(0);
+  const promptRef = useRef(prompt);
+
+  useEffect(() => {
+    promptRef.current = prompt;
+  }, [prompt]);
 
   const writeCompleteBoot = (terminal: Terminal) => {
     const content = getTerminalContent(language);
@@ -55,7 +60,7 @@ export function useTerminalBootSequence({
       });
       terminal.write("\r\n");
     });
-    terminal.write(prompt);
+    terminal.write(promptRef.current);
     isAnimatingRef.current = false;
   };
 
@@ -106,9 +111,15 @@ export function useTerminalBootSequence({
       if (animationGenerationRef.current !== runGeneration) return;
       if (!completed) return;
 
-      terminal.write(prompt);
+      terminal.write(promptRef.current);
       isAnimatingRef.current = false;
     });
+  };
+
+  const replacePrompt = (nextPrompt: string) => {
+    if (!terminalRef.current || isAnimatingRef.current) return;
+
+    terminalRef.current.write(`\r\x1b[2K${nextPrompt}`);
   };
 
   const consumeInput = (data: string) => {
@@ -128,5 +139,5 @@ export function useTerminalBootSequence({
     isAnimatingRef.current = false;
   };
 
-  return { start, consumeInput, cancel };
+  return { start, consumeInput, cancel, replacePrompt };
 }

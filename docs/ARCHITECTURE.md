@@ -1,6 +1,6 @@
 # Portfolio-terminal-OS Architecture
 
-> 최종 업데이트: 2026-08-24
+> 최종 업데이트: 2026-09-03
 
 ## Overview
 
@@ -160,6 +160,7 @@ flowchart TD
 - Authenticated writes go through Server Actions.
 - Note mutation actions re-check the current user server-side.
 - React Query owns notes list cache and invalidation.
+- The Guestbook dynamic app fallback and the mounted notes query state share the feature-owned `GuestbookShell` and localized status component, preventing a layout jump between loading phases.
 
 ### GUI preferences
 

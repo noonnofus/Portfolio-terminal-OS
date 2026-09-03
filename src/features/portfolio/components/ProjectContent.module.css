@@ -116,6 +116,11 @@
   padding-top: var(--app-projects-space-section-inset);
 }
 
+.overviewSection + .architectureSection,
+.overviewSection + .caseSection {
+  border-top: 0;
+}
+
 .supportingSection {
   margin-top: var(--app-projects-space-section-supporting);
 }

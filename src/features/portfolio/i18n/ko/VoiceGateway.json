@@ -13,10 +13,6 @@
     "description": "웹 대화 중심의 OptiGen을 전화 상담 채널로 확장하려면 전화 시스템, 실시간 오디오, AI 대화, 음성 공급자를 잇는 별도 계층이 필요했습니다. Voice Gateway가 통화 상태와 음성 처리를 맡아 OptiGen의 핵심 대화 로직과 전화 환경을 분리했습니다."
   },
   "projectContext": {
-    "category": {
-      "label": "구분",
-      "description": "회사 실무, 백엔드"
-    },
     "service": {
       "label": "시스템",
       "description": "전화망의 실시간 음성과 OptiGen AI의 대화 요청 및 응답을 연결하는 음성 중계 시스템"

@@ -38,6 +38,7 @@ export default function TerminalApp({
   const terminalPrompt = formatTerminalPrompt(promptIdentity);
 
   const inputRef = useRef("");
+  const previousTerminalPromptRef = useRef(terminalPrompt);
   const sequence = useTerminalSequenceController();
   const bootSequence = useTerminalBootSequence({
     isTouchDevice,
@@ -50,6 +51,16 @@ export default function TerminalApp({
     sequence,
     startBoot: bootSequence.start,
   });
+
+  useEffect(() => {
+    if (previousTerminalPromptRef.current === terminalPrompt) return;
+
+    previousTerminalPromptRef.current = terminalPrompt;
+
+    if (inputRef.current.length === 0) {
+      bootSequence.replacePrompt(terminalPrompt);
+    }
+  }, [bootSequence, terminalPrompt]);
 
   useEffect(() => {
     if (active) {

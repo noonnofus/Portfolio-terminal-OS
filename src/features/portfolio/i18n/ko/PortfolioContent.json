@@ -36,7 +36,7 @@
           "title": "AICC Voice Gateway",
           "items": [
             "PBX와 SIP 연결 계층, 통화별 Worker, 여러 Voice AI 백엔드를 잇는 AICC Voice Gateway를 구현했습니다.",
-            "Transport, Factory, Strategy, Codec으로 Provider별 통신과 오디오 차이를 분리했습니다. 1,114줄 WorkerContext를 658줄로 줄이고 책임을 역할별 모듈로 나눴습니다.",
+            "Transport, Factory, Strategy, Codec으로 Provider별 통신과 오디오 차이를 분리했습니다.",
             "VAD 기반 무음과 배경 소리 처리, DTMF 입력, 통화 세션, 재연결 흐름을 구현했습니다."
           ]
         }

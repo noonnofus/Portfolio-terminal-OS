@@ -52,7 +52,7 @@ describe("project detail content", () => {
 
                 expect(page.title).not.toBe("");
                 expect(page.summary).not.toBe("");
-                expect(page.contexts).toHaveLength(4);
+                expect(page.contexts).toHaveLength(3);
                 expect(page.sections.length).toBeGreaterThan(0);
                 expect(
                     page.sections.every(

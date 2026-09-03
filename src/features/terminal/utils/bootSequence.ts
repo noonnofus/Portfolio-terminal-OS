@@ -1,4 +1,4 @@
-export const TERMINAL_PROMPT_SUFFIX = "@noonnofus.com ~ % ";
+export const TERMINAL_PROMPT_SUFFIX = "@hyunhokim.is-a.dev ~ % ";
 
 export const TERMINAL_BOOT_TIMING = {
   asciiLine: 200,

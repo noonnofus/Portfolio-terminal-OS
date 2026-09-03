@@ -36,7 +36,7 @@
           "title": "AICC Voice Gateway",
           "items": [
             "I implemented an AICC Voice Gateway connecting PBX and SIP integration, per-call Workers, and multiple Voice AI backends.",
-            "Transport, Factory, Strategy, and Codec boundaries isolate provider protocol and audio differences, while WorkerContext was reduced from 1,114 lines to 658 as its responsibilities moved into focused modules.",
+            "Transport, Factory, Strategy, and Codec boundaries isolate provider protocol and audio differences.",
             "I implemented VAD-based silence and background-noise handling, DTMF input, call sessions, and reconnection flows."
           ]
         }

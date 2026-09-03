@@ -2,23 +2,15 @@ import type { Language } from "@/lib/i18n/language";
 import ko from "@/features/portfolio/i18n/ko/Portfolio.json";
 import en from "@/features/portfolio/i18n/en/Portfolio.json";
 import {
-    type ProjectCaseStudySection,
+    createProjectDetailPageContent,
     type ProjectDetailResource,
+    type ProjectDetailSectionSource,
     type ProjectDetailText,
 } from "../projectDetailContent";
 
-type PortfolioCase = {
-    title: string;
-    context: string;
-    problem: string;
-    decision: string;
-    result: string;
-};
-
 type PortfolioResource = ProjectDetailResource & {
-    intent: ProjectDetailText;
-    cases: Record<string, PortfolioCase>;
-    otherContributions: ProjectDetailText;
+    projectIntro: ProjectDetailText;
+    caseStudy: Record<string, ProjectDetailSectionSource>;
     architecture: ProjectDetailText & {
         alt: string;
         caption: string;
@@ -27,68 +19,46 @@ type PortfolioResource = ProjectDetailResource & {
 
 const resources: Record<Language, PortfolioResource> = { ko, en };
 
-function toProblemSolvingSection(
-    id: string,
-    source: PortfolioCase,
-): ProjectCaseStudySection {
-    return {
-        id,
-        title: source.title,
-        description: source.context,
-        isProblemSolving: true,
-        items: [
-            {
-                id: "problem",
-                phase: "problem",
-                title: "",
-                description: source.problem,
-            },
-            {
-                id: "process",
-                phase: "process",
-                title: "",
-                description: source.decision,
-            },
-            {
-                id: "result",
-                phase: "result",
-                title: "",
-                description: source.result,
-            },
-        ],
-    };
-}
-
 export function getPortfolioProjectContent(language: Language) {
     const resource = resources[language];
 
     return {
-        page: {
-            title: resource.title,
-            summary: resource.summary,
-            stackLabel: resource.stackLabel,
-            overviewTitle: resource.intent.title,
-            overviewDescription: resource.intent.description,
-            contexts: Object.entries(resource.projectContext).map(
-                ([id, context]) => ({ id, ...context }),
-            ),
-            keyOutcome: resource.keyOutcome,
-            sections: [
-                toProblemSolvingSection("navigation", resource.cases.navigation),
-                toProblemSolvingSection("directory", resource.cases.directory),
-                {
-                    id: "otherContributions",
-                    title: resource.otherContributions.title,
-                    description: resource.otherContributions.description,
-                    items: ["content", "accessibility"].map((id) => ({
-                        id,
-                        title: resource.cases[id].title,
-                        description: resource.cases[id].result,
-                    })),
-                },
-            ],
-            problemSolvingLabel: resource.problemSolvingLabel,
-        },
+        page: createProjectDetailPageContent(resource, resource.projectIntro, [
+            {
+                id: "navigation",
+                source: resource.caseStudy.navigation,
+                isProblemSolving: true,
+                items: [
+                    { id: "problem", phase: "problem" },
+                    { id: "decision", phase: "process" },
+                    { id: "result", phase: "result" },
+                ],
+            },
+            {
+                id: "directory",
+                source: resource.caseStudy.directory,
+                isProblemSolving: true,
+                items: [
+                    { id: "problem", phase: "problem" },
+                    { id: "decision", phase: "process" },
+                    { id: "result", phase: "result" },
+                ],
+            },
+            {
+                id: "implementation",
+                source: resource.caseStudy.implementation,
+                items: [{ id: "content" }, { id: "accessibility" }],
+            },
+            {
+                id: "verification",
+                source: resource.caseStudy.verification,
+                items: [
+                    { id: "structure" },
+                    { id: "navigation" },
+                    { id: "interaction" },
+                ],
+            },
+        ]),
         architecture: resource.architecture,
     };
 }

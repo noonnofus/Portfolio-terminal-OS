@@ -13,10 +13,6 @@
     "description": "When wildfire locations, risk information, and related news live in separate channels, users have to assemble the situation themselves. I helped design one experience that connects the core information, follow-up questions, and notifications."
   },
   "projectContext": {
-    "category": {
-      "label": "Category",
-      "description": "Earlier team project"
-    },
     "product": {
       "label": "Product",
       "description": "An installable web application for exploring wildfire information and related questions"

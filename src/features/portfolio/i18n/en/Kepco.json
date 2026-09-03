@@ -5,18 +5,13 @@
   "summary": "An internal web service that helps public-sector contact-center agents follow live STT transcription during a call, then review AI analysis and consultation history after it ends. I designed and implemented the frontend across agent and manager workflows.",
   "keyOutcome": {
     "label": "Key Outcome",
-    "value": "Used by 60% of agents, with average customer wait time reduced by 30%",
-    "description": "These are project-level operating results and are not attributed to the SSE case alone."
+    "value": "Used by 60% of agents, with average customer wait time reduced by 30%"
   },
   "projectIntro": {
     "title": "Project overview",
     "description": "Live transcription and connection status matter during a call, while durable consultation history and AI analysis matter after it ends. I designed the screens and state flow so agents retain the same context as call state changes."
   },
   "projectContext": {
-    "category": {
-      "label": "Category",
-      "description": "Company work, Frontend"
-    },
     "service": {
       "label": "Service",
       "description": "An internal web service supporting public-sector contact-center work"

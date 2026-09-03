@@ -13,10 +13,6 @@
     "description": "I built a separate MCP server to extend OptiGen conversations into real business execution. It translates different business APIs into tools the AI can understand and provides one consistent path from tool discovery to execution results."
   },
   "projectContext": {
-    "category": {
-      "label": "Category",
-      "description": "Company work, Backend"
-    },
     "service": {
       "label": "System",
       "description": "An extension server responsible for tool discovery and execution between the OptiGen AI platform and external business systems"

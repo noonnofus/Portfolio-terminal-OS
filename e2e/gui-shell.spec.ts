@@ -134,6 +134,53 @@ test.describe("GUI shell", () => {
         ).toHaveCount(0);
     });
 
+    test("updates the Terminal prompt after the viewer becomes authenticated", async ({
+        page,
+    }) => {
+        let resolveViewerResponse: (() => void) | undefined;
+        const viewerResponse = new Promise<void>((resolve) => {
+            resolveViewerResponse = resolve;
+        });
+
+        await page.route("**/api/auth/viewer", async (route) => {
+            await viewerResponse;
+            await route.fulfill({
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify({
+                    status: "authenticated",
+                    accountId: "account-1",
+                    displayName: "Hyunho",
+                    email: null,
+                    avatarUrl: null,
+                    role: "user",
+                }),
+            });
+        });
+
+        await page.goto("/gui?app=terminal");
+
+        const terminalWindow = page.locator('[data-window-id="terminal"]');
+        const terminalRows = terminalWindow.locator(".xterm-rows");
+        const terminalInput = terminalWindow.locator(".xterm-helper-textarea");
+        await expect(terminalRows).toBeVisible();
+
+        await terminalInput.focus();
+        await page.keyboard.press("Space");
+        await expect(terminalRows).toContainText(
+            "guest@hyunhokim.is-a.dev ~ %",
+        );
+
+        resolveViewerResponse?.();
+
+        await expect(page.locator(".application-viewer-name")).toHaveText(
+            "Hyunho",
+        );
+        await expect(terminalRows).toContainText(
+            "hyunho@hyunhokim.is-a.dev ~ %",
+        );
+    });
+
     test("focuses a desktop shortcut on one click and opens it on double click", async ({
         page,
     }) => {
@@ -816,6 +863,65 @@ test.describe("GUI shell", () => {
         await expect(retry).toBeEnabled();
     });
 
+    test("keeps the localized Guestbook loading state across app and data loading", async ({
+        page,
+    }) => {
+        let releaseGuestbookChunk: (() => void) | undefined;
+        const guestbookChunk = new Promise<void>((resolve) => {
+            releaseGuestbookChunk = resolve;
+        });
+        let resolveNotesResponse: (() => void) | undefined;
+        const notesResponse = new Promise<void>((resolve) => {
+            resolveNotesResponse = resolve;
+        });
+        let notesRequests = 0;
+
+        await page.goto("/gui?app=desktop");
+
+        await page.route("**/_next/static/chunks/**/*.js", async (route) => {
+            const response = await route.fetch();
+            const body = await response.body();
+
+            if (body.toString("utf8").includes("createGuestbookNoteAction")) {
+                await guestbookChunk;
+            }
+
+            await route.fulfill({ response, body });
+        });
+
+        await page.route("**/api/notes?*", async (route) => {
+            notesRequests += 1;
+            await notesResponse;
+            await route.fulfill({
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify({ notes: [] }),
+            });
+        });
+
+        await page
+            .getByRole("navigation", { name: "Applications" })
+            .getByRole("button", { name: "방명록" })
+            .click();
+
+        const notes = page.getByRole("dialog", { name: "방명록" });
+        const appLoadingState = notes.locator('[data-loading-phase="app"]');
+        await expect(appLoadingState).toHaveText("불러오는 중...");
+        await expect(notes.getByText("Loading…")).toHaveCount(0);
+        expect(notesRequests).toBe(0);
+
+        releaseGuestbookChunk?.();
+
+        await expect.poll(() => notesRequests).toBeGreaterThanOrEqual(1);
+        await expect(
+            notes.locator('[data-loading-phase="notes"]'),
+        ).toHaveText("불러오는 중...");
+
+        resolveNotesResponse?.();
+
+        await expect(notes.getByText("아직 노트가 없습니다.")).toBeVisible();
+    });
+
     test("restores Settings from the URL and keeps language canonical", async ({
         page,
     }) => {
@@ -869,10 +975,18 @@ test.describe("GUI shell", () => {
         await expect(page.locator("html")).toHaveClass(/light/);
         const shell = page.locator(".application-shell");
         await expect(shell).toHaveAttribute("data-theme", "light");
-        await expect(shell).toHaveCSS(
-            "background-image",
-            /tahoe_light\.jpg/,
+        const wallpaperImage = shell.locator(
+            ".application-wallpaper-media img",
         );
+        await expect(wallpaperImage).toBeVisible();
+        await expect(wallpaperImage).toHaveAttribute("src", /tahoe_light\.jpg/);
+        await expect
+            .poll(() =>
+                wallpaperImage.evaluate(
+                    (image) => (image as HTMLImageElement).naturalWidth,
+                ),
+            )
+            .toBeGreaterThan(0);
         const settings = page.getByRole("dialog", { name: "설정" });
 
         const dock = page.getByRole("navigation", { name: "Applications" });
