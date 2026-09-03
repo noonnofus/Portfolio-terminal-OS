@@ -15,8 +15,9 @@ A bilingual Korean/English portfolio presented as an operating system in the bro
 
 - `/` opens an xterm-powered terminal entry.
 - `/gui` opens a macOS-inspired GUI workspace with windows, dock apps, desktop files, shareable URLs, authentication, settings, wallpapers, and a guestbook.
+- `/en` and `/en/gui` provide fixed English entry points for search engines and direct sharing.
 
-Live site: [hyunho.vercel.app](https://hyunho.vercel.app/)
+Live site: [hyunhokim.is-a.dev](https://hyunhokim.is-a.dev/)
 
 ## Current features
 
@@ -35,6 +36,7 @@ Live site: [hyunho.vercel.app](https://hyunho.vercel.app/)
 - Server-backed wallpaper catalog with light/dark wallpaper presets.
 - Responsive Next Image delivery for wallpapers and portfolio technology assets.
 - Project technology badges use the centralized manifest and reviewed technology PNG assets.
+- SEO metadata includes canonical URLs, Korean/English `hreflang` alternates, Open Graph/Twitter cards, robots rules, and a sitemap.
 - TanStack Query for client server-state reads, mutations, and invalidation.
 - Server Actions for note writes.
 - TipTap Markdown editing and Markdown rendering for notes.
@@ -162,6 +164,8 @@ Open:
 
 - Terminal route: <http://localhost:3000/>
 - GUI route: <http://localhost:3000/gui>
+- English terminal route: <http://localhost:3000/en>
+- English GUI route: <http://localhost:3000/en/gui>
 
 ## Database migrations
 
