@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useTerminal } from "../hooks/useTerminal";
 import { useTerminalBootSequence } from "../hooks/useTerminalBootSequence";
@@ -22,11 +22,13 @@ import {
 export default function TerminalApp({
   active = true,
   promptIdentity,
+  initialLanguage,
   resumeSignal = 0,
   onLanguageChange,
 }: {
   active?: boolean;
   promptIdentity: TerminalPromptIdentity;
+  initialLanguage?: Language;
   resumeSignal?: number;
   onLanguageChange?: (language: Language) => void;
 }) {
@@ -36,6 +38,12 @@ export default function TerminalApp({
   const currentLanguage = useLanguageStore((state) => state.currentLanguage);
   const setLanguage = useLanguageStore((state) => state.setLanguage);
   const terminalPrompt = formatTerminalPrompt(promptIdentity);
+
+  useLayoutEffect(() => {
+    if (initialLanguage !== undefined) {
+      setLanguage(initialLanguage);
+    }
+  }, [initialLanguage, setLanguage]);
 
   const inputRef = useRef("");
   const previousTerminalPromptRef = useRef(terminalPrompt);

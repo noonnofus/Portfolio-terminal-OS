@@ -14,7 +14,7 @@ export type TerminalActionUri =
   (typeof TERMINAL_ACTION_URI)[keyof typeof TERMINAL_ACTION_URI];
 
 export function getGuiEntryUrl(language: Language): string {
-  return `/gui?lang=${language}`;
+  return language === "en" ? "/en/gui" : "/gui";
 }
 
 export function toTerminalActionUri(action: TerminalAction): TerminalActionUri {
