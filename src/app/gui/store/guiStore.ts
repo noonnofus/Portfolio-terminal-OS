@@ -93,14 +93,12 @@ function activateApp(
 }
 
 export function createGuiStore(
-    urlBasePath: "/gui" = "/gui",
     initialViewer: Viewer = { status: "guest" },
 ) {
     return createStore<GuiStore>()((set) => ({
         windows: [],
         focus: { mode: "desktop", activeWindowId: null },
         nextEntrySequence: 1,
-        urlBasePath,
         activationSequence: 0,
         pageVisibility: "visible",
         resumeEpoch: 0,
@@ -191,6 +189,5 @@ export function selectWorkspaceState(store: GuiStore): GuiWorkspaceState {
         windows: store.windows,
         focus: store.focus,
         nextEntrySequence: store.nextEntrySequence,
-        urlBasePath: store.urlBasePath,
     };
 }

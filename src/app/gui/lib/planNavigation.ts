@@ -82,7 +82,7 @@ function replaceCurrentEntry(
     return {
         type: "replace",
         entry: replacement,
-        url: serializeGuiUrl(view, state.urlBasePath),
+        url: serializeGuiUrl(view),
     };
 }
 
@@ -126,10 +126,7 @@ function planDerivedWindowChange(
                 type: "back",
                 expectedEntryId: null,
                 fallbackEntry,
-                fallbackUrl: serializeGuiUrl(
-                    targetView,
-                    state.urlBasePath,
-                ),
+                fallbackUrl: serializeGuiUrl(targetView),
             },
             languageEffect: null,
         };
@@ -173,7 +170,7 @@ export function planNavigation(
                 historyEffect: {
                     type: "push",
                     entry,
-                    url: serializeGuiUrl(targetView, state.urlBasePath),
+                    url: serializeGuiUrl(targetView),
                 },
                 languageEffect: null,
             };
@@ -205,7 +202,7 @@ export function planNavigation(
                 historyEffect: {
                     type: "push",
                     entry,
-                    url: serializeGuiUrl(targetView, state.urlBasePath),
+                    url: serializeGuiUrl(targetView),
                 },
                 languageEffect: null,
             };

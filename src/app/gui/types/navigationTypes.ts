@@ -23,7 +23,6 @@ export type GuiWorkspaceState = {
     windows: readonly GuiWindowSnapshot[];
     focus: WorkspaceFocus;
     nextEntrySequence: number;
-    urlBasePath: "/gui";
 };
 
 export type GuiHistoryState = {

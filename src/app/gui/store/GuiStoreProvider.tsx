@@ -19,14 +19,12 @@ const GuiStoreContext = createContext<GuiStoreApi | null>(null);
 export function GuiStoreProvider({
     children,
     initialViewer = { status: "guest" },
-    urlBasePath = "/gui",
 }: {
     children: ReactNode;
     initialViewer?: Viewer;
-    urlBasePath?: "/gui";
 }) {
     const [store] = useState<GuiStoreApi>(() =>
-        createGuiStore(urlBasePath, initialViewer),
+        createGuiStore(initialViewer),
     );
 
     return (

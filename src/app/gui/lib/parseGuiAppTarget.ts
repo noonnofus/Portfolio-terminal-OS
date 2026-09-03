@@ -9,12 +9,40 @@ import type { Language } from "@/lib/i18n/language";
 
 const MAX_QUERY_LENGTH = 256;
 
-export function parseGuiUrl(searchParams: URLSearchParams): GuiUrlState {
-    if (searchParams.toString().length > MAX_QUERY_LENGTH) {
-        return { app: "about", lang: "ko" };
+export function getGuiUrlBasePath(language: Language): "/gui" | "/en/gui" {
+    return language === "en" ? "/en/gui" : "/gui";
+}
+
+export function getGuiLanguageFromPathname(
+    pathname: string,
+    fallbackLanguage: Language,
+): Language {
+    const normalizedPathname = pathname.replace(/\/$/, "");
+
+    if (normalizedPathname === "/en/gui") {
+        return "en";
     }
 
-    const lang: Language = searchParams.get("lang") === "en" ? "en" : "ko";
+    if (normalizedPathname === "/gui") {
+        return "ko";
+    }
+
+    return fallbackLanguage;
+}
+
+export function parseGuiUrl(
+    searchParams: URLSearchParams,
+    defaultLanguage: Language = "ko",
+): GuiUrlState {
+    if (searchParams.toString().length > MAX_QUERY_LENGTH) {
+        return { app: "about", lang: defaultLanguage };
+    }
+
+    const requestedLanguage = searchParams.get("lang");
+    const lang: Language =
+        requestedLanguage === "ko" || requestedLanguage === "en"
+            ? requestedLanguage
+            : defaultLanguage;
     const app = searchParams.get("app");
 
     switch (app) {
@@ -47,10 +75,7 @@ export function parseGuiUrl(searchParams: URLSearchParams): GuiUrlState {
     }
 }
 
-export function serializeGuiUrl(
-    state: GuiUrlState,
-    basePath: "/gui" = "/gui",
-): string {
+export function serializeGuiUrl(state: GuiUrlState): string {
     const searchParams = new URLSearchParams();
 
     if (state.app !== "about") {
@@ -61,11 +86,8 @@ export function serializeGuiUrl(
         searchParams.set("slug", state.slug);
     }
 
-    if (state.lang === "en") {
-        searchParams.set("lang", "en");
-    }
-
     const query = searchParams.toString();
+    const basePath = getGuiUrlBasePath(state.lang);
     return query.length === 0 ? basePath : `${basePath}?${query}`;
 }
 
