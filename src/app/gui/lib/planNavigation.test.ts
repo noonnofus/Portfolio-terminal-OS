@@ -27,7 +27,6 @@ function createState(
         ],
         focus: { mode: "windows", activeWindowId: "about" },
         nextEntrySequence: 1,
-        urlBasePath: "/gui",
         ...overrides,
     };
 }
@@ -227,7 +226,7 @@ describe("planNavigation", () => {
                         from: null,
                     },
                 },
-                url: "/gui?lang=en",
+                url: "/en/gui",
             },
             languageEffect: "en",
         });

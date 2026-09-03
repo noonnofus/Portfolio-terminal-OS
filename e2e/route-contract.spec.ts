@@ -44,7 +44,7 @@ test.describe("route compatibility", () => {
         await page.keyboard.type("startx");
         await page.keyboard.press("Enter");
 
-        await expect(page).toHaveURL(/\/gui\?lang=en$/);
+        await expect(page).toHaveURL(/\/en\/gui$/);
         await expect(page.locator("html")).toHaveAttribute("lang", "en");
         await expect(
             page.getByRole("dialog", { name: "Career" }),

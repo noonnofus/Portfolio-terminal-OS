@@ -124,7 +124,7 @@ test.describe("GUI shell", () => {
             .getByRole("button", { name: "English" })
             .click();
 
-        await expect(page).toHaveURL(/lang=en/);
+        await expect(page).toHaveURL(/\/en\/gui\?app=settings$/);
         await expect(page.locator("html")).toHaveAttribute("lang", "en");
         await expect(
             page.getByRole("dialog", { name: "Career" }),

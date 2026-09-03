@@ -15,6 +15,7 @@ import { wallpaperIds } from "@/features/settings/config/wallpaperCatalog";
 import enAppShell from "@/app/i18n/resources/en/appShell.json";
 import koAppShell from "@/app/i18n/resources/ko/appShell.json";
 import {
+    getGuiLanguageFromPathname,
     parseGuiUrl,
     serializeGuiUrl,
 } from "@/app/gui/lib/parseGuiAppTarget";
@@ -88,12 +89,18 @@ describe("GUI app boundaries", () => {
                 slug: "wchms",
                 lang: "en",
             }),
-        ).toBe("/gui?app=project&slug=wchms&lang=en");
+        ).toBe("/en/gui?app=project&slug=wchms");
         expect(serializeGuiUrl({ app: "about", lang: "ko" })).toBe("/gui");
         expect(parseGuiUrl(new URLSearchParams("app=notes"))).toEqual({
             app: "notes",
             lang: "ko",
         });
+        expect(parseGuiUrl(new URLSearchParams(), "en")).toEqual({
+            app: "about",
+            lang: "en",
+        });
+        expect(getGuiLanguageFromPathname("/en/gui", "ko")).toBe("en");
+        expect(getGuiLanguageFromPathname("/gui", "en")).toBe("ko");
     });
 
     it("falls back through the allowlist for invalid values", () => {

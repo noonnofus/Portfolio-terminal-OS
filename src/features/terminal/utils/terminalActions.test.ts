@@ -7,12 +7,12 @@ import {
 } from "./terminalActions";
 
 describe("terminal actions", () => {
-  it.each(["ko", "en"] as const)(
-    "includes the current %s language in the GUI entry URL",
-    (language) => {
-      expect(getGuiEntryUrl(language)).toBe(`/gui?lang=${language}`);
-    },
-  );
+  it.each([
+    ["ko", "/gui"],
+    ["en", "/en/gui"],
+  ] as const)("uses the %s GUI entry URL", (language, expectedUrl) => {
+    expect(getGuiEntryUrl(language)).toBe(expectedUrl);
+  });
 
   it("converts actions to exact internal URIs", () => {
     expect(toTerminalActionUri({ type: "open-portfolio" })).toBe(
