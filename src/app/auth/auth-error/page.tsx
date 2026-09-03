@@ -1,6 +1,14 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "로그인 오류",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function AuthErrorPage() {
   return (
