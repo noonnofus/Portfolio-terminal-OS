@@ -6,8 +6,9 @@
 
 Portfolio-terminal-OS is a Next.js App Router application with two primary experiences:
 
-- `/`: an xterm-based terminal portfolio
-- `/gui`: an OS-style desktop portfolio
+- `/`: a Korean xterm-based terminal portfolio
+- `/gui`: a Korean OS-style desktop portfolio
+- `/en` and `/en/gui`: fixed English entry points for direct sharing and SEO
 
 The application is bilingual, authentication-aware, and backed by Supabase for
 GitHub login, guestbook notes, and the wallpaper catalog. GUI preferences are
@@ -22,8 +23,8 @@ flowchart TD
     ClientProvider --> ColorMode["Color mode provider"]
     ClientProvider --> I18nWrapper["Language/document sync"]
 
-    I18nWrapper --> TerminalRoute["/ terminal route"]
-    I18nWrapper --> GuiRoute["/gui route"]
+    I18nWrapper --> TerminalRoute["/ and /en terminal routes"]
+    I18nWrapper --> GuiRoute["/gui and /en/gui routes"]
 
     GuiRoute --> ViewerLookup["Supabase Auth viewer lookup"]
     ViewerLookup --> GuiEntry["GuiEntry"]
@@ -54,10 +55,18 @@ flowchart LR
 
 The GUI URL can carry language state, but the active language is still owned by
 the shared language store and synchronized to i18next and `<html lang>`.
+The `/en` and `/en/gui` routes initialize English from the route and serialize
+GUI navigation under the `/en/gui` path. Legacy `?lang=en` GUI URLs are
+canonicalized to that fixed English path. Each language route publishes a
+canonical URL and a reciprocal `hreflang` alternate.
 Core namespaces are registered in `src/shared/i18n/client.ts`; project-specific
 namespaces are loaded by their allowlisted app loaders. The current project
 namespace set includes Portfolio, OptiGen, MCP, Voice Gateway, KEPCO Advisor,
 WCHMS, and Flare.
+
+`src/app/robots.ts` excludes API and authentication paths from crawlers,
+`src/app/sitemap.ts` lists the four public entry points, and
+`src/app/auth/auth-error/page.tsx` is marked `noindex, nofollow`.
 
 ## GUI runtime
 
