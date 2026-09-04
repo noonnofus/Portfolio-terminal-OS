@@ -1,0 +1,685 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { EditorContent, useEditor } from "@tiptap/react";
+import { Markdown } from "@tiptap/markdown";
+import StarterKit from "@tiptap/starter-kit";
+import ReactMarkdown, { type Components } from "react-markdown";
+import { useTranslation } from "react-i18next";
+import remarkGfm from "remark-gfm";
+import styles from "./Guestbook.module.css";
+import { GuestbookLoadingState } from "./GuestbookLoadingState";
+import { GuestbookShell } from "./GuestbookShell";
+
+import {
+  useCreateNoteMutation,
+  useDeleteNoteMutation,
+  useUpdateNoteMutation,
+} from "@/features/guestbook/hooks/useNoteMutations";
+import { useNotesQuery } from "@/features/guestbook/hooks/useNotesQuery";
+import { getNotePermissions } from "@/features/guestbook/utils/notePermissions";
+import type { PublicNote } from "@/features/guestbook/types/noteTypes";
+import type {
+  GuestbookActions,
+  GuestbookViewer,
+} from "@/features/guestbook/types/guestbookTypes";
+import type { Language } from "@/lib/i18n/language";
+
+// 사용자 입력이 시간만큼 없을시, 자동저장
+const AUTOSAVE_DELAY_MS = 500;
+const MAX_NOTE_MARKDOWN_LENGTH = 1000;
+
+const tiptapExtensions = [StarterKit, Markdown];
+
+type SaveStatus = "idle" | "dirty" | "saving" | "saved" | "error";
+
+type SaveFlight = {
+  inFlight: boolean;
+  currentPromise: Promise<boolean> | null;
+  pendingLatestContent: string | null;
+  lastSavedContent: string;
+};
+
+type NoteEditorProps = {
+  initialNoteId: string | null;
+  initialContent: string;
+  label: string;
+  placeholder?: string;
+  autoFocus?: boolean;
+  allowCancel?: boolean;
+  createNote: (content: string) => Promise<PublicNote>;
+  updateNote: (noteId: string, content: string) => Promise<PublicNote>;
+  deleteNote: (noteId: string) => Promise<unknown>;
+  onCreated?: (note: PublicNote) => void;
+  onDeleted?: (noteId: string) => void;
+  onFinished?: () => void;
+  onError: (message: string) => void;
+  t: (key: string) => string;
+};
+
+function getClientErrorStatus(error: unknown): string {
+  if (!(error instanceof Error)) return "unknown";
+  const status = error.message.split(":").at(1);
+  return status ?? "unknown";
+}
+
+function formatNoteDate(value: string, language: Language) {
+  const locale = language === "ko" ? "ko-KR" : "en-US";
+
+  return new Intl.DateTimeFormat(locale, {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
+function getDisplayedNoteDate(note: PublicNote) {
+  return note.updatedAt === note.createdAt ? note.createdAt : note.updatedAt;
+}
+
+function isSafeMarkdownHref(href: string) {
+  try {
+    const url = new URL(href, "https://portfolio.local");
+    return ["http:", "https:", "mailto:"].includes(url.protocol);
+  } catch {
+    return false;
+  }
+}
+
+function validateMarkdownLength(content: string) {
+  const trimmed = content.trim();
+  if (trimmed.length === 0) return "empty";
+  if (trimmed.length > MAX_NOTE_MARKDOWN_LENGTH) return "too_long";
+  return "valid";
+}
+
+const markdownComponents = {
+  h1: ({ children }) => (
+    <h1 className={`${styles.richHeading1} mt-5 mb-3 font-bold first:mt-0`}>
+      {children}
+    </h1>
+  ),
+  h2: ({ children }) => (
+    <h2 className={`${styles.richHeading2} mt-5 mb-2 font-semibold first:mt-0`}>
+      {children}
+    </h2>
+  ),
+  h3: ({ children }) => (
+    <h3 className={`${styles.richHeading3} mt-4 mb-2 font-semibold first:mt-0`}>
+      {children}
+    </h3>
+  ),
+  p: ({ children }) => <p className="my-3 first:mt-0 last:mb-0">{children}</p>,
+  ul: ({ children }) => <ul className="my-3 list-disc pl-5">{children}</ul>,
+  ol: ({ children }) => <ol className="my-3 list-decimal pl-5">{children}</ol>,
+  li: ({ children }) => <li className="my-1 pl-1">{children}</li>,
+  blockquote: ({ children }) => (
+    <blockquote className="my-3 border-l-2 border-[var(--app-notes-color-quote-border)] pl-3 text-[var(--app-notes-color-muted-strong)]">
+      {children}
+    </blockquote>
+  ),
+  code: ({ children }) => (
+    <code className={`${styles.richCode} rounded-md bg-[var(--app-notes-color-code-background)] px-1.5 py-0.5`}>
+      {children}
+    </code>
+  ),
+  pre: ({ children }) => (
+    <pre className="my-3 overflow-x-auto rounded-xl bg-[var(--app-notes-color-code-background)] p-3 text-[length:var(--application-text-body)]">
+      {children}
+    </pre>
+  ),
+  a: ({ href, children }) => {
+    if (!href || !isSafeMarkdownHref(href)) {
+      return <span>{children}</span>;
+    }
+
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noreferrer"
+        className="text-[var(--app-notes-color-link)] underline decoration-[var(--app-notes-color-link-decoration)] underline-offset-2"
+      >
+        {children}
+      </a>
+    );
+  },
+} satisfies Components;
+
+function MarkdownContent({ content }: { content: string }) {
+  return (
+    <div className={`${styles.readingContent} notes-markdown-content max-w-none whitespace-normal break-words`}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={markdownComponents}
+      >
+        {content}
+      </ReactMarkdown>
+    </div>
+  );
+}
+
+function statusLabel(status: SaveStatus, t: (key: string) => string) {
+  switch (status) {
+    case "dirty":
+    case "saving":
+      return t("saving");
+    case "saved":
+      return t("saved");
+    case "error":
+      return t("saveError");
+    default:
+      return "";
+  }
+}
+
+function NoteEditor({
+  initialNoteId,
+  initialContent,
+  label,
+  placeholder,
+  autoFocus = false,
+  allowCancel = false,
+  createNote,
+  updateNote,
+  deleteNote,
+  onCreated,
+  onDeleted,
+  onFinished,
+  onError,
+  t,
+}: NoteEditorProps) {
+  const [draft, setDraft] = useState(initialContent);
+  const [status, setStatus] = useState<SaveStatus>("idle");
+  const [lengthError, setLengthError] = useState<string | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const noteIdRef = useRef<string | null>(initialNoteId);
+  const deletedRef = useRef(false);
+  const cancelingRef = useRef(false);
+  const originalContentRef = useRef(initialContent.trim());
+  const flightRef = useRef<SaveFlight>({
+    inFlight: false,
+    currentPromise: null,
+    pendingLatestContent: null,
+    lastSavedContent: initialContent.trim(),
+  });
+
+  async function persistContent(content: string): Promise<PublicNote | null> {
+    const trimmed = content.trim();
+    const currentNoteId = noteIdRef.current;
+
+    if (currentNoteId === null) {
+      const created = await createNote(trimmed);
+      noteIdRef.current = created.id;
+      onCreated?.(created);
+      return created;
+    }
+
+    return updateNote(currentNoteId, trimmed);
+  }
+
+  function consumePendingContent(): string | null {
+    const pendingContent = flightRef.current.pendingLatestContent;
+    flightRef.current.pendingLatestContent = null;
+    return pendingContent;
+  }
+
+  async function saveContent(content: string): Promise<boolean> {
+    const validation = validateMarkdownLength(content);
+
+    if (validation === "empty") {
+      setStatus("idle");
+      setLengthError(null);
+      return true;
+    }
+
+    if (validation === "too_long") {
+      setStatus("error");
+      setLengthError(t("tooLong"));
+      return false;
+    }
+
+    const trimmed = content.trim();
+    setLengthError(null);
+
+    if (trimmed === flightRef.current.lastSavedContent) {
+      setStatus("saved");
+      return true;
+    }
+
+    if (flightRef.current.inFlight) {
+      flightRef.current.pendingLatestContent = trimmed;
+      setStatus("dirty");
+      return flightRef.current.currentPromise ?? true;
+    }
+
+    flightRef.current.inFlight = true;
+    flightRef.current.pendingLatestContent = null;
+    setStatus("saving");
+
+    const savePromise = (async () => {
+      try {
+        const saved = await persistContent(trimmed);
+        if (deletedRef.current) return false;
+        flightRef.current.lastSavedContent = saved?.content ?? trimmed;
+        setStatus("saved");
+      } catch (error) {
+        if (!deletedRef.current) {
+          setStatus("error");
+          onError(`${t("error")}: ${getClientErrorStatus(error)}`);
+        }
+        return false;
+      } finally {
+        flightRef.current.inFlight = false;
+        flightRef.current.currentPromise = null;
+      }
+
+      const pendingContent = consumePendingContent();
+
+      if (
+        pendingContent !== null &&
+        pendingContent.trim() !== flightRef.current.lastSavedContent
+      ) {
+        return saveContent(pendingContent);
+      }
+
+      return true;
+    })();
+
+    flightRef.current.currentPromise = savePromise;
+    return savePromise;
+  }
+
+  function scheduleSave(content: string) {
+    if (cancelingRef.current) return;
+
+    setDraft(content);
+
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current);
+    }
+
+    const validation = validateMarkdownLength(content);
+    if (validation === "empty") {
+      setStatus("idle");
+      setLengthError(null);
+      return;
+    }
+
+    if (validation === "too_long") {
+      setStatus("error");
+      setLengthError(t("tooLong"));
+      return;
+    }
+
+    setLengthError(null);
+    setStatus("dirty");
+    timerRef.current = setTimeout(() => {
+      timerRef.current = null;
+      void saveContent(content);
+    }, AUTOSAVE_DELAY_MS);
+  }
+
+  async function handleBlur(content: string) {
+    if (cancelingRef.current) return;
+
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+
+    if (content.trim().length === 0) {
+      const currentNoteId = noteIdRef.current;
+      if (currentNoteId !== null) {
+        deletedRef.current = true;
+        try {
+          await deleteNote(currentNoteId);
+          onDeleted?.(currentNoteId);
+        } catch (error) {
+          deletedRef.current = false;
+          setStatus("error");
+          onError(`${t("error")}: ${getClientErrorStatus(error)}`);
+          return;
+        }
+      }
+      onFinished?.();
+      return;
+    }
+
+    const saved = await saveContent(content);
+    if (saved) {
+      onFinished?.();
+    }
+  }
+
+  async function cancelEditing() {
+    if (cancelingRef.current || !allowCancel) return;
+
+    cancelingRef.current = true;
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+
+    const originalContent = originalContentRef.current;
+    flightRef.current.pendingLatestContent = originalContent;
+
+    const currentSave = flightRef.current.currentPromise;
+    if (currentSave !== null) {
+      const saved = await currentSave;
+      if (!saved) {
+        flightRef.current.pendingLatestContent = null;
+        cancelingRef.current = false;
+        return;
+      }
+    }
+
+    flightRef.current.pendingLatestContent = null;
+    if (flightRef.current.lastSavedContent !== originalContent) {
+      const restored = await saveContent(originalContent);
+      if (!restored) {
+        cancelingRef.current = false;
+        return;
+      }
+    }
+
+    setDraft(originalContent);
+    onFinished?.();
+  }
+
+  const editor = useEditor({
+    extensions: tiptapExtensions,
+    content: initialContent,
+    contentType: "markdown",
+    immediatelyRender: false,
+    editorProps: {
+      attributes: {
+        "aria-label": label,
+      },
+      handleKeyDown: (_view, event) => {
+        if (event.key !== "Escape" || !allowCancel) return false;
+
+        event.preventDefault();
+        void cancelEditing();
+        return true;
+      },
+    },
+    onUpdate: ({ editor }) => {
+      scheduleSave(editor.getMarkdown());
+    },
+    onBlur: ({ editor }) => {
+      void handleBlur(editor.getMarkdown());
+    },
+  });
+
+  useEffect(() => {
+    if (!autoFocus || editor === null) return;
+    editor.commands.focus("end");
+  }, [autoFocus, editor]);
+
+  useEffect(
+    () => () => {
+      if (timerRef.current !== null) {
+        clearTimeout(timerRef.current);
+      }
+    },
+    [],
+  );
+
+  if (editor === null) {
+    return null;
+  }
+
+  return (
+    <div className={styles.editor}>
+      <EditorContent editor={editor} />
+      {placeholder && draft.trim().length === 0 ? (
+        <p className={`${styles.editorPlaceholder} pointer-events-none`}>
+          {placeholder}
+        </p>
+      ) : null}
+      <div className="mt-1 flex min-h-4 items-center justify-between gap-3 text-[length:var(--application-text-footnote)] text-[var(--app-notes-color-muted)]">
+        <p aria-live="polite">{lengthError ?? statusLabel(status, t)}</p>
+        <span aria-label={t("characterCount")}>
+          {draft.trim().length}/{MAX_NOTE_MARKDOWN_LENGTH}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function NoteBlock({
+  note,
+  canEdit,
+  createNote,
+  updateNote,
+  deleteNote,
+  onError,
+  t,
+  language,
+}: {
+  note: PublicNote;
+  canEdit: boolean;
+  createNote: (content: string) => Promise<PublicNote>;
+  updateNote: (noteId: string, content: string) => Promise<PublicNote>;
+  deleteNote: (noteId: string) => Promise<unknown>;
+  onError: (message: string) => void;
+  t: (key: string) => string;
+  language: Language;
+}) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
+
+  if (isDeleted) return null;
+
+  return (
+    <article className={styles.entry}>
+      <aside className="text-left sm:pt-1">
+        <strong className="block truncate text-[length:var(--application-text-body)] font-semibold text-[var(--app-notes-color-muted-strong)]">
+          {note.authorName}
+        </strong>
+        <time className="mt-1 block text-[length:var(--application-text-footnote)] leading-4 text-[var(--app-notes-color-muted)]">
+          {formatNoteDate(getDisplayedNoteDate(note), language)}
+        </time>
+      </aside>
+
+      <div className="min-w-0">
+        {isEditing ? (
+          <NoteEditor
+            initialNoteId={note.id}
+            initialContent={note.content}
+            label={t("editNoteLabel")}
+            autoFocus
+            allowCancel
+            createNote={createNote}
+            updateNote={updateNote}
+            deleteNote={deleteNote}
+            onDeleted={() => setIsDeleted(true)}
+            onFinished={() => setIsEditing(false)}
+            onError={onError}
+            t={t}
+          />
+        ) : (
+          <div
+            role={canEdit ? "button" : undefined}
+            tabIndex={canEdit ? 0 : undefined}
+            className={
+              canEdit
+                ? "cursor-text rounded-md outline-none focus-visible:bg-[var(--app-notes-color-focus-background)] focus-visible:ring-2 focus-visible:ring-[var(--app-notes-color-accent)]/70"
+                : undefined
+            }
+            aria-description={canEdit ? t("editHint") : undefined}
+            onDoubleClick={(event) => {
+              if (!canEdit) return;
+              if (
+                event.target instanceof Element &&
+                event.target.closest("a") !== null
+              ) {
+                return;
+              }
+
+              setIsEditing(true);
+            }}
+            onKeyDown={(event) => {
+              if (!canEdit) return;
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                setIsEditing(true);
+              }
+            }}
+          >
+            <MarkdownContent content={note.content} />
+          </div>
+        )}
+      </div>
+    </article>
+  );
+}
+
+type GuestbookProps = {
+  actions: GuestbookActions;
+  language: Language;
+  loginHref: string;
+  viewer: GuestbookViewer;
+};
+
+export default function Guestbook({
+  actions,
+  language,
+  loginHref,
+  viewer,
+}: GuestbookProps) {
+  const { t } = useTranslation(["Notes"]);
+  const notesQuery = useNotesQuery();
+  const createNoteMutation = useCreateNoteMutation(actions);
+  const updateNoteMutation = useUpdateNoteMutation(actions);
+  const deleteNoteMutation = useDeleteNoteMutation(actions);
+  const [message, setMessage] = useState<string | null>(null);
+  const [composerRevision, setComposerRevision] = useState(0);
+  const [composerNoteId, setComposerNoteId] = useState<string | null>(null);
+
+  const notesReadyForWriting =
+    viewer.status === "authenticated" &&
+    notesQuery.isSuccess &&
+    !notesQuery.isFetching &&
+    !notesQuery.isError;
+
+  const notes = (notesQuery.data ?? []).filter(
+    (note) => note.id !== composerNoteId,
+  );
+
+  return (
+    <GuestbookShell
+      language={language}
+      loginHref={loginHref}
+      viewer={viewer}
+    >
+        {message ? (
+          <p className="mb-4 rounded-[var(--application-radius-window)] bg-red-50 px-4 py-3 text-[length:var(--application-text-body)] text-red-700 dark:bg-red-950/30 dark:text-red-200">
+            {message}
+          </p>
+        ) : null}
+
+        <section className="flex flex-col gap-5">
+          {notesQuery.isLoading ? (
+            <GuestbookLoadingState language={language} />
+          ) : notesQuery.isError ? (
+            <div className="rounded-[var(--application-radius-window)] border border-[var(--application-border)] bg-[var(--application-settings-group-bg)] px-4 py-4">
+              <div role="alert">
+                <p className="text-[length:var(--application-text-body)] font-semibold text-[var(--app-notes-color-text)]">
+                  {t("loadError")}
+                </p>
+                <p className="mt-1 text-[length:var(--application-text-callout)] text-[var(--app-notes-color-muted-soft)]">
+                  {t("loadErrorDescription")}
+                </p>
+              </div>
+              <button
+                type="button"
+                className="mt-3 rounded-full bg-[var(--app-notes-color-accent)] px-3 py-1.5 text-[length:var(--application-text-callout)] font-semibold text-[var(--app-notes-color-text)] shadow-sm transition hover:bg-[var(--app-notes-color-accent-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--app-notes-color-accent)] disabled:cursor-wait disabled:opacity-60"
+                disabled={notesQuery.isFetching}
+                onClick={() => void notesQuery.refetch()}
+              >
+                {notesQuery.isFetching ? t("retrying") : t("retry")}
+              </button>
+            </div>
+          ) : notes.length === 0 && composerNoteId === null ? (
+            <p className="text-[length:var(--application-text-body)] text-[var(--app-notes-color-muted-soft)]">
+              {t("empty")}
+            </p>
+          ) : (
+            notes.map((note) => {
+              const { canEdit: hasPermissionToEdit } = getNotePermissions(
+                viewer,
+                note,
+              );
+
+              return (
+                <NoteBlock
+                  key={note.id}
+                  note={note}
+                  canEdit={notesReadyForWriting && hasPermissionToEdit}
+                  createNote={(content) =>
+                    createNoteMutation.mutateAsync({ content })
+                  }
+                  updateNote={(noteId, content) =>
+                    updateNoteMutation.mutateAsync({ noteId, content })
+                  }
+                  deleteNote={(noteId) =>
+                    deleteNoteMutation.mutateAsync({ noteId })
+                  }
+                  onError={setMessage}
+                  t={t}
+                  language={language}
+                />
+              );
+            })
+          )}
+
+          {notesReadyForWriting ? (
+            <article className={`${styles.entry} pt-2`}>
+              <aside className="text-left sm:pt-1">
+                <strong className="block truncate text-[length:var(--application-text-body)] font-semibold text-[var(--app-notes-color-muted-strong)]">
+                  {viewer.displayName}
+                </strong>
+                <span className="mt-1 block text-[length:var(--application-text-footnote)] leading-4 text-[var(--app-notes-color-muted)]">
+                  {t("newNote")}
+                </span>
+              </aside>
+              <NoteEditor
+                key={composerRevision}
+                initialNoteId={null}
+                initialContent=""
+                label={t("composerLabel")}
+                placeholder={t("placeholder")}
+                createNote={(content) =>
+                  createNoteMutation.mutateAsync({ content })
+                }
+                updateNote={(noteId, content) =>
+                  updateNoteMutation.mutateAsync({ noteId, content })
+                }
+                deleteNote={(noteId) =>
+                  deleteNoteMutation.mutateAsync({ noteId })
+                }
+                onCreated={(note) => setComposerNoteId(note.id)}
+                onDeleted={() => setComposerNoteId(null)}
+                onFinished={() => {
+                  setComposerNoteId(null);
+                  setComposerRevision((value) => value + 1);
+                }}
+                onError={setMessage}
+                t={t}
+              />
+            </article>
+          ) : viewer.status === "guest" &&
+            notesQuery.isSuccess &&
+            !notesQuery.isFetching &&
+            !notesQuery.isError ? (
+            <p className="pt-2 text-[length:var(--application-text-body)] text-[var(--app-notes-color-muted-soft)]">
+              {t("guest")}
+            </p>
+          ) : null}
+        </section>
+    </GuestbookShell>
+  );
+}

@@ -1,0 +1,96 @@
+{
+  "title": "Portfolio",
+  "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "This portfolio presents my résumé and projects while serving as a frontend work sample for interaction design, state management, accessibility, and content architecture. I built windows, folders, a Dock, and a terminal in the browser, then connected URLs, browser history, keyboard interaction, and preferences into one experience.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Unified URL, History, and GUI state in one navigation model",
+    "description": "Shared links, refreshes, and browser Back restore the same project view."
+  },
+  "projectContext": {
+    "product": {"label": "Product", "description": "A bilingual portfolio explored through a terminal and OS-style GUI"},
+    "users": {"label": "Users", "description": "Recruiters and engineering interviewers reviewing career evidence and technical decisions"},
+    "role": {"label": "My scope", "description": "Product concept, design, frontend architecture, accessibility, testing, and content model"}
+  },
+  "projectIntro": {
+    "title": "Project overview",
+    "description": "I treated the portfolio itself as a frontend work sample. Beyond expressing an OS-style concept, I designed complex interaction to behave predictably in a real browser environment."
+  },
+  "caseStudy": {
+    "navigation": {
+      "title": "I managed window state and URLs through one model.",
+      "description": "Opening and moving between windows should not diverge from sharing a URL or using browser Back.",
+      "items": {
+        "problem": {
+          "title": "",
+          "description": "When GUI window state and URL or browser history change separately, shared links and Back can show a different view."
+        },
+        "decision": {
+          "title": "",
+          "description": "I correlated app IDs, URLs, parameters, and component props with types. A navigation planner calculates state and History API effects, while only the browser adapter calls the History API."
+        },
+        "result": {
+          "title": "",
+          "description": "Window transitions, shared URLs, and browser history follow one state model. Structure and type checks catch missing IDs, URLs, loaders, and folder nodes when an app is added."
+        }
+      }
+    },
+    "directory": {
+      "title": "I made the desktop and Projects folder one interaction model.",
+      "description": "Even on different surfaces, users should feel that they are selecting and opening items within the same OS.",
+      "items": {
+        "problem": {
+          "title": "",
+          "description": "Separate desktop and folder implementations easily diverge in selection, dragging, keyboard navigation, and resize behavior."
+        },
+        "decision": {
+          "title": "",
+          "description": "I defined an explicit folder tree that references GUI app IDs and rendered both surfaces with DirectorySurface. ResizeObserver tracks area changes and reclamps icon positions."
+        },
+        "result": {
+          "title": "",
+          "description": "Both surfaces use the same selection, focus, and drag rules. Icons remain in bounds after resizing and can be operated with a keyboard and move menu."
+        }
+      }
+    },
+    "implementation": {
+      "title": "Other Contributions",
+      "description": "Beyond the featured navigation cases, localized content and keyboard accessibility are managed within the same product structure.",
+      "items": {
+        "content": {
+          "title": "I separated content from user preferences.",
+          "description": "Career and Resume reuse the same experience, skill, and contact data. Localized content remains separate from UI labels, and language, wallpaper, and Dock preferences survive refreshes."
+        },
+        "accessibility": {
+          "title": "I made the OS-style UI navigable by keyboard.",
+          "description": "The visual concept remains intact while the interface can be explored without a mouse. Visitors can distinguish focus and selection as they follow the same project flow."
+        }
+      }
+    },
+    "verification": {
+      "title": "Verification evidence",
+      "description": "I check structural contracts, browser navigation, and real interaction at separate levels so the OS-style UI keeps the same rules after changes.",
+      "items": {
+        "structure": {
+          "title": "Application structure contracts",
+          "description": "Structure checks and unit tests keep app IDs, URLs, loaders, folder nodes, and localized title keys aligned."
+        },
+        "navigation": {
+          "title": "URLs and browser navigation",
+          "description": "Tests verify that shared-URL canonicalization, user navigation, Back, and popstate all follow the same navigation plan."
+        },
+        "interaction": {
+          "title": "Real browser interaction",
+          "description": "Playwright scenarios cover opening project windows, keeping windows in bounds, releasing DOM after close, and switching applications by keyboard."
+        }
+      }
+    }
+  },
+  "architecture": {
+    "title": "Navigation architecture for the OS-style portfolio",
+    "description": "The terminal and GUI share the same app registry and content, while a navigation planner connects window state with browser history.",
+    "alt": "Interactive portfolio architecture showing the terminal and GUI shell, navigation planner, GUI store, browser URL and History API, DirectorySurface, content, and preferences",
+    "caption": "Window state and browser effects are separate, while repeated navigation interaction and content preferences are managed through shared boundaries."
+  }
+}

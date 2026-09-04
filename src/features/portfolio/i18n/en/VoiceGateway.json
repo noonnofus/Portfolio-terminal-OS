@@ -1,0 +1,175 @@
+{
+  "title": "AICC Voice Gateway",
+  "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "A Voice Gateway that connects real-time phone audio with multiple AI providers. PBX and SIP integration, per-call Workers, and provider-specific protocol and audio differences are separated so one call flow can select the configured implementation.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Confined provider changes to Transport, Strategy, and Codec boundaries",
+    "description": "The core call flow stays stable while configuration selects the required AI provider."
+  },
+  "projectIntro": {
+    "title": "Project background",
+    "description": "Extending the web-first OptiGen conversation experience into phone calls required a separate layer connecting telephony, real-time audio, AI conversations, and speech providers. Voice Gateway owns call state and audio processing so OptiGen's core conversation logic remains separate from the telephone environment."
+  },
+  "projectContext": {
+    "service": {
+      "label": "System",
+      "description": "A voice relay system connecting real-time phone audio with OptiGen AI conversation requests and responses"
+    },
+    "flow": {
+      "label": "User flow",
+      "description": "Convert phone audio through STT, generate an OptiGen AI response, then return it to the call as TTS audio"
+    },
+    "role": {
+      "label": "My scope",
+      "description": "Voice Gateway design and implementation, PBX and SIP integration, per-call sessions and Workers, audio processing, and AI provider abstraction"
+    }
+  },
+  "caseStudy": {
+    "problem": {
+      "title": "Problem and requirements",
+      "description": "The system had to translate phone audio into AI conversations without breaking the call flow and support different speech providers within one service architecture.",
+      "items": {
+        "realtimeAudio": {
+          "title": "Real-time audio processing",
+          "description": "Call audio had to be received continuously, processed through STT and AI, and returned through TTS without interrupting the conversation."
+        },
+        "sessionConsistency": {
+          "title": "Consistent call and conversation state",
+          "description": "Audio, input events, and AI responses for each call had to remain isolated from every other active call."
+        },
+        "vendorDifferences": {
+          "title": "Provider-specific differences",
+          "description": "STT and TTS providers use different configuration, streaming, and audio formats, so the core call flow could not depend on one provider."
+        }
+      }
+    },
+    "providerArchitecture": {
+      "title": "Isolating provider protocol and audio differences with Transport and Factory",
+      "description": "I redesigned a structure that required changes across the call flow for every new Voice AI provider into a common contract, configuration-based selection, and provider-specific implementation boundaries.",
+      "items": {
+        "coupling": {
+          "title": "Problem",
+          "description": "A single Voice Client file owned connection handling, event interpretation, STT and TTS, and audio conversion. Adding a provider therefore required changing existing call logic, and STT or TTS could not be replaced independently."
+        },
+        "contract": {
+          "title": "Common Transport contract",
+          "description": "I defined IVoiceTransport for every Voice Client and moved connection state, exponential backoff with jitter, keep-alive, and common error classification into BaseVoiceTransport."
+        },
+        "factory": {
+          "title": "Configuration-based factories",
+          "description": "VoiceTransportFactory selects the Transport from configuration. Separate STT and TTS factories allow implementations to change without modifying the shared call flow."
+        },
+        "strategyCodec": {
+          "title": "Strategy and Codec boundaries",
+          "description": "Provider-specific event formats live in event strategies, while audio-format differences live in codecs. A new provider is therefore centered on its Transport, Strategy, and Codec."
+        },
+        "verification": {
+          "title": "Verified result",
+          "description": "After a refactor spanning 120 files, the Transport, Factory, Strategy, and Codec boundaries remain in the default branch. Multiple Transport, STT, and TTS implementations are selected through the same factory contracts."
+        }
+      }
+    },
+    "workerDecomposition": {
+      "title": "Reducing WorkerContext from 1,114 lines to 658 and splitting its responsibilities",
+      "description": "Even with one Worker per call, a single object owning every internal responsibility made change impact and failures difficult to trace. I split session, turn, audio, and conversation-data responsibilities into focused modules.",
+      "items": {
+        "oversizedContext": {
+          "title": "An oversized call context",
+          "description": "WorkerContext handled session initialization, turn management, PII processing, the audio pipeline, conversation records, and metrics together, so small changes required reasoning about a wide shared state."
+        },
+        "responsibilityBoundary": {
+          "title": "Role-focused modules",
+          "description": "Responsibilities moved into a turn manager, PII terminator, audio pipeline manager, session builder, conversation data manager, and TTFP tracker."
+        },
+        "callIsolation": {
+          "title": "Preserving call isolation",
+          "description": "Each call continues to own its session and audio flow in an independent Worker, while modules inside that Worker own only the state and behavior required for their role."
+        },
+        "result": {
+          "title": "A smaller change radius",
+          "description": "Provider connection, audio processing, turn management, and persistence changes can now remain within their boundaries instead of spreading across the entire WorkerContext."
+        }
+      }
+    },
+    "design": {
+      "title": "Design and technical decisions",
+      "description": "I separated the responsibilities of telephony, call sessions, OptiGen AI, and speech providers to limit the effect of change in each area.",
+      "items": {
+        "gatewayBoundary": {
+          "title": "Telephony separated from AI services",
+          "description": "Voice Gateway translates phone events and audio into OptiGen conversation requests, keeping telephony details out of the AI service."
+        },
+        "sessionModel": {
+          "title": "Call-scoped session model",
+          "description": "Each call owns an independent session and conversation identifier so voice input, AI responses, and connection state stay attached to the correct call."
+        },
+        "providerAdapter": {
+          "title": "STT and TTS adapters",
+          "description": "Provider-specific configuration and audio processing sit behind common interfaces, allowing providers to be selected or replaced through platform configuration."
+        }
+      }
+    },
+    "implementation": {
+      "title": "Other Contributions",
+      "description": "Beyond the two featured architecture cases, I implemented the real-time path from call connection through voice input and AI response playback.",
+      "items": {
+        "twilio": {
+          "title": "PBX and SIP integration layer",
+          "description": "Call start, progress, and end events from phone connections and live audio streams are mapped into per-call Voice Gateway Workers and sessions."
+        },
+        "audioPipeline": {
+          "title": "Real-time voice pipeline",
+          "description": "Incoming audio is converted into STT text for OptiGen AI, and generated responses are converted into TTS audio and returned to the call stream."
+        },
+        "callControls": {
+          "title": "Call control and recovery",
+          "description": "I implemented VAD-based silence and background-noise handling, DTMF input, call sessions, and reconnection flows."
+        },
+        "providerIntegration": {
+          "title": "Multiple STT and TTS providers",
+          "description": "Adapters encapsulate provider-specific configuration and audio formats so the active provider can be chosen from platform settings."
+        }
+      }
+    },
+    "outcome": {
+      "title": "Outcome and reflection",
+      "description": "Making Voice Gateway an independent voice layer preserved OptiGen's conversation capabilities while isolating the real-time requirements of phone calls.",
+      "items": {
+        "voiceExtension": {
+          "title": "AI conversations extended to phone calls",
+          "description": "The web-based OptiGen conversation flow can be reused while callers speak their questions and hear AI responses."
+        },
+        "providerFlexibility": {
+          "title": "Flexible speech-provider selection",
+          "description": "Abstracted STT and TTS implementations reduce the portion of the core call flow tied to a specific provider."
+        },
+        "stableFlow": {
+          "title": "Explicit call-state management",
+          "description": "Separate call sessions, input state, and reconnection flow make state changes in the real-time voice pipeline traceable."
+        }
+      }
+    }
+  },
+  "architecture": {
+    "title": "Real-time voice flow",
+    "description": "A call from the PBX and SIP integration layer enters an isolated Worker. Factory selects the configured Transport, while Strategy and Codec handle provider-specific events and audio differences.",
+    "alt": "A phone call flows through the PBX and SIP integration layer, a per-call Worker, Transport Factory, Strategy, and Codec to Voice AI providers",
+    "caption": "The Voice Gateway separates shared call-flow responsibilities from provider-specific protocol and audio responsibilities.",
+    "loading": "Loading the architecture diagram.",
+    "error": "The architecture diagram could not be displayed.",
+    "diagram": {
+      "phone": "Caller",
+      "pbx": "PBX / SIP integration",
+      "worker": "Per-call Worker",
+      "factory": "Transport Factory",
+      "transport": "Voice Transport",
+      "strategy": "Event Strategy",
+      "codec": "Audio Codec",
+      "providers": "Voice AI Providers",
+      "call": "Phone call",
+      "audioStream": "Call events / audio"
+    }
+  }
+}

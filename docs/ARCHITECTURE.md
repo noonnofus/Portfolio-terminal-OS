@@ -1,13 +1,14 @@
 # Portfolio-terminal-OS Architecture
 
-> 최종 업데이트: 2026-07-09
+> 최종 업데이트: 2026-09-03
 
 ## Overview
 
 Portfolio-terminal-OS is a Next.js App Router application with two primary experiences:
 
-- `/`: an xterm-based terminal portfolio
-- `/gui`: an OS-style desktop portfolio
+- `/`: a Korean xterm-based terminal portfolio
+- `/gui`: a Korean OS-style desktop portfolio
+- `/en` and `/en/gui`: fixed English entry points for direct sharing and SEO
 
 The application is bilingual, authentication-aware, and backed by Supabase for
 GitHub login, guestbook notes, and the wallpaper catalog. GUI preferences are
@@ -22,8 +23,8 @@ flowchart TD
     ClientProvider --> ColorMode["Color mode provider"]
     ClientProvider --> I18nWrapper["Language/document sync"]
 
-    I18nWrapper --> TerminalRoute["/ terminal route"]
-    I18nWrapper --> GuiRoute["/gui route"]
+    I18nWrapper --> TerminalRoute["/ and /en terminal routes"]
+    I18nWrapper --> GuiRoute["/gui and /en/gui routes"]
 
     GuiRoute --> ViewerLookup["Supabase Auth viewer lookup"]
     ViewerLookup --> GuiEntry["GuiEntry"]
@@ -48,12 +49,24 @@ flowchart LR
     LanguageStore["useLanguageStore"] --> I18nWrapper
     I18nWrapper --> I18next["i18n.changeLanguage"]
     I18nWrapper --> HtmlLang["document.documentElement.lang"]
-    LocaleJSON["public/locales/{ko,en}"] --> I18next
+    LocaleJSON["src/shared/i18n/resources/{ko,en}"] --> I18next
     I18next --> Apps["Terminal and GUI Apps"]
 ```
 
 The GUI URL can carry language state, but the active language is still owned by
 the shared language store and synchronized to i18next and `<html lang>`.
+The `/en` and `/en/gui` routes initialize English from the route and serialize
+GUI navigation under the `/en/gui` path. Legacy `?lang=en` GUI URLs are
+canonicalized to that fixed English path. Each language route publishes a
+canonical URL and a reciprocal `hreflang` alternate.
+Core namespaces are registered in `src/shared/i18n/client.ts`; project-specific
+namespaces are loaded by their allowlisted app loaders. The current project
+namespace set includes Portfolio, OptiGen, MCP, Voice Gateway, KEPCO Advisor,
+WCHMS, and Flare.
+
+`src/app/robots.ts` excludes API and authentication paths from crawlers,
+`src/app/sitemap.ts` lists the four public entry points, and
+`src/app/auth/auth-error/page.tsx` is marked `noindex, nofollow`.
 
 ## GUI runtime
 
@@ -86,6 +99,15 @@ browserHistoryAdapter     → pure navigation planner
 GUI apps                  → shared UI/content/i18n/query helpers
 ```
 
+### Style ownership
+
+- `src/app/globals.css` owns site-wide reset and design tokens.
+- `src/features/gui/styles/application.css` owns shared OS application chrome,
+  `.application-*` selectors, and `--application-*` tokens.
+- App-specific presentation stays co-located in CSS Modules, including Notes and
+  project reading content. This keeps shared shell changes separate from app
+  content styling.
+
 ### State rules
 
 - A GUI store is created through `zustand/vanilla` for each mounted shell and supplied through React Context.
@@ -105,6 +127,12 @@ GUI apps                  → shared UI/content/i18n/query helpers
 - Catalog and loader key sets must match through mapped types and unit tests.
 - URL values select allowlisted app IDs and project slugs. They never become dynamic import paths.
 - Folder apps render through `DirectorySurface`; they do not define custom folder renderers.
+- Project metadata such as stack badges and visibility is centralized in
+  `shared/content/portfolio/projectManifest.ts`; app configs retain only
+  typed runtime metadata.
+- Project detail apps compose the shared `ProjectCaseStudyPage`; architecture
+  sections use either reviewed static content or client-rendered
+  `ProjectArchitectureDiagram` charts with Mermaid strict security mode.
 
 ### Navigation rules
 
@@ -141,6 +169,7 @@ flowchart TD
 - Authenticated writes go through Server Actions.
 - Note mutation actions re-check the current user server-side.
 - React Query owns notes list cache and invalidation.
+- The Guestbook dynamic app fallback and the mounted notes query state share the feature-owned `GuestbookShell` and localized status component, preventing a layout jump between loading phases.
 
 ### GUI preferences
 
@@ -155,15 +184,19 @@ flowchart TD
 - GUI runtime icons use small files under `public/icons/optimized`.
 - Dock/Desktop icon rendering bypasses Next Image optimization for these local tiny assets.
 - Original high-resolution icons remain available for non-runtime or detail-app use cases.
+- Portfolio technology icons use 96px PNG sources with Next Image sizing at their 32px and 16px display sizes.
+- Project detail stacks come from the centralized portfolio manifest, with each mapped badge rendered through the shared Next Image component.
+- The shell wallpaper uses a responsive Next Image source, and Settings uses dedicated 360px wallpaper previews.
 
 ## Delivery status
 
 1. Terminal and GUI routes are active.
 2. Typed catalog/loader boundaries and the pure navigation planner are active.
 3. About, Projects, Resume, Terminal, Contact, Guestbook, and Settings apps are active under `/gui`.
-4. GitHub OAuth, Notes, server-backed wallpapers, and local GUI preferences are integrated.
-5. React Query is the client server-state layer for notes and wallpapers.
-6. GUI icon loading and guest notes reads have been optimized for the current Vercel/Supabase deployment shape.
+4. Projects exposes seven allowlisted case-study apps, including MCP and Voice Gateway, with bilingual content and architecture diagrams.
+5. GitHub OAuth, Notes, server-backed wallpapers, and local GUI preferences are integrated.
+6. React Query is the client server-state layer for notes and wallpapers.
+7. GUI icon loading and guest notes reads have been optimized for the current Vercel/Supabase deployment shape.
 
 ## Verification
 

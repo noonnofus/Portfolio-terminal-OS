@@ -2,6 +2,31 @@ import { expect, test } from "@playwright/test";
 
 const projects = [
     {
+        appId: "project:portfolio",
+        listTitle: "포트폴리오",
+        windowTitle: "포트폴리오",
+    },
+    {
+        appId: "project:optigen",
+        listTitle: "OptiGen AI 플랫폼",
+        windowTitle: "OptiGen AI 플랫폼",
+    },
+    {
+        appId: "project:mcp",
+        listTitle: "OptiGen MCP 서버",
+        windowTitle: "OptiGen MCP 서버",
+    },
+    {
+        appId: "project:voice-gateway",
+        listTitle: "AICC Voice Gateway",
+        windowTitle: "AICC Voice Gateway",
+    },
+    {
+        appId: "project:kepco",
+        listTitle: "공공기관 상담 어드바이저",
+        windowTitle: "공공기관 상담 어드바이저",
+    },
+    {
         appId: "project:wchms",
         listTitle: "WCHMS",
         windowTitle: "WCHMS",
@@ -10,31 +35,6 @@ const projects = [
         appId: "project:flare",
         listTitle: "Flare",
         windowTitle: "Flare",
-    },
-    {
-        appId: "project:weconnect",
-        listTitle: "WeConnect",
-        windowTitle: "WeConnect",
-    },
-    {
-        appId: "project:pagessence",
-        listTitle: "PageSsence",
-        windowTitle: "pageSsence",
-    },
-    {
-        appId: "project:diceroller",
-        listTitle: "DiceRoller",
-        windowTitle: "다이스롤러",
-    },
-    {
-        appId: "project:mejubot",
-        listTitle: "MejuBot",
-        windowTitle: "디스코드 봇",
-    },
-    {
-        appId: "project:webpiano",
-        listTitle: "WebPiano",
-        windowTitle: "웹 피아노",
     },
 ] as const;
 

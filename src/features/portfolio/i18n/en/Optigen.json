@@ -1,0 +1,194 @@
+{
+  "title": "OptiGen AI Platform",
+  "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "A B2B AI platform for managing organizations, permissions, AI bots, and documents while providing RAG-grounded conversations. I designed and implemented the frontend and UI/UX from the ground up, then extended it into business execution and voice channels through MCP and Voice Gateway.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Automated browser verification across 40 shared UI stories",
+    "description": "The design system and its verification environment were built alongside the product from the start."
+  },
+  "projectIntro": {
+    "title": "Project background",
+    "description": "This was a new product built from the ground up, not an improvement to an existing system. Administrators configure organizations, permissions, AI bots, and documents, while users select the right bot and receive document-grounded answers. I designed the web application so administration and AI conversations work as one product experience."
+  },
+  "projectContext": {
+    "service": {
+      "label": "Product",
+      "description": "A B2B AI platform providing organization-specific AI bots and document-grounded RAG conversations"
+    },
+    "users": {
+      "label": "Users",
+      "description": "Administrators managing organizations, permissions, bots, and documents, and people applying AI to their work"
+    },
+    "role": {
+      "label": "My scope",
+      "description": "Frontend and UI/UX design and implementation, AI conversation experience, and integration with MCP and Voice Gateway"
+    }
+  },
+  "caseStudy": {
+    "streamingLayout": {
+      "title": "A chat layout that preserves reading position as streamed responses grow",
+      "description": "I addressed the screen shift caused by live LLM responses through the layout structure itself.",
+      "items": {
+        "growingResponse": {
+          "title": "Increasing screen movement during long responses",
+          "description": "As SSE content expanded the response block, a conventional bottom-scroll layout pushed the sentence a user was reading out of view."
+        },
+        "spacerLayout": {
+          "title": "A flexible spacer below the response",
+          "description": "I placed each LLM response in its own block and added an empty block that occupied the remaining viewport height. As the response grew, the spacer shrank by the same amount, keeping existing messages in place."
+        },
+        "streamState": {
+          "title": "Layout behavior tied to stream state",
+          "description": "Generating, completed, interrupted, and error states were modeled explicitly so the spacer and final scroll behavior followed the same rules."
+        },
+        "readingPosition": {
+          "title": "Reading position preserved",
+          "description": "Users could continue reading existing content while a long response was generated without the screen jumping as new content arrived."
+        }
+      }
+    },
+    "problem": {
+      "title": "Problem and requirements",
+      "description": "The process of configuring an AI workspace and the process of using it in real conversations had to connect naturally within one product.",
+      "items": {
+        "administration": {
+          "title": "Organization-level administration",
+          "description": "Administrators needed interfaces for organizations, user permissions, AI bots, prompts, documents, and file uploads."
+        },
+        "conversation": {
+          "title": "Document-grounded AI conversations",
+          "description": "Users needed to select a bot, receive streamed answers grounded in documents, and continue from their conversation history."
+        },
+        "extension": {
+          "title": "Extension into work and voice channels",
+          "description": "The product had to connect MCP business tools and Voice Gateway calls without breaking the existing conversation experience."
+        }
+      }
+    },
+    "design": {
+      "title": "Design and technical decisions",
+      "description": "I organized the information architecture around user tasks and gave server data, view state, and streaming connections separate responsibilities.",
+      "items": {
+        "informationArchitecture": {
+          "title": "Task-oriented information architecture",
+          "description": "I organized organizations, permissions, bots, prompts, documents, and conversation history into feature views, then designed navigation from administration into AI conversations."
+        },
+        "stateBoundary": {
+          "title": "Server and view state boundaries",
+          "description": "React Query manages server data, while feature-scoped Zustand stores contain view-only filters and selections."
+        },
+        "streaming": {
+          "title": "State management separated from SSE",
+          "description": "Message and conversation state remain application state, while SSE is limited to the transport layer that receives responses and execution events."
+        },
+        "qualityFoundation": {
+          "title": "Accessibility as a product requirement",
+          "description": "Semantic HTML, accessible names, keyboard operation, and focus restoration were baseline implementation requirements."
+        }
+      }
+    },
+    "implementation": {
+      "title": "Other Contributions",
+      "description": "Beyond the featured chat UX case, I owned the work required to build the product into an operable web application from scratch.",
+      "items": {
+        "chatExperience": {
+          "title": "Chat UI and conversation experience",
+          "description": "I connected bot selection, message composition, response review, and conversation-history navigation into one conversation interface."
+        },
+        "responseFlow": {
+          "title": "SSE response streaming",
+          "description": "Generated responses appear incrementally, with generation, completion, interruption, and error represented as distinct states."
+        },
+        "accessibility": {
+          "title": "Web accessibility and standards",
+          "description": "I applied semantic elements, accessible names, keyboard controls, and modal focus restoration, then checked core flows with Playwright and axe."
+        },
+        "responsive": {
+          "title": "Responsive interface",
+          "description": "Navigation, conversation lists, message content, and input tools reflow according to the available screen size."
+        }
+      }
+    },
+    "localStt": {
+      "title": "Experiment: WebGPU local transcription path",
+      "description": "This was a POC to test whether recording and transcription could run in the browser. It is presented only as a verified execution path, not as an operating feature or a cost-reduction result.",
+      "items": {
+        "problem": {
+          "title": "Problem and constraints",
+          "description": "Calling server STT for every meeting accumulated processing cost, while creating a recording in another app and uploading it broke the product flow. Browser GPU support and the initial preparation time of a large model also had to be represented in the interface."
+        },
+        "workerBoundary": {
+          "title": "Separate VAD and Whisper workers",
+          "description": "Silero VAD and Whisper run in separate Workers connected directly through MessageChannel. This boundary prevents transcription work from delaying voice-segment detection."
+        },
+        "fallback": {
+          "title": "Execution paths by browser capability",
+          "description": "Browsers without WebGPU use a WASM path, while local STT is disabled on mobile where stability could not be guaranteed. Model download, readiness, recording, and transcription appear as distinct UI states."
+        },
+        "lifecycle": {
+          "title": "Worker lifecycle and text safety",
+          "description": "Message ports close with AudioWorklet and Worker shutdown so events cannot reach terminated workers. Transcription state is also released for silence or empty output, and results enter the editor as text nodes rather than HTML."
+        },
+        "verification": {
+          "title": "Verified scope",
+          "description": "The merged change confirms dual Workers, the WASM fallback, mobile disablement, silent-result recovery, and safe text insertion. The PR's browser checklist was not marked complete, so this portfolio does not claim validation across every browser."
+        }
+      }
+    },
+    "outcome": {
+      "title": "Outcome and reflection",
+      "description": "I established the frontend foundation for the new product and enabled business execution and voice channels to extend the same conversation experience.",
+      "items": {
+        "newProduct": {
+          "title": "Frontend foundation for a new product",
+          "description": "I built the web application from its initial information architecture and state flow through administration and AI conversations."
+        },
+        "extensionPath": {
+          "title": "Expansion from one conversation experience",
+          "description": "MCP and Voice Gateway connect as separate systems, extending the existing chat experience into business execution and voice channels."
+        },
+        "qualityBaseline": {
+          "title": "Quality applied early",
+          "description": "Accessibility, web standards, responsive behavior, and tests were implementation criteria from the beginning rather than follow-up work."
+        }
+      }
+    },
+    "verification": {
+      "title": "Verification criteria and methods",
+      "description": "I reviewed the user-facing states and accessibility behavior that define the core experience instead of treating implementation completion as the only result.",
+      "items": {
+        "accessibility": {
+          "title": "Keyboard and assistive-technology flows",
+          "description": "I reviewed semantic structure and accessible names on core screens, then used Playwright and axe to check keyboard operation and focus restoration after closing dialogs."
+        },
+        "streaming": {
+          "title": "Streaming state transitions",
+          "description": "I checked response generation, completion, user interruption, and error states so messages and available next actions remain consistent at each stage."
+        }
+      }
+    }
+  },
+  "architecture": {
+    "title": "Platform flow",
+    "description": "The web application provides RAG-grounded responses through the API and AI services. MCP and Voice Gateway operate as extension systems for business execution and voice channels.",
+    "alt": "Platform flow showing the relationship between the OptiGen web application, API, AI service, MCP, and Voice Gateway",
+    "caption": "A high-level view of MCP and Voice Gateway extending the OptiGen web application.",
+    "loading": "Loading the architecture diagram.",
+    "error": "The architecture diagram could not be displayed.",
+    "diagram": {
+      "webUser": "Web user",
+      "chat": "OptiGen web application",
+      "phoneCall": "Phone call",
+      "vg": "Voice Gateway",
+      "api": "API server",
+      "ai": "AI service / RAG",
+      "mcp": "MCP server",
+      "requestResponse": "Request / streamed response",
+      "orchestration": "AI processing",
+      "toolExtension": "Business execution extension",
+      "voiceExtension": "Voice channel extension"
+    }
+  }
+}

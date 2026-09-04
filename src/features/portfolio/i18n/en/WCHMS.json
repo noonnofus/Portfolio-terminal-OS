@@ -1,0 +1,134 @@
+{
+  "title": "WCHMS",
+  "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "A multilingual web application that supports older adults participating in dementia-prevention programs and cognitive activities. I designed and implemented full-stack workflows connecting AI-assisted self-study, course-material generation, and program administration.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Connected self-study, course-material generation, and administration in one product flow",
+    "description": "The evidence is the implemented and demonstrable workflow rather than an unverified metric."
+  },
+  "projectIntro": {
+    "title": "Project overview",
+    "description": "Learners needed repeatable math and reading activities, while administrators and staff needed to prepare class materials using the same difficulty model. I connected self-study, material generation, and administration into one product flow."
+  },
+  "projectContext": {
+    "product": {
+      "label": "Product",
+      "description": "A multilingual web application supporting cognitive activities and program operations for older adults"
+    },
+    "users": {
+      "label": "Users",
+      "description": "Learners completing math and reading activities, plus staff and administrators managing course materials and operations"
+    },
+    "role": {
+      "label": "My scope",
+      "description": "Designed and implemented AI-assisted self-study, course-material generation, administration features, and the course-material database schema"
+    }
+  },
+  "caseStudy": {
+    "learningMaterialAlignment": {
+      "title": "Aligned difficulty standards across learner practice and staff course materials",
+      "description": "I aligned the content model and generation flow so learner activities and staff materials would not use conflicting standards.",
+      "items": {
+        "separateStandards": {
+          "title": "Learning standards could diverge",
+          "description": "If self-study activities and staff-generated course materials used different difficulty models, the learning experience could become inconsistent within the same program."
+        },
+        "sharedDifficulty": {
+          "title": "A shared difficulty model",
+          "description": "Math and reading self-study and course-material generation were built around the same difficulty structure."
+        },
+        "contentModel": {
+          "title": "A reusable content model",
+          "description": "Generated content, difficulty, and operating information were stored in the database and made reusable as PDF material."
+        },
+        "connectedFlow": {
+          "title": "Learning and operations connected",
+          "description": "Learners could practice against one standard while staff generated and managed materials using that same standard."
+        }
+      }
+    },
+    "problem": {
+      "title": "Problem and requirements",
+      "description": "The product needed both approachable cognitive activities for learners and operational tools for staff preparing and running classes.",
+      "items": {
+        "learningAccess": {
+          "title": "Repeatable self-study activities",
+          "description": "Older learners needed math and reading activities they could repeat at an appropriate difficulty."
+        },
+        "materialPreparation": {
+          "title": "Class-material preparation",
+          "description": "Administrators and staff needed to prepare PDF course materials that remained consistent with the self-study difficulty model."
+        },
+        "administration": {
+          "title": "Operational data management",
+          "description": "Participants, staff, courses, and session rooms needed to be created and managed from one operational workspace."
+        }
+      }
+    },
+    "design": {
+      "title": "Design and technical decisions",
+      "description": "I aligned the models used by learning activities and course materials, then placed meaningful learner choices directly in the activity flow.",
+      "items": {
+        "difficultyAlignment": {
+          "title": "Shared difficulty model",
+          "description": "Self-study activities and course-material generation use the same difficulty model so learner content and staff materials do not follow conflicting criteria."
+        },
+        "topicReading": {
+          "title": "Topic-based reading activities",
+          "description": "Reading practice was not limited to fixed exercises. Learners could choose an area of interest and generate an activity around that topic."
+        },
+        "contentModel": {
+          "title": "Course-material data model",
+          "description": "I designed a database schema that stores generated materials, difficulty, and operational information for later use."
+        }
+      }
+    },
+    "implementation": {
+      "title": "Other Contributions",
+      "description": "Beyond the featured content-model case, I implemented the main full-stack workflows from learner activities through administration.",
+      "items": {
+        "selfStudy": {
+          "title": "AI-assisted self-study",
+          "description": "I built two difficulty levels for math and reading activities, including reading content generated from a learner-selected topic."
+        },
+        "pdfMaterials": {
+          "title": "PDF course-material generation",
+          "description": "Administrators and staff can generate course materials at a selected difficulty and use them in PDF format."
+        },
+        "adminWorkspace": {
+          "title": "Administration workspace",
+          "description": "I built participant and staff CRUD workflows together with course and session-room management."
+        },
+        "localization": {
+          "title": "Localization and in-app notifications",
+          "description": "The interface supports Japanese and English and provides operational notifications within the application."
+        }
+      }
+    },
+    "outcome": {
+      "title": "Implementation outcome",
+      "description": "Learners and operators can work from the same content model while completing their respective tasks in one service.",
+      "items": {
+        "connectedFlow": {
+          "title": "Connected learning and operations",
+          "description": "Self-study, course-material generation, and participant and class management are available in one web application."
+        },
+        "reusableMaterials": {
+          "title": "Reusable course materials",
+          "description": "Generated course materials are stored as data and available as PDFs, allowing staff-prepared content to be used again."
+        },
+        "operationalWorkspace": {
+          "title": "Consolidated administration",
+          "description": "User, staff, course, and session-room management are collected in one workspace for program operations."
+        }
+      }
+    }
+  },
+  "walkthrough": {
+    "title": "Product walkthrough",
+    "description": "The video demonstrates the implemented AI-assisted math and reading activity flow.",
+    "unsupported": "Your browser does not support video playback."
+  }
+}

@@ -15,8 +15,9 @@ A bilingual Korean/English portfolio presented as an operating system in the bro
 
 - `/` opens an xterm-powered terminal entry.
 - `/gui` opens a macOS-inspired GUI workspace with windows, dock apps, desktop files, shareable URLs, authentication, settings, wallpapers, and a guestbook.
+- `/en` and `/en/gui` provide fixed English entry points for search engines and direct sharing.
 
-Live site: [hyunho.vercel.app](https://hyunho.vercel.app/)
+Live site: [hyunhokim.is-a.dev](https://hyunhokim.is-a.dev/)
 
 ## Current features
 
@@ -25,12 +26,17 @@ Live site: [hyunho.vercel.app](https://hyunho.vercel.app/)
 - Typed app registry that keeps app IDs, URL targets, loaders, metadata, and project slugs correlated at compile time.
 - Shareable GUI URLs for desktop, apps, project detail windows, and language state.
 - Bilingual portfolio content in Korean and English.
-- Project folder with WCHMS, Flare, WeConnect, PageSsence, DiceRoller, Discord Bot, and WebPiano detail apps.
+- Project folder with KEPCO Advisor, OptiGen, Portfolio, MCP, Voice Gateway, WCHMS, and Flare case-study apps.
+- Shared case-study layouts with bilingual evidence sections and Mermaid or reviewed static architecture diagrams.
 - Built-in About, Projects, Resume, Terminal, Contact, Guestbook, and Settings apps.
 - GitHub OAuth through Supabase Auth.
 - Server-backed guestbook notes with GitHub-authenticated writes, 1,000 character validation, per-account rate limiting, owner/admin permissions, and deleted-account anonymization.
+- Guestbook app and notes data loading share one localized loading surface.
 - Local GUI preferences for language, theme, dock auto-hide, and wallpaper.
 - Server-backed wallpaper catalog with light/dark wallpaper presets.
+- Responsive Next Image delivery for wallpapers and portfolio technology assets.
+- Project technology badges use the centralized manifest and reviewed technology PNG assets.
+- SEO metadata includes canonical URLs, Korean/English `hreflang` alternates, Open Graph/Twitter cards, robots rules, and a sitemap.
 - TanStack Query for client server-state reads, mutations, and invalidation.
 - Server Actions for note writes.
 - TipTap Markdown editing and Markdown rendering for notes.
@@ -48,7 +54,7 @@ Live site: [hyunho.vercel.app](https://hyunho.vercel.app/)
 | Auth and data | Supabase SSR, Supabase Auth, Supabase Postgres, GitHub OAuth |
 | Terminal | xterm.js, `@xterm/addon-fit` |
 | Editor and Markdown | TipTap, `@tiptap/markdown`, `react-markdown`, `remark-gfm`, `rehype-raw` |
-| UI libraries | Radix UI primitives, Framer Motion, lucide-react |
+| UI libraries | Radix UI primitives, Framer Motion, lucide-react, Mermaid |
 | Testing | Vitest, Playwright |
 | Deployment target | Vercel |
 
@@ -158,6 +164,8 @@ Open:
 
 - Terminal route: <http://localhost:3000/>
 - GUI route: <http://localhost:3000/gui>
+- English terminal route: <http://localhost:3000/en>
+- English GUI route: <http://localhost:3000/en/gui>
 
 ## Database migrations
 

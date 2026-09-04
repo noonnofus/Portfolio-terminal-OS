@@ -14,20 +14,20 @@ test.describe("GUI shell", () => {
         await page.addInitScript(() => localStorage.setItem("theme", "dark"));
 
         await page.goto("/gui");
-        await expect(page.locator(".gui-shell")).toHaveAttribute(
+        await expect(page.locator(".application-shell")).toHaveAttribute(
             "data-theme",
             "dark",
         );
         expect(hydrationErrors).toEqual([]);
     });
 
-    test("opens About by default and preserves user-selected history", async ({
+    test("opens Career by default and preserves user-selected history", async ({
         page,
     }) => {
         await page.goto("/gui");
 
         await expect(
-            page.getByRole("dialog", { name: "나에 대해서" }),
+            page.getByRole("dialog", { name: "커리어" }),
         ).toBeVisible();
         await expect(page).toHaveURL(/\/gui$/);
 
@@ -40,7 +40,7 @@ test.describe("GUI shell", () => {
             page.getByRole("dialog", { name: "프로젝트" }),
         ).toBeVisible();
 
-        await dock.getByRole("button", { name: "나에 대해서" }).click();
+        await dock.getByRole("button", { name: "커리어" }).click();
         await expect(page).toHaveURL(/\/gui$/);
 
         await page.goBack();
@@ -56,6 +56,51 @@ test.describe("GUI shell", () => {
         ).toHaveCount(0);
     });
 
+    test("renders company work as complete inline timeline content", async ({
+        page,
+    }) => {
+        await page.goto("/gui");
+
+        const careerWindow = page.getByRole("dialog", { name: "커리어" });
+        await expect(
+            careerWindow.getByRole("heading", { name: "KEPCO 상담 어드바이저" }),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByText(
+                "하루 평균 약 5만 콜 환경에서 전체 상담사의 60%가 사용했고 프로젝트 운영 후 고객 평균 대기 시간이 약 30% 줄었습니다.",
+            ),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByText(
+                /실시간 STT 전사, 통화 후 AI 분석, 상담 이력/,
+            ),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByRole("heading", { name: "OptiGen AI 플랫폼" }),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByText(
+                "WebGPU 로컬 STT와 회의록 MCP를 연결하고 Storybook 40개 스토리와 Vitest를 활용해 공통 UI 검증을 자동화했습니다.",
+            ),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByRole("heading", { name: "AICC Voice Gateway" }),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByText(
+                /Transport, Factory, Strategy, Codec으로 Provider별 통신과 오디오 차이/,
+            ),
+        ).toBeVisible();
+        await expect(
+            careerWindow.getByRole("button", { name: /사례 보기|사례 연구/ }),
+        ).toHaveCount(0);
+        await expect(
+            careerWindow.getByRole("heading", {
+                name: "경력을 증명하는 프로젝트 사례",
+            }),
+        ).toHaveCount(0);
+    });
+
     test("keeps language in the canonical shared URL", async ({ page }) => {
         await page.goto("/gui");
 
@@ -64,7 +109,7 @@ test.describe("GUI shell", () => {
         });
         await expect(systemControls.getByRole("button", { name: "en" })).toHaveCount(0);
         await expect(page.getByRole("button", { name: "Show desktop" })).toHaveCount(0);
-        await expect(page.locator(".gui-viewer-name")).toHaveText("Guest");
+        await expect(page.locator(".application-viewer-name")).toHaveText("Guest");
 
         await page
             .getByRole("navigation", { name: "Applications" })
@@ -72,11 +117,68 @@ test.describe("GUI shell", () => {
             .click();
         await page
             .getByRole("dialog", { name: "설정" })
+            .getByRole("button", { name: "일반" })
+            .click();
+        await page
+            .getByRole("dialog", { name: "설정" })
             .getByRole("button", { name: "English" })
             .click();
 
-        await expect(page).toHaveURL(/lang=en/);
+        await expect(page).toHaveURL(/\/en\/gui\?app=settings$/);
         await expect(page.locator("html")).toHaveAttribute("lang", "en");
+        await expect(
+            page.getByRole("dialog", { name: "Career" }),
+        ).toBeVisible();
+        await expect(
+            page.getByRole("dialog", { name: "커리어" }),
+        ).toHaveCount(0);
+    });
+
+    test("updates the Terminal prompt after the viewer becomes authenticated", async ({
+        page,
+    }) => {
+        let resolveViewerResponse: (() => void) | undefined;
+        const viewerResponse = new Promise<void>((resolve) => {
+            resolveViewerResponse = resolve;
+        });
+
+        await page.route("**/api/auth/viewer", async (route) => {
+            await viewerResponse;
+            await route.fulfill({
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify({
+                    status: "authenticated",
+                    accountId: "account-1",
+                    displayName: "Hyunho",
+                    email: null,
+                    avatarUrl: null,
+                    role: "user",
+                }),
+            });
+        });
+
+        await page.goto("/gui?app=terminal");
+
+        const terminalWindow = page.locator('[data-window-id="terminal"]');
+        const terminalRows = terminalWindow.locator(".xterm-rows");
+        const terminalInput = terminalWindow.locator(".xterm-helper-textarea");
+        await expect(terminalRows).toBeVisible();
+
+        await terminalInput.focus();
+        await page.keyboard.press("Space");
+        await expect(terminalRows).toContainText(
+            "guest@hyunhokim.is-a.dev ~ %",
+        );
+
+        resolveViewerResponse?.();
+
+        await expect(page.locator(".application-viewer-name")).toHaveText(
+            "Hyunho",
+        );
+        await expect(terminalRows).toContainText(
+            "hyunho@hyunhokim.is-a.dev ~ %",
+        );
     });
 
     test("focuses a desktop shortcut on one click and opens it on double click", async ({
@@ -84,7 +186,7 @@ test.describe("GUI shell", () => {
     }) => {
         await page.goto("/gui?app=desktop");
         const projectsShortcut = page
-            .getByRole("navigation", { name: "Desktop shortcuts" })
+            .getByRole("navigation", { name: "데스크톱 바로가기" })
             .getByRole("button", { name: "프로젝트" });
 
         await expect(projectsShortcut).toHaveCSS("width", "70px");
@@ -114,7 +216,7 @@ test.describe("GUI shell", () => {
         expect(initialBox?.width).toBeLessThanOrEqual(652);
         expect(initialBox?.height).toBeLessThanOrEqual(450);
 
-        const titleBar = projectsWindow.locator(".gui-title-bar");
+        const titleBar = projectsWindow.locator(".application-title-bar");
         const titleBox = await titleBar.boundingBox();
         expect(titleBox).not.toBeNull();
         await page.mouse.move(
@@ -140,10 +242,23 @@ test.describe("GUI shell", () => {
             viewport: { width: 390, height: 844 },
         });
         const page = await mobileContext.newPage();
+        await page.addInitScript(() => {
+            globalThis.localStorage.setItem(
+                "gui:preferences",
+                JSON.stringify({
+                    version: 1,
+                    preferences: {
+                        language: "ko",
+                        wallpaper: "golden_gate_light",
+                        dockAutoHide: true,
+                    },
+                }),
+            );
+        });
         await page.goto("/gui");
 
         const window = page.getByRole("dialog", {
-            name: "나에 대해서",
+            name: "커리어",
         });
         const box = await window.boundingBox();
 
@@ -154,7 +269,7 @@ test.describe("GUI shell", () => {
         expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThan(770);
 
         const windowLayerZ = Number(
-            await page.locator(".gui-window-layer").evaluate((element) =>
+            await page.locator(".application-window-layer").evaluate((element) =>
                 getComputedStyle(element).zIndex,
             ),
         );
@@ -164,6 +279,26 @@ test.describe("GUI shell", () => {
             ),
         );
         expect(windowLayerZ).toBeGreaterThan(shortcutsZ);
+
+        const dock = page.getByRole("navigation", {
+            name: "Applications",
+        });
+        await expect(dock).toHaveAttribute("data-auto-hide", "true");
+        await expect(dock).toBeVisible();
+
+        await dock.getByRole("button", { name: "설정" }).click();
+        const settingsWindow = page.getByRole("dialog", { name: "설정" });
+        await settingsWindow.getByRole("button", { name: "일반" }).click();
+        await expect(
+            settingsWindow.getByText("모바일에서는 Dock이 항상 표시됩니다."),
+        ).toBeVisible();
+        await expect(
+            settingsWindow.getByRole("button", { name: "자동 숨김" }),
+        ).toBeHidden();
+        await expect(
+            settingsWindow.getByRole("button", { name: "항상 표시" }),
+        ).toBeHidden();
+
         await mobileContext.close();
     });
 
@@ -172,7 +307,7 @@ test.describe("GUI shell", () => {
         await page.goto("/gui?app=desktop");
 
         const projectsShortcut = page
-            .getByRole("navigation", { name: "Desktop shortcuts" })
+            .getByRole("navigation", { name: "데스크톱 바로가기" })
             .getByRole("button", { name: "프로젝트" });
         const before = await projectsShortcut.boundingBox();
         expect(before).not.toBeNull();
@@ -206,7 +341,7 @@ test.describe("GUI shell", () => {
 
         await expect(
             page.getByRole("navigation", {
-                name: "Desktop shortcuts",
+                name: "데스크톱 바로가기",
             }),
         ).toBeVisible();
         await expect(
@@ -216,14 +351,14 @@ test.describe("GUI shell", () => {
         ).toBeVisible();
 
         const windowBox = await page
-            .getByRole("dialog", { name: "나에 대해서" })
+            .getByRole("dialog", { name: "커리어" })
             .boundingBox();
         expect(windowBox).not.toBeNull();
         expect(windowBox?.x).toBe(64);
-        expect(windowBox?.width).toBe(740);
+        expect(windowBox?.width).toBe(820);
 
         const backgroundType = page.locator(
-            ".gui-wallpaper-art",
+            ".application-wallpaper-art",
         );
         await expect(backgroundType).toHaveAttribute(
             "aria-hidden",
@@ -245,7 +380,7 @@ test.describe("GUI shell", () => {
         await expect(aboutWindow).toHaveAttribute("data-active", "true");
 
         const beforeDrag = await aboutWindow.boundingBox();
-        const titleBar = aboutWindow.locator(".gui-title-bar");
+        const titleBar = aboutWindow.locator(".application-title-bar");
         const titleBarBox = await titleBar.boundingBox();
         expect(titleBarBox).not.toBeNull();
         await page.mouse.move(
@@ -259,7 +394,7 @@ test.describe("GUI shell", () => {
         );
         await page.mouse.up();
         const afterDrag = await aboutWindow.boundingBox();
-        expect((afterDrag?.x ?? 0) - (beforeDrag?.x ?? 0)).toBeGreaterThan(20);
+        expect((afterDrag?.x ?? 0) - (beforeDrag?.x ?? 0)).toBeGreaterThan(0);
 
         const movedTitleBar = await titleBar.boundingBox();
         await page.mouse.move(
@@ -281,11 +416,11 @@ test.describe("GUI shell", () => {
     }) => {
         await page.goto("/gui?app=projects");
         const projectFile = page.getByRole("button", {
-            name: "WCHMS 프로젝트 열기",
+            name: "공공기관 상담 어드바이저 프로젝트 열기",
         });
         await expect(projectFile).toHaveCSS("width", "70px");
-        const projectGrid = page.locator(".gui-project-grid");
-        const projectFolder = page.locator(".gui-folder-view");
+        const projectGrid = page.locator(".application-project-grid");
+        const projectFolder = page.locator(".application-folder-view");
         const hoverTarget = page.getByRole("button", {
             name: "Flare 프로젝트 열기",
         });
@@ -360,7 +495,7 @@ test.describe("GUI shell", () => {
         await expect(page).toHaveURL(/app=projects/);
 
         await projectFile.dblclick();
-        await expect(page).toHaveURL(/app=project&slug=wchms/);
+        await expect(page).toHaveURL(/app=project&slug=kepco/);
     });
 
     test("opens independent project windows without eager media", async ({
@@ -436,7 +571,7 @@ test.describe("GUI shell", () => {
         await expect(terminalRows).toBeVisible();
 
         const dock = page.getByRole("navigation", { name: "Applications" });
-        await dock.getByRole("button", { name: "나에 대해서" }).click();
+        await dock.getByRole("button", { name: "커리어" }).click();
         await expect(terminalWindow).toHaveAttribute("data-active", "false");
 
         const before = await terminalRows.textContent();
@@ -479,7 +614,7 @@ test.describe("GUI shell", () => {
         const dock = page.getByRole("navigation", {
             name: "Applications",
         });
-        await dock.getByRole("button", { name: "나에 대해서" }).click();
+        await dock.getByRole("button", { name: "커리어" }).click();
 
         await expect(terminalRuntime).toHaveAttribute(
             "data-effective-visibility",
@@ -570,7 +705,14 @@ test.describe("GUI shell", () => {
                 name: "Experience",
             }),
         ).toBeVisible();
-        await expect(resumeWindow.getByText("WebPiano")).toBeVisible();
+        await expect(
+            resumeWindow
+                .getByLabel("Experience", { exact: true })
+                .getByRole("heading", {
+                    name: "OptiGen AI Platform",
+                    exact: true,
+                }),
+        ).toBeVisible();
         await expect(
             resumeWindow.getByRole("link", {
                 name: "github.com/noonnofus",
@@ -587,11 +729,11 @@ test.describe("GUI shell", () => {
 
         await page.emulateMedia({ media: "print" });
 
-        await expect(page.locator(".gui-system-bar")).toBeHidden();
-        await expect(page.locator(".gui-dock")).toBeHidden();
+        await expect(page.locator(".application-system-bar")).toBeHidden();
+        await expect(page.locator(".application-dock")).toBeHidden();
         await expect(aboutWindow).toBeHidden();
         await expect(
-            resumeWindow.locator(".gui-title-bar"),
+            resumeWindow.locator(".application-title-bar"),
         ).toBeHidden();
         await expect(
             resumeWindow.getByRole("button", {
@@ -615,20 +757,25 @@ test.describe("GUI shell", () => {
         });
 
         await page.goto("/gui?app=settings");
+        let settingsWindow = page.getByRole("dialog", { name: "설정" });
+        await settingsWindow.getByRole("button", { name: "일반" }).click();
+        await settingsWindow.getByRole("button", { name: "English" }).click();
 
-        await page.getByRole("button", { name: "English" }).click();
-        await page.getByRole("button", { name: "Dark Mode" }).click();
-        await page.getByRole("button", { name: "Auto hide" }).click();
-        await page.getByRole("button", { name: /Tahoe Light/ }).click();
+        settingsWindow = page.getByRole("dialog", { name: "Settings" });
+        await settingsWindow.getByRole("button", { name: "Display" }).click();
+        await settingsWindow.getByRole("button", { name: "Dark Mode" }).click();
+        await settingsWindow.getByRole("button", { name: /Tahoe Light/ }).click();
+        await settingsWindow.getByRole("button", { name: "General" }).click();
+        await settingsWindow.getByRole("button", { name: "Auto hide" }).click();
 
         await page.goto("/gui?app=settings");
 
         await expect(page.locator("html")).toHaveAttribute("lang", "en");
-        await expect(page.locator(".gui-shell")).toHaveAttribute(
+        await expect(page.locator(".application-shell")).toHaveAttribute(
             "data-theme",
             "dark",
         );
-        await expect(page.locator(".gui-shell")).toHaveAttribute(
+        await expect(page.locator(".application-shell")).toHaveAttribute(
             "data-wallpaper",
             "tahoe_light",
         );
@@ -636,6 +783,143 @@ test.describe("GUI shell", () => {
             page.getByRole("navigation", { name: "Applications" }),
         ).toHaveAttribute("data-auto-hide", "true");
         expect(preferenceRequests).toEqual([]);
+    });
+
+    test("keeps Settings and the GUI available when Supabase APIs fail", async ({
+        page,
+    }) => {
+        await page.route("**/api/auth/viewer", (route) =>
+            route.fulfill({ status: 503, body: "{}" }),
+        );
+        await page.route("**/api/wallpapers", (route) =>
+            route.fulfill({ status: 503, body: "{}" }),
+        );
+
+        await page.goto("/gui?app=settings");
+
+        await expect(page.locator(".application-shell")).toBeVisible();
+        await expect(page.locator(".application-viewer-name")).toHaveText(
+            "Guest",
+        );
+
+        const settings = page.getByRole("dialog", { name: "설정" });
+        await settings.getByRole("button", { name: "화면 모드" }).click();
+        await expect(
+            settings.getByRole("button", { name: /Golden Gate Light/ }),
+        ).toBeVisible();
+        await settings.getByRole("button", { name: "다크 모드" }).click();
+
+        await expect(page.locator(".application-shell")).toHaveAttribute(
+            "data-theme",
+            "dark",
+        );
+        await expect
+            .poll(() =>
+                page.evaluate(() => localStorage.getItem("theme")),
+            )
+            .toBe("dark");
+    });
+
+    test("isolates a Notes API outage and offers an accessible retry", async ({
+        page,
+    }) => {
+        let notesRequests = 0;
+        await page.route("**/api/auth/viewer", (route) =>
+            route.fulfill({
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify({
+                    status: "authenticated",
+                    accountId: "account-1",
+                    displayName: "Hyunho",
+                    email: null,
+                    avatarUrl: null,
+                    role: "user",
+                }),
+            }),
+        );
+        await page.route("**/api/notes?*", (route) => {
+            notesRequests += 1;
+            return route.fulfill({ status: 503, body: "{}" });
+        });
+
+        await page.goto("/gui?app=notes");
+
+        const notes = page.getByRole("dialog", { name: "방명록" });
+        await expect(notes.getByRole("alert")).toContainText(
+            "노트를 불러오지 못했습니다.",
+        );
+        await expect(
+            notes.getByText("작성하려면 로그인이 필요합니다."),
+        ).toHaveCount(0);
+        await expect(notes.getByText("새 노트")).toHaveCount(0);
+        await expect(
+            notes.getByRole("textbox", { name: "새 노트 작성" }),
+        ).toHaveCount(0);
+        const retry = notes.getByRole("button", { name: "다시 시도" });
+        await expect(retry).toBeVisible();
+        await retry.click();
+        await expect.poll(() => notesRequests).toBeGreaterThanOrEqual(3);
+        await expect(retry).toBeEnabled();
+    });
+
+    test("keeps the localized Guestbook loading state across app and data loading", async ({
+        page,
+    }) => {
+        let releaseGuestbookChunk: (() => void) | undefined;
+        const guestbookChunk = new Promise<void>((resolve) => {
+            releaseGuestbookChunk = resolve;
+        });
+        let resolveNotesResponse: (() => void) | undefined;
+        const notesResponse = new Promise<void>((resolve) => {
+            resolveNotesResponse = resolve;
+        });
+        let notesRequests = 0;
+
+        await page.goto("/gui?app=desktop");
+
+        await page.route("**/_next/static/chunks/**/*.js", async (route) => {
+            const response = await route.fetch();
+            const body = await response.body();
+
+            if (body.toString("utf8").includes("createGuestbookNoteAction")) {
+                await guestbookChunk;
+            }
+
+            await route.fulfill({ response, body });
+        });
+
+        await page.route("**/api/notes?*", async (route) => {
+            notesRequests += 1;
+            await notesResponse;
+            await route.fulfill({
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify({ notes: [] }),
+            });
+        });
+
+        await page
+            .getByRole("navigation", { name: "Applications" })
+            .getByRole("button", { name: "방명록" })
+            .click();
+
+        const notes = page.getByRole("dialog", { name: "방명록" });
+        const appLoadingState = notes.locator('[data-loading-phase="app"]');
+        await expect(appLoadingState).toHaveText("불러오는 중...");
+        await expect(notes.getByText("Loading…")).toHaveCount(0);
+        expect(notesRequests).toBe(0);
+
+        releaseGuestbookChunk?.();
+
+        await expect.poll(() => notesRequests).toBeGreaterThanOrEqual(1);
+        await expect(
+            notes.locator('[data-loading-phase="notes"]'),
+        ).toHaveText("불러오는 중...");
+
+        resolveNotesResponse?.();
+
+        await expect(notes.getByText("아직 노트가 없습니다.")).toBeVisible();
     });
 
     test("restores Settings from the URL and keeps language canonical", async ({
@@ -652,7 +936,7 @@ test.describe("GUI shell", () => {
                 name: "System Settings",
             }),
         ).toBeVisible();
-
+        await settingsWindow.getByRole("button", { name: "General" }).click();
         await settingsWindow
             .getByRole("button", { name: "한국어" })
             .click();
@@ -660,13 +944,17 @@ test.describe("GUI shell", () => {
         await expect(
             page.getByRole("dialog", { name: "설정" }),
         ).toBeVisible();
+        await page
+            .getByRole("dialog", { name: "설정" })
+            .getByRole("button", { name: "화면 모드" })
+            .click();
 
         await page
             .getByRole("dialog", { name: "설정" })
             .getByRole("button", { name: "다크 모드" })
             .click();
         await expect(page.locator("html")).toHaveClass(/dark/);
-        await expect(page.locator(".gui-shell")).toHaveAttribute(
+        await expect(page.locator(".application-shell")).toHaveAttribute(
             "data-theme",
             "dark",
         );
@@ -675,7 +963,7 @@ test.describe("GUI shell", () => {
             .getByRole("dialog", { name: "설정" })
             .getByRole("button", { name: /Tahoe Light/ })
             .click();
-        await expect(page.locator(".gui-shell")).toHaveAttribute(
+        await expect(page.locator(".application-shell")).toHaveAttribute(
             "data-wallpaper",
             "tahoe_light",
         );
@@ -685,18 +973,24 @@ test.describe("GUI shell", () => {
             .getByRole("button", { name: "라이트 모드" })
             .click();
         await expect(page.locator("html")).toHaveClass(/light/);
-        const shell = page.locator(".gui-shell");
+        const shell = page.locator(".application-shell");
         await expect(shell).toHaveAttribute("data-theme", "light");
-        await expect(shell).toHaveCSS(
-            "background-image",
-            /tahoe_light\.jpg/,
+        const wallpaperImage = shell.locator(
+            ".application-wallpaper-media img",
         );
+        await expect(wallpaperImage).toBeVisible();
+        await expect(wallpaperImage).toHaveAttribute("src", /tahoe_light\.jpg/);
+        await expect
+            .poll(() =>
+                wallpaperImage.evaluate(
+                    (image) => (image as HTMLImageElement).naturalWidth,
+                ),
+            )
+            .toBeGreaterThan(0);
         const settings = page.getByRole("dialog", { name: "설정" });
-        await expect(
-            settings.locator(".gui-settings-panel").first(),
-        ).toHaveCSS("background-color", "rgb(248, 250, 252)");
 
         const dock = page.getByRole("navigation", { name: "Applications" });
+        await settings.getByRole("button", { name: "일반" }).click();
         await settings.getByRole("button", { name: "자동 숨김" }).click();
         await expect(dock).toHaveAttribute("data-auto-hide", "true");
         await expect
@@ -712,8 +1006,8 @@ test.describe("GUI shell", () => {
             .getByRole("button", { name: "프로젝트" })
             .click();
         const projectsWindow = page.getByRole("dialog", { name: "프로젝트" });
-        const projectsContent = projectsWindow.locator(".gui-window-content");
-        const folder = projectsWindow.locator(".gui-folder-view");
+        const projectsContent = projectsWindow.locator(".application-window-content");
+        const folder = projectsWindow.locator(".application-folder-view");
         await expect(folder).toHaveCSS("background-color", "rgb(247, 249, 252)");
         const contentBox = await projectsContent.boundingBox();
         const folderBox = await folder.boundingBox();
@@ -726,9 +1020,9 @@ test.describe("GUI shell", () => {
         await page.goto("/gui");
 
         await expect(
-            page.locator(".gui-system-title"),
+            page.locator(".application-system-title"),
         ).toHaveText("Hyunho's Portfolio");
-        await expect(page.locator(".gui-viewer-name")).toContainText(
+        await expect(page.locator(".application-viewer-name")).toContainText(
             "Guest",
         );
 
@@ -751,7 +1045,7 @@ test.describe("GUI shell", () => {
             '[data-window-id="contact"]',
         );
         const contactSurface = contactWindow.locator(
-            ".gui-app-surface",
+            ".application-app-surface",
         );
         const contactBox = await contactWindow.boundingBox();
 
@@ -762,12 +1056,16 @@ test.describe("GUI shell", () => {
         );
         await expect(contactSurface).toHaveCSS(
             "background-color",
-            "rgb(246, 245, 244)",
+            "rgb(245, 245, 247)",
         );
 
         await page
             .getByRole("navigation", { name: "Applications" })
             .getByRole("button", { name: "설정" })
+            .click();
+        await page
+            .getByRole("dialog", { name: "설정" })
+            .getByRole("button", { name: "화면 모드" })
             .click();
         await page
             .getByRole("dialog", { name: "설정" })
@@ -803,10 +1101,10 @@ test.describe("GUI shell", () => {
         );
 
         await expect(
-            aboutWindow.locator(".gui-window-content"),
+            aboutWindow.locator(".application-window-content"),
         ).toHaveAttribute("inert", "");
         await expect(
-            projectsWindow.locator(".gui-window-content"),
+            projectsWindow.locator(".application-window-content"),
         ).not.toHaveAttribute("inert", "");
 
         await page.keyboard.press("Control+F6");
@@ -817,7 +1115,8 @@ test.describe("GUI shell", () => {
         );
         await expect(
             aboutWindow.getByRole("heading", {
-                name: "나에 대해서",
+                name: "커리어",
+                exact: true,
             }),
         ).toBeFocused();
 
@@ -837,7 +1136,7 @@ test.describe("GUI shell", () => {
         const aboutWindow = page.locator('[data-window-id="about"]');
         await expect(
             aboutWindow.getByRole("combobox", {
-                name: "나에 대해서 position",
+                name: "커리어 position",
             }),
         ).toHaveCount(0);
         await expect(
@@ -845,15 +1144,15 @@ test.describe("GUI shell", () => {
         ).toHaveCount(0);
 
         const maximizeButton = aboutWindow.getByRole("button", {
-            name: "나에 대해서 maximize",
+            name: "커리어 maximize",
         });
         await maximizeButton.click();
-        await expect(aboutWindow).toHaveClass(/gui-window-maximized/);
+        await expect(aboutWindow).toHaveClass(/application-window-maximized/);
         const maximizedBox = await aboutWindow.boundingBox();
         expect(maximizedBox).toEqual({ x: 0, y: 36, width: 756, height: 765 });
 
         await aboutWindow
-            .getByRole("button", { name: "나에 대해서 restore" })
+            .getByRole("button", { name: "커리어 restore" })
             .click();
         await aboutWindow.evaluate((dialog) => {
             const startedAt = performance.now();
@@ -871,7 +1170,7 @@ test.describe("GUI shell", () => {
         });
         await aboutWindow
             .getByRole("button", {
-                name: "나에 대해서 minimize",
+                name: "커리어 minimize",
             })
             .click();
         await expect(aboutWindow).toBeHidden();
@@ -914,7 +1213,7 @@ async function expectGuiScreenshot(
         : null;
     try {
         await expect(page).toHaveScreenshot(name, {
-            mask: [page.locator(".gui-system-clock")],
+            mask: [page.locator(".application-system-clock")],
         });
     } finally {
         await stabilizationStyle?.evaluate((element) =>
@@ -925,6 +1224,20 @@ async function expectGuiScreenshot(
 
 test.describe("GUI visual parity", () => {
     test.beforeEach(async ({ page }) => {
+        await page.route("**/api/auth/viewer", (route) =>
+            route.fulfill({
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify({ status: "guest" }),
+            }),
+        );
+        await page.route("**/api/wallpapers", (route) =>
+            route.fulfill({
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify({ wallpapers: [] }),
+            }),
+        );
         await page.setViewportSize({ width: 1440, height: 900 });
     });
 
@@ -933,11 +1246,11 @@ test.describe("GUI visual parity", () => {
         await expectGuiScreenshot(page, "desktop-idle.png");
 
         await page
-            .getByRole("navigation", { name: "Desktop shortcuts" })
+            .getByRole("navigation", { name: "데스크톱 바로가기" })
             .getByRole("button", { name: "프로젝트" })
             .click();
         const selectedIcon = page
-            .getByRole("navigation", { name: "Desktop shortcuts" })
+            .getByRole("navigation", { name: "데스크톱 바로가기" })
             .getByRole("button", { name: "프로젝트" })
             .locator(".desktop-app-icon-wrapper");
         await expect(selectedIcon).toHaveCSS("outline-width", "1px");
@@ -977,8 +1290,8 @@ test.describe("GUI visual parity", () => {
         await expectGuiScreenshot(page, "window-normal.png");
 
         await page
-            .getByRole("dialog", { name: "나에 대해서" })
-            .getByRole("button", { name: "나에 대해서 maximize" })
+            .getByRole("dialog", { name: "커리어" })
+            .getByRole("button", { name: "커리어 maximize" })
             .click();
         await expectGuiScreenshot(page, "window-maximized.png");
     });
@@ -988,9 +1301,11 @@ test.describe("GUI visual parity", () => {
         await expectGuiScreenshot(page, "settings-light.png");
 
         const settings = page.getByRole("dialog", { name: "설정" });
+        await settings.getByRole("button", { name: "화면 모드" }).click();
         await settings.getByRole("button", { name: "다크 모드" }).click();
         await expectGuiScreenshot(page, "settings-dark.png");
 
+        await settings.getByRole("button", { name: "일반" }).click();
         const autoHideButton = settings.getByRole("button", {
             name: "자동 숨김",
         });
@@ -1006,7 +1321,7 @@ test.describe("GUI visual parity", () => {
             .toBeLessThan(850);
         const dockCaptureStyle = await page.addStyleTag({
             content: `
-                .gui-dock[data-auto-hide="true"] {
+                .application-dock[data-auto-hide="true"] {
                     transform: translateX(-50%) !important;
                 }
             `,

@@ -1,8 +1,16 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function proxy(request: NextRequest) {
+  const isPublicGuiRead =
+    request.nextUrl.pathname.startsWith("/gui") &&
+    (request.method === "GET" || request.method === "HEAD");
+
+  if (isPublicGuiRead) {
+    return NextResponse.next();
+  }
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -36,5 +44,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/gui/:path*", "/auth/:path*", "/api/:path*"],
+  matcher: ["/gui/:path*", "/api/auth/viewer", "/api/account"],
 };

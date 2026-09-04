@@ -1,0 +1,134 @@
+{
+  "title": "Flare",
+  "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "A team project that helps local communities explore fragmented wildfire information in one place. It combines a map, risk indicators, related news, a wildfire-focused AI chatbot, and web push notifications in an installable web application.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Combined maps, risk indicators, news, questions, and alerts in one PWA",
+    "description": "The evidence is the implemented user flow and web and installed-environment demos rather than an unverified metric."
+  },
+  "projectIntro": {
+    "title": "Project overview",
+    "description": "When wildfire locations, risk information, and related news live in separate channels, users have to assemble the situation themselves. I helped design one experience that connects the core information, follow-up questions, and notifications."
+  },
+  "projectContext": {
+    "product": {
+      "label": "Product",
+      "description": "An installable web application for exploring wildfire information and related questions"
+    },
+    "users": {
+      "label": "Users",
+      "description": "Local users who want to review wildfire locations, risk indicators, and related news in one place"
+    },
+    "role": {
+      "label": "My scope",
+      "description": "Designed and implemented major full-stack features including PWA installation, a wildfire-focused AI chatbot, and web push notifications"
+    }
+  },
+  "caseStudy": {
+    "informationFlow": {
+      "title": "Unified fragmented wildfire information around a map-first flow",
+      "description": "I helped bring information from separate sources into one view where users could understand the situation and continue with follow-up questions.",
+      "items": {
+        "fragmentedInformation": {
+          "title": "Information spread across separate channels",
+          "description": "Wildfire locations, risk indicators, and related news were separated, leaving users to assemble the current situation themselves."
+        },
+        "unifiedView": {
+          "title": "A map-centered unified view",
+          "description": "Wildfire locations and risk levels were placed on the map, with related news available in the same exploration flow."
+        },
+        "installableWeb": {
+          "title": "An installable web path",
+          "description": "PWA installation and web push notifications supported repeat access on mobile and desktop without a separate native application."
+        },
+        "consolidatedAccess": {
+          "title": "One exploration flow",
+          "description": "Users could move through the map, risk indicators, news, wildfire questions, and notifications in one web application."
+        }
+      }
+    },
+    "problem": {
+      "title": "Problem and requirements",
+      "description": "Users needed a quicker way to understand wildfire information from several sources and return to the service from mobile devices.",
+      "items": {
+        "fragmentedInformation": {
+          "title": "Fragmented wildfire information",
+          "description": "When locations, risk indicators, and related news are separate, users must move between sources and assemble the situation themselves."
+        },
+        "deviceAccess": {
+          "title": "Access across devices",
+          "description": "The same capabilities needed to work on desktop and mobile, with browser installation available on supported devices."
+        },
+        "focusedQuestions": {
+          "title": "Follow-up information",
+          "description": "Users needed a supporting channel for questions that a map and news feed alone could not answer, while keeping the topic focused on wildfires."
+        }
+      }
+    },
+    "design": {
+      "title": "Design and technical decisions",
+      "description": "I placed information exploration, installation, and follow-up questions inside one disaster-information experience.",
+      "items": {
+        "unifiedView": {
+          "title": "Map-centered unified view",
+          "description": "Wildfire locations and risk indicators are presented on a map, with related news available in the same exploration flow."
+        },
+        "installableWeb": {
+          "title": "PWA installation",
+          "description": "I used a PWA to retain a web codebase while enabling installation from supported mobile and desktop browsers."
+        },
+        "scopedAssistant": {
+          "title": "Wildfire-scoped chatbot",
+          "description": "Instead of a general-purpose chatbot, I constrained the prompt role and response scope to wildfire-related questions."
+        }
+      }
+    },
+    "implementation": {
+      "title": "Other Contributions",
+      "description": "Beyond the featured information-flow case, I connected news collection, AI conversation, and notification features across the stack.",
+      "items": {
+        "mapAndRisk": {
+          "title": "Wildfire map and risk indicators",
+          "description": "I presented wildfire information in a map interface so users could review location and risk level together."
+        },
+        "newsPipeline": {
+          "title": "Related-news collection",
+          "description": "I connected related stories collected through the Bing News API and a web crawler to the application."
+        },
+        "chatbot": {
+          "title": "Wildfire-focused AI chatbot",
+          "description": "I used the OpenAI API to implement a conversation experience for follow-up wildfire questions."
+        },
+        "notifications": {
+          "title": "Web push notifications",
+          "description": "I used Firebase to deliver wildfire-related notifications to supported browsers."
+        }
+      }
+    },
+    "outcome": {
+      "title": "Implementation outcome",
+      "description": "The main wildfire-information capabilities are available in one service that users can revisit from desktop and mobile environments.",
+      "items": {
+        "consolidatedAccess": {
+          "title": "Consolidated information flow",
+          "description": "The map, risk indicators, and related news are available within one screen flow."
+        },
+        "installableExperience": {
+          "title": "Installable web experience",
+          "description": "The product retains a web architecture while supporting installation to the home screen or application list in compatible browsers."
+        },
+        "focusedSupport": {
+          "title": "Extended through questions and notifications",
+          "description": "The experience goes beyond static information by supporting wildfire-focused questions and web push notifications."
+        }
+      }
+    }
+  },
+  "walkthrough": {
+    "title": "Product walkthrough",
+    "description": "The videos demonstrate the implemented screens and user flows in the web and installed experiences.",
+    "unsupported": "Your browser does not support video playback."
+  }
+}

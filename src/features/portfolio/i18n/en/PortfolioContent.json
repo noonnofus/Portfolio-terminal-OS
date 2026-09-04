@@ -1,0 +1,75 @@
+{
+  "profile": {
+    "name": "HyunHo Kim",
+    "role": "Frontend Developer",
+    "summary": [
+      "I believe small differences in user experience shape a product's overall quality.",
+      "I turn design intent into code and improve maintainability through reusable components and clear file structures.",
+      "I validate critical user flows with Playwright-based end-to-end and unit tests, then start with reproducible conditions when resolving issues.",
+      "I automate repetitive work with AI, but always verify the results myself. I believe developers are ultimately responsible for delivering trustworthy outcomes."
+    ],
+    "location": "South Korea"
+  },
+  "experience": [
+    {
+      "title": "LOGOS AI",
+      "role": "Full-Stack Developer",
+      "period": "Aug 2025 ~ Present",
+      "highlights": [
+        {
+          "title": "KEPCO Contact Center Advisor",
+          "items": [
+            "I designed and implemented the agent and manager frontend from live STT transcription through post-call AI analysis and consultation history.",
+            "During the pilot, I trained agents and turned their feedback into name search, favorites, and a dedicated favorites tab.",
+            "In an environment averaging about 50,000 calls a day, the system was used by 60% of all agents, and average customer wait time decreased by about 30% after the project entered operation."
+          ]
+        },
+        {
+          "title": "OptiGen AI Platform",
+          "items": [
+            "I designed and implemented the frontend and UI/UX from the ground up, including chat, agent settings, conversation history, documents, and administrative features.",
+            "I aligned SSE event rules with the backend and connected response generation, MCP tool execution, completion, and error states to the conversation flow.",
+            "I connected WebGPU local STT with the meeting-minutes MCP and automated shared-UI verification with 40 Storybook stories and Vitest."
+          ]
+        },
+        {
+          "title": "AICC Voice Gateway",
+          "items": [
+            "I implemented an AICC Voice Gateway connecting PBX and SIP integration, per-call Workers, and multiple Voice AI backends.",
+            "Transport, Factory, Strategy, and Codec boundaries isolate provider protocol and audio differences.",
+            "I implemented VAD-based silence and background-noise handling, DTMF input, call sessions, and reconnection flows."
+          ]
+        }
+      ]
+    }
+  ],
+  "skills": [
+    { "label": "Languages", "items": ["TypeScript", "JavaScript", "HTML", "CSS", "PHP"] },
+    { "label": "Frontend", "items": ["React", "Next.js", "Vue.js", "Tailwind CSS"] },
+    { "label": "Backend", "items": ["Node.js", "Express", "Hono", "Laravel"] },
+    { "label": "Data", "items": ["PostgreSQL", "MySQL", "MongoDB", "Drizzle", "Prisma"] },
+    { "label": "Realtime and AI", "items": ["WebRTC", "WebSocket", "OpenAI API", "STT"] },
+    { "label": "Tools", "items": ["Git", "GitHub", "Jira", "Figma"] }
+  ],
+  "projects": [
+    { "slug": "portfolio", "summary": "An OS-style portfolio for the browser that keeps window state, URLs, folder interactions, and preferences in one consistent model." },
+    { "slug": "optigen", "summary": "A B2B AI platform for managing organizations, permissions, AI bots, and documents with RAG-grounded conversations, extended through MCP and Voice Gateway." },
+    { "slug": "mcp", "summary": "An MCP server that connects OptiGen AI to external business APIs and reports progress and results for long-running work such as meeting-minute generation." },
+    { "slug": "voice-gateway", "summary": "A real-time voice gateway connecting PBX and SIP calls with multiple Voice AI backends while isolating provider protocol and audio differences." },
+    { "slug": "kepco", "summary": "A contact-center support system that connects live STT transcription, post-call AI analysis, and call-history search for agents." },
+    { "slug": "wchms", "summary": "An AI-assisted self-study and course management platform supporting dementia prevention programs for Japanese seniors in Vancouver." },
+    { "slug": "flare", "summary": "A wildfire information PWA combining live maps, risk indicators, news, notifications, and a focused AI chatbot." }
+  ],
+  "education": [
+    {
+      "institution": "British Columbia Institute of Technology (BCIT)",
+      "program": "Full-Stack Web Development",
+      "period": "Aug 2023 ~ Jun 2025"
+    }
+  ],
+  "contact": {
+    "email": "kevinvancouver02@gmail.com",
+    "github": "https://github.com/noonnofus",
+    "linkedin": "https://www.linkedin.com/in/kevin-hyun-ho-kim/"
+  }
+}

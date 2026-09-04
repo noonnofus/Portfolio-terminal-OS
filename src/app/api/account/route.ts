@@ -4,8 +4,8 @@ import { requireViewer } from "@/features/auth/server/requireUser";
 import {
   rejectInvalidJsonRequest,
   rejectInvalidOrigin,
-} from "@/shared/lib/http/requestGuards";
-import { createSupabaseAdminClient } from "@/shared/lib/supabase/admin";
+} from "@/lib/http/requestGuards";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 

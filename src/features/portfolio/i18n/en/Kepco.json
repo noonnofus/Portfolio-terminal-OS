@@ -1,0 +1,139 @@
+{
+  "title": "Public-Sector Contact Center Advisor",
+  "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "An internal web service that helps public-sector contact-center agents follow live STT transcription during a call, then review AI analysis and consultation history after it ends. I designed and implemented the frontend across agent and manager workflows.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Used by 60% of agents, with average customer wait time reduced by 30%"
+  },
+  "projectIntro": {
+    "title": "Project overview",
+    "description": "Live transcription and connection status matter during a call, while durable consultation history and AI analysis matter after it ends. I designed the screens and state flow so agents retain the same context as call state changes."
+  },
+  "projectContext": {
+    "service": {
+      "label": "Service",
+      "description": "An internal web service supporting public-sector contact-center work"
+    },
+    "users": {
+      "label": "Users",
+      "description": "Agents handling live calls and managers reviewing consultation status and history"
+    },
+    "role": {
+      "label": "My scope",
+      "description": "Designed and implemented agent and manager UI, live transcription, call state, connection recovery, and consultation history"
+    }
+  },
+  "caseStudy": {
+    "sttRecovery": {
+      "title": "Rendering live STT reliably with SSE",
+      "description": "I translated SSE events into screen state so agents could follow new transcription during a call while retaining their reading context as connection and scroll state changed.",
+      "items": {
+        "problem": {
+          "title": "Problem",
+          "description": "Connection closure, a stalled heartbeat, and expired authentication were handled as if they were the same failure. Returning to a tab could also reconnect to an already-ended call, receive a 404, and incorrectly turn a recoverable state into a fatal one."
+        },
+        "errorPolicy": {
+          "title": "Error classification and five-stage retry",
+          "description": "With fetchEventSource, I separated retryable errors from failures that should stop immediately. Connection attempts run at 0, 500, 1000, 2000, and 3000ms with a 60-second heartbeat monitor, while the reducer owns open, retrying, recovered, exhausted, and fatal states."
+        },
+        "authRecovery": {
+          "title": "Authentication recovery for SSE",
+          "description": "I applied proactive token refresh to SSE, which runs outside Axios. A 401 during onopen triggers one in-band refresh before reconnecting, and a one-shot guard prevents an infinite refresh loop. openWhenHidden keeps the connection alive while the tab is hidden."
+        },
+        "scrollOwnership": {
+          "title": "One owner for transcript scrolling",
+          "description": "ResizeObserver detects transcript growth. Automatic following pauses when an agent scrolls upward to read earlier content and resumes after returning to the bottom, preventing live, playback, and search scrolling from competing."
+        },
+        "verification": {
+          "title": "Outcome",
+          "description": "Agents could follow new transcription in real time while seeing the current connection state. Automatic scrolling no longer took control while they read earlier content, and a temporary disconnect no longer led directly to a fatal-error screen."
+        }
+      }
+    },
+    "multiTabAuth": {
+      "title": "Removing forced logout caused by multi-tab refresh-token races",
+      "description": "Multiple tabs could consume a single-use Refresh Token at the same time and turn a valid session into a logout. I resolved it by serializing refreshes across tabs and separating failure policies.",
+      "items": {
+        "problem": {
+          "title": "Problem",
+          "description": "When several tabs refreshed the same token simultaneously, only the first request succeeded and the others received 401 responses. Those failures were treated as invalid authentication and deleted an otherwise valid session."
+        },
+        "rootCause": {
+          "title": "Root cause",
+          "description": "Each browser tab ran its refresh flow independently, and transient timeout, network, and 5xx failures shared the same logout path as an actually invalid session."
+        },
+        "serialization": {
+          "title": "Cross-tab refresh serialization",
+          "description": "Web Locks allows only one tab to refresh at a time. Waiting tabs read the shared updated authentication state after the lock is released, with the previous flow retained as a fallback where Web Locks is unavailable."
+        },
+        "failurePolicy": {
+          "title": "Session policy by failure type",
+          "description": "The session is cleared only when authentication is genuinely invalid. Network and server failures preserve the user session and remain retryable."
+        },
+        "verification": {
+          "title": "Verification",
+          "description": "Tests cover simultaneous refresh requests, reuse after another tab succeeds, and session preservation during network and server failures to prevent forced logout from returning."
+        }
+      }
+    }
+  },
+  "contributions": {
+    "title": "Other Contributions",
+    "description": "Beyond the featured problem-solving case, I implemented the main frontend workflows used by agents and administrators.",
+    "items": {
+      "consultation": {
+        "title": "Live consultation screen",
+        "description": "I connected active-call detection, speaker-specific STT transcription, call and connection state, and post-call AI analysis into one consultation flow."
+      },
+      "history": {
+        "title": "Consultation history navigation",
+        "description": "I implemented consultation history and added search, favorites, and a favorites-only tab in response to agent feedback."
+      },
+      "roles": {
+        "title": "Agent and manager screens",
+        "description": "Side panels, tabs, and main panels compose by role, with loading states and error boundaries applied at the panel level."
+      },
+      "resilience": {
+        "title": "Connection and recovery experience",
+        "description": "Retry state and recovery points remain visible so agents keep previously confirmed transcription and continue into next-call detection after a disconnect."
+      }
+    }
+  },
+  "verification": {
+    "title": "Core scenarios I verified",
+    "description": "I evaluated the live interface not only under a healthy connection, but also by whether it preserves consultation context across event-order and reconnection scenarios.",
+    "items": {
+      "stateTransition": {
+        "title": "Call-state transitions",
+        "description": "I checked the idle, live, and ended transitions to confirm that polling and SSE start and stop in the correct state."
+      },
+      "eventConsistency": {
+        "title": "Transcription-event consistency",
+        "description": "I checked that partial speech stays in speaker-specific temporary regions and finalized speech remains deduplicated and ordered by start time."
+      },
+      "recovery": {
+        "title": "Recovery without context loss",
+        "description": "I checked that finalized transcription survives staged retries and manual reconnection, then reconciles with a fresh snapshot."
+      }
+    }
+  },
+  "flow": {
+    "title": "I switched between live and durable data paths through call state.",
+    "description": "While idle, the frontend looks for an active call. Once a call begins, reducer-managed SSE events drive the UI. After the call ends, the live connection closes and the flow continues into AI analysis and consultation history.",
+    "alt": "Frontend state flow from active-call detection through call state, SSE, transcription reducer, and consultation UI",
+    "caption": "SSE owns live state during a call; next-call detection and durable history continue after it ends.",
+    "loading": "Loading the architecture diagram.",
+    "error": "The architecture diagram could not be displayed.",
+    "diagram": {
+      "polling": "1-second active-call polling",
+      "callState": "Zustand call state, idle → live → ended",
+      "live": "live",
+      "stream": "Call-scoped SSE, openWhenHidden",
+      "reducer": "Transcript reducer, SNAPSHOT, PARTIAL, FINAL",
+      "ui": "Consultation UI, transcript, connection state, analysis",
+      "terminal": "CALL_END, fatal, exhausted, resume polling"
+    }
+  }
+}

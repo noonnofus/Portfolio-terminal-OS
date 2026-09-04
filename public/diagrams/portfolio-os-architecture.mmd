@@ -1,0 +1,23 @@
+flowchart LR
+    Visitor[Visitor] --> Terminal[Terminal entry]
+    Visitor --> Gui[GUI shell]
+    Terminal --> Gui
+    Gui --> Planner[Navigation planner]
+    Planner --> Store[GUI store]
+    Planner --> Adapter[Browser adapter]
+    Adapter --> History[URL and History API]
+    Gui --> Directory[DirectorySurface]
+    Directory --> Desktop[Desktop]
+    Directory --> Projects[Projects folder]
+    Gui --> Content[Portfolio content and locale]
+    Gui --> Preferences[Language and appearance preferences]
+
+    classDef shell fill:#e8f0fe,stroke:#2563eb,color:#172554
+    classDef state fill:#ecfdf5,stroke:#059669,color:#064e3b
+    classDef browser fill:#fff7ed,stroke:#ea580c,color:#7c2d12
+    classDef data fill:#f5f3ff,stroke:#7c3aed,color:#3b0764
+
+    class Terminal,Gui,Directory,Desktop,Projects shell
+    class Planner,Store state
+    class Adapter,History browser
+    class Content,Preferences data

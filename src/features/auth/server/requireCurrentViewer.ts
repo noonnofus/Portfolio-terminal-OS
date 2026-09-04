@@ -2,9 +2,9 @@ import "server-only";
 
 import { cookies } from "next/headers";
 
-import type { Viewer } from "@/features/auth/model/viewer";
+import type { Viewer } from "@/features/auth/types/viewer";
 import { ensureUserAccount } from "@/features/auth/server/getViewer";
-import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function requireCurrentViewer(): Promise<
   Extract<Viewer, { status: "authenticated" }> | null

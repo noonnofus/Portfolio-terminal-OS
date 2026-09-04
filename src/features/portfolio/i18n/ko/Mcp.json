@@ -1,0 +1,176 @@
+{
+  "title": "OptiGen MCP 서버",
+  "stackLabel": "개발 스택",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "OptiGen AI의 답변 생성과 외부 업무 API 실행을 연결하는 MCP 서버입니다. 도구별 계약과 프롬프트를 정의하고 회의록 작성처럼 오래 걸리는 작업의 진행 상태와 결과를 대화 흐름에 연결했습니다.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "1시간, 30MB 음성 처리 371.9초에서 291.0초로 단축",
+    "description": "동일한 테스트 파일에서 처리 시간을 21.8% 단축했습니다."
+  },
+  "projectIntro": {
+    "title": "프로젝트 배경",
+    "description": "OptiGen의 대화 경험에 실제 업무 실행을 붙이기 위해 별도의 MCP 서버를 구축했습니다. 서로 다른 업무 API를 AI가 이해하는 도구로 변환하고 도구 탐색부터 결과 전달까지 흐름을 일관되게 만들었습니다."
+  },
+  "projectContext": {
+    "service": {
+      "label": "시스템",
+      "description": "OptiGen AI 플랫폼과 외부 업무 시스템 사이에서 도구 탐색과 실행을 담당하는 확장 서버"
+    },
+    "flow": {
+      "label": "사용 흐름",
+      "description": "AI가 필요한 도구를 선택하면 MCP 서버가 업무 API를 실행하고 결과 또는 진행 상태를 대화 화면에 전달"
+    },
+    "role": {
+      "label": "담당 범위",
+      "description": "MCP 서버 설계 및 구현, 업무 API 연동, 도구별 프롬프트, 회의록 도구와 장시간 작업 처리"
+    }
+  },
+  "caseStudy": {
+    "performance": {
+      "title": "1시간 회의 음성 처리 시간을 371.9초에서 291.0초로 단축",
+      "description": "긴 음성을 한 번에 처리할 때 발생하는 파일 제한과 대기 시간을 청킹, 병렬 처리, 단계별 병합으로 줄였습니다.",
+      "items": {
+        "longAudio": {
+          "title": "장시간 음성의 파일 제한과 순차 처리",
+          "description": "약 1시간 분량의 30MB 음성은 파일 크기 제한과 긴 컨텍스트 처리로 지연이 생겼습니다. 전사, 화자 분리, 요약을 순서대로 기다리는 구조도 전체 시간을 늘렸습니다."
+        },
+        "chunkBoundary": {
+          "title": "20분 청크와 3분 오버랩",
+          "description": "음성을 20분 단위로 나누고 다음 청크는 17분 지점부터 시작했습니다. 경계에서 발화가 잘리지 않도록 3분을 겹친 뒤, 병합 과정에서 중복 전사를 제거했습니다."
+        },
+        "parallelPipeline": {
+          "title": "전사와 화자 분리, 요약의 병렬화",
+      "description": "전사와 화자 분리를 동시에 실행하고 청크별 요약은 동시성 제한 안에서 병렬로 추출한 뒤 최종 결과를 통합했습니다. 한 단계가 실패하면 나머지 작업을 중단하고 임시 파일을 정리했습니다."
+        },
+        "measuredResult": {
+          "title": "동일 파일 기준 21.8% 단축",
+          "description": "1시간, 30MB 테스트 파일을 E2E로 측정한 결과 전체 처리 시간은 371.9초에서 291.0초로 줄었습니다."
+        }
+      }
+    },
+    "problem": {
+      "title": "문제와 요구사항",
+      "description": "AI가 여러 업무 시스템을 안전하고 예측 가능한 방식으로 실행하려면 API 차이를 가리고 도구 선택과 장시간 작업을 별도 실행 문제로 다뤄야 했습니다.",
+      "items": {
+        "apiDiversity": {
+          "title": "서로 다른 업무 API",
+          "description": "업무 시스템마다 입력값, 응답 형식, 오류 규칙이 달랐기 때문에 AI가 각 API 차이를 직접 처리하는 방식은 사용할 수 없었습니다."
+        },
+        "toolSelection": {
+          "title": "정확한 도구 선택",
+          "description": "AI가 비슷한 도구를 혼동하지 않으려면 필요한 입력값과 실행 조건을 도구 설명에 분명히 적어야 했습니다."
+        },
+        "longRunning": {
+          "title": "장시간 작업의 사용자 피드백",
+          "description": "회의록 작성처럼 바로 끝나지 않는 작업에서도 사용자가 실행 여부와 현재 처리 단계를 확인해야 했습니다."
+        }
+      }
+    },
+    "design": {
+      "title": "설계와 기술적 의사결정",
+      "description": "외부 API, MCP 도구, AI 프롬프트, 장시간 작업의 책임을 나눠 변경 범위를 줄이고 실행 흐름을 분명하게 만들었습니다.",
+      "items": {
+        "toolContract": {
+          "title": "도구 계약과 입력 검증",
+          "description": "각 도구의 입력과 출력 구조를 정의하고 Zod로 입력값을 검증해 불완전한 요청이 업무 API에 도달하지 않게 했습니다."
+        },
+        "promptBoundary": {
+          "title": "도구별 설명과 프롬프트",
+          "description": "도구별로 목적, 사용 조건, 필수 입력, 예상 결과를 작성해 AI가 상황에 맞는 도구를 고르게 했습니다."
+        },
+        "executionModel": {
+          "title": "즉시 작업과 장시간 작업 분리",
+          "description": "즉시 결과를 반환하는 도구와 별도 처리가 필요한 작업을 나눴습니다. 장시간 작업은 시작, 진행, 완료, 실패 상태를 전달합니다."
+        }
+      }
+    },
+    "implementation": {
+      "title": "기타 기여",
+      "description": "대표 문제 해결 사례와 별개로 업무 API를 MCP 도구로 바꾸고 실행 결과를 대화에 연결하는 서버 전반을 구축했습니다.",
+      "items": {
+        "apiTools": {
+          "title": "업무 API의 MCP 도구화",
+          "description": "업무 API의 요청과 응답을 MCP 도구 계약에 맞춰 변환하고 API 응답을 AI와 사용자가 이해하는 결과로 정규화했습니다."
+        },
+        "meetingMinutes": {
+          "title": "회의록 작성 도구",
+          "description": "브라우저 녹음과 음성 파일을 입력으로 받아 전사, 화자 분리, 요약을 수행하고 Markdown과 DOCX 회의록을 만드는 작업을 도구로 연결했습니다."
+        },
+        "streaming": {
+          "title": "진행 상태와 결과 스트리밍",
+          "description": "장시간 작업의 처리 단계를 이벤트로 보내 대화 화면에 진행 상태와 최종 결과를 차례로 표시했습니다."
+        },
+        "errorBoundary": {
+          "title": "실패 범위 분리",
+          "description": "도구 입력 오류, 외부 API 오류, 장시간 작업 실패를 나눠 전체 대화를 중단하지 않고 원인에 맞는 상태를 전달했습니다."
+        }
+      }
+    },
+    "progressProtocol": {
+      "title": "장시간 MCP 작업의 진행 상태를 대화까지 전달하는 세션 기반 SSE",
+      "description": "회의록 생성처럼 오래 걸리는 도구의 실행 상태를 사용자에게 보여주려고 MCP 서버의 세션 수명부터 SSE 이벤트, 프론트엔드 상태, 최종 렌더링까지 같은 규칙으로 연결했습니다.",
+      "items": {
+        "rootCause": {
+          "title": "진행 이벤트를 보내지 못한 원인",
+          "description": "stateless JSON 응답 모드에서는 실행 중 progress notification을 SSE 스트림에 쓸 수 없었습니다. 하나의 McpServer에서 요청마다 transport를 바꾸면 동시 요청 중 연결이 교체돼 Not connected 오류가 발생할 수도 있었습니다."
+        },
+        "sessionBoundary": {
+          "title": "세션별 서버와 Transport",
+          "description": "회의록 MCP를 세션 기반 SSE로 전환하고 세션마다 McpServer와 transport를 분리했습니다. 세션 Map에서 연결을 재사용한 뒤 종료할 때 함께 정리해 동시 요청이 서로의 transport를 덮어쓰지 않게 했습니다."
+        },
+        "eventContract": {
+          "title": "status와 progress를 나눈 이벤트 계약",
+          "description": "프론트엔드에 progress 이벤트를 별도 타입으로 추가했습니다. status에는 실행 단계 설명을, progress에는 도구별 최신 진행률을 담아 역할과 데이터 구조를 나눴습니다."
+        },
+        "uiState": {
+          "title": "대화 안의 임시 상태와 최종 결과",
+          "description": "같은 도구의 진행 상태는 누적하지 않고 최신 값으로 교체했습니다. final 이벤트가 오면 임시 status와 progress를 지우고 최종 콘텐츠만 남겼습니다. 이렇게 진행 문구가 대화에 반복해서 쌓이지 않게 했습니다."
+        },
+        "verification": {
+          "title": "검증",
+          "description": "progress 단위 테스트 12개와 파이프라인 통합 테스트 4개를 추가했습니다. 개발 서버에서 실제 회의록을 생성하며 1% 단위 진행률과 완료 뒤 임시 UI 정리를 확인했습니다."
+        }
+      }
+    },
+    "outcome": {
+      "title": "결과와 회고",
+      "description": "MCP 서버를 독립 실행 계층으로 분리하면서 OptiGen의 대화 경험과 업무 시스템의 변경 책임을 나눴습니다.",
+      "items": {
+        "businessExecution": {
+          "title": "답변에서 업무 실행으로 확장",
+          "description": "사용자는 대화 흐름 안에서 AI를 통해 업무 도구를 탐색하고 실행합니다."
+        },
+        "extensionCost": {
+          "title": "도구 추가 범위의 제한",
+          "description": "새 업무 기능은 도구 계약, 프롬프트, API 어댑터 단위로 추가해 기존 대화 UI의 변경 범위를 줄였습니다."
+        },
+        "executionVisibility": {
+          "title": "장시간 작업의 가시성",
+          "description": "즉시 끝나지 않는 작업도 시작, 진행, 완료, 실패 상태를 보여줘 사용자가 처리 흐름을 이해하게 했습니다."
+        }
+      }
+    }
+  },
+  "architecture": {
+    "title": "도구 실행 흐름",
+    "description": "OptiGen의 AI 서비스가 필요한 도구를 선택하면 MCP 서버가 업무 API나 장시간 작업을 실행합니다. 실행 결과와 진행 상태를 기존 대화 흐름으로 전달합니다.",
+    "alt": "OptiGen 대화에서 AI 서비스와 MCP 서버를 거쳐 업무 API와 장시간 작업을 실행하는 흐름도",
+    "caption": "MCP 서버가 대화형 AI와 실제 업무 실행 사이의 독립된 연결 계층으로 동작합니다.",
+    "loading": "구조도를 불러오는 중입니다.",
+    "error": "구조도를 표시하지 못했습니다.",
+    "diagram": {
+      "user": "사용자",
+      "chat": "OptiGen 대화",
+      "ai": "AI 서비스",
+      "mcp": "MCP 서버",
+      "businessApi": "업무 API",
+      "longJob": "장시간 작업",
+      "conversation": "요청 / 응답",
+      "toolCall": "도구 탐색 / 실행",
+      "apiRequest": "검증된 API 요청",
+      "asyncStart": "작업 시작",
+      "progress": "진행 상태 / 결과"
+    }
+  }
+}

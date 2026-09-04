@@ -1,0 +1,194 @@
+{
+  "title": "OptiGen AI 플랫폼",
+  "stackLabel": "개발 스택",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "조직, 권한, AI 봇, 문서를 관리하고 RAG 기반 대화를 제공하는 B2B AI 플랫폼입니다. 프론트엔드와 UI/UX를 처음부터 설계하고 구현했으며 MCP와 Voice Gateway를 연결해 업무 실행과 음성 채널까지 확장했습니다.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "공통 UI 40개 Story와 브라우저 검증 자동화",
+    "description": "제품 초기부터 디자인 시스템과 검증 환경을 함께 구축했습니다."
+  },
+  "projectIntro": {
+    "title": "프로젝트 배경",
+    "description": "기존 시스템 개선이 아닌, 처음부터 구축한 신규 제품입니다. 관리자가 조직과 권한, AI 봇, 문서를 설정하면 사용자는 목적에 맞는 봇을 골라 문서에 근거한 답변을 받습니다. 관리 기능과 AI 대화를 한 제품 경험으로 묶는 웹 애플리케이션을 설계했습니다."
+  },
+  "projectContext": {
+    "service": {
+      "label": "제품",
+      "description": "조직별 AI 봇과 문서 기반 RAG 대화를 제공하는 B2B AI 플랫폼"
+    },
+    "users": {
+      "label": "사용자",
+      "description": "조직, 권한, 봇, 문서를 관리하는 운영자와 AI를 업무에 활용하는 사용자"
+    },
+    "role": {
+      "label": "담당 범위",
+      "description": "프론트엔드와 UI/UX 설계 및 구현, AI 대화 경험 구축, MCP와 Voice Gateway 연동"
+    }
+  },
+  "caseStudy": {
+    "streamingLayout": {
+      "title": "스트리밍 응답이 길어져도 읽던 위치가 밀리지 않는 채팅 레이아웃",
+      "description": "실시간으로 늘어나는 LLM 응답 때문에 기존 메시지가 화면 위로 밀리는 문제를 레이아웃 구조로 해결했습니다.",
+      "items": {
+        "growingResponse": {
+          "title": "응답이 길어질수록 커지는 화면 이동",
+          "description": "SSE로 내용이 추가되면 응답 블록의 높이가 계속 커졌습니다. 일반적인 하단 스크롤 방식에서는 사용자가 읽던 문장이 화면 밖으로 밀렸습니다."
+        },
+        "spacerLayout": {
+          "title": "응답 아래의 가변 여백",
+          "description": "LLM 메시지를 독립된 블록으로 두고 아래에 남은 화면 높이를 채우는 빈 블록을 배치했습니다. 응답이 커질 때 빈 블록을 같은 만큼 줄여 기존 메시지의 위치를 유지했습니다."
+        },
+        "streamState": {
+          "title": "스트리밍 상태와 레이아웃 연결",
+          "description": "생성, 완료, 사용자 중단, 오류를 메시지 상태로 나눴습니다. 빈 영역과 최종 스크롤도 이 상태를 기준으로 움직이게 했습니다."
+        },
+        "readingPosition": {
+          "title": "읽던 위치 유지",
+          "description": "긴 응답이 생성되는 동안에도 사용자는 기존 내용을 계속 읽습니다. 새 콘텐츠가 생겨도 화면이 갑자기 움직이지 않게 했습니다."
+        }
+      }
+    },
+    "problem": {
+      "title": "문제와 요구사항",
+      "description": "관리자가 AI 사용 환경을 구성하고 사용자가 실제 대화를 하는 과정이 한 제품 안에서 자연스럽게 이어져야 했습니다.",
+      "items": {
+        "administration": {
+          "title": "조직별 운영 관리",
+          "description": "조직과 사용자 권한, AI 봇, 프롬프트, 문서를 관리하고 파일을 업로드하는 운영 화면이 필요했습니다."
+        },
+        "conversation": {
+          "title": "문서 기반 AI 대화",
+          "description": "사용자는 목적에 맞는 봇을 고르고 문서에 근거한 응답을 스트리밍으로 확인하며 이전 대화를 이어볼 수 있어야 했습니다."
+        },
+        "extension": {
+          "title": "업무와 음성 채널로 확장",
+          "description": "기존 대화 경험을 유지한 채 MCP의 업무 도구 실행과 Voice Gateway의 음성 상담을 연결해야 했습니다."
+        }
+      }
+    },
+    "design": {
+      "title": "설계와 기술적 의사결정",
+      "description": "사용자 작업 흐름에 맞춰 정보 구조를 나누고 서버 데이터, 화면 상태, 스트리밍 연결의 책임을 각각 분리했습니다.",
+      "items": {
+        "informationArchitecture": {
+          "title": "작업 중심 정보 구조",
+          "description": "조직, 권한, 봇, 프롬프트, 문서, 대화 이력을 기능별 화면으로 나눴습니다. 관리 작업에서 실제 AI 대화로 이어지는 탐색 흐름도 설계했습니다."
+        },
+        "stateBoundary": {
+          "title": "서버 상태와 화면 상태 분리",
+          "description": "서버에서 가져오는 데이터는 React Query로 관리하고 필터와 선택값처럼 화면에 한정된 상태는 기능별 Zustand store로 분리했습니다."
+        },
+        "streaming": {
+          "title": "상태 관리와 SSE 분리",
+          "description": "메시지와 대화 상태는 애플리케이션 상태로 관리했습니다. SSE는 서버가 보내는 응답과 실행 이벤트를 처리하는 통신 계층으로 한정했습니다."
+        },
+        "qualityFoundation": {
+          "title": "접근성을 제품 기준으로 적용",
+          "description": "시맨틱 HTML, 접근 가능한 이름, 키보드 조작, 포커스 복원을 구현의 기본 조건으로 삼았습니다."
+        }
+      }
+    },
+    "implementation": {
+      "title": "기타 기여",
+      "description": "대표 채팅 UX 사례 외에도 제품을 처음부터 운영 가능한 웹 애플리케이션으로 만드는 범위를 맡았습니다.",
+      "items": {
+        "chatExperience": {
+          "title": "챗봇 대화 UI와 사용자 경험",
+          "description": "봇 선택, 메시지 작성, 응답 확인, 대화 이력 탐색을 한 흐름으로 묶는 대화 인터페이스를 구현했습니다."
+        },
+        "responseFlow": {
+          "title": "SSE 기반 응답 스트리밍",
+          "description": "생성 중인 응답을 순서대로 표시하고 생성, 완료, 중단, 오류 상태를 구분해 현재 처리 상태를 전달했습니다."
+        },
+        "accessibility": {
+          "title": "웹 접근성과 웹 표준",
+          "description": "시맨틱 요소, 접근 가능한 이름, 키보드 조작, 모달 포커스 복원을 적용했습니다. Playwright와 axe로 주요 흐름도 검사했습니다."
+        },
+        "responsive": {
+          "title": "반응형 인터페이스",
+          "description": "화면 크기에 맞춰 탐색, 대화 목록, 메시지 영역, 입력 도구가 자연스럽게 재배치되는 반응형 인터페이스를 구현했습니다."
+        }
+      }
+    },
+    "localStt": {
+      "title": "실험: WebGPU 로컬 전사 경로",
+      "description": "브라우저에서 녹음과 전사를 이어가는 경로를 확인한 POC입니다. 운영 기능이나 비용 절감 성과로 포장하지 않고 검증한 실행 경로만 남겼습니다.",
+      "items": {
+        "problem": {
+          "title": "문제와 제약",
+          "description": "사용자가 회의를 만들 때마다 서버 STT를 호출하면 처리 비용이 쌓였습니다. 녹음 파일을 별도 앱에서 만든 뒤 다시 업로드하는 흐름도 끊겼습니다. 브라우저별 GPU 지원과 큰 모델의 초기 준비 시간도 함께 해결해야 했습니다."
+        },
+        "workerBoundary": {
+          "title": "VAD와 Whisper Worker 분리",
+          "description": "Silero VAD와 Whisper를 서로 다른 Worker에서 실행하고 MessageChannel로 직접 연결했습니다. 전사가 연산 자원을 사용해도 음성 구간 감지가 밀리지 않게 처리 책임을 나눴습니다."
+        },
+        "fallback": {
+          "title": "지원 범위에 따른 실행 경로",
+          "description": "WebGPU를 사용할 수 없는 브라우저에는 WASM 경로를 두고 안정성을 보장하기 어려운 모바일에서는 로컬 STT를 끄었습니다. 모델 다운로드와 준비, 녹음, 전사 상태는 UI에서 나눠 표시했습니다."
+        },
+        "lifecycle": {
+          "title": "Worker 생명주기와 텍스트 안전성",
+          "description": "AudioWorklet과 Worker를 종료할 때 메시지 포트도 닫아 종료된 Worker로 이벤트가 들어가지 않게 했습니다. 무음이나 빈 결과에서도 전사 상태를 해제하고 결과는 HTML이 아닌 텍스트 노드로 편집기에 넣었습니다."
+        },
+        "verification": {
+          "title": "확인된 범위",
+          "description": "병합된 변경에서 듀얼 Worker, WASM 대체 경로, 모바일 비활성화, 무음 상태 복구, 안전한 텍스트 삽입을 확인했습니다. PR의 브라우저별 체크리스트에 완료 표시가 없어 모든 환경을 검증했다고 단정하지 않았습니다."
+        }
+      }
+    },
+    "outcome": {
+      "title": "결과와 회고",
+      "description": "신규 제품의 프론트엔드 기반을 구축한 뒤, 업무 실행과 음성 채널을 같은 대화 경험에 연결할 토대도 마련했습니다.",
+      "items": {
+        "newProduct": {
+          "title": "신규 제품의 프론트엔드 기반 구축",
+          "description": "관리 기능과 AI 대화를 포함한 웹 애플리케이션을 초기 정보 구조와 상태 흐름부터 구축했습니다."
+        },
+        "extensionPath": {
+          "title": "동일한 대화 경험에서 기능 확장",
+          "description": "MCP와 Voice Gateway를 별도 시스템으로 연결해 기존 채팅 경험에 업무 실행과 음성 채널을 붙였습니다."
+        },
+        "qualityBaseline": {
+          "title": "품질 기준의 조기 적용",
+          "description": "접근성, 웹 표준, 반응형 동작, 테스트를 기능 완료 뒤에 더하는 보완 작업이 아니라 초기 구현 기준으로 삼았습니다."
+        }
+      }
+    },
+    "verification": {
+      "title": "검증 기준과 확인 방법",
+      "description": "구현 완료 여부만 나열하지 않고 사용자가 실제로 겪는 핵심 상태와 접근성 동작을 기준으로 주요 흐름을 확인했습니다.",
+      "items": {
+        "accessibility": {
+          "title": "키보드와 보조 기술 흐름",
+          "description": "주요 화면에서 시맨틱 구조와 접근 가능한 이름을 확인하고 키보드 조작과 모달 종료 후 포커스 복원을 Playwright와 axe로 검사했습니다."
+        },
+        "streaming": {
+          "title": "스트리밍 상태 전환",
+          "description": "응답 생성, 완료, 사용자 중단과 오류 상태를 구분해 각 단계에서 메시지와 다음 행동이 일관되게 표시되는지 확인했습니다."
+        }
+      }
+    }
+  },
+  "architecture": {
+    "title": "플랫폼 전체 흐름",
+    "description": "웹 애플리케이션은 API와 AI 서비스로 RAG 기반 응답을 제공합니다. MCP와 Voice Gateway는 각각 업무 실행과 음성 채널을 연결하는 확장 시스템으로 동작합니다.",
+    "alt": "OptiGen 웹 애플리케이션과 API, AI 서비스, MCP, Voice Gateway의 관계를 보여주는 플랫폼 흐름도",
+    "caption": "OptiGen 웹 애플리케이션을 중심으로 MCP와 Voice Gateway가 연결된 상위 수준의 흐름입니다.",
+    "loading": "구조도를 불러오는 중입니다.",
+    "error": "구조도를 표시하지 못했습니다.",
+    "diagram": {
+      "webUser": "웹 사용자",
+      "chat": "OptiGen 웹 애플리케이션",
+      "phoneCall": "전화 상담",
+      "vg": "Voice Gateway",
+      "api": "API 서버",
+      "ai": "AI 서비스 / RAG",
+      "mcp": "MCP 서버",
+      "requestResponse": "요청 / 스트리밍 응답",
+      "orchestration": "AI 처리",
+      "toolExtension": "업무 실행 확장",
+      "voiceExtension": "음성 채널 확장"
+    }
+  }
+}

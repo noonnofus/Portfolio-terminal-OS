@@ -1,0 +1,28 @@
+{
+  "appNames": {
+    "about": "Career",
+    "projects": "Projects",
+    "resume": "Resume",
+    "terminal": "Terminal",
+    "contact": "Contact",
+    "notes": "Guestbook",
+    "settings": "Settings",
+    "portfolio": "Portfolio",
+    "optigen": "OptiGen AI Platform",
+    "mcp": "OptiGen MCP Server",
+    "voice-gateway": "AICC Voice Gateway",
+    "kepco": "Public-Sector Contact Center Advisor",
+    "wchms": "WCHMS",
+    "flare": "Flare"
+  },
+  "desktop": {
+    "shortcutsAria": "Desktop shortcuts",
+    "folderAria": "Folder",
+    "emptyFolder": "This folder is empty.",
+    "moveItem": "Move item",
+    "reset": "Reset",
+    "itemCount": "{{count}} items",
+    "activeWindow": "window {{id}}",
+    "openProject": "open project"
+  }
+}

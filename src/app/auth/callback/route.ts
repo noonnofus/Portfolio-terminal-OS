@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { parseAuthCallbackQuery } from "@/features/auth/callbackQuery";
-import { getApplicationOrigin } from "@/shared/lib/supabase/env";
-import { createResponseSupabaseClient } from "@/shared/lib/supabase/nextResponse";
+import { parseAuthCallbackQuery } from "@/features/auth/utils/callbackQuery";
+import { getApplicationOrigin } from "@/lib/supabase/env";
+import { createResponseSupabaseClient } from "@/lib/supabase/nextResponse";
 
 export const dynamic = "force-dynamic";
 

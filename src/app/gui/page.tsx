@@ -1,25 +1,43 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
-import { GuiEntry } from "@/features/gui/GuiEntry";
-import { getViewerForUser } from "@/features/auth/server/getViewer";
-import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
+import { GuiClient } from "@/app/gui/GuiClient";
 
 export const metadata: Metadata = {
-  title: "Hyunho Kim | Portfolio",
+  title: "GUI 포트폴리오",
+  description:
+    "김현호의 프로젝트, 커리어, 이력서를 둘러볼 수 있는 인터랙티브 포트폴리오입니다.",
+  alternates: {
+    canonical: "/gui",
+    languages: {
+      ko: "/gui",
+      en: "/en/gui",
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    url: "/gui",
+    siteName: "Hyunho Kim Portfolio",
+    title: "GUI 포트폴리오 | 김현호",
+    description:
+      "김현호의 프로젝트, 커리어, 이력서를 둘러볼 수 있는 인터랙티브 포트폴리오입니다.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Hyunho Kim, Frontend Developer Portfolio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GUI 포트폴리오 | 김현호",
+    description:
+      "김현호의 프로젝트, 커리어, 이력서를 둘러볼 수 있는 인터랙티브 포트폴리오입니다.",
+    images: ["/opengraph-image"],
+  },
 };
 
-export default async function GuiPage() {
-  const cookieStore = await cookies();
-  const supabase = createSupabaseServerClient({
-    getAll: () => cookieStore.getAll(),
-    setAll: () => {
-      // proxy.ts owns Supabase auth cookie refresh for /gui.
-    },
-  });
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const viewer = await getViewerForUser(user);
-
-  return <GuiEntry viewer={viewer} />;
+export default function GuiPage() {
+  return <GuiClient />;
 }

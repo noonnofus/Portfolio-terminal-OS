@@ -1,0 +1,22 @@
+flowchart LR
+    polling["1초 active-call polling"]
+    callState["Zustand 통화 상태 · idle → live → ended"]
+    stream["call-scoped SSE · openWhenHidden"]
+    reducer["transcript reducer · SNAPSHOT · PARTIAL · FINAL"]
+    ui["상담 화면 · 전사 · 연결 상태 · 분석 결과"]
+    terminal["CALL_END · fatal · exhausted · polling 재개"]
+
+    polling --> callState
+    callState -->|"live"| stream
+    stream --> reducer
+    reducer --> ui
+    reducer --> terminal
+
+    classDef source fill:#e8f1ff,stroke:#2563eb,color:#172554,stroke-width:2px
+    classDef state fill:#ecfdf5,stroke:#059669,color:#064e3b,stroke-width:2px
+    classDef presentation fill:#fff7ed,stroke:#ea580c,color:#7c2d12,stroke-width:2px
+    classDef terminal fill:#faf5ff,stroke:#9333ea,color:#581c87,stroke-width:2px
+    class polling source
+    class callState,stream,reducer state
+    class ui presentation
+    class terminal terminal
