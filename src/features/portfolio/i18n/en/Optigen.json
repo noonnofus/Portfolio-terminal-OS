@@ -1,0 +1,79 @@
+{
+  "title": "OptiGen AI Platform",
+  "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "A B2B AI platform for managing organizations, permissions, AI bots, and documents while providing RAG-grounded conversations. I designed and implemented the frontend and UI/UX from the ground up, then extended it into business execution and voice channels through MCP and Voice Gateway.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "AI platform foundation extended across POC, DEV, and SOLUM environments",
+    "description": "I established the frontend structure and shared UI standards first, so the same development approach could continue as environments and capabilities grew."
+  },
+  "projectIntro": {
+    "title": "Project overview",
+    "description": "I built the frontend structure and screens from scratch, covering organization, permission, bot, prompt, and document management through retrieval-augmented generation (RAG) conversations grounded in documents. I connected bot selection, message composition, response reading, and conversation history in one flow. Navigation, conversation lists, messages, and input tools rearrange to fit the screen size.\n\nI created shared design tokens and components and defined state management responsibilities across React Query, Zustand, and SSE. Forty Storybook stories and a Vitest and Playwright testing setup gave later contributors a shared baseline for extending the product. I used semantic elements and accessible names, then checked keyboard interaction and focus restoration after closing modals with Playwright and axe."
+  },
+  "projectContext": {
+    "service": {
+      "label": "Product",
+      "description": "A B2B AI platform providing organization-specific AI bots and document-grounded RAG conversations"
+    },
+    "users": {
+      "label": "Users",
+      "description": "Administrators managing organizations, permissions, bots, and documents, and people applying AI to their work"
+    },
+    "role": {
+      "label": "My scope",
+      "description": "Frontend and UI/UX design and implementation, AI conversation experience, and integration with MCP and Voice Gateway"
+    }
+  },
+  "caseStudy": {
+    "streamingLayout": {
+      "title": "A chat layout that keeps the user's question in place as streamed responses grow",
+      "description": "I addressed the way live LLM responses push recent questions and reading context away through layout structure rather than scroll correction.",
+      "items": {
+        "growingResponse": {
+          "title": "Increasing screen movement during long responses",
+          "description": "As SSE content expanded the response block, a conventional bottom-scroll layout pushed both the user's recent question and the sentence they were reading out of view."
+        },
+        "spacerLayout": {
+          "title": "A flexible spacer below the response",
+          "description": "I placed an empty spacer below the latest user message and in-progress AI response. Its height is the chat viewport minus the latest question and response heights, so it shrinks by the same amount whenever the response gains a line."
+        },
+        "measurement": {
+          "title": "Measuring size without rendering on every change",
+          "description": "ResizeObserver watches the chat viewport, latest question, and streamed response. requestAnimationFrame batches height updates to one render per frame when response chunks arrive."
+        },
+        "streamLifecycle": {
+          "title": "Stream lifecycle tied to layout behavior",
+          "description": "I modeled sending, streaming, done, and error states explicitly, then used AbortController to stop the previous stream when the user leaves or changes conversations. Spacer and final-scroll behavior follow those same states."
+        },
+        "readingPosition": {
+          "title": "Reading position preserved",
+          "description": "When a user sends a question, its message scrolls near the top of the chat viewport. The spacer preserves that position until the response fills the viewport, then reaches zero and hands off to natural scrolling.\n\nI checked that messages and available next actions match each state during response generation, completion, user cancellation, and errors."
+        }
+      }
+    }
+  },
+  "architecture": {
+    "title": "Platform flow",
+    "description": "The web application provides RAG-grounded responses through the API and AI services. MCP and Voice Gateway operate as extension systems for business execution and voice channels.",
+    "alt": "Platform flow showing the relationship between the OptiGen web application, API, AI service, MCP, and Voice Gateway",
+    "caption": "A high-level view of MCP and Voice Gateway extending the OptiGen web application.",
+    "loading": "Loading the architecture diagram.",
+    "error": "The architecture diagram could not be displayed.",
+    "scrollLabel": "Horizontal scroll area for the platform flow diagram",
+    "diagram": {
+      "webUser": "Web user",
+      "chat": "OptiGen web application",
+      "phoneCall": "Phone call",
+      "vg": "Voice Gateway",
+      "api": "API server",
+      "ai": "AI service / RAG",
+      "mcp": "MCP server",
+      "requestResponse": "Request / streamed response",
+      "orchestration": "AI processing",
+      "toolExtension": "Business execution extension",
+      "voiceExtension": "Voice channel extension"
+    }
+  }
+}

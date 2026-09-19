@@ -1,0 +1,58 @@
+{
+  "title": "Flare",
+  "stackLabel": "개발 스택",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "지역 사회 곳곳에 흩어진 산불 정보를 한곳에서 탐색하는 팀 프로젝트입니다. 지도, 위험 지표, 관련 뉴스, 산불 질문에 집중한 AI 챗봇과 웹 푸시 알림을 설치 가능한 웹 애플리케이션으로 구성했습니다.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "지도, 위험 지표, 뉴스, 질문과 알림을 하나의 PWA로 통합",
+    "description": "정량 성과 대신 구현한 사용자 흐름과 웹, 설치 환경 시연을 근거로 제시합니다."
+  },
+  "projectIntro": {
+    "title": "프로젝트 개요",
+    "description": "산불 위치와 위험 수준을 지도에서 함께 파악하고 관련 뉴스에서 후속 질문과 알림으로 이어지는 탐색 흐름을 설계했습니다. Bing News API와 웹 크롤러로 수집한 뉴스를 연결하고, OpenAI API 기반 산불 전용 챗봇과 Firebase 웹 푸시, 모바일과 데스크톱의 설치 경험을 구성했습니다."
+  },
+  "projectContext": {
+    "product": {
+      "label": "제품",
+      "description": "산불 정보 탐색과 관련 질문을 지원하는 설치 가능한 웹 애플리케이션"
+    },
+    "users": {
+      "label": "사용자",
+      "description": "산불 위치, 위험 지표와 관련 뉴스를 한곳에서 확인하려는 지역 사용자"
+    },
+    "role": {
+      "label": "담당 범위",
+      "description": "PWA 설치 경험, 산불 전용 AI 챗봇, 웹 푸시 알림을 포함한 주요 풀스택 기능 설계 및 구현"
+    }
+  },
+  "caseStudy": {
+    "informationFlow": {
+      "title": "흩어진 산불 정보를 지도 중심의 탐색 흐름으로 통합",
+      "description": "여러 출처를 오가야 했던 산불 정보를 한 화면에서 이해하고 이어서 질문하는 흐름으로 구성했습니다.",
+      "items": {
+        "fragmentedInformation": {
+          "title": "여러 경로에 흩어진 정보",
+          "description": "산불 위치와 위험 지표, 관련 뉴스가 분리되어 사용자가 현재 상황을 직접 조합해야 했습니다."
+        },
+        "unifiedView": {
+          "title": "지도 중심 통합 화면",
+          "description": "산불 위치와 위험 수준을 지도에 배치하고 관련 뉴스를 같은 탐색 흐름에서 확인하는 구조로 설계했습니다."
+        },
+        "installableWeb": {
+          "title": "설치 가능한 웹 경로",
+          "description": "별도 네이티브 앱 없이 모바일과 데스크톱에서 다시 접근하도록 PWA 설치와 웹 푸시 알림을 연결했습니다."
+        },
+        "consolidatedAccess": {
+          "title": "하나의 탐색 흐름",
+          "description": "지도, 위험 지표, 뉴스, 산불 질문과 알림을 한 웹 애플리케이션에서 이어서 확인합니다."
+        }
+      }
+    }
+  },
+  "walkthrough": {
+    "title": "기능 시연",
+    "description": "웹과 설치 환경의 주요 화면, 사용자 흐름을 확인합니다.",
+    "unsupported": "브라우저가 비디오 재생을 지원하지 않습니다."
+  }
+}

@@ -2,9 +2,9 @@ import "server-only";
 
 import type { NextRequest } from "next/server";
 
-import type { Viewer } from "@/features/auth/model/viewer";
+import type { Viewer } from "@/features/auth/types/viewer";
 import { ensureUserAccount } from "@/features/auth/server/getViewer";
-import { createSupabaseRequestClient } from "@/shared/lib/supabase/server";
+import { createSupabaseRequestClient } from "@/lib/supabase/server";
 
 export async function requireViewer(
   request: NextRequest,

@@ -1,0 +1,101 @@
+{
+  "title": "OptiGen MCP Server",
+  "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "An MCP server that lets OptiGen AI execute external business APIs instead of stopping at generated answers. I defined tool contracts and tool-specific prompts, then connected progress and results from long-running work such as meeting-minute generation back into the conversation flow.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Built audio-to-meeting-minutes generation and reduced processing time by 21.8%",
+    "description": "Connected transcription, speaker diarization, and summarization to DOCX meeting-minute generation. End-to-end processing of the same one-hour, 30 MB test file fell from 371.9 seconds to 291.0 seconds."
+  },
+  "projectIntro": {
+    "title": "Project overview",
+    "description": "I built a separate MCP server so OptiGen conversations could execute real business APIs. It normalizes API requests and responses into tool contracts and turns browser recordings or audio files into Markdown and DOCX meeting minutes through transcription, diarization, and summarization. Long-running jobs emit progress and results as events, while input errors, external API failures, and job failures remain separate so one failed tool does not stop the conversation."
+  },
+  "projectContext": {
+    "service": {
+      "label": "System",
+      "description": "An extension server responsible for tool discovery and execution between the OptiGen AI platform and external business systems"
+    },
+    "flow": {
+      "label": "User flow",
+      "description": "The AI selects a tool, the MCP server executes the business API, and the result or progress returns to the conversation interface"
+    },
+    "role": {
+      "label": "My scope",
+      "description": "MCP server design and implementation, business API integration, tool-specific prompts, meeting-minute tools, and long-running job handling"
+    }
+  },
+  "caseStudy": {
+    "performance": {
+      "title": "Reduced audio-to-meeting-minutes processing time by 21.8%",
+      "description": "I reduced file-limit risk and end-to-end wait time through chunking, parallel work, and staged merging.",
+      "items": {
+        "longAudio": {
+          "title": "File constraints and sequential work on long audio",
+          "description": "An approximately one-hour, 30 MB recording created file-size and long-context constraints, while waiting for transcription, diarization, and summarization in sequence extended total processing time."
+        },
+        "chunkBoundary": {
+          "title": "Twenty-minute chunks with three-minute overlap",
+          "description": "Audio was split into twenty-minute chunks, with each next chunk starting at minute seventeen. The three-minute overlap protected speech at boundaries, and duplicated transcript segments were removed during merging."
+        },
+        "parallelPipeline": {
+          "title": "Parallel transcription, diarization, and summarization",
+          "description": "Transcription and diarization ran together, while per-chunk summaries were extracted in parallel under a concurrency limit and then consolidated. If one stage failed, remaining work was aborted and temporary files were cleaned up."
+        },
+        "measuredResult": {
+          "title": "21.8% less processing time on the same file",
+          "description": "In an E2E measurement of the one-hour, 30 MB test file, total processing fell from 371.9 seconds to 291.0 seconds."
+        }
+      }
+    },
+    "progressProtocol": {
+      "title": "Session-based SSE from a long-running MCP job to the conversation UI",
+      "description": "To explain why a long-running tool such as meeting-minute generation is still active, I connected MCP server session lifetime, SSE events, frontend state, and final rendering under one protocol.",
+      "items": {
+        "rootCause": {
+          "title": "Why progress could not reach the UI",
+          "description": "Stateless JSON response mode could not write progress notifications into an SSE stream. Replacing the transport on one shared McpServer for each request could also swap the active connection during concurrent work and cause a Not connected error."
+        },
+        "sessionBoundary": {
+          "title": "A server and transport per session",
+          "description": "I moved the meeting-minutes endpoint to session-based SSE and isolated McpServer and transport instances per session. A session Map reuses connections and disposes them together so concurrent requests cannot overwrite one another's transport."
+        },
+        "eventContract": {
+          "title": "Separate contracts for status and progress",
+          "description": "The frontend gained progress as a distinct event type. status explains the current execution stage, while progress carries the latest tool-specific percentage, keeping their responsibilities and payload shapes separate."
+        },
+        "uiState": {
+          "title": "Temporary conversation state and final content",
+          "description": "Progress for the same tool replaces the previous value instead of accumulating. When final arrives, temporary status and progress entries are removed and only final content remains, preventing repeated progress text from filling the conversation."
+        },
+        "verification": {
+          "title": "Verification",
+          "description": "I added 12 progress unit tests and four pipeline integration tests, then verified one-percent progress updates and temporary-UI cleanup during real meeting-minute generation on the development server."
+        }
+      }
+    }
+  },
+  "architecture": {
+    "title": "Tool execution flow",
+    "description": "When the OptiGen AI service selects a tool, the MCP server executes a business API or starts a long-running job. Results and progress return to the existing conversation flow.",
+    "alt": "Flow from an OptiGen conversation through the AI service and MCP server to business APIs and long-running jobs",
+    "caption": "The MCP server acts as an independent connection layer between conversational AI and real business execution.",
+    "loading": "Loading the architecture diagram.",
+    "error": "The architecture diagram could not be displayed.",
+    "scrollLabel": "Horizontal scroll area for the MCP tool execution diagram",
+    "diagram": {
+      "user": "User",
+      "chat": "OptiGen conversation",
+      "ai": "AI service",
+      "mcp": "MCP server",
+      "businessApi": "Business API",
+      "longJob": "Long-running job",
+      "conversation": "Request / response",
+      "toolCall": "Discover / execute tool",
+      "apiRequest": "Validated API request",
+      "asyncStart": "Start job",
+      "progress": "Progress / result"
+    }
+  }
+}

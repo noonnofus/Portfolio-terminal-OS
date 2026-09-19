@@ -1,0 +1,58 @@
+{
+  "title": "WCHMS",
+  "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "A multilingual web application that supports older adults participating in dementia-prevention programs and cognitive activities. I designed and implemented full-stack workflows connecting AI-assisted self-study, course-material generation, and program administration.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Connected self-study, course-material generation, and administration in one product flow",
+    "description": "The evidence is the implemented and demonstrable workflow rather than an unverified metric."
+  },
+  "projectIntro": {
+    "title": "Project overview",
+    "description": "I implemented one product flow from learner math and reading practice through staff course-material generation and administration. The application includes two difficulty levels, topic-based reading activities, PDF course materials built on the same difficulty model, participant and staff CRUD, and course and session-room management. I also connected Japanese and English interfaces with in-app operational notifications."
+  },
+  "projectContext": {
+    "product": {
+      "label": "Product",
+      "description": "A multilingual web application supporting cognitive activities and program operations for older adults"
+    },
+    "users": {
+      "label": "Users",
+      "description": "Learners completing math and reading activities, plus staff and administrators managing course materials and operations"
+    },
+    "role": {
+      "label": "My scope",
+      "description": "Designed and implemented AI-assisted self-study, course-material generation, administration features, and the course-material database schema"
+    }
+  },
+  "caseStudy": {
+    "learningMaterialAlignment": {
+      "title": "Aligned difficulty standards across learner practice and staff course materials",
+      "description": "I aligned the content model and generation flow so learner activities and staff materials would not use conflicting standards.",
+      "items": {
+        "separateStandards": {
+          "title": "Learning standards could diverge",
+          "description": "If self-study activities and staff-generated course materials used different difficulty models, the learning experience could become inconsistent within the same program."
+        },
+        "sharedDifficulty": {
+          "title": "A shared difficulty model",
+          "description": "Math and reading self-study and course-material generation were built around the same difficulty structure."
+        },
+        "contentModel": {
+          "title": "A reusable content model",
+          "description": "Generated content, difficulty, and operating information were stored in the database and made reusable as PDF material."
+        },
+        "connectedFlow": {
+          "title": "Learning and operations connected",
+          "description": "Learners could practice against one standard while staff generated and managed materials using that same standard."
+        }
+      }
+    }
+  },
+  "walkthrough": {
+    "title": "Product walkthrough",
+    "description": "The video demonstrates the implemented AI-assisted math and reading activity flow.",
+    "unsupported": "Your browser does not support video playback."
+  }
+}

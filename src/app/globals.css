@@ -1,8 +1,59 @@
 @import "tailwindcss";
-@import "./tokens.css";
+
+@theme {
+  /* Pencil design primitives */
+  --font-pen-primary: var(--app-font-sans);
+
+  --color-pen-primary-light: #60a5fa;
+  --color-pen-primary: #3b82f6;
+  --color-pen-primary-dark: #1d4ed8;
+
+  --color-pen-gray-100: #f3f4f6;
+  --color-pen-gray-200: #e5e7eb;
+  --color-pen-gray-300: #d1d5db;
+  --color-pen-gray-400: #9ca3af;
+  --color-pen-gray-500: #6b7280;
+  --color-pen-gray-600: #4b5563;
+  --color-pen-gray-700: #374151;
+  --color-pen-gray-800: #1f2937;
+  --color-pen-gray-900: #111827;
+  --color-pen-white: #ffffff;
+  --color-pen-black: #000000;
+
+  --color-terminal-bg: #000000;
+  --color-terminal-fg: #3cd607;
+  --color-mac-close: #ff605c;
+  --color-mac-minimize: #ffbd2e;
+  --color-mac-maximize: #00ca4e;
+  --color-glass-bg: #4b556333;
+  --color-glass-border: #0000001a;
+  --color-os-scrim: rgb(15 23 42 / 72%);
+  --color-os-scrim-strong: rgb(0 0 0 / 82%);
+  --color-os-window-surface: #27272a;
+  --color-os-window-header-surface: #202023;
+  --color-os-window-foreground: #f4f4f5;
+  --color-os-window-border: #52525b;
+  --shadow-os-window: 0 18px 50px rgb(0 0 0 / 35%), 0 2px 8px rgb(0 0 0 / 28%);
+  --color-os-panel-surface: rgb(24 24 27 / 94%);
+  --color-os-panel-border: rgb(255 255 255 / 12%);
+  --color-os-bar-surface: rgb(75 85 99 / 24%);
+  --color-os-bar-border: rgb(255 255 255 / 18%);
+
+  --radius-pen-sm: 4px;
+  --radius-pen-md: 10px;
+  --radius-pen-lg: 12px;
+  --radius-os-window: 9px;
+
+  --spacing-pen-xs: 4px;
+  --spacing-pen-sm: 8px;
+  --spacing-pen-md: 16px;
+  --spacing-pen-lg: 24px;
+  --spacing-pen-xl: 32px;
+}
 
 @theme inline {
-  --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  --font-sans: var(--app-font-sans);
+  --font-mono: var(--app-font-mono);
   
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -67,6 +118,8 @@
 
 @layer base {
   :root {
+    --app-font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", Roboto, Arial, sans-serif;
+    --app-font-mono: "SF Mono", SFMono-Regular, Menlo, Monaco, ui-monospace, "Cascadia Code", monospace;
     --background: var(--color-pen-white);
     --foreground: var(--color-pen-gray-900);
     --card: var(--color-pen-white);
@@ -149,6 +202,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--app-font-sans);
   }
 }
 

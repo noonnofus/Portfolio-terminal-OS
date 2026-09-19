@@ -1,0 +1,93 @@
+{
+  "title": "포트폴리오",
+  "stackLabel": "개발 스택",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "이 포트폴리오는 이력과 프로젝트를 보여주는 페이지이자, 인터랙션 설계, 상태 관리, 접근성, 콘텐츠 구조를 직접 구현한 프론트엔드 작업물입니다. 창, 폴더, Dock, 터미널을 브라우저 안에 구성하고 URL, 브라우저 이력, 키보드 조작, 사용자 설정을 하나의 경험으로 연결했습니다.",
+  "keyOutcome": {
+    "label": "핵심 결과",
+    "value": "새 GUI 앱을 같은 등록, 로딩, 탐색 계약으로 추가하는 구조 정립",
+    "description": "앱 ID, URL, 로더, props, 폴더 노드를 타입과 구조 검사로 함께 확인해 기능을 추가해도 OS의 탐색 규칙이 흩어지지 않게 했습니다."
+  },
+  "projectContext": {
+    "product": {
+      "label": "제품",
+      "description": "터미널과 OS형 GUI로 탐색하는 이중 언어 포트폴리오"
+    },
+    "users": {
+      "label": "사용자",
+      "description": "경력과 기술적 판단을 빠르게 확인하려는 채용 담당자와 개발 면접관"
+    },
+    "role": {
+      "label": "담당 범위",
+      "description": "기획, 디자인, 프론트엔드 구조, 접근성, 테스트와 콘텐츠 모델 전반"
+    }
+  },
+  "projectIntro": {
+    "title": "프로젝트 개요",
+    "description": "브라우저에서 터미널과 OS형 GUI를 함께 탐색하는 한국어/영어 포트폴리오를 설계했습니다. Career와 Resume는 같은 경력, 기술, 연락처 데이터를 사용하며, 언어별 콘텐츠와 UI 라벨은 구분해 관리합니다. 언어, 배경화면과 Dock 설정은 새로고침 후에도 유지하도록 구현했습니다.\n\n키보드로 앱을 열고 전환할 수 있게 하고, 현재 포커스와 선택 상태를 구분해 표시했습니다. 프로젝트 창 열기, 화면 경계 안에서 창 유지, 종료 후 화면 요소(DOM) 제거와 키보드 앱 전환을 Playwright로 확인합니다."
+  },
+  "caseStudy": {
+    "ownership": {
+      "title": "GUI shell과 제품 기능을 변경 이유에 따라 분리",
+      "description": "창과 Dock, 폴더, 브라우저 탐색은 OS 실행 환경의 관심사이고, Terminal, Portfolio, Guestbook, Settings는 각 기능의 화면과 흐름을 책임집니다.",
+      "items": {
+        "problem": {
+          "title": "",
+          "description": "OS형 UI를 구성하는 코드와 각 앱의 기능 코드를 한 계층에 두면, 창 동작을 바꿀 때 제품 화면까지 함께 살펴야 하고 기능이 GUI store를 직접 알아야 하는 의존성이 생깁니다."
+        },
+        "decision": {
+          "title": "",
+          "description": "src/app/gui에는 GuiShell, 창, Dock, directory, navigation, store를 두고 src/features에는 앱별 화면과 사용자 흐름을 뒀습니다. Terminal, Guestbook, Settings처럼 GUI 상태가 필요한 앱은 Adapter가 값을 props로 주입해 feature가 GUI store를 직접 import하지 않게 했습니다."
+        },
+        "result": {
+          "title": "",
+          "description": "파일 경로만 봐도 OS 실행 환경과 제품 기능의 소유권을 구분할 수 있습니다. GUI를 바꾸는 일과 앱 기능을 바꾸는 일이 서로의 내부 구현을 침범하지 않고 각각의 변경 이유에 맞춰 움직입니다."
+        }
+      }
+    },
+    "appContract": {
+      "title": "앱 등록에 필요한 파일을 역할별 계약으로 분리",
+      "description": "새 앱을 추가할 때 창 하나만 만들면 끝나지 않습니다. 제목, URL, 동적 로딩, 폴더 표시, 브라우저 탐색이 같은 앱 ID를 기준으로 맞아야 합니다.",
+      "items": {
+        "problem": {
+          "title": "",
+          "description": "앱 정보, 컴포넌트 로딩, 폴더 트리, URL 처리가 여러 파일에 흩어져 있으므로, 한 곳을 빠뜨리면 Dock에는 보이지만 열리지 않거나 공유 URL이 복원되지 않는 문제가 생길 수 있습니다."
+        },
+        "decision": {
+          "title": "",
+          "description": "appCatalog.ts에는 서버에서도 읽을 수 있는 앱 메타데이터만, appLoaderRegistry.tsx에는 client 전용 dynamic import만 뒀습니다. directoryTree.ts는 catalog의 앱 ID를 참조하고, planNavigation.ts는 상태 변경과 URL 효과를 순수 함수로 계산한 뒤 GuiNavigationProvider만 History API를 호출하게 했습니다."
+        },
+        "result": {
+          "title": "",
+          "description": "앱의 정적 정보, 클라이언트 전용 로더, 폴더 노드와 브라우저 탐색 처리를 역할별 파일로 분리했습니다. 앱 ID와 props의 관계는 타입으로 확인하고, 앱 목록과 로더, URL, 폴더 노드와 다국어 제목 키의 정합성은 구조 검사와 단위 테스트로 확인합니다.\n\n공유 URL 정규화, 사용자 탐색과 뒤로 가기가 같은 탐색 계획을 따르는지도 테스트합니다. 브라우저 이력이 바뀔 때 발생하는 popstate 이벤트가 GUI 상태에 반영되는 과정도 검증 대상에 포함합니다."
+        }
+      }
+    }
+  },
+  "architecture": {
+    "title": "OS형 포트폴리오의 폴더와 실행 구조",
+    "description": "라우트 진입점은 GUI 실행 환경을 조립하고, GUI shell은 창과 탐색을 관리하며, 각 feature는 독립된 앱 화면과 사용자 흐름을 담당합니다.",
+    "alt": "라우트 진입점, GUI shell, navigation, store, app catalog, dynamic loader, directory tree와 Portfolio, Terminal, Guestbook, Settings feature의 관계를 보여주는 포트폴리오 구조도",
+    "caption": "정적 앱 정보, client 전용 로더, 폴더 트리, 브라우저 탐색을 역할별 파일로 나눠 앱을 추가해도 같은 실행 규칙을 유지합니다.",
+    "loading": "구조도를 불러오는 중입니다.",
+    "error": "구조도를 표시하지 못했습니다.",
+    "scrollLabel": "포트폴리오 폴더와 실행 구조도, 가로로 스크롤할 수 있습니다.",
+    "diagram": {
+      "route": "app/gui/page.tsx, route entry",
+      "client": "GuiClient, composition",
+      "shell": "GuiShell, window, Dock, directory",
+      "store": "GuiStoreProvider, factory and Context",
+      "navigation": "GuiNavigationProvider, browser adapter",
+      "planner": "planNavigation.ts, pure navigation plan",
+      "history": "URL and History API",
+      "catalog": "appCatalog.ts, serializable app metadata",
+      "directory": "directoryTree.ts, Desktop and Projects nodes",
+      "renderer": "GuiAppRenderer, typed app props",
+      "loader": "appLoaderRegistry.tsx, client dynamic loader",
+      "portfolio": "features/portfolio",
+      "terminal": "features/terminal",
+      "guestbook": "features/guestbook",
+      "settings": "features/settings"
+    }
+  }
+}

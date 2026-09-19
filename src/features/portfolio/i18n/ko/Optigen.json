@@ -1,0 +1,79 @@
+{
+  "title": "OptiGen AI 플랫폼",
+  "stackLabel": "개발 스택",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "조직, 권한, AI 봇, 문서를 관리하고 RAG 기반 대화를 제공하는 B2B AI 플랫폼입니다. 프론트엔드와 UI/UX를 처음부터 설계하고 구현했으며, MCP와 Voice Gateway를 연결해 업무 실행과 음성 채널까지 확장했습니다.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "POC, DEV, SOLUM 3개 실행 환경으로 확장한 AI 플랫폼 기반",
+    "description": "신규 제품의 프론트엔드 구조와 공통 UI 기준을 먼저 정립했습니다. 환경과 기능이 늘어나도 같은 개발 방식을 이어갈 수 있게 했습니다."
+  },
+  "projectIntro": {
+    "title": "프로젝트 개요",
+    "description": "조직, 권한, 봇, 프롬프트, 문서 관리부터 문서를 검색해 답변하는 RAG 대화까지 프론트엔드 구조와 화면을 처음부터 구축했습니다. 봇 선택, 메시지 작성, 응답 확인, 대화 이력 탐색을 하나의 흐름으로 연결했습니다. 화면 크기에 따라 탐색 메뉴, 대화 목록, 메시지 영역과 입력 도구가 재배치되도록 구현했습니다.\n\n공통 디자인 토큰과 컴포넌트를 만들고 React Query, Zustand와 SSE의 상태 관리 범위를 나눴습니다. 이후 합류한 팀원이 같은 기준으로 기능을 확장할 수 있도록 Storybook 40개 Story와 Vitest, Playwright 기반 검증 환경을 마련했습니다. 시맨틱 요소와 접근 가능한 이름을 적용하고, 키보드 조작과 모달 종료 후 포커스 복원을 Playwright와 axe로 검사했습니다."
+  },
+  "projectContext": {
+    "service": {
+      "label": "제품",
+      "description": "조직별 AI 봇과 문서 기반 RAG 대화를 제공하는 B2B AI 플랫폼"
+    },
+    "users": {
+      "label": "사용자",
+      "description": "조직, 권한, 봇, 문서를 관리하는 운영자와 AI를 업무에 활용하는 사용자"
+    },
+    "role": {
+      "label": "담당 범위",
+      "description": "프론트엔드와 UI/UX를 설계하고 구현했으며, AI 대화 경험을 구축하고 MCP와 Voice Gateway를 연동"
+    }
+  },
+  "caseStudy": {
+    "streamingLayout": {
+      "title": "스트리밍 응답이 길어져도 질문 위치가 밀리지 않는 채팅 레이아웃",
+      "description": "LLM 응답이 실시간으로 길어질 때 사용자가 방금 보낸 질문과 읽고 있던 내용이 밀리는 문제를 스크롤 보정이 아닌 레이아웃 구조로 해결했습니다.",
+      "items": {
+        "growingResponse": {
+          "title": "응답이 길어질수록 커지는 화면 이동",
+          "description": "SSE로 내용이 추가되면 응답 블록의 높이가 계속 커집니다. 일반적인 하단 스크롤 방식에서는 사용자가 방금 질문한 위치와 읽던 문장이 화면 밖으로 밀립니다."
+        },
+        "spacerLayout": {
+          "title": "응답 아래의 가변 여백",
+          "description": "마지막 사용자 메시지와 진행 중인 AI 응답 아래에 빈 여백을 배치했습니다. 여백 높이는 채팅 영역 높이에서 마지막 질문과 현재 답변의 높이를 뺀 값으로 계산합니다. 답변이 한 줄 늘어나면 여백도 같은 높이만큼 줄어듭니다."
+        },
+        "measurement": {
+          "title": "크기 측정과 렌더링 빈도 제어",
+          "description": "ResizeObserver로 채팅 영역, 마지막 질문, 스트리밍 답변의 높이를 관찰했습니다. 응답 청크마다 바뀌는 높이는 requestAnimationFrame으로 프레임당 한 번만 반영해 불필요한 렌더링을 줄였습니다."
+        },
+        "streamLifecycle": {
+          "title": "스트리밍 생명주기와 레이아웃 연결",
+          "description": "전송 흐름을 sending, streaming, done, error 상태로 나누고 AbortController로 화면 이탈이나 대화 전환 때 이전 스트림을 중단했습니다. 빈 여백과 최종 스크롤도 이 상태에 맞춰 동작하도록 했습니다."
+        },
+        "readingPosition": {
+          "title": "읽던 위치 유지",
+          "description": "새 질문을 보내면 마지막 사용자 메시지를 채팅 영역 상단에서 약간 여유를 둔 위치로 이동시켰습니다. 답변이 화면을 채우기 전까지 질문 위치를 유지하고, 이후에는 빈 여백이 0이 되면서 자연스러운 스크롤로 전환되도록 했습니다.\n\n응답 생성, 완료, 사용자 중단과 오류 상황에서 메시지와 다음에 할 수 있는 행동이 각 상태에 맞게 표시되는지 확인했습니다."
+        }
+      }
+    }
+  },
+  "architecture": {
+    "title": "플랫폼 전체 흐름",
+    "description": "웹 애플리케이션은 API와 AI 서비스로 RAG 기반 응답을 제공합니다. MCP와 Voice Gateway는 각각 업무 실행과 음성 채널을 연결하는 확장 시스템으로 동작합니다.",
+    "alt": "OptiGen 웹 애플리케이션과 API, AI 서비스, MCP, Voice Gateway의 관계를 보여주는 플랫폼 흐름도",
+    "caption": "OptiGen 웹 애플리케이션을 중심으로 MCP와 Voice Gateway가 연결된 상위 수준의 흐름입니다.",
+    "loading": "구조도를 불러오는 중입니다.",
+    "error": "구조도를 표시하지 못했습니다.",
+    "scrollLabel": "플랫폼 전체 흐름도 가로 스크롤 영역",
+    "diagram": {
+      "webUser": "웹 사용자",
+      "chat": "OptiGen 웹 애플리케이션",
+      "phoneCall": "전화 상담",
+      "vg": "Voice Gateway",
+      "api": "API 서버",
+      "ai": "AI 서비스 / RAG",
+      "mcp": "MCP 서버",
+      "requestResponse": "요청 / 스트리밍 응답",
+      "orchestration": "AI 처리",
+      "toolExtension": "업무 실행 확장",
+      "voiceExtension": "음성 채널 확장"
+    }
+  }
+}

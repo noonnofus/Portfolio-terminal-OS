@@ -1,0 +1,100 @@
+{
+  "title": "AICC Voice Gateway",
+  "stackLabel": "Technology stack",
+  "problemSolvingLabel": "Problem Solving",
+  "summary": "A Voice Gateway that connects real-time phone audio with multiple AI providers. PBX and SIP integration, per-call Workers, and provider-specific protocol and audio differences are separated so one call flow can select the configured implementation.",
+  "keyOutcome": {
+    "label": "Key Outcome",
+    "value": "Confined provider changes to Transport, Strategy, and Codec boundaries",
+    "description": "The core call flow stays stable while configuration selects the required AI provider."
+  },
+  "projectIntro": {
+    "title": "Project overview",
+    "description": "I built the Voice Gateway that connects phone calls and real-time audio to OptiGen AI conversations. PBX and SIP call events map into per-call Workers and sessions, incoming audio becomes STT text, and AI responses return to the call stream as TTS audio. I also implemented VAD-based silence and background-noise handling, DTMF input, and reconnection flows while separating provider-specific configuration and audio formats from the shared call flow."
+  },
+  "projectContext": {
+    "service": {
+      "label": "System",
+      "description": "A voice relay system connecting real-time phone audio with OptiGen AI conversation requests and responses"
+    },
+    "flow": {
+      "label": "User flow",
+      "description": "Convert phone audio through STT, generate an OptiGen AI response, then return it to the call as TTS audio"
+    },
+    "role": {
+      "label": "My scope",
+      "description": "Voice Gateway design and implementation, PBX and SIP integration, per-call sessions and Workers, audio processing, and AI provider abstraction"
+    }
+  },
+  "caseStudy": {
+    "providerArchitecture": {
+      "title": "Isolating provider protocol and audio differences with Transport and Factory",
+      "description": "I redesigned a structure that required changes across the call flow for every new Voice AI provider into a common contract, configuration-based selection, and provider-specific implementation boundaries.",
+      "items": {
+        "coupling": {
+          "title": "Problem",
+          "description": "A single Voice Client file owned connection handling, event interpretation, STT and TTS, and audio conversion. Adding a provider therefore required changing existing call logic, and STT or TTS could not be replaced independently."
+        },
+        "contract": {
+          "title": "Common Transport contract",
+          "description": "I defined IVoiceTransport for every Voice Client and moved connection state, exponential backoff with jitter, keep-alive, and common error classification into BaseVoiceTransport."
+        },
+        "factory": {
+          "title": "Configuration-based factories",
+          "description": "VoiceTransportFactory selects the Transport from configuration. Separate STT and TTS factories allow implementations to change without modifying the shared call flow."
+        },
+        "strategyCodec": {
+          "title": "Strategy and Codec boundaries",
+          "description": "Provider-specific event formats live in event strategies, while audio-format differences live in codecs. A new provider is therefore centered on its Transport, Strategy, and Codec."
+        },
+        "verification": {
+          "title": "Verified result",
+          "description": "After a refactor spanning 120 files, the Transport, Factory, Strategy, and Codec boundaries remain in the default branch. Multiple Transport, STT, and TTS implementations are selected through the same factory contracts."
+        }
+      }
+    },
+    "audioPacing": {
+      "title": "Addressing call audio interruptions caused by packet bursts",
+      "description": "I traced bursts of audio packets to when the pacing timer started and how it recovered from delays.",
+      "items": {
+        "timing": {
+          "title": "A timer delayed during initialization",
+          "description": "The pacing timer started before STT/TTS connection initialization. Event-loop delays during initialization left it behind schedule, while the old recovery counter reset during catch-up. The code documents eight packets being sent in roughly 40 ms."
+        },
+        "lazyStart": {
+          "title": "Start with the first audio",
+          "description": "SessionBuilder now creates the timer without starting it. The first audio enqueue starts pacing, keeping connection setup time out of the audio transmission schedule."
+        },
+        "recovery": {
+          "title": "Reset the schedule after a large delay",
+          "description": "When execution is more than 50 ms behind schedule, the timer resets its reference to the current time. It schedules the next packet 20 ms later instead of rapidly catching up on missed ticks."
+        },
+        "result": {
+          "title": "Corrected the burst-producing recovery logic",
+          "description": "The implementation addresses initialization delays and runtime delays separately. First-audio startup and recovery for delays above 50 ms remain in the current code; no call-quality improvement percentage is claimed without before-and-after measurements."
+        }
+      }
+    }
+  },
+  "architecture": {
+    "title": "Real-time voice flow",
+    "description": "A call from the PBX and SIP integration layer enters an isolated Worker. Factory selects the configured Transport, while Strategy and Codec handle provider-specific events and audio differences.",
+    "alt": "A phone call flows through the PBX and SIP integration layer, a per-call Worker, Transport Factory, Strategy, and Codec to Voice AI providers",
+    "caption": "The Voice Gateway separates shared call-flow responsibilities from provider-specific protocol and audio responsibilities.",
+    "loading": "Loading the architecture diagram.",
+    "error": "The architecture diagram could not be displayed.",
+    "scrollLabel": "Horizontal scroll area for the real-time voice flow diagram",
+    "diagram": {
+      "phone": "Caller",
+      "pbx": "PBX / SIP integration",
+      "worker": "Per-call Worker",
+      "factory": "Transport Factory",
+      "transport": "Voice Transport",
+      "strategy": "Event Strategy",
+      "codec": "Audio Codec",
+      "providers": "Voice AI Providers",
+      "call": "Phone call",
+      "audioStream": "Call events / audio"
+    }
+  }
+}

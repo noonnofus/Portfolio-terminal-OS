@@ -1,0 +1,13 @@
+{
+    "eyebrow": "Frontend Engineer",
+    "title": "안녕하세요, 프론트엔드 엔지니어 김현호입니다.",
+    "careerTimelineTitle": "커리어 타임라인",
+    "techStackTitle": "기술 스택",
+    "stackCategorySelector": "기술 스택 분류",
+    "frontend": "Frontend",
+    "stateAndApi": "State & API",
+    "uiAndDesign": "UI & Design",
+    "infra": "Infra",
+    "toolingAndQuality": "개발 도구",
+    "collaboration": "협업"
+}

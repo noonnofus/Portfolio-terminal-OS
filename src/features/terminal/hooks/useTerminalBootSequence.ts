@@ -1,0 +1,143 @@
+import { useEffect, useRef } from "react";
+import type { Terminal } from "@xterm/xterm";
+import chooseASCII from "../utils/ascii";
+import { TERMINAL_BOOT_TIMING } from "../utils/bootSequence";
+import type { Language } from "@/lib/i18n/language";
+import {
+  getTerminalContent,
+  type TerminalSegment,
+} from "../utils/terminalContent";
+import { formatTerminalLink } from "../utils/terminalFormatting";
+import { toTerminalActionUri } from "../utils/terminalActions";
+import type {
+  TerminalSequenceController,
+  TerminalSequenceStep,
+} from "../utils/terminalSequence";
+
+interface UseTerminalBootSequenceOptions {
+  isTouchDevice: boolean;
+  language: Language;
+  prompt: string;
+  sequence: TerminalSequenceController;
+}
+
+export function useTerminalBootSequence({
+  isTouchDevice,
+  language,
+  prompt,
+  sequence,
+}: UseTerminalBootSequenceOptions) {
+  const isAnimatingRef = useRef(false);
+  const terminalRef = useRef<Terminal | null>(null);
+  const animationGenerationRef = useRef(0);
+  const promptRef = useRef(prompt);
+
+  useEffect(() => {
+    promptRef.current = prompt;
+  }, [prompt]);
+
+  const writeCompleteBoot = (terminal: Terminal) => {
+    const content = getTerminalContent(language);
+    animationGenerationRef.current += 1;
+    sequence.cancel();
+    terminal.reset();
+    terminal.clear();
+    terminal.writeln("");
+    terminal.writeln("");
+    chooseASCII(isTouchDevice).forEach((line) => terminal.writeln(line));
+    content.bootLines.forEach((line) => {
+      line.forEach((segment) => {
+        if (segment.type === "link") {
+          terminal.write(
+            formatTerminalLink(
+              segment.label,
+              toTerminalActionUri(segment.action),
+            ),
+          );
+        } else {
+          terminal.write(segment.value);
+        }
+      });
+      terminal.write("\r\n");
+    });
+    terminal.write(promptRef.current);
+    isAnimatingRef.current = false;
+  };
+
+  const start = (terminal: Terminal) => {
+    const content = getTerminalContent(language);
+    const runGeneration = animationGenerationRef.current + 1;
+    animationGenerationRef.current = runGeneration;
+    terminalRef.current = terminal;
+    isAnimatingRef.current = true;
+    terminal.reset();
+    terminal.clear();
+    terminal.writeln("");
+    terminal.writeln("");
+
+    const ascii = chooseASCII(isTouchDevice);
+    const steps: TerminalSequenceStep[] = [];
+
+    ascii.forEach((line) => {
+      steps.push({ type: "write", value: line });
+      steps.push({ type: "line-break" });
+      steps.push({ type: "wait", delayMs: TERMINAL_BOOT_TIMING.asciiLine });
+    });
+
+    content.bootLines.forEach((line) => {
+      line.forEach((segment: TerminalSegment) => {
+        if (segment.type === "link") {
+          steps.push({
+            type: "write",
+            value: formatTerminalLink(
+              segment.label,
+              toTerminalActionUri(segment.action),
+            ),
+          });
+          return;
+        }
+
+        steps.push({
+          type: "type",
+          value: segment.value,
+          delayMs: TERMINAL_BOOT_TIMING.character,
+        });
+      });
+
+      steps.push({ type: "line-break" });
+    });
+
+    void sequence.run(terminal, steps).then((completed) => {
+      if (animationGenerationRef.current !== runGeneration) return;
+      if (!completed) return;
+
+      terminal.write(promptRef.current);
+      isAnimatingRef.current = false;
+    });
+  };
+
+  const replacePrompt = (nextPrompt: string) => {
+    if (!terminalRef.current || isAnimatingRef.current) return;
+
+    terminalRef.current.write(`\r\x1b[2K${nextPrompt}`);
+  };
+
+  const consumeInput = (data: string) => {
+    if (!isAnimatingRef.current) return false;
+
+    if (data === " " && terminalRef.current) {
+      writeCompleteBoot(terminalRef.current);
+    }
+
+    return true;
+  };
+
+  const cancel = () => {
+    animationGenerationRef.current += 1;
+    sequence.cancel();
+    terminalRef.current = null;
+    isAnimatingRef.current = false;
+  };
+
+  return { start, consumeInput, cancel, replacePrompt };
+}

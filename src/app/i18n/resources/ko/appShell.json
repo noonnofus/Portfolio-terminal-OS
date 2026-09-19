@@ -1,0 +1,28 @@
+{
+  "appNames": {
+    "about": "커리어",
+    "projects": "프로젝트",
+    "resume": "이력서",
+    "terminal": "터미널",
+    "contact": "연락처",
+    "notes": "방명록",
+    "settings": "설정",
+    "portfolio": "포트폴리오",
+    "optigen": "OptiGen AI 플랫폼",
+    "mcp": "OptiGen MCP 서버",
+    "voice-gateway": "AICC Voice Gateway",
+    "kepco": "공공기관 상담 어드바이저",
+    "wchms": "WCHMS",
+    "flare": "Flare"
+  },
+  "desktop": {
+    "shortcutsAria": "데스크톱 바로가기",
+    "folderAria": "폴더",
+    "emptyFolder": "이 폴더는 비어 있습니다.",
+    "moveItem": "위치 변경",
+    "reset": "초기화",
+    "itemCount": "{{count}}개 항목",
+    "activeWindow": "창 {{id}}",
+    "openProject": "프로젝트 열기"
+  }
+}
