@@ -34,16 +34,6 @@ export function getWchmsProjectContent(language: Language) {
                     { id: "connectedFlow", phase: "result" },
                 ],
             },
-            {
-                id: "implementation",
-                source: resource.caseStudy.implementation,
-                items: [
-                    { id: "selfStudy" },
-                    { id: "pdfMaterials" },
-                    { id: "adminWorkspace" },
-                    { id: "localization" },
-                ],
-            },
         ]),
         walkthrough: resource.walkthrough,
     };

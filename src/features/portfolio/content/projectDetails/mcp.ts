@@ -16,6 +16,7 @@ type McpResource = ProjectDetailResource & {
         caption: string;
         loading: string;
         error: string;
+        scrollLabel: string;
         diagram: Record<string, string>;
     };
 };
@@ -48,16 +49,6 @@ export function getMcpProjectContent(language: Language) {
                     { id: "eventContract", phase: "process" },
                     { id: "uiState", phase: "process" },
                     { id: "verification", phase: "result" },
-                ],
-            },
-            {
-                id: "implementation",
-                source: resource.caseStudy.implementation,
-                items: [
-                    { id: "apiTools" },
-                    { id: "meetingMinutes" },
-                    { id: "streaming" },
-                    { id: "errorBoundary" },
                 ],
             },
         ]),

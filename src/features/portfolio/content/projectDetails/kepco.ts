@@ -11,14 +11,13 @@ import {
 type KepcoResource = ProjectDetailResource & {
     projectIntro: ProjectDetailText;
     caseStudy: Record<string, ProjectDetailSectionSource>;
-    contributions: ProjectDetailSectionSource;
-    verification: ProjectDetailSectionSource;
     flow: ProjectDetailText & {
-        alt: string;
-        caption: string;
-        loading: string;
-        error: string;
-        diagram: Record<string, string>;
+      alt: string;
+      caption: string;
+      loading: string;
+      error: string;
+      scrollLabel: string;
+      diagram: Record<string, string>;
     };
 };
 
@@ -30,34 +29,17 @@ export function getKepcoProjectContent(language: Language) {
     return {
         page: createProjectDetailPageContent(resource, resource.projectIntro, [
             {
-                id: "sttRecovery",
-                source: resource.caseStudy.sttRecovery,
+                id: "multiTabAuth",
+                source: resource.caseStudy.multiTabAuth,
                 isProblemSolving: true,
                 items: [
+                    { id: "securityBackground", phase: "problem" },
                     { id: "problem", phase: "problem" },
-                    { id: "errorPolicy", phase: "process" },
-                    { id: "authRecovery", phase: "process" },
-                    { id: "scrollOwnership", phase: "process" },
+                    { id: "idleSync", phase: "process" },
+                    { id: "firstAttempt", phase: "process" },
+                    { id: "refreshOwnership", phase: "process" },
+                    { id: "resultSharing", phase: "process" },
                     { id: "verification", phase: "result" },
-                ],
-            },
-            {
-                id: "contributions",
-                source: resource.contributions,
-                items: [
-                    { id: "consultation" },
-                    { id: "history" },
-                    { id: "roles" },
-                    { id: "resilience" },
-                ],
-            },
-            {
-                id: "verification",
-                source: resource.verification,
-                items: [
-                    { id: "stateTransition" },
-                    { id: "eventConsistency" },
-                    { id: "recovery" },
                 ],
             },
         ]),

@@ -9,7 +9,7 @@
   },
   "projectIntro": {
     "title": "Project overview",
-    "description": "Live transcription and connection status matter during a call, while durable consultation history and AI analysis matter after it ends. I designed the screens and state flow so agents retain the same context as call state changes."
+    "description": "I designed and implemented the agent and administrator screens. The workflow connects active-call detection, live speaker-specific transcripts, call and connection status, post-call AI analysis, and consultation history. Agent feedback informed the addition of history search, favorites, and dedicated tabs.\n\nI displayed partial transcripts in temporary areas for each speaker and kept finalized transcripts in start-time order without duplicates. I verified that finalized transcripts survive connection loss and that retries or manual reconnection restore the current state from a fresh snapshot. I also checked that polling and SSE start and stop as calls move between idle, active, and ended states."
   },
   "projectContext": {
     "service": {
@@ -22,118 +22,64 @@
     },
     "role": {
       "label": "My scope",
-      "description": "Designed and implemented agent and manager UI, live transcription, call state, connection recovery, and consultation history"
+      "description": "Frontend design and implementation across the application"
     }
   },
   "caseStudy": {
-    "sttRecovery": {
-      "title": "Rendering live STT reliably with SSE",
-      "description": "I translated SSE events into screen state so agents could follow new transcription during a call while retaining their reading context as connection and scroll state changed.",
-      "items": {
-        "problem": {
-          "title": "Problem",
-          "description": "Connection closure, a stalled heartbeat, and expired authentication were handled as if they were the same failure. Returning to a tab could also reconnect to an already-ended call, receive a 404, and incorrectly turn a recoverable state into a fatal one."
-        },
-        "errorPolicy": {
-          "title": "Error classification and five-stage retry",
-          "description": "With fetchEventSource, I separated retryable errors from failures that should stop immediately. Connection attempts run at 0, 500, 1000, 2000, and 3000ms with a 60-second heartbeat monitor, while the reducer owns open, retrying, recovered, exhausted, and fatal states."
-        },
-        "authRecovery": {
-          "title": "Authentication recovery for SSE",
-          "description": "I applied proactive token refresh to SSE, which runs outside Axios. A 401 during onopen triggers one in-band refresh before reconnecting, and a one-shot guard prevents an infinite refresh loop. openWhenHidden keeps the connection alive while the tab is hidden."
-        },
-        "scrollOwnership": {
-          "title": "One owner for transcript scrolling",
-          "description": "ResizeObserver detects transcript growth. Automatic following pauses when an agent scrolls upward to read earlier content and resumes after returning to the bottom, preventing live, playback, and search scrolling from competing."
-        },
-        "verification": {
-          "title": "Outcome",
-          "description": "Agents could follow new transcription in real time while seeing the current connection state. Automatic scrolling no longer took control while they read earlier content, and a temporary disconnect no longer led directly to a fatal-error screen."
-        }
-      }
-    },
     "multiTabAuth": {
-      "title": "Removing forced logout caused by multi-tab refresh-token races",
-      "description": "Multiple tabs could consume a single-use Refresh Token at the same time and turn a valid session into a logout. I resolved it by serializing refreshes across tabs and separating failure policies.",
+      "title": "Coordinating inactivity logout and token refresh across tabs",
+      "description": "The project required logout after 15 minutes of inactivity to avoid leaving consultation data exposed in an unattended browser. I coordinated activity timing and logout across tabs, and addressed refresh races that could incorrectly terminate a session.",
       "items": {
         "problem": {
           "title": "Problem",
-          "description": "When several tabs refreshed the same token simultaneously, only the first request succeeded and the others received 401 responses. Those failures were treated as invalid authentication and deleted an otherwise valid session."
+          "description": "When several tabs received 401 responses together, each tried to refresh with the same single-use Refresh Token. After one tab consumed it, the others retried with an already-used token, received 401 responses, and could propagate logout to otherwise valid tabs."
         },
-        "rootCause": {
-          "title": "Root cause",
-          "description": "Each browser tab ran its refresh flow independently, and transient timeout, network, and 5xx failures shared the same logout path as an actually invalid session."
+        "firstAttempt": {
+          "title": "First decision and its limitation",
+          "description": "I first serialized refresh requests with Web Locks. This prevented simultaneous use of the same token, but tabs that acquired the lock in sequence could still make repeated server requests and rotate the Refresh Token unnecessarily."
         },
-        "serialization": {
-          "title": "Cross-tab refresh serialization",
-          "description": "Web Locks allows only one tab to refresh at a time. Waiting tabs read the shared updated authentication state after the lock is released, with the previous flow retained as a fallback where Web Locks is unavailable."
+        "refreshOwnership": {
+          "title": "One owner for server refresh",
+          "description": "Web Locks serialize server refresh requests. The authentication channel distributes the new Access Token, and receiving tabs adopt it without another request. Serialization does not itself coalesce all waiting requests into a single server call."
         },
-        "failurePolicy": {
-          "title": "Session policy by failure type",
-          "description": "The session is cleared only when authentication is genuinely invalid. Network and server failures preserve the user session and remain retryable."
+        "resultSharing": {
+          "title": "Sharing refresh results without restoring a logged-out session",
+          "description": "The authentication channel shares logout events and refreshed Access Tokens. Receiving tabs check logout state and compare exp values before adopting newer tokens. Once logout begins, refresh requests and token adoption are blocked. Refresh Tokens are not broadcast."
         },
         "verification": {
-          "title": "Verification",
-          "description": "Tests cover simultaneous refresh requests, reuse after another tab succeeds, and session preservation during network and server failures to prevent forced logout from returning."
+          "title": "Outcome and verification",
+          "description": "Tests verify that receiving tabs adopt a new Access Token without a server request and ignore missing payloads, tokens received during logout, and older expirations. Network and 5xx failures are also separated from invalid authentication so temporary outages do not expand into cross-tab logout."
+        },
+        "securityBackground": {
+          "title": "Inactivity logout across tabs",
+          "description": "Independent timers can log out an active user or leave another tab displaying an ended session. Fifteen minutes was the project policy; the current implementation reads the timeout from server configuration and pauses inactivity timing during a live call."
+        },
+        "idleSync": {
+          "title": "Synchronizing activity and propagating logout",
+          "description": "react-idle-timer coordinates activity and timers using crossTab, leaderElection, and syncTimers. The leader handles the server request for inactivity logout. Tabs receiving logged-out on a separate authentication BroadcastChannel clear tokens and query caches, then navigate to the login page."
         }
-      }
-    }
-  },
-  "contributions": {
-    "title": "Other Contributions",
-    "description": "Beyond the featured problem-solving case, I implemented the main frontend workflows used by agents and administrators.",
-    "items": {
-      "consultation": {
-        "title": "Live consultation screen",
-        "description": "I connected active-call detection, speaker-specific STT transcription, call and connection state, and post-call AI analysis into one consultation flow."
-      },
-      "history": {
-        "title": "Consultation history navigation",
-        "description": "I implemented consultation history and added search, favorites, and a favorites-only tab in response to agent feedback."
-      },
-      "roles": {
-        "title": "Agent and manager screens",
-        "description": "Side panels, tabs, and main panels compose by role, with loading states and error boundaries applied at the panel level."
-      },
-      "resilience": {
-        "title": "Connection and recovery experience",
-        "description": "Retry state and recovery points remain visible so agents keep previously confirmed transcription and continue into next-call detection after a disconnect."
-      }
-    }
-  },
-  "verification": {
-    "title": "Core scenarios I verified",
-    "description": "I evaluated the live interface not only under a healthy connection, but also by whether it preserves consultation context across event-order and reconnection scenarios.",
-    "items": {
-      "stateTransition": {
-        "title": "Call-state transitions",
-        "description": "I checked the idle, live, and ended transitions to confirm that polling and SSE start and stop in the correct state."
-      },
-      "eventConsistency": {
-        "title": "Transcription-event consistency",
-        "description": "I checked that partial speech stays in speaker-specific temporary regions and finalized speech remains deduplicated and ordered by start time."
-      },
-      "recovery": {
-        "title": "Recovery without context loss",
-        "description": "I checked that finalized transcription survives staged retries and manual reconnection, then reconciles with a fresh snapshot."
       }
     }
   },
   "flow": {
-    "title": "I switched between live and durable data paths through call state.",
-    "description": "While idle, the frontend looks for an active call. Once a call begins, reducer-managed SSE events drive the UI. After the call ends, the live connection closes and the flow continues into AI analysis and consultation history.",
-    "alt": "Frontend state flow from active-call detection through call state, SSE, transcription reducer, and consultation UI",
-    "caption": "SSE owns live state during a call; next-call detection and durable history continue after it ends.",
+    "title": "I separated ownership of multi-tab token refresh from result distribution.",
+    "description": "Activity timing and logout are synchronized across tabs for the project's 15-minute inactivity policy. The diagram below focuses on token refresh: Web Locks coordinate refresh work and BroadcastChannel distributes the refreshed Access Token.",
+    "alt": "Flow showing one browser tab refreshing with the Refresh Token and sharing the new Access Token with other tabs through BroadcastChannel",
+    "caption": "IdleTimer uses its own channel for activity synchronization. A separate authentication channel carries logout and refreshed tokens; tabs that are logging out do not adopt incoming tokens.",
     "loading": "Loading the architecture diagram.",
     "error": "The architecture diagram could not be displayed.",
+    "scrollLabel": "Horizontal scroll area for the diagram",
     "diagram": {
-      "polling": "1-second active-call polling",
-      "callState": "Zustand call state, idle → live → ended",
-      "live": "live",
-      "stream": "Call-scoped SSE, openWhenHidden",
-      "reducer": "Transcript reducer, SNAPSHOT, PARTIAL, FINAL",
-      "ui": "Consultation UI, transcript, connection state, analysis",
-      "terminal": "CALL_END, fatal, exhausted, resume polling"
+      "before": "Previous flow",
+      "signal": "BroadcastChannel, refresh signal",
+      "repeatedRefresh": "Every tab requests a server token refresh",
+      "race": "Single-use Refresh Token race, 401",
+      "decision": "Separate work ownership from result sharing",
+      "after": "Improved flow",
+      "tabs": "Several tabs need a fresh token",
+      "ownerRefresh": "Serialize server refresh requests with Web Locks",
+      "broadcast": "BroadcastChannel sends the new Access Token",
+      "adopt": "Receiving tabs check logout state and compare exp"
     }
   }
 }

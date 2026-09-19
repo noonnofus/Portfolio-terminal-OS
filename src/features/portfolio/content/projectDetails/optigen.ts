@@ -16,6 +16,7 @@ type OptigenResource = ProjectDetailResource & {
         caption: string;
         loading: string;
         error: string;
+        scrollLabel: string;
         diagram: Record<string, string>;
     };
 };
@@ -34,33 +35,10 @@ export function getOptigenProjectContent(language: Language) {
                 items: [
                     { id: "growingResponse", phase: "problem" },
                     { id: "spacerLayout", phase: "process" },
-                    { id: "streamState", phase: "process" },
+                    { id: "measurement", phase: "process" },
+                    { id: "streamLifecycle", phase: "process" },
                     { id: "readingPosition", phase: "result" },
                 ],
-            },
-            {
-                id: "implementation",
-                source: resource.caseStudy.implementation,
-                items: [
-                    { id: "chatExperience" },
-                    { id: "responseFlow" },
-                    { id: "accessibility" },
-                    { id: "responsive" },
-                ],
-            },
-            {
-                id: "localStt",
-                source: resource.caseStudy.localStt,
-                items: [
-                    { id: "workerBoundary" },
-                    { id: "fallback" },
-                    { id: "verification" },
-                ],
-            },
-            {
-                id: "verification",
-                source: resource.caseStudy.verification,
-                items: [{ id: "accessibility" }, { id: "streaming" }],
             },
         ]),
         architecture: resource.architecture,

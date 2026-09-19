@@ -39,6 +39,8 @@ export default function McpApp({ language }: McpAppProps) {
         caption: architecture.caption,
         loadingLabel: architecture.loading,
         errorLabel: architecture.error,
+        scrollable: true,
+        scrollLabel: architecture.scrollLabel,
       }}
     />
   );

@@ -43,6 +43,8 @@ export default function OptigenApp({ language }: OptigenAppProps) {
         caption: architecture.caption,
         loadingLabel: architecture.loading,
         errorLabel: architecture.error,
+        scrollable: true,
+        scrollLabel: architecture.scrollLabel,
       }}
     />
   );

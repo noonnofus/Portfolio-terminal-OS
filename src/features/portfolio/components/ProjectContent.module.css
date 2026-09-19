@@ -6,7 +6,6 @@
   --app-projects-space-page-inline-wide: 2.5rem;
   --app-projects-space-page-block: 2.25rem;
   --app-projects-space-page-block-wide: 3.5rem;
-  --app-projects-size-prose-max-width: 65ch;
   --app-projects-font-size-document-title: 1.75rem;
   --app-projects-font-size-section-title: 1.125rem;
   --app-projects-font-size-reading: 0.95rem;
@@ -85,7 +84,6 @@
 
 .documentSummary,
 .sectionDescription {
-  max-width: var(--app-projects-size-prose-max-width);
   font-size: var(--app-projects-font-size-supporting);
   line-height: var(--app-projects-line-height-supporting);
 }
@@ -97,6 +95,14 @@
 
 .overviewSection {
   margin-top: var(--app-projects-space-section);
+}
+
+.projectInfoSection {
+  margin-top: var(--app-projects-space-section);
+}
+
+.projectInfoStack {
+  margin-top: 1rem;
 }
 
 .overviewGrid {
@@ -112,6 +118,13 @@
 
 .architectureSection {
   margin-top: var(--app-projects-space-section);
+  border-top: 1px solid var(--application-border);
+  padding-top: var(--app-projects-space-section-inset);
+}
+
+.caseArchitectureSection {
+  min-width: 0;
+  margin-top: 2rem;
   border-top: 1px solid var(--application-border);
   padding-top: var(--app-projects-space-section-inset);
 }
@@ -141,7 +154,6 @@
 }
 
 .keyOutcomeValue {
-  max-width: var(--app-projects-size-prose-max-width);
   margin-top: 0.5rem;
   color: var(--application-app-surface-text);
   font-size: var(--app-projects-font-size-outcome);
@@ -151,7 +163,6 @@
 }
 
 .keyOutcomeDescription {
-  max-width: var(--app-projects-size-prose-max-width);
   margin-top: 0.5rem;
   color: var(--application-app-surface-muted);
   font-size: var(--app-projects-font-size-supporting);
@@ -242,7 +253,6 @@
 
 .evidenceDescription {
   margin-top: 0.5rem;
-  max-width: var(--app-projects-size-prose-max-width);
 }
 
 .supportingText {

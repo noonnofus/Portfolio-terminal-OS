@@ -14,6 +14,10 @@ type PortfolioResource = ProjectDetailResource & {
     architecture: ProjectDetailText & {
         alt: string;
         caption: string;
+        loading: string;
+        error: string;
+        scrollLabel: string;
+        diagram: Record<string, string>;
     };
 };
 
@@ -25,8 +29,8 @@ export function getPortfolioProjectContent(language: Language) {
     return {
         page: createProjectDetailPageContent(resource, resource.projectIntro, [
             {
-                id: "navigation",
-                source: resource.caseStudy.navigation,
+                id: "ownership",
+                source: resource.caseStudy.ownership,
                 isProblemSolving: true,
                 items: [
                     { id: "problem", phase: "problem" },
@@ -35,27 +39,13 @@ export function getPortfolioProjectContent(language: Language) {
                 ],
             },
             {
-                id: "directory",
-                source: resource.caseStudy.directory,
+                id: "appContract",
+                source: resource.caseStudy.appContract,
                 isProblemSolving: true,
                 items: [
                     { id: "problem", phase: "problem" },
                     { id: "decision", phase: "process" },
                     { id: "result", phase: "result" },
-                ],
-            },
-            {
-                id: "implementation",
-                source: resource.caseStudy.implementation,
-                items: [{ id: "content" }, { id: "accessibility" }],
-            },
-            {
-                id: "verification",
-                source: resource.caseStudy.verification,
-                items: [
-                    { id: "structure" },
-                    { id: "navigation" },
-                    { id: "interaction" },
                 ],
             },
         ]),

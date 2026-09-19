@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import type { Language } from "@/lib/i18n/language";
 import type {
   ProjectCaseStudyPhase,
@@ -24,6 +24,11 @@ const phaseLabelsByLanguage: Record<
   },
 };
 
+const projectInfoLabels: Record<Language, string> = {
+  ko: "프로젝트 정보",
+  en: "Project information",
+};
+
 type ProjectArchitectureBase = {
   title: string;
   description: string;
@@ -31,6 +36,10 @@ type ProjectArchitectureBase = {
   caption: string;
   loadingLabel: string;
   errorLabel: string;
+  sectionId?: string;
+  wide?: boolean;
+  scrollable?: boolean;
+  scrollLabel?: string;
 };
 
 export type ProjectArchitecture = ProjectArchitectureBase &
@@ -70,6 +79,55 @@ export function ProjectCaseStudyPage({
     ...sections.filter((section) => section.isProblemSolving),
     ...sections.filter((section) => !section.isProblemSolving),
   ];
+  const renderArchitecture = (
+    architectureSectionId: string,
+    isCaseStudy = false,
+  ) => {
+    if (!architecture) return null;
+
+    return (
+      <section
+        className={
+          isCaseStudy
+            ? styles.caseArchitectureSection
+            : styles.architectureSection
+        }
+        aria-labelledby={`${projectId}-${architectureSectionId}-title`}
+      >
+        <h3
+          id={`${projectId}-${architectureSectionId}-title`}
+          className={`${styles.sectionTitle} font-semibold text-[var(--application-app-surface-text)]`}
+        >
+          {architecture.title}
+        </h3>
+        <p
+          className={`${styles.sectionDescription} mt-3 text-[var(--application-app-surface-muted)]`}
+        >
+          {architecture.description}
+        </p>
+        <figure className="mt-5">
+          {"content" in architecture ? (
+            architecture.content
+          ) : (
+            <ProjectArchitectureDiagram
+              chart={architecture.chart}
+              label={architecture.label}
+              loadingLabel={architecture.loadingLabel}
+              errorLabel={architecture.errorLabel}
+              wide={architecture.wide}
+              scrollable={architecture.scrollable}
+              scrollLabel={architecture.scrollLabel}
+            />
+          )}
+          <figcaption
+            className={`${styles.supportingText} mt-3 text-[var(--application-app-surface-muted)]`}
+          >
+            {architecture.caption}
+          </figcaption>
+        </figure>
+      </section>
+    );
+  };
 
   return (
     <div className="application-app-surface h-full w-full overflow-y-auto">
@@ -85,30 +143,23 @@ export function ProjectCaseStudyPage({
           >
             {summary}
           </p>
-          <div className="mt-5">
-            <ProjectTechBadges label={stackLabel} items={stack} />
-          </div>
         </header>
 
         <section
-          className={styles.overviewSection}
-          aria-labelledby={`${projectId}-overview-title`}
+          className={styles.projectInfoSection}
+          aria-labelledby={`${projectId}-project-info-title`}
         >
           <h3
-            id={`${projectId}-overview-title`}
+            id={`${projectId}-project-info-title`}
             className={`${styles.sectionTitle} font-semibold text-[var(--application-app-surface-text)]`}
           >
-            {overviewTitle}
+            {projectInfoLabels[language]}
           </h3>
-          <p
-            className={`${styles.sectionDescription} mt-3 text-[var(--application-app-surface-muted)]`}
-          >
-            {overviewDescription}
-          </p>
+          <div className={styles.projectInfoStack}>
+            <ProjectTechBadges label={stackLabel} items={stack} />
+          </div>
           <div className={styles.overviewGrid}>
-            <dl
-              className={styles.contextList}
-            >
+            <dl className={styles.contextList}>
               {contexts.map((context) => (
                 <div key={context.id} className={styles.contextRow}>
                   <dt className="font-semibold text-[var(--application-app-surface-text)]">
@@ -123,41 +174,29 @@ export function ProjectCaseStudyPage({
           </div>
         </section>
 
-        {architecture ? (
-          <section
-            className={styles.architectureSection}
-            aria-labelledby={`${projectId}-architecture-title`}
+        <section
+          className={styles.overviewSection}
+          aria-labelledby={`${projectId}-overview-title`}
+        >
+          <h3
+            id={`${projectId}-overview-title`}
+            className={`${styles.sectionTitle} font-semibold text-[var(--application-app-surface-text)]`}
           >
-            <h3
-              id={`${projectId}-architecture-title`}
-              className={`${styles.sectionTitle} font-semibold text-[var(--application-app-surface-text)]`}
-            >
-              {architecture.title}
-            </h3>
+            {overviewTitle}
+          </h3>
+          {overviewDescription.split("\n\n").map((paragraph) => (
             <p
+              key={paragraph}
               className={`${styles.sectionDescription} mt-3 text-[var(--application-app-surface-muted)]`}
             >
-              {architecture.description}
+              {paragraph}
             </p>
-            <figure className="mt-5">
-              {"content" in architecture ? (
-                architecture.content
-              ) : (
-                <ProjectArchitectureDiagram
-                  chart={architecture.chart}
-                  label={architecture.label}
-                  loadingLabel={architecture.loadingLabel}
-                  errorLabel={architecture.errorLabel}
-                />
-              )}
-              <figcaption
-                className={`${styles.supportingText} mt-3 text-[var(--application-app-surface-muted)]`}
-              >
-                {architecture.caption}
-              </figcaption>
-            </figure>
-          </section>
-        ) : null}
+          ))}
+        </section>
+
+        {architecture && !architecture.sectionId
+          ? renderArchitecture("architecture")
+          : null}
 
         {orderedSections.map((section) => (
           <section
@@ -197,27 +236,41 @@ export function ProjectCaseStudyPage({
                   );
 
                   return items.length > 0 ? (
-                    <section key={phase} className={styles.casePhase}>
-                      <h4 className={styles.casePhaseLabel}>{label}</h4>
-                      <ul className={styles.caseEvidenceList}>
-                        {items.map((item) => (
-                          <li key={item.id} className={styles.evidenceItem}>
-                            <p
-                              className={`${styles.evidenceDescription} text-[var(--application-app-surface-muted)]`}
-                            >
-                              {item.title ? (
-                                <>
-                                  <strong className="font-semibold text-[var(--application-app-surface-text)]">
-                                    {item.title}
-                                  </strong>{" "}
-                                </>
-                              ) : null}
-                              {item.description}
-                            </p>
-                          </li>
-                        ))}
-                      </ul>
-                    </section>
+                    <Fragment key={phase}>
+                      <section className={styles.casePhase}>
+                        <h4 className={styles.casePhaseLabel}>{label}</h4>
+                        <ul className={styles.caseEvidenceList}>
+                          {items.map((item) => (
+                            <li key={item.id} className={styles.evidenceItem}>
+                              {item.description.split("\n\n").map(
+                                (paragraph, index) => (
+                                  <p
+                                    key={paragraph}
+                                    className={`${styles.evidenceDescription} ${index > 0 ? "mt-3" : ""} text-[var(--application-app-surface-muted)]`}
+                                  >
+                                    {index === 0 && item.title ? (
+                                      <>
+                                        <strong className="font-semibold text-[var(--application-app-surface-text)]">
+                                          {item.title}
+                                        </strong>{" "}
+                                      </>
+                                    ) : null}
+                                    {paragraph}
+                                  </p>
+                                ),
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </section>
+                      {phase === "problem" &&
+                      architecture?.sectionId === section.id
+                        ? renderArchitecture(
+                            `${section.id}-architecture`,
+                            true,
+                          )
+                        : null}
+                    </Fragment>
                   ) : null;
                 })}
               </div>

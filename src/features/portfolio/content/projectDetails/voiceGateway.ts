@@ -16,6 +16,7 @@ type VoiceGatewayResource = ProjectDetailResource & {
         caption: string;
         loading: string;
         error: string;
+        scrollLabel: string;
         diagram: Record<string, string>;
     };
 };
@@ -40,24 +41,14 @@ export function getVoiceGatewayProjectContent(language: Language) {
                 ],
             },
             {
-                id: "workerDecomposition",
-                source: resource.caseStudy.workerDecomposition,
+                id: "audioPacing",
+                source: resource.caseStudy.audioPacing,
                 isProblemSolving: true,
                 items: [
-                    { id: "oversizedContext", phase: "problem" },
-                    { id: "responsibilityBoundary", phase: "process" },
-                    { id: "callIsolation", phase: "process" },
+                    { id: "timing", phase: "problem" },
+                    { id: "lazyStart", phase: "process" },
+                    { id: "recovery", phase: "process" },
                     { id: "result", phase: "result" },
-                ],
-            },
-            {
-                id: "implementation",
-                source: resource.caseStudy.implementation,
-                items: [
-                    { id: "twilio" },
-                    { id: "audioPipeline" },
-                    { id: "callControls" },
-                    { id: "providerIntegration" },
                 ],
             },
         ]),

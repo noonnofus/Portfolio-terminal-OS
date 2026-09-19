@@ -43,6 +43,8 @@ export default function VoiceGatewayApp({ language }: VoiceGatewayAppProps) {
         caption: architecture.caption,
         loadingLabel: architecture.loading,
         errorLabel: architecture.error,
+        scrollable: true,
+        scrollLabel: architecture.scrollLabel,
       }}
     />
   );

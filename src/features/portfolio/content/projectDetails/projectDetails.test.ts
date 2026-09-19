@@ -56,6 +56,11 @@ describe("project detail content", () => {
                 expect(page.sections.length).toBeGreaterThan(0);
                 expect(
                     page.sections.every(
+                        (section) => section.isProblemSolving,
+                    ),
+                ).toBe(true);
+                expect(
+                    page.sections.every(
                         (section) =>
                             section.title !== "" &&
                             section.description !== "" &&
@@ -64,6 +69,89 @@ describe("project detail content", () => {
                             ),
                     ),
                 ).toBe(true);
+            }
+        }
+    });
+
+    it("uses the multi-tab broadcast case and preserves KEPCO operating outcomes", () => {
+        for (const language of ["ko", "en"] as const) {
+            const { page, flow } = getKepcoProjectContent(language);
+
+            expect(page.sections.map((section) => section.id)).toEqual([
+                "multiTabAuth",
+            ]);
+            expect(page.sections[0].id).toBe("multiTabAuth");
+            expect(page.sections[0].items.map((item) => item.id)).toEqual([
+                "securityBackground",
+                "problem",
+                "idleSync",
+                "firstAttempt",
+                "refreshOwnership",
+                "resultSharing",
+                "verification",
+            ]);
+            expect(page.keyOutcome.value).toBe(
+                language === "ko"
+                    ? "전체 상담사의 60% 사용, 고객 평균 대기 시간 30% 감소"
+                    : "Used by 60% of agents, with average customer wait time reduced by 30%",
+            );
+            expect(flow.diagram.broadcast).toContain("BroadcastChannel");
+        }
+    });
+
+    it("uses the streaming-layout case and integrates the product foundation into the OptiGen overview", () => {
+        for (const language of ["ko", "en"] as const) {
+            const { page } = getOptigenProjectContent(language);
+
+            expect(page.keyOutcome.value).toContain("POC");
+            expect(page.sections.map((section) => section.id)).toEqual([
+                "streamingLayout",
+            ]);
+            expect(page.overviewDescription).toContain("Storybook");
+            expect(page.sections[0].items.map((item) => item.id)).toEqual([
+                "growingResponse",
+                "spacerLayout",
+                "measurement",
+                "streamLifecycle",
+                "readingPosition",
+            ]);
+        }
+    });
+
+    it("uses the GUI ownership and app-contract cases for the portfolio", () => {
+        for (const language of ["ko", "en"] as const) {
+            const { page, architecture } = getPortfolioProjectContent(language);
+
+            expect(page.sections.map((section) => section.id)).toEqual([
+                "ownership",
+                "appContract",
+            ]);
+            expect(page.overviewDescription).toContain("Playwright");
+            expect(page.keyOutcome.value).toContain(
+                language === "ko" ? "등록, 로딩, 탐색 계약" : "registering, loading, and navigating",
+            );
+            expect(architecture.diagram.loader).toContain("appLoaderRegistry");
+        }
+    });
+
+    it("uses only the documented problem-solving cases for the remaining projects", () => {
+        const contracts = [
+            [getMcpProjectContent, ["performance", "progressProtocol"]],
+            [
+                getVoiceGatewayProjectContent,
+                ["providerArchitecture", "audioPacing"],
+            ],
+            [getWchmsProjectContent, ["learningMaterialAlignment"]],
+            [getFlareProjectContent, ["informationFlow"]],
+        ] as const;
+
+        for (const [getProjectContent, expectedSections] of contracts) {
+            for (const language of ["ko", "en"] as const) {
+                expect(
+                    getProjectContent(language).page.sections.map(
+                        (section) => section.id,
+                    ),
+                ).toEqual(expectedSections);
             }
         }
     });

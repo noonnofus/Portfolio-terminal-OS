@@ -7,6 +7,9 @@ type ProjectArchitectureDiagramProps = {
   label: string;
   loadingLabel: string;
   errorLabel: string;
+  wide?: boolean;
+  scrollable?: boolean;
+  scrollLabel?: string;
 };
 
 let isMermaidInitialized = false;
@@ -20,6 +23,9 @@ export function ProjectArchitectureDiagram({
   label,
   loadingLabel,
   errorLabel,
+  wide = false,
+  scrollable = false,
+  scrollLabel,
 }: ProjectArchitectureDiagramProps) {
   const generatedId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -87,7 +93,10 @@ export function ProjectArchitectureDiagram({
 
   return (
     <div
-      className="mx-auto max-w-[30rem] overflow-x-auto rounded-xl border border-[var(--application-border)] bg-white p-3 sm:p-5 [&_svg]:mx-auto [&_svg]:h-auto [&_svg]:w-full [&_svg]:min-w-[26rem]"
+      role={scrollable ? "region" : undefined}
+      aria-label={scrollable ? scrollLabel : undefined}
+      tabIndex={scrollable ? 0 : undefined}
+      className={`mx-auto overflow-x-auto rounded-xl border border-[var(--application-border)] bg-white p-3 sm:p-5 [&_svg]:mx-auto [&_svg]:h-auto [&_svg]:w-full ${wide ? "max-w-none [&_svg]:min-w-[58rem]" : "max-w-[30rem] [&_svg]:min-w-[26rem]"}`}
     >
       <div
         ref={containerRef}

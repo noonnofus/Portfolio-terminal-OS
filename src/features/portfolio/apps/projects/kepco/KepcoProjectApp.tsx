@@ -13,20 +13,28 @@ type KepcoAppProps = {
 export default function KepcoApp({ language }: KepcoAppProps) {
   const { page, flow } = getKepcoProjectContent(language);
   const diagram = `flowchart TB
-    polling["${escapeMermaidLabel(flow.diagram.polling)}"] --> callState["${escapeMermaidLabel(flow.diagram.callState)}"]
-    callState -->|"${escapeMermaidLabel(flow.diagram.live)}"| stream["${escapeMermaidLabel(flow.diagram.stream)}"]
-    stream --> reducer["${escapeMermaidLabel(flow.diagram.reducer)}"]
-    reducer --> ui["${escapeMermaidLabel(flow.diagram.ui)}"]
-    reducer --> terminal["${escapeMermaidLabel(flow.diagram.terminal)}"]
+    subgraph before["${escapeMermaidLabel(flow.diagram.before)}"]
+      direction LR
+      signal["${escapeMermaidLabel(flow.diagram.signal)}"] --> repeatedRefresh["${escapeMermaidLabel(flow.diagram.repeatedRefresh)}"] --> race["${escapeMermaidLabel(flow.diagram.race)}"]
+    end
 
-    classDef source fill:#e8f1ff,stroke:#2563eb,stroke-width:2px,color:#172554
-    classDef state fill:#ecfdf5,stroke:#059669,stroke-width:2px,color:#064e3b
-    classDef presentation fill:#fff7ed,stroke:#ea580c,stroke-width:2px,color:#7c2d12
-    classDef terminalState fill:#faf5ff,stroke:#9333ea,stroke-width:2px,color:#581c87
-    class polling source
-    class callState,stream,reducer state
-    class ui presentation
-    class terminal terminalState`;
+    decision["${escapeMermaidLabel(flow.diagram.decision)}"]
+
+    subgraph after["${escapeMermaidLabel(flow.diagram.after)}"]
+      direction LR
+      tabs["${escapeMermaidLabel(flow.diagram.tabs)}"] --> ownerRefresh["${escapeMermaidLabel(flow.diagram.ownerRefresh)}"] --> broadcast["${escapeMermaidLabel(flow.diagram.broadcast)}"] --> adopt["${escapeMermaidLabel(flow.diagram.adopt)}"]
+    end
+
+    before --> decision --> after
+
+    classDef problem fill:#fff1f2,stroke:#e11d48,stroke-width:2px,color:#881337
+    classDef pivot fill:#fff7ed,stroke:#ea580c,stroke-width:2px,color:#7c2d12
+    classDef owner fill:#e8f1ff,stroke:#2563eb,stroke-width:2px,color:#172554
+    classDef shared fill:#ecfdf5,stroke:#059669,stroke-width:2px,color:#064e3b
+    class signal,repeatedRefresh,race problem
+    class decision pivot
+    class tabs,ownerRefresh owner
+    class broadcast,adopt shared`;
 
   return (
     <ProjectCaseStudyPage
@@ -42,6 +50,10 @@ export default function KepcoApp({ language }: KepcoAppProps) {
         caption: flow.caption,
         loadingLabel: flow.loading,
         errorLabel: flow.error,
+        sectionId: "multiTabAuth",
+        wide: true,
+        scrollable: true,
+        scrollLabel: flow.scrollLabel,
       }}
     />
   );

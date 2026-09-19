@@ -34,16 +34,6 @@ export function getFlareProjectContent(language: Language) {
                     { id: "consolidatedAccess", phase: "result" },
                 ],
             },
-            {
-                id: "implementation",
-                source: resource.caseStudy.implementation,
-                items: [
-                    { id: "mapAndRisk" },
-                    { id: "newsPipeline" },
-                    { id: "chatbot" },
-                    { id: "notifications" },
-                ],
-            },
         ]),
         walkthrough: resource.walkthrough,
     };
