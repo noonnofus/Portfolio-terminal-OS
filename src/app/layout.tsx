@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: SITE_NAME,
-    template: "%s | 김현호",
+    template: "김현호 | %s",
   },
   description: SITE_DESCRIPTION,
   alternates: {
