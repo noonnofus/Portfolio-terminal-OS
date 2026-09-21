@@ -12,14 +12,14 @@ describe("executeCommand", () => {
         expect(result.lines.some((line) => line.includes("포트폴리오"))).toBe(true);
     });
 
-    it("returns startx action outside gui route", () => {
+    it("returns startx action outside desktop route", () => {
         expect(executeCommand("startx", { pathname: "/", language: "ko" })).toEqual({
             type: "open-portfolio",
         });
     });
 
-    it("returns already accessed message inside gui route", () => {
-        const result = executeCommand("startx", { pathname: "/gui", language: "en" });
+    it("returns already accessed message inside desktop route", () => {
+        const result = executeCommand("startx", { pathname: "/desktop", language: "en" });
 
         expect(result).toEqual({
             type: "write-lines",

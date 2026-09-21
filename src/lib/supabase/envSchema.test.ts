@@ -10,7 +10,7 @@ describe("parseApplicationOrigin", () => {
   it("normalizes the configured canonical origin", () => {
     expect(
       parseApplicationOrigin({
-        APP_ORIGIN: "https://portfolio.example/gui",
+        APP_ORIGIN: "https://portfolio.example/desktop",
       }),
     ).toBe("https://portfolio.example");
   });

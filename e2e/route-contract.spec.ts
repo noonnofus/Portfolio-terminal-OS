@@ -1,25 +1,43 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("route compatibility", () => {
-    test("terminal and switched GUI routes render", async ({
+    test("redirects legacy GUI URLs to the matching Desktop route", async ({
+        page,
+    }) => {
+        await page.goto("/gui?app=projects");
+
+        await expect(page).toHaveURL(/\/desktop\?app=projects$/);
+        await expect(
+            page.getByRole("dialog", { name: "프로젝트" }),
+        ).toBeVisible();
+
+        await page.goto("/en/gui?app=settings");
+
+        await expect(page).toHaveURL(/\/en\/desktop\?app=settings$/);
+        await expect(
+            page.getByRole("dialog", { name: "Settings" }),
+        ).toBeVisible();
+    });
+
+    test("terminal and switched Desktop routes render", async ({
         page,
     }) => {
         await page.goto("/");
         await expect(page.locator("body")).toBeVisible();
 
-        await page.goto("/gui");
+        await page.goto("/desktop");
         await expect(
             page.getByRole("dialog", { name: "커리어" }),
         ).toBeVisible();
-        await expect(page).toHaveURL(/\/gui$/);
+        await expect(page).toHaveURL(/\/desktop$/);
     });
 
-    test("keeps the terminal language when startx opens the GUI", async ({
+    test("keeps the terminal language when startx opens the Desktop", async ({
         page,
     }) => {
         await page.addInitScript(() => {
             window.localStorage.setItem(
-                "gui:preferences",
+                "desktop:preferences",
                 JSON.stringify({
                     version: 1,
                     preferences: {
@@ -44,7 +62,7 @@ test.describe("route compatibility", () => {
         await page.keyboard.type("startx");
         await page.keyboard.press("Enter");
 
-        await expect(page).toHaveURL(/\/en\/gui$/);
+        await expect(page).toHaveURL(/\/en\/desktop$/);
         await expect(page.locator("html")).toHaveAttribute("lang", "en");
         await expect(
             page.getByRole("dialog", { name: "Career" }),
@@ -54,7 +72,7 @@ test.describe("route compatibility", () => {
     test("project loaders render localized content on demand", async ({
         page,
     }) => {
-        await page.goto("/gui?app=projects");
+        await page.goto("/desktop?app=projects");
         await page
             .getByRole("button", {
                 name: "WCHMS 프로젝트 열기",
@@ -100,12 +118,12 @@ test.describe("route compatibility", () => {
                 slug: "portfolio",
                 dialog: "포트폴리오",
                 diagram:
-                    "라우트 진입점, GUI shell, navigation, store, app catalog, dynamic loader, directory tree와 Portfolio, Terminal, Guestbook, Settings feature의 관계를 보여주는 포트폴리오 구조도",
+                    "라우트 진입점, Desktop shell, navigation, store, app catalog, dynamic loader, directory tree와 Portfolio, Terminal, Guestbook, Settings feature의 관계를 보여주는 포트폴리오 구조도",
             },
         ] as const;
 
         for (const project of projects) {
-            await page.goto(`/gui?app=project&slug=${project.slug}`);
+            await page.goto(`/desktop?app=project&slug=${project.slug}`);
 
             const projectDialog = page.getByRole("dialog", {
                 name: project.dialog,
@@ -146,12 +164,12 @@ test.describe("route compatibility", () => {
                 region:
                     "포트폴리오 폴더와 실행 구조도, 가로로 스크롤할 수 있습니다.",
                 image:
-                    "라우트 진입점, GUI shell, navigation, store, app catalog, dynamic loader, directory tree와 Portfolio, Terminal, Guestbook, Settings feature의 관계를 보여주는 포트폴리오 구조도",
+                    "라우트 진입점, Desktop shell, navigation, store, app catalog, dynamic loader, directory tree와 Portfolio, Terminal, Guestbook, Settings feature의 관계를 보여주는 포트폴리오 구조도",
             },
         ] as const;
 
         for (const project of projects) {
-            await page.goto(`/gui?app=project&slug=${project.slug}`);
+            await page.goto(`/desktop?app=project&slug=${project.slug}`);
             const diagram = page.getByRole("region", {
                 name: project.region,
             });
@@ -173,7 +191,7 @@ test.describe("route compatibility", () => {
         page,
     }) => {
         await page.setViewportSize({ width: 390, height: 844 });
-        await page.goto("/gui?app=project&slug=kepco");
+        await page.goto("/desktop?app=project&slug=kepco");
 
         const dialog = page.getByRole("dialog", {
             name: "공공기관 상담 어드바이저",
@@ -212,7 +230,7 @@ test.describe("route compatibility", () => {
         page,
     }) => {
         await page.setViewportSize({ width: 1024, height: 768 });
-        await page.goto("/gui?app=project&slug=kepco");
+        await page.goto("/desktop?app=project&slug=kepco");
 
         const dialog = page.getByRole("dialog", {
             name: "공공기관 상담 어드바이저",
@@ -240,7 +258,7 @@ test.describe("route compatibility", () => {
             article.locator('section[class*="caseArchitectureSection"]'),
         ).toHaveCSS("border-top-width", "1px");
 
-        await page.goto("/gui?app=project&slug=wchms");
+        await page.goto("/desktop?app=project&slug=wchms");
         const wchmsArticle = page
             .getByRole("dialog", { name: "WCHMS" })
             .getByRole("article");
@@ -294,8 +312,8 @@ test.describe("route compatibility", () => {
             {
                 slug: "portfolio",
                 dialog: "포트폴리오",
-                heading: "GUI shell과 제품 기능을 변경 이유에 따라 분리",
-                outcome: "새 GUI 앱을 같은 등록, 로딩, 탐색 계약으로 추가하는 구조 정립",
+                heading: "Desktop shell과 제품 기능을 변경 이유에 따라 분리",
+                outcome: "새 Desktop 앱을 같은 등록, 로딩, 탐색 계약으로 추가하는 구조 정립",
                 caseCount: 2,
             },
             {
@@ -317,7 +335,7 @@ test.describe("route compatibility", () => {
         ] as const;
 
         for (const project of projects) {
-            await page.goto(`/gui?app=project&slug=${project.slug}`);
+            await page.goto(`/desktop?app=project&slug=${project.slug}`);
             const dialog = page.getByRole("dialog", {
                 name: project.dialog,
             });
@@ -353,7 +371,7 @@ test.describe("route compatibility", () => {
             ).toBeVisible();
         }
 
-        await page.goto("/gui?app=project&slug=mcp");
+        await page.goto("/desktop?app=project&slug=mcp");
         const mcpDialog = page.getByRole("dialog", {
             name: "OptiGen MCP 서버",
         });
@@ -366,7 +384,7 @@ test.describe("route compatibility", () => {
             mcpDialog.locator('img[src*="express-light.png"]'),
         ).toBeVisible();
 
-        await page.goto("/gui?app=project&slug=mcp&lang=en");
+        await page.goto("/desktop?app=project&slug=mcp&lang=en");
         const englishMcpDialog = page.getByRole("dialog", {
             name: "OptiGen MCP Server",
         });
@@ -399,7 +417,7 @@ test.describe("route compatibility", () => {
         ] as const;
 
         for (const [slug, dialogName, caseCount] of projects) {
-            await page.goto(`/gui?app=project&slug=${slug}&lang=en`);
+            await page.goto(`/desktop?app=project&slug=${slug}&lang=en`);
             const dialog = page.getByRole("dialog", { name: dialogName });
 
             await expect(

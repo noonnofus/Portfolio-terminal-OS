@@ -38,7 +38,7 @@ export const executeCommand = (
   }
 
   if (trimmed === "startx") {
-    if (context.pathname.includes("gui")) {
+    if (context.pathname.includes("desktop")) {
       return {
         type: "write-lines",
         lines: [content.messages.alreadyInPortfolio],

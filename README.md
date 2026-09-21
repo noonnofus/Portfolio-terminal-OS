@@ -14,17 +14,17 @@
 A bilingual Korean/English portfolio presented as an operating system in the browser.
 
 - `/` opens an xterm-powered terminal entry.
-- `/gui` opens a macOS-inspired GUI workspace with windows, dock apps, desktop files, shareable URLs, authentication, settings, wallpapers, and a guestbook.
-- `/en` and `/en/gui` provide fixed English entry points for search engines and direct sharing.
+- `/desktop` opens a macOS-inspired Desktop workspace with windows, dock apps, desktop files, shareable URLs, authentication, settings, wallpapers, and a guestbook.
+- `/en` and `/en/desktop` provide fixed English entry points for search engines and direct sharing.
 
 Live site: [hyunhokim.is-a.dev](https://hyunhokim.is-a.dev/)
 
 ## Current features
 
-- Terminal landing page with boot animation, command parsing, language commands, and GUI navigation.
-- GUI workspace with system bar, dock, desktop shortcuts, draggable windows, minimize/restore, show desktop, and keyboard-friendly directory navigation.
-- Typed app registry that keeps app IDs, URL targets, loaders, metadata, and project slugs correlated at compile time.
-- Shareable GUI URLs for desktop, apps, project detail windows, and language state.
+- Terminal landing page with boot animation, command parsing, language commands, and Desktop navigation.
+- Desktop workspace with system bar, dock, desktop shortcuts, draggable windows, minimize/restore, show desktop, and keyboard-friendly directory navigation.
+- Typed app contract that keeps app IDs, URL targets, loaders, metadata, and project slugs correlated at compile time.
+- Shareable Desktop URLs for desktop, apps, project detail windows, and language state.
 - Bilingual portfolio content in Korean and English.
 - Project folder with KEPCO Advisor, OptiGen, Portfolio, MCP, Voice Gateway, WCHMS, and Flare case-study apps.
 - Shared case-study layouts with bilingual evidence sections and Mermaid or reviewed static architecture diagrams.
@@ -32,7 +32,7 @@ Live site: [hyunhokim.is-a.dev](https://hyunhokim.is-a.dev/)
 - GitHub OAuth through Supabase Auth.
 - Server-backed guestbook notes with GitHub-authenticated writes, 1,000 character validation, per-account rate limiting, owner/admin permissions, and deleted-account anonymization.
 - Guestbook app and notes data loading share one localized loading surface.
-- Local GUI preferences for language, theme, dock auto-hide, and wallpaper.
+- Local Desktop preferences for language, theme, dock auto-hide, and wallpaper.
 - Server-backed wallpaper catalog with light/dark wallpaper presets.
 - Responsive Next Image delivery for wallpapers and portfolio technology assets.
 - Project technology badges use the centralized manifest and reviewed technology PNG assets.
@@ -49,12 +49,12 @@ Live site: [hyunhokim.is-a.dev](https://hyunhokim.is-a.dev/)
 | Framework | Next.js 16 App Router, React 19 |
 | Language | TypeScript 5 |
 | Styling | Tailwind CSS 4, CSS custom properties, local Pretendard font |
-| GUI state | Zustand vanilla store with React Context provider |
+| Desktop state | Zustand vanilla store with React Context provider |
 | Server state | TanStack Query 5 |
 | Auth and data | Supabase SSR, Supabase Auth, Supabase Postgres, GitHub OAuth |
 | Terminal | xterm.js, `@xterm/addon-fit` |
 | Editor and Markdown | TipTap, `@tiptap/markdown`, `react-markdown`, `remark-gfm`, `rehype-raw` |
-| UI libraries | Radix UI primitives, Framer Motion, lucide-react, Mermaid |
+| UI libraries | Framer Motion, lucide-react, Mermaid |
 | Testing | Vitest, Playwright |
 | Deployment target | Vercel |
 
@@ -66,12 +66,12 @@ Browser
   │   └─ TerminalRouteClient
   │       └─ TerminalApp
   │
-  └─ /gui route
-      └─ Server Component viewer lookup
-          └─ GuiEntry
-              └─ GuiStoreProvider
-                  ├─ GuiShell / Dock / Window manager
-                  └─ GUI apps
+  └─ /desktop route
+      └─ DesktopClient
+          └─ DesktopStoreProvider
+              ├─ DesktopNavigationProvider
+              └─ DesktopShell / Dock / Window manager
+                  └─ Feature apps through Desktop adapters
 ```
 
 Data flow for authenticated features:
@@ -85,15 +85,18 @@ Browser
 
 The browser never talks to private tables directly. Reads and writes go through the Next.js backend boundary, and public DTOs avoid exposing internal account IDs where they are not needed.
 
-## GUI app model
+## Desktop app model
 
-GUI apps live under `src/features/apps`.
+The Desktop shell lives in `src/app/desktop`, while product UI and feature logic
+live in `src/features/{terminal,portfolio,guestbook,settings}`. Authentication is
+owned by `src/features/auth`.
 
-- `app.config.ts` defines server-safe metadata.
-- `app.loader.tsx` defines the client runtime loader.
-- App IDs, URL targets, params, and loaders are typed through `src/features/gui/registry`.
-- Project apps are nested under `src/features/apps/projects/apps`.
-- Folder rendering is handled by `DirectorySurface`; project folders are not separate custom renderers.
+- `appCatalog.ts` contains server-safe app metadata.
+- `appLoaderRegistry.tsx` contains client-only dynamic loaders.
+- Mapped types keep app IDs, URL targets, params, and component props correlated.
+- `DirectorySurface` renders the Desktop and Projects folder trees.
+- Desktop adapters inject shell state and commands into features without making
+  features import `src/app`.
 
 Current top-level apps:
 
@@ -114,7 +117,7 @@ Main tables:
 - `wallpapers`
 
 The database still has a `user_preferences` table from earlier migrations, but
-the current GUI keeps language, theme, Dock auto-hide, and wallpaper selection
+the current Desktop keeps language, theme, Dock auto-hide, and wallpaper selection
 in local browser storage.
 
 Notes policy:
@@ -163,9 +166,9 @@ npm run dev
 Open:
 
 - Terminal route: <http://localhost:3000/>
-- GUI route: <http://localhost:3000/gui>
+- Desktop route: <http://localhost:3000/desktop>
 - English terminal route: <http://localhost:3000/en>
-- English GUI route: <http://localhost:3000/en/gui>
+- English Desktop route: <http://localhost:3000/en/desktop>
 
 ## Database migrations
 
@@ -199,7 +202,7 @@ npm run test:e2e:release
 
 Command meanings:
 
-- `validate:app-structure`: validates GUI app config, loader, folder, and registry contracts.
+- `validate:app-structure`: validates feature boundaries and required Desktop architecture files.
 - `lint`: runs ESLint.
 - `tsc --noEmit`: runs standalone TypeScript validation.
 - `test`: runs Vitest unit tests.
@@ -211,12 +214,14 @@ Command meanings:
 
 ```text
 src/app                     Next.js routes, API routes, layout, providers
-src/features/apps           GUI app implementations
-src/features/gui            GUI shell, registry, navigation, windowing, styles
-src/features/auth           Supabase viewer and auth helpers
-src/features/notes          Guestbook client, server actions, repository, schemas
-src/features/wallpapers     Wallpaper query and repository code
-src/shared                  Shared UI, content, i18n, Supabase clients, utilities
+src/app/desktop             Desktop shell, catalog, loaders, navigation, windowing, adapters
+src/features/auth           Viewer and authentication contracts
+src/features/terminal       Terminal UI and command behavior
+src/features/portfolio      Portfolio apps, content, and project case studies
+src/features/guestbook      Guestbook UI, query logic, and server repository
+src/features/settings       Settings UI and wallpaper catalog/query logic
+src/components              Shared providers and reviewed UI components
+src/lib                     Shared i18n, query, SEO, HTTP, and Supabase foundations
 supabase/migrations         Database migrations
 supabase/spikes             Database behavior spikes
 ```

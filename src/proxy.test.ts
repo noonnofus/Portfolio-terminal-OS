@@ -20,11 +20,16 @@ describe("proxy", () => {
     getClaims.mockResolvedValue({ data: { claims: null }, error: null });
   });
 
-  it.each(["GET", "HEAD"])(
-    "lets public GUI %s requests render without Supabase",
-    async (method) => {
+  it.each([
+    ["GET", "/desktop"],
+    ["HEAD", "/desktop"],
+    ["GET", "/en/desktop"],
+    ["HEAD", "/en/desktop"],
+  ])(
+    "lets public Desktop %s requests to %s render without Supabase",
+    async (method, pathname) => {
       const response = await proxy(
-        new NextRequest("https://portfolio.example/gui", { method }),
+        new NextRequest(`https://portfolio.example${pathname}`, { method }),
       );
 
       expect(response.status).toBe(200);
@@ -32,17 +37,18 @@ describe("proxy", () => {
     },
   );
 
-  it("refreshes auth for GUI Server Action requests", async () => {
+  it("refreshes auth for Desktop Server Action requests", async () => {
     await proxy(
-      new NextRequest("https://portfolio.example/gui", { method: "POST" }),
+      new NextRequest("https://portfolio.example/desktop", { method: "POST" }),
     );
 
     expect(getClaims).toHaveBeenCalledOnce();
   });
 
-  it("only matches GUI and account-related backend routes", () => {
+  it("only matches Desktop and account-related backend routes", () => {
     expect(config.matcher).toEqual([
-      "/gui/:path*",
+      "/desktop/:path*",
+      "/en/desktop/:path*",
       "/api/auth/viewer",
       "/api/account",
     ]);

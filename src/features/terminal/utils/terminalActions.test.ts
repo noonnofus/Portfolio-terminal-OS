@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  getGuiEntryUrl,
+  getDesktopEntryUrl,
   parseTerminalActionUri,
   TERMINAL_ACTION_URI,
   toTerminalActionUri,
@@ -8,10 +8,10 @@ import {
 
 describe("terminal actions", () => {
   it.each([
-    ["ko", "/gui"],
-    ["en", "/en/gui"],
-  ] as const)("uses the %s GUI entry URL", (language, expectedUrl) => {
-    expect(getGuiEntryUrl(language)).toBe(expectedUrl);
+    ["ko", "/desktop"],
+    ["en", "/en/desktop"],
+  ] as const)("uses the %s Desktop entry URL", (language, expectedUrl) => {
+    expect(getDesktopEntryUrl(language)).toBe(expectedUrl);
   });
 
   it("converts actions to exact internal URIs", () => {

@@ -5,13 +5,13 @@
   "summary": "This portfolio presents my résumé and projects while serving as a frontend work sample for interaction design, state management, accessibility, and content architecture. I built windows, folders, a Dock, and a terminal in the browser, then connected URLs, browser history, keyboard interaction, and preferences into one experience.",
   "keyOutcome": {
     "label": "Key outcome",
-    "value": "Established one contract for registering, loading, and navigating every GUI app",
+    "value": "Established one contract for registering, loading, and navigating every Desktop app",
     "description": "Types and structural checks keep each app ID, URL, loader, props, and folder node aligned so the OS navigation rules do not fragment as features grow."
   },
   "projectContext": {
     "product": {
       "label": "Product",
-      "description": "A bilingual portfolio explored through a terminal and OS-style GUI"
+      "description": "A bilingual portfolio explored through a terminal and OS-style desktop"
     },
     "users": {
       "label": "Users",
@@ -24,24 +24,24 @@
   },
   "projectIntro": {
     "title": "Project overview",
-    "description": "I designed a Korean/English portfolio that lets visitors explore both a terminal and an OS-style GUI in the browser. Career and Resume share the same career, skills, and contact data, while localized content and UI labels are managed separately. Language, wallpaper, and Dock preferences persist across reloads.\n\nVisitors can open and switch applications by keyboard, with distinct focus and selection states. Playwright checks cover opening project windows, keeping windows within screen bounds, removing their DOM elements after closing, and switching applications by keyboard."
+    "description": "I designed a Korean/English portfolio that lets visitors explore both a terminal and an OS-style desktop in the browser. Career and Resume share the same career, skills, and contact data, while localized content and UI labels are managed separately. Language, wallpaper, and Dock preferences persist across reloads.\n\nVisitors can open and switch applications by keyboard, with distinct focus and selection states. Playwright checks cover opening project windows, keeping windows within screen bounds, removing their DOM elements after closing, and switching applications by keyboard."
   },
   "caseStudy": {
     "ownership": {
-      "title": "I separated the GUI shell from product features by why they change.",
+      "title": "I separated the Desktop shell from product features by why they change.",
       "description": "Windows, the Dock, folders, and browser navigation belong to the OS runtime, while Terminal, Portfolio, Guestbook, and Settings own their screens and user flows.",
       "items": {
         "problem": {
           "title": "",
-          "description": "When OS UI code and application features live at the same layer, changing window behavior requires inspecting product screens and features start to depend directly on the GUI store."
+          "description": "When OS UI code and application features live at the same layer, changing window behavior requires inspecting product screens and features start to depend directly on the Desktop store."
         },
         "decision": {
           "title": "",
-          "description": "I placed GuiShell, windows, the Dock, directories, navigation, and the store in src/app/gui, and kept each application screen and user flow in src/features. For Terminal, Guestbook, and Settings, adapters inject GUI state as props so features do not import the GUI store directly."
+          "description": "I placed DesktopShell, windows, the Dock, directories, navigation, and the store in src/app/desktop, and kept each application screen and user flow in src/features. For Terminal, Guestbook, and Settings, adapters inject Desktop state as props so features do not import the Desktop store directly."
         },
         "result": {
           "title": "",
-          "description": "The path alone now makes it clear whether the OS runtime or a product feature owns a concern. GUI changes and app changes move independently instead of reaching into each other's internal implementation."
+          "description": "The path alone now makes it clear whether the OS runtime or a product feature owns a concern. Desktop changes and app changes move independently instead of reaching into each other's internal implementation."
         }
       }
     },
@@ -55,34 +55,34 @@
         },
         "decision": {
           "title": "",
-          "description": "appCatalog.ts holds only serializable metadata that the server can read, while appLoaderRegistry.tsx holds client-only dynamic imports. directoryTree.ts references catalog app IDs. planNavigation.ts calculates state changes and URL effects as a pure function, and GuiNavigationProvider is the only caller of the History API."
+          "description": "appCatalog.ts holds only serializable metadata that the server can read, while appLoaderRegistry.tsx holds client-only dynamic imports. directoryTree.ts references catalog app IDs. planNavigation.ts calculates state changes and URL effects as a pure function, and DesktopNavigationProvider is the only caller of the History API."
         },
         "result": {
           "title": "",
-          "description": "I separated static app metadata, client-only loaders, folder nodes, and browser navigation into files with distinct responsibilities. Types check the relationship between app IDs and props, while structure checks and unit tests verify consistency across the app catalog, loaders, URLs, folder nodes, and localized title keys.\n\nTests also check that shared URL normalization, user navigation, and back navigation follow the same navigation plan. They cover how popstate events from browser history changes update the GUI state."
+          "description": "I separated static app metadata, client-only loaders, folder nodes, and browser navigation into files with distinct responsibilities. Types check the relationship between app IDs and props, while structure checks and unit tests verify consistency across the app catalog, loaders, URLs, folder nodes, and localized title keys.\n\nTests also check that shared URL normalization, user navigation, and back navigation follow the same navigation plan. They cover how popstate events from browser history changes update the Desktop state."
         }
       }
     }
   },
   "architecture": {
     "title": "Folder and runtime structure of the OS-style portfolio",
-    "description": "The route entry composes the GUI runtime, the GUI shell manages windows and navigation, and each feature owns an independent application screen and user flow.",
-    "alt": "Portfolio architecture showing the route entry, GUI shell, navigation, store, app catalog, dynamic loader, directory tree, and Portfolio, Terminal, Guestbook, and Settings features",
+    "description": "The route entry composes the Desktop runtime, the Desktop shell manages windows and navigation, and each feature owns an independent application screen and user flow.",
+    "alt": "Portfolio architecture showing the route entry, Desktop shell, navigation, store, app catalog, dynamic loader, directory tree, and Portfolio, Terminal, Guestbook, and Settings features",
     "caption": "Static app metadata, client-only loaders, folder trees, and browser navigation are separated by file responsibility so each new app follows the same runtime rules.",
     "loading": "Loading the architecture diagram.",
     "error": "The architecture diagram could not be displayed.",
     "scrollLabel": "Portfolio folder and runtime architecture diagram. Horizontally scrollable.",
     "diagram": {
-      "route": "app/gui/page.tsx, route entry",
-      "client": "GuiClient, composition",
-      "shell": "GuiShell, window, Dock, directory",
-      "store": "GuiStoreProvider, factory and Context",
-      "navigation": "GuiNavigationProvider, browser adapter",
+      "route": "app/desktop/page.tsx, route entry",
+      "client": "DesktopClient, composition",
+      "shell": "DesktopShell, window, Dock, directory",
+      "store": "DesktopStoreProvider, factory and Context",
+      "navigation": "DesktopNavigationProvider, browser adapter",
       "planner": "planNavigation.ts, pure navigation plan",
       "history": "URL and History API",
       "catalog": "appCatalog.ts, serializable app metadata",
       "directory": "directoryTree.ts, Desktop and Projects nodes",
-      "renderer": "GuiAppRenderer, typed app props",
+      "renderer": "DesktopAppRenderer, typed app props",
       "loader": "appLoaderRegistry.tsx, client dynamic loader",
       "portfolio": "features/portfolio",
       "terminal": "features/terminal",

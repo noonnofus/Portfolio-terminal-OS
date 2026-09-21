@@ -26,6 +26,20 @@ const nextConfig: NextConfig = {
     experimental: {
         optimizePackageImports: [],
     },
+    async redirects() {
+        return [
+            {
+                source: "/gui/:path*",
+                destination: "/desktop/:path*",
+                permanent: true,
+            },
+            {
+                source: "/en/gui/:path*",
+                destination: "/en/desktop/:path*",
+                permanent: true,
+            },
+        ];
+    },
     async headers() {
         const connectSrc = ["'self'", getSupabaseCspOrigin()]
             .filter(Boolean)

@@ -12,7 +12,7 @@ describe("SEO metadata routes", () => {
         priority: 1,
       },
       {
-        url: `${SITE_URL}/gui`,
+        url: `${SITE_URL}/desktop`,
         changeFrequency: "monthly",
         priority: 0.8,
       },
@@ -22,7 +22,7 @@ describe("SEO metadata routes", () => {
         priority: 1,
       },
       {
-        url: `${SITE_URL}/en/gui`,
+        url: `${SITE_URL}/en/desktop`,
         changeFrequency: "monthly",
         priority: 0.8,
       },

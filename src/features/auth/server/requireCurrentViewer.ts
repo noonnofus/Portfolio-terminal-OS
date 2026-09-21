@@ -13,7 +13,7 @@ export async function requireCurrentViewer(): Promise<
   const supabase = createSupabaseServerClient({
     getAll: () => cookieStore.getAll(),
     setAll: () => {
-      // proxy.ts owns Supabase auth cookie refresh for /gui and actions.
+      // proxy.ts owns Supabase auth cookie refresh for /desktop and actions.
     },
   });
   const {
@@ -42,7 +42,7 @@ export async function requireCurrentUserId(): Promise<string | null> {
   const supabase = createSupabaseServerClient({
     getAll: () => cookieStore.getAll(),
     setAll: () => {
-      // proxy.ts owns Supabase auth cookie refresh for /gui and actions.
+      // proxy.ts owns Supabase auth cookie refresh for /desktop and actions.
     },
   });
   const {

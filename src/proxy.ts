@@ -3,11 +3,12 @@ import { type NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function proxy(request: NextRequest) {
-  const isPublicGuiRead =
-    request.nextUrl.pathname.startsWith("/gui") &&
+  const isPublicDesktopRead =
+    (request.nextUrl.pathname.startsWith("/desktop") ||
+      request.nextUrl.pathname.startsWith("/en/desktop")) &&
     (request.method === "GET" || request.method === "HEAD");
 
-  if (isPublicGuiRead) {
+  if (isPublicDesktopRead) {
     return NextResponse.next();
   }
 
@@ -44,5 +45,10 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/gui/:path*", "/api/auth/viewer", "/api/account"],
+  matcher: [
+    "/desktop/:path*",
+    "/en/desktop/:path*",
+    "/api/auth/viewer",
+    "/api/account",
+  ],
 };

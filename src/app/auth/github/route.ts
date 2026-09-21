@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   const origin = getApplicationOrigin();
-  const response = NextResponse.redirect(new URL("/gui", origin));
+  const response = NextResponse.redirect(new URL("/desktop", origin));
   const supabase = createResponseSupabaseClient(request, response);
   const redirectTo = new URL("/auth/callback", origin);
 
