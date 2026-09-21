@@ -118,7 +118,7 @@ describe("project detail content", () => {
         }
     });
 
-    it("uses the GUI ownership and app-contract cases for the portfolio", () => {
+    it("uses the Desktop ownership and app-contract cases for the portfolio", () => {
         for (const language of ["ko", "en"] as const) {
             const { page, architecture } = getPortfolioProjectContent(language);
 

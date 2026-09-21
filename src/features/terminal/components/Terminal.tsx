@@ -11,7 +11,7 @@ import useIsTouchDevice from "@/features/terminal/hooks/useIsTouchDevice";
 import { useLanguageStore } from "@/lib/i18n/useLanguageStore";
 import type { Language } from "@/lib/i18n/language";
 import {
-  getGuiEntryUrl,
+  getDesktopEntryUrl,
   type TerminalAction,
 } from "../utils/terminalActions";
 import {
@@ -83,7 +83,7 @@ export default function TerminalApp({
     inputRef.current = "";
 
     if (action.type === "open-portfolio") {
-      router.push(getGuiEntryUrl(currentLanguage));
+      router.push(getDesktopEntryUrl(currentLanguage));
       return;
     }
 

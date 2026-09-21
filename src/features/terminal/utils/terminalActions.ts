@@ -13,8 +13,8 @@ export const TERMINAL_ACTION_URI = {
 export type TerminalActionUri =
   (typeof TERMINAL_ACTION_URI)[keyof typeof TERMINAL_ACTION_URI];
 
-export function getGuiEntryUrl(language: Language): string {
-  return language === "en" ? "/en/gui" : "/gui";
+export function getDesktopEntryUrl(language: Language): string {
+  return language === "en" ? "/en/desktop" : "/desktop";
 }
 
 export function toTerminalActionUri(action: TerminalAction): TerminalActionUri {

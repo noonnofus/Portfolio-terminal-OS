@@ -31,7 +31,7 @@ async function assertAbsent(target) {
 
 async function assertRequired(paths) {
   for (const target of paths) {
-    if (!(await exists(target))) errors.push(`${target}: required by the GUI architecture`);
+    if (!(await exists(target))) errors.push(`${target}: required by the Desktop architecture`);
   }
 }
 
@@ -66,7 +66,7 @@ async function validateFoundations() {
 }
 
 async function validateGuestbookComposition() {
-  const actionPath = "src/app/gui/actions/guestbookActions.ts";
+  const actionPath = "src/app/desktop/actions/guestbookActions.ts";
   const actionSource = await readFile(actionPath, "utf8");
   if (!actionSource.startsWith('"use server";')) {
     errors.push(`${actionPath}: must be a top-level use server module`);
@@ -87,29 +87,29 @@ async function validateGuestbookComposition() {
 await assertAbsent("src/features/apps");
 await assertAbsent("src/features/desktop");
 await assertAbsent("src/features/wallpapers");
-await assertAbsent("src/app/gui/registry");
+await assertAbsent("src/app/desktop/registry");
 await assertRequired([
-  "src/app/gui/GuiClient.tsx",
-  "src/app/gui/components/AppRuntimeBoundary.tsx",
-  "src/app/gui/components/GuiNavigationProvider.tsx",
-  "src/app/gui/hooks/useAppRuntime.ts",
-  "src/app/gui/hooks/useGuiNavigation.ts",
-  "src/app/gui/hooks/usePageVisibilitySync.ts",
-  "src/app/gui/lib/planNavigation.ts",
-  "src/app/gui/lib/pendingNavigation.ts",
-  "src/app/gui/contexts/AppRuntimeContext.ts",
-  "src/app/gui/types/appVisibility.ts",
-  "src/app/gui/types/navigationTypes.ts",
-  "src/app/gui/utils/deriveVisibility.ts",
-  "src/app/gui/config/appCatalog.ts",
-  "src/app/gui/config/dockApps.ts",
-  "src/app/gui/lib/appLoaderRegistry.tsx",
-  "src/app/gui/lib/parseGuiAppTarget.ts",
-  "src/app/gui/types/appTypes.ts",
+  "src/app/desktop/DesktopClient.tsx",
+  "src/app/desktop/components/AppRuntimeBoundary.tsx",
+  "src/app/desktop/components/DesktopNavigationProvider.tsx",
+  "src/app/desktop/hooks/useAppRuntime.ts",
+  "src/app/desktop/hooks/useDesktopNavigation.ts",
+  "src/app/desktop/hooks/usePageVisibilitySync.ts",
+  "src/app/desktop/lib/planNavigation.ts",
+  "src/app/desktop/lib/pendingNavigation.ts",
+  "src/app/desktop/contexts/AppRuntimeContext.ts",
+  "src/app/desktop/types/appVisibility.ts",
+  "src/app/desktop/types/navigationTypes.ts",
+  "src/app/desktop/utils/deriveVisibility.ts",
+  "src/app/desktop/config/appCatalog.ts",
+  "src/app/desktop/config/dockApps.ts",
+  "src/app/desktop/lib/appLoaderRegistry.tsx",
+  "src/app/desktop/lib/parseDesktopAppTarget.ts",
+  "src/app/desktop/types/appTypes.ts",
   "src/app/i18n/index.ts",
-  "src/app/gui/components/adapters/TerminalGuiAdapter.tsx",
-  "src/app/gui/components/adapters/GuestbookGuiAdapter.tsx",
-  "src/app/gui/components/adapters/SettingsGuiAdapter.tsx",
+  "src/app/desktop/adapters/TerminalAdapter.tsx",
+  "src/app/desktop/adapters/GuestbookAdapter.tsx",
+  "src/app/desktop/adapters/SettingsAdapter.tsx",
   "src/features/portfolio/apps/about/AboutApp.tsx",
   "src/features/portfolio/apps/contact/ContactApp.tsx",
   "src/features/portfolio/apps/resume/ResumeApp.tsx",
@@ -130,4 +130,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-process.stdout.write("Validated feature boundaries and GUI architecture.\n");
+process.stdout.write("Validated feature boundaries and Desktop architecture.\n");

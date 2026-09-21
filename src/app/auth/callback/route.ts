@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL("/auth/auth-error", origin));
   }
 
-  const response = NextResponse.redirect(new URL("/gui", origin));
+  const response = NextResponse.redirect(new URL("/desktop", origin));
   const supabase = createResponseSupabaseClient(request, response);
   const { error: exchangeError } =
     await supabase.auth.exchangeCodeForSession(callback.code);

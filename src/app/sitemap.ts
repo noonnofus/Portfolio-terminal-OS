@@ -9,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${SITE_URL}/gui`,
+      url: `${SITE_URL}/desktop`,
       changeFrequency: "monthly",
       priority: 0.8,
     },
@@ -19,7 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${SITE_URL}/en/gui`,
+      url: `${SITE_URL}/en/desktop`,
       changeFrequency: "monthly",
       priority: 0.8,
     },
