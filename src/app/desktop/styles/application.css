@@ -330,6 +330,23 @@
   }
 }
 
+@media screen and (hover: hover) and (pointer: fine) {
+  .application-window-maximized .application-window-content :is(
+    .application-content-inset,
+    .application-resume,
+    .application-settings-sidebar,
+    .application-settings-detail,
+    .directory-surface--window > .directory-grid
+  ) {
+    margin-top: 0;
+    padding-top: calc(var(--application-titlebar-height) + 15px);
+  }
+
+  .application-window-maximized .application-window-content .application-content-inset .application-content-inset {
+    padding-top: 0;
+  }
+}
+
 @media (hover: none), (pointer: coarse) {
   .application-window.application-window-maximized {
     top: var(--application-system-bar-height) !important;

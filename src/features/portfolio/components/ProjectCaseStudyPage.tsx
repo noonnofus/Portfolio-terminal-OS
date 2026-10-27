@@ -131,7 +131,7 @@ export function ProjectCaseStudyPage({
 
   return (
     <div className="application-app-surface h-full w-full overflow-y-auto">
-      <article lang={language} className={styles.readingArticle}>
+      <article lang={language} className={`application-content-inset ${styles.readingArticle}`}>
         <header className={styles.documentHeader}>
           <h2
             className={`${styles.documentTitle} font-bold tracking-tight text-[var(--application-app-surface-text)]`}

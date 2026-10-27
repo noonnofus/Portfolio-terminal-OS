@@ -38,6 +38,8 @@ test.describe("Desktop fullscreen", () => {
         await page.goto("/desktop");
         const original = await career(page).boundingBox();
         const originalRadius = await career(page).evaluate((dialog) => getComputedStyle(dialog).borderRadius);
+        const article = career(page).locator(".application-content-inset");
+        const originalPadding = await article.evaluate((element) => getComputedStyle(element).paddingTop);
         expect(parseFloat(originalRadius)).toBeGreaterThan(0);
         await career(page).getByRole("button", { name: "커리어 maximize" }).evaluate((button) => {
             button.addEventListener("click", () => {
@@ -59,7 +61,13 @@ test.describe("Desktop fullscreen", () => {
         expect(widths.some((width) => width > original!.width + 1 && width < 1279)).toBe(true);
         const content = await career(page).locator(".application-window-content").boundingBox();
         expect(content).toEqual({ x: 0, y: 36, width: 1280, height: 864 });
+        await expect(article).toHaveCSS("padding-top", "57px");
         const scrollSurface = career(page).locator(".application-app-surface");
+        const firstLine = article.locator("header > p").first();
+        expect((await firstLine.boundingBox())!.y).toBe(93);
+        await scrollSurface.evaluate((surface) => { surface.scrollTop = 57; });
+        await expect.poll(async () => (await firstLine.boundingBox())!.y).toBe(36);
+        await expect(firstLine).toBeInViewport({ ratio: 1 });
         await scrollSurface.evaluate((surface) => { surface.scrollTop = 240; });
         await expect.poll(() => scrollSurface.evaluate((surface) => surface.scrollTop)).toBe(240);
 
@@ -107,8 +115,32 @@ test.describe("Desktop fullscreen", () => {
         await career(page).getByRole("button", { name: "커리어 restore" }).click();
         await expect.poll(() => career(page).boundingBox()).toEqual(original);
         await expect(career(page)).toHaveCSS("border-radius", originalRadius);
+        await expect(article).toHaveCSS("padding-top", originalPadding);
         await expect(page.locator(".application-shell")).toHaveAttribute("data-fullscreen", "false");
     });
+
+    for (const theme of ["light", "dark"]) {
+        test(`fills the fullscreen viewport with the app surface in ${theme} mode`, async ({ page }) => {
+            await page.addInitScript((value) => localStorage.setItem("theme", value), theme);
+            await page.goto("/desktop");
+            await expect(page.locator(".application-shell")).toHaveAttribute("data-theme", theme);
+            const dialog = career(page);
+            const originalBackground = await dialog.evaluate((element) => getComputedStyle(element).backgroundColor);
+            const dock = page.locator(".application-dock");
+            const originalDockBackground = await dock.evaluate((element) => getComputedStyle(element).backgroundColor);
+            await maximize(page);
+            const surfaceBackground = await dialog.locator(".application-window-content")
+                .evaluate((element) => getComputedStyle(element).backgroundColor);
+            const surface = dialog.locator(".application-app-surface");
+            await expect(surface).toHaveCSS("background-color", surfaceBackground);
+            expect(await surface.boundingBox()).toEqual({ x: 0, y: 36, width: 1280, height: 864 });
+            await expect(dialog).toHaveCSS("background-color", originalBackground);
+            await expect(dialog).toHaveCSS("opacity", "1");
+            await expect(dock).toHaveCSS("background-color", originalDockBackground);
+            await page.keyboard.press("Escape");
+            await expect(dialog).toHaveCSS("background-color", originalBackground);
+        });
+    }
 
     test("blocks fullscreen dragging without changing the restored position and allows normal dragging", async ({ page }) => {
         await page.goto("/desktop");
@@ -196,24 +228,45 @@ test.describe("Desktop fullscreen", () => {
     });
 
     for (const app of [
-        { id: "terminal", title: "터미널", surface: ".xterm" },
-        { id: "settings", title: "설정", surface: ".application-settings-surface" },
+        { id: "terminal", title: "터미널", surface: ".xterm", insets: ".xterm", url: "/desktop?app=terminal" },
+        { id: "settings", title: "설정", surface: ".application-settings-surface", insets: ".application-settings-sidebar, .application-settings-detail", url: "/desktop?app=settings" },
+        { id: "resume", title: "이력서", surface: ".application-resume", insets: ".application-resume", url: "/desktop?app=resume" },
+        { id: "contact", title: "연락처", surface: ".application-app-surface", insets: ".application-content-inset", url: "/desktop?app=contact" },
+        { id: "notes", title: "방명록", surface: ".application-content-inset", insets: ".application-content-inset", url: "/desktop?app=notes" },
+        { id: "projects", title: "프로젝트", surface: ".directory-surface--window", insets: ".directory-surface--window > .directory-grid", url: "/desktop?app=projects" },
+        { id: "project:portfolio", title: "포트폴리오", surface: ".application-content-inset", insets: ".application-content-inset", url: "/desktop?app=project&slug=portfolio" },
     ]) {
-        test(`keeps ${app.id} content fixed beneath the fullscreen header overlay`, async ({ page }) => {
-            await page.goto(`/desktop?app=${app.id}`);
+        test(`keeps ${app.id} content below the fullscreen header without duplicate top spacing`, async ({ page }) => {
+            await page.goto(app.url);
             const dialog = page.locator(`[data-window-id="${app.id}"]`);
             await expect(dialog.locator(app.surface)).toBeVisible();
             const original = await dialog.boundingBox();
+            const insets = dialog.locator(app.insets);
+            await expect(insets.first()).toBeVisible();
+            const originalInsets = await insets.evaluateAll((elements) => elements.map((element) => ({
+                paddingTop: getComputedStyle(element).paddingTop,
+                marginTop: getComputedStyle(element).marginTop,
+            })));
             await dialog.getByRole("button", { name: `${app.title} maximize` }).click();
             await page.mouse.move(600, 400);
             await expectFullscreenChrome(page);
             const content = dialog.locator(".application-window-content");
             await expect.poll(() => content.boundingBox())
                 .toEqual({ x: 0, y: 36, width: 1280, height: 864 });
+            for (const [index, inset] of (await insets.all()).entries()) {
+                const padding = app.id === "terminal" || (app.id === "contact" && index > 0) ? "0px" : "57px";
+                await expect(inset).toHaveCSS("padding-top", padding);
+                await expect(inset).toHaveCSS("margin-top", "0px");
+            }
             for (const y of [18, 58]) {
                 await page.mouse.move(500, y);
                 await expectRevealedHeaders(page);
                 expect(await content.boundingBox()).toEqual({ x: 0, y: 36, width: 1280, height: 864 });
+            }
+            if (app.id === "resume") {
+                await page.emulateMedia({ media: "print" });
+                await expect(content).toHaveCSS("margin-top", "0px");
+                await page.emulateMedia({ media: "screen" });
             }
             await page.mouse.move(500, 400);
             await expectFullscreenChrome(page);
@@ -221,6 +274,32 @@ test.describe("Desktop fullscreen", () => {
             await dialog.getByRole("button", { name: `${app.title} restore` }).click();
             await expect.poll(() => dialog.boundingBox()).toEqual(original);
             await expect(dialog).toHaveCSS("border-radius", "12px");
+            expect(await insets.evaluateAll((elements) => elements.map((element) => ({
+                paddingTop: getComputedStyle(element).paddingTop,
+                marginTop: getComputedStyle(element).marginTop,
+            })))).toEqual(originalInsets);
+        });
+    }
+
+    for (const app of [
+        { id: "resume", url: "/desktop?app=resume", scroller: ".application-window-content", firstContent: ".application-resume-hero > div:first-child > p:first-child" },
+        { id: "settings", url: "/desktop?app=settings", scroller: ".application-settings-detail", firstContent: ".application-settings-section-title" },
+        { id: "project:portfolio", url: "/desktop?app=project&slug=portfolio", scroller: ".application-app-surface", firstContent: ".application-content-inset > header > h2" },
+    ]) {
+        test(`scrolls the initial fullscreen clearance away with ${app.id} content`, async ({ page }) => {
+            await page.setViewportSize({ width: 1280, height: 300 });
+            await page.goto(app.url);
+            const dialog = page.locator(`[data-window-id="${app.id}"]`);
+            await dialog.getByRole("button", { name: / maximize$/ }).click();
+            await page.mouse.move(600, 150);
+            await expectFullscreenChrome(page);
+            const firstContent = dialog.locator(app.firstContent);
+            const scroller = dialog.locator(app.scroller);
+            await expect.poll(async () => (await firstContent.boundingBox())!.y).toBe(93);
+            await scroller.evaluate((element) => { element.scrollTop = 57; });
+            await expect.poll(async () => (await firstContent.boundingBox())!.y).toBe(36);
+            await expect(firstContent).toBeInViewport({ ratio: 1 });
+            expect((await scroller.boundingBox())!.y).toBe(36);
         });
     }
 
@@ -322,6 +401,8 @@ test.describe("Touch fullscreen", () => {
         test(`keeps both headers and the Dock available at ${width}px`, async ({ page }) => {
             await page.setViewportSize({ width, height: 844 });
             await page.goto("/desktop");
+            const article = career(page).locator(".application-content-inset");
+            const padding = await article.evaluate((element) => getComputedStyle(element).paddingTop);
             await career(page).getByRole("button", { name: "커리어 maximize" }).tap();
             await expect.poll(async () => {
                 const box = (await career(page).boundingBox())!;
@@ -333,6 +414,7 @@ test.describe("Touch fullscreen", () => {
             await expect(dock).toBeInViewport();
             const content = (await career(page).locator(".application-window-content").boundingBox())!;
             expect(content.y).toBe(78);
+            await expect(article).toHaveCSS("padding-top", padding);
             expect(content.y + content.height).toBeLessThanOrEqual((await dock.boundingBox())!.y);
             await page.setViewportSize({ width: 844, height: width });
             await expect.poll(async () => {

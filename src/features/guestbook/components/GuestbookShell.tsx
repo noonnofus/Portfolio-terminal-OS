@@ -25,7 +25,7 @@ export function GuestbookShell({
 
   return (
     <div className={`${styles.root} flex min-h-full w-full flex-col overflow-hidden bg-(--application-app-surface-bg) text-(--application-app-surface-text)`}>
-      <div className={`${styles.content} flex min-h-0 flex-1 flex-col overflow-y-auto`}>
+      <div className={`application-content-inset ${styles.content} flex min-h-0 flex-1 flex-col overflow-y-auto`}>
         <header className={`${styles.entry} mb-7`}>
           <div className="hidden sm:block" aria-hidden="true" />
           <div className="flex min-w-0 items-start justify-between gap-4">

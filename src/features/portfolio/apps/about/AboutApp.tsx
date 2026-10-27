@@ -151,7 +151,7 @@ export default function AboutApp({ language }: AboutAppProps) {
 
     return (
         <div className="application-app-surface h-full w-full overflow-y-auto">
-            <article className="mx-auto w-full max-w-4xl px-5 py-8 md:px-10 md:py-12">
+            <article className="application-content-inset mx-auto w-full max-w-4xl px-5 py-8 md:px-10 md:py-12">
                 <header className="border-b border-[var(--application-border)] pb-8 md:pb-10">
                     <p className="text-[length:var(--application-text-caption)] font-semibold uppercase tracking-[0.16em] text-[var(--application-accent-text)]">
                         {t("eyebrow")}
