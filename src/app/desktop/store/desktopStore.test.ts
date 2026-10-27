@@ -1,7 +1,36 @@
 import { describe, expect, it } from "vitest";
-import { createDesktopStore } from "@/app/desktop/store/desktopStore";
+import { createDesktopStore, selectFullscreenWindowId } from "@/app/desktop/store/desktopStore";
 
 describe("Desktop store", () => {
+    it("uses fullscreen chrome only for the active window and clears it on close", () => {
+        const store = createDesktopStore();
+        const dispatch = store.getState().dispatch;
+        const fullscreen = () => selectFullscreenWindowId(store.getState());
+
+        dispatch({ type: "open-app", appId: "about", params: {} });
+        store.getState().setFullscreenWindow("about");
+        expect(fullscreen()).toBe("about");
+        expect(selectFullscreenWindowId(createDesktopStore().getState())).toBeNull();
+
+        dispatch({ type: "open-app", appId: "projects", params: {} });
+        expect(fullscreen()).toBeNull();
+        dispatch({ type: "close-window", windowId: "projects" });
+        expect(fullscreen()).toBe("about");
+
+        dispatch({ type: "minimize-window", windowId: "about" });
+        expect(fullscreen()).toBeNull();
+        dispatch({ type: "open-app", appId: "about", params: {} });
+        expect(fullscreen()).toBe("about");
+
+        dispatch({ type: "show-desktop" });
+        expect(fullscreen()).toBeNull();
+        dispatch({ type: "open-app", appId: "about", params: {} });
+        dispatch({ type: "close-window", windowId: "about" });
+        expect(store.getState().fullscreenWindowId).toBeNull();
+        dispatch({ type: "open-app", appId: "about", params: {} });
+        expect(fullscreen()).toBeNull();
+    });
+
     it("creates an isolated bootstrap-ready store for each shell", () => {
         const first = createDesktopStore();
         const second = createDesktopStore();
