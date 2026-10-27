@@ -1151,6 +1151,7 @@ test.describe("Desktop shell", () => {
         const maximizedBox = await aboutWindow.boundingBox();
         expect(maximizedBox).toEqual({ x: 0, y: 36, width: 756, height: 765 });
 
+        await page.mouse.move(100, 58);
         await aboutWindow
             .getByRole("button", { name: "커리어 restore" })
             .click();
@@ -1224,6 +1225,7 @@ async function expectDesktopScreenshot(
 
 test.describe("Desktop visual parity", () => {
     test.beforeEach(async ({ page }) => {
+        await page.clock.setFixedTime(new Date("2026-01-01T12:00:00Z"));
         await page.route("**/api/auth/viewer", (route) =>
             route.fulfill({
                 status: 200,
@@ -1294,6 +1296,13 @@ test.describe("Desktop visual parity", () => {
             .getByRole("button", { name: "커리어 maximize" })
             .click();
         await expectDesktopScreenshot(page, "window-maximized.png");
+        await page.mouse.move(720, 18);
+        await expect.poll(async () => (await page.locator(".application-title-bar").boundingBox())?.y).toBe(36);
+        await expectDesktopScreenshot(page, "window-fullscreen-headers-revealed.png");
+        await page.mouse.move(20, 899);
+        await expect.poll(async () => (await page.locator(".application-dock").boundingBox())?.y ?? 900)
+            .toBeLessThan(850);
+        await expectDesktopScreenshot(page, "window-fullscreen-dock-revealed.png");
     });
 
     test("captures Settings themes and revealed Dock", async ({ page }) => {

@@ -183,17 +183,19 @@
 .application-traffic-lights {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0;
 }
 
 /* Individual traffic light button */
 .application-traffic-light {
   display: grid;
-  width: 13px;
-  height: 13px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
   place-items: center;
   border-radius: 999px;
-  border: 0.5px solid rgb(0 0 0 / 12%);
+  border: 5.5px solid transparent;
+  background-clip: padding-box;
   cursor: pointer;
   transition: filter 120ms ease;
 }
@@ -205,7 +207,7 @@
 
 /* Close button — red */
 .application-traffic-close {
-  background: #ff5f57;
+  background-color: #ff5f57;
 }
 
 .application-traffic-close:hover {
@@ -214,7 +216,7 @@
 
 /* Minimize button — yellow */
 .application-traffic-minimize {
-  background: #febc2e;
+  background-color: #febc2e;
 }
 
 .application-traffic-minimize:hover {
@@ -223,7 +225,7 @@
 
 /* Maximize button — green */
 .application-traffic-maximize {
-  background: #28c840;
+  background-color: #28c840;
 }
 
 .application-traffic-maximize:hover {
@@ -269,6 +271,73 @@
 
 .application-window-maximized .application-title-bar {
   cursor: default;
+}
+
+.application-system-bar > * {
+  transition: opacity 180ms ease;
+}
+
+.application-dock-bottom-edge,
+.application-title-bar-trigger {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .application-window-maximized .application-title-bar-trigger {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 1;
+    display: block;
+    height: var(--application-titlebar-height);
+  }
+
+  .application-window-maximized .application-title-bar {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 2;
+    transform: translateY(var(--application-fullscreen-titlebar-offset, -100%));
+    transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .application-shell[data-fullscreen="true"]:has(
+    .application-system-bar:hover,
+    .application-system-bar:focus-within,
+    .application-window[data-active="true"] .application-title-bar-trigger:hover,
+    .application-window[data-active="true"] .application-title-bar:hover,
+    .application-window[data-active="true"] .application-title-bar:focus-within
+  ) {
+    --application-fullscreen-titlebar-offset: 0%;
+    --application-fullscreen-system-opacity: 1;
+  }
+
+  .application-window-maximized .application-window-content {
+    isolation: isolate;
+  }
+
+  /* WebKit cannot hit-test the pseudo-element of a Dock fully outside the viewport. */
+  .application-shell:is([data-fullscreen="true"], :has(.application-dock[data-auto-hide="true"]))
+    .application-dock-bottom-edge {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 99;
+    display: block;
+    height: 18px;
+  }
+
+  .application-shell[data-fullscreen="true"]
+    .application-system-bar > * {
+    opacity: var(--application-fullscreen-system-opacity, 0);
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .application-window.application-window-maximized {
+    top: var(--application-system-bar-height) !important;
+    height: calc(
+      100dvh - var(--application-system-bar-height) - 84px - env(safe-area-inset-bottom, 0px)
+    ) !important;
+    min-width: 0;
+  }
 }
 
 /* ── Window content ─────────────────────────────────────── */
@@ -407,23 +476,36 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .application-dock[data-auto-hide="true"] {
-    transform: translate(-50%, calc(100% + 4px));
+  .application-dock[data-auto-hide="true"],
+  .application-shell[data-fullscreen="true"] .application-dock {
+    transform: translate(-50%, calc(100% + 12px + env(safe-area-inset-bottom, 0px)));
   }
 
-  .application-dock[data-auto-hide="true"]::before {
+  .application-dock[data-auto-hide="true"]::before,
+  .application-shell[data-fullscreen="true"] .application-dock::before {
     position: absolute;
     right: 50%;
     bottom: 100%;
     width: 100vw;
-    height: 18px;
+    height: 26px;
     transform: translateX(50%);
     content: "";
   }
 
   .application-dock[data-auto-hide="true"]:hover,
-  .application-dock[data-auto-hide="true"]:focus-within {
+  .application-dock[data-auto-hide="true"]:focus-within,
+  .application-shell:has(.application-dock-bottom-edge:hover) .application-dock,
+  .application-shell[data-fullscreen="true"] .application-dock:hover,
+  .application-shell[data-fullscreen="true"] .application-dock:focus-within {
     transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .application-window-maximized .application-title-bar,
+  .application-system-bar > *,
+  .application-dock {
+    transition: none;
   }
 }
 

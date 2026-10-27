@@ -6,6 +6,7 @@ import type {
     DesktopWorkspaceState,
     StoreCommand,
     WorkspaceFocus,
+    WindowId,
 } from "@/app/desktop/types/navigationTypes";
 import type { PageVisibility } from "@/app/desktop/types/appVisibility";
 import type { WallpaperId } from "@/features/settings/config/wallpaperCatalog";
@@ -17,6 +18,7 @@ export type DesktopState = DesktopWorkspaceState & {
     urlReady: boolean;
     wallpaper: WallpaperId;
     dockAutoHide: boolean;
+    fullscreenWindowId: WindowId | null;
     viewer: Viewer;
 };
 
@@ -26,6 +28,7 @@ export type DesktopActions = {
     setPageVisibility: (visibility: PageVisibility) => void;
     signalPageRestore: () => void;
     setUrlReady: (ready: boolean) => void;
+    setFullscreenWindow: (windowId: WindowId | null) => void;
 };
 
 export type DesktopStore = DesktopState & DesktopActions;
@@ -105,6 +108,7 @@ export function createDesktopStore(
         urlReady: false,
         wallpaper: "golden_gate_light",
         dockAutoHide: false,
+        fullscreenWindowId: null,
         viewer: initialViewer,
         setViewer: (viewer) => set({ viewer }),
         dispatch: (command) =>
@@ -119,6 +123,10 @@ export function createDesktopStore(
                         );
                         return {
                             windows,
+                            fullscreenWindowId:
+                                state.fullscreenWindowId === command.windowId
+                                    ? null
+                                    : state.fullscreenWindowId,
                             focus:
                                 state.focus.mode === "windows" &&
                                 state.focus.activeWindowId === command.windowId
@@ -181,7 +189,18 @@ export function createDesktopStore(
                 resumeEpoch: state.resumeEpoch + 1,
             })),
         setUrlReady: (ready) => set({ urlReady: ready }),
+        setFullscreenWindow: (fullscreenWindowId) => set({ fullscreenWindowId }),
     }));
+}
+
+export function selectFullscreenWindowId(store: DesktopStore): WindowId | null {
+    return store.focus.mode === "windows" &&
+        store.focus.activeWindowId === store.fullscreenWindowId &&
+        store.windows.some(
+            (window) => window.windowId === store.fullscreenWindowId && !window.minimized,
+        )
+        ? store.fullscreenWindowId
+        : null;
 }
 
 export function selectWorkspaceState(store: DesktopStore): DesktopWorkspaceState {
