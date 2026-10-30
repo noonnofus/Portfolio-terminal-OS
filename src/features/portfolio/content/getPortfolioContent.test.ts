@@ -33,7 +33,7 @@ describe("portfolio content model", () => {
                 (experience) => experience.highlights,
             );
 
-            expect(highlights).toHaveLength(3);
+            expect(highlights).toHaveLength(4);
             expect(
                 highlights.every(
                     (highlight) =>

@@ -13,11 +13,14 @@ import { useColorMode } from "@/components/providers/color-mode";
 import "@/app/desktop/styles/application.css";
 import { getWallpaperStyle } from "@/app/desktop/lib/wallpaperPresentation";
 import { wallpaperCatalog } from "@/features/settings/config/wallpaperCatalog";
+import { selectFullscreenWindowId } from "@/app/desktop/store/desktopStore";
 
 export function DesktopShell() {
   usePageVisibilitySync();
   const urlReady = useDesktopStore((state) => state.urlReady);
   const wallpaper = useDesktopStore((state) => state.wallpaper);
+  const fullscreenWindowId = useDesktopStore(selectFullscreenWindowId);
+  const setFullscreenWindow = useDesktopStore((state) => state.setFullscreenWindow);
   const wallpaperDefinition = wallpaperCatalog[wallpaper];
   const { resolvedColorMode } = useColorMode();
   const themeMounted = useSyncExternalStore(
@@ -31,8 +34,15 @@ export function DesktopShell() {
       <div
         className="application-shell"
         data-wallpaper={wallpaper}
+        data-fullscreen={fullscreenWindowId !== null}
         data-theme={themeMounted ? resolvedColorMode : undefined}
         style={getWallpaperStyle(wallpaper)}
+        onKeyDown={(event) => {
+          if (event.key === "Escape" && !event.defaultPrevented && fullscreenWindowId !== null) {
+            event.preventDefault();
+            setFullscreenWindow(null);
+          }
+        }}
       >
         <div aria-hidden="true" className="application-wallpaper-media">
           <Image
@@ -51,9 +61,12 @@ export function DesktopShell() {
           <span />
         </div>
         <DesktopSystemBar />
-        <DesktopShortcuts />
+        <div inert={fullscreenWindowId !== null ? true : undefined}>
+          <DesktopShortcuts />
+        </div>
         {urlReady ? <DesktopWindowLayer /> : null}
         <DesktopDock />
+        <div aria-hidden="true" className="application-dock-bottom-edge" />
       </div>
     </MotionConfig>
   );

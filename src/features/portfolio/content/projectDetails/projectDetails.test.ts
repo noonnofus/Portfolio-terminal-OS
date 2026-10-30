@@ -1,11 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { getFlareProjectContent } from "./flare";
-import { getKepcoProjectContent } from "./kepco";
-import { getMcpProjectContent } from "./mcp";
-import { getOptigenProjectContent } from "./optigen";
-import { getPortfolioProjectContent } from "./portfolio";
-import { getVoiceGatewayProjectContent } from "./voiceGateway";
-import { getWchmsProjectContent } from "./wchms";
+import { getProjectDetailPageContent } from "../projectDetailContent";
+import type { Language } from "@/lib/i18n/language";
+import type { ProjectSlug } from "@/features/portfolio/types/projectTypes";
+
+function loader(slug: ProjectSlug) {
+    return (language: Language) => ({ page: getProjectDetailPageContent(slug, language) });
+}
+const getPortfolioProjectContent = loader("portfolio");
+const getOptigenProjectContent = loader("optigen");
+const getMcpProjectContent = loader("mcp");
+const getVoiceGatewayProjectContent = loader("voice-gateway");
+const getKepcoProjectContent = loader("kepco");
+const getWchmsProjectContent = loader("wchms");
+const getFlareProjectContent = loader("flare");
 
 const projectContentLoaders = [
     getPortfolioProjectContent,
@@ -16,16 +23,6 @@ const projectContentLoaders = [
     getWchmsProjectContent,
     getFlareProjectContent,
 ] as const;
-
-function getSectionItemSignatures(
-    sections: readonly {
-        items: readonly { id: string; phase?: string }[];
-    }[],
-) {
-    return sections.map((section) =>
-        section.items.map((item) => [item.id, item.phase]),
-    );
-}
 
 describe("project detail content", () => {
     it("keeps Korean and English project page structures aligned", () => {
@@ -39,8 +36,8 @@ describe("project detail content", () => {
             expect(ko.sections.map((section) => section.id)).toEqual(
                 en.sections.map((section) => section.id),
             );
-            expect(getSectionItemSignatures(ko.sections)).toEqual(
-                getSectionItemSignatures(en.sections),
+            expect(ko.sections.map((section) => Object.keys(section.phases))).toEqual(
+                en.sections.map((section) => Object.keys(section.phases)),
             );
         }
     });
@@ -52,20 +49,27 @@ describe("project detail content", () => {
 
                 expect(page.title).not.toBe("");
                 expect(page.summary).not.toBe("");
+                expect(page.stack.length).toBeGreaterThan(0);
+                expect(page.overviewTitle).not.toBe("");
+                expect(page.overviewDescription).not.toBe("");
+                for (const media of [page.architecture, page.walkthrough]) {
+                    if (media) {
+                        expect(media.title).not.toBe("");
+                        expect(media.description).not.toBe("");
+                        expect(media.markdown.trim()).not.toBe("");
+                    }
+                }
                 expect(page.contexts).toHaveLength(3);
+                expect(page.keyOutcome !== undefined).toBe(
+                    getProjectContent === getKepcoProjectContent,
+                );
                 expect(page.sections.length).toBeGreaterThan(0);
-                expect(
-                    page.sections.every(
-                        (section) => section.isProblemSolving,
-                    ),
-                ).toBe(true);
                 expect(
                     page.sections.every(
                         (section) =>
                             section.title !== "" &&
-                            section.description !== "" &&
-                            section.items.every(
-                                (item) => item.description !== "",
+                            Object.values(section.phases).every(
+                                (markdown) => markdown.trim() !== "",
                             ),
                     ),
                 ).toBe(true);
@@ -75,71 +79,65 @@ describe("project detail content", () => {
 
     it("uses the multi-tab broadcast case and preserves KEPCO operating outcomes", () => {
         for (const language of ["ko", "en"] as const) {
-            const { page, flow } = getKepcoProjectContent(language);
+            const { page } = getKepcoProjectContent(language);
 
             expect(page.sections.map((section) => section.id)).toEqual([
+                "liveTranscript",
+                "consultationReview",
                 "multiTabAuth",
             ]);
-            expect(page.sections[0].id).toBe("multiTabAuth");
-            expect(page.sections[0].items.map((item) => item.id)).toEqual([
-                "securityBackground",
-                "problem",
-                "idleSync",
-                "firstAttempt",
-                "refreshOwnership",
-                "resultSharing",
-                "verification",
-            ]);
-            expect(page.keyOutcome.value).toBe(
+            const authSection = page.sections.find(
+                (section) => section.id === "multiTabAuth",
+            );
+            expect(authSection?.phases.process).toContain("BroadcastChannel");
+            expect(authSection?.phases.process).toContain("Web Lock");
+            expect(page.keyOutcome?.value).toBe(
                 language === "ko"
                     ? "전체 상담사의 60% 사용, 고객 평균 대기 시간 30% 감소"
                     : "Used by 60% of agents, with average customer wait time reduced by 30%",
             );
-            expect(flow.diagram.broadcast).toContain("BroadcastChannel");
+            expect(page.architecture?.markdown).toContain("BroadcastChannel");
         }
     });
 
-    it("uses the streaming-layout case and integrates the product foundation into the OptiGen overview", () => {
+    it("covers OptiGen frontend features, streaming, performance, and shared UI", () => {
         for (const language of ["ko", "en"] as const) {
             const { page } = getOptigenProjectContent(language);
 
-            expect(page.keyOutcome.value).toContain("POC");
             expect(page.sections.map((section) => section.id)).toEqual([
-                "streamingLayout",
+                "productWorkspace",
+                "streamingConversation",
+                "performance",
+                "deliveryFoundation",
             ]);
-            expect(page.overviewDescription).toContain("Storybook");
-            expect(page.sections[0].items.map((item) => item.id)).toEqual([
-                "growingResponse",
-                "spacerLayout",
-                "measurement",
-                "streamLifecycle",
-                "readingPosition",
-            ]);
+            const streamingSection = page.sections.find(
+                (section) => section.id === "streamingConversation",
+            );
+            expect(streamingSection?.phases.process).toContain("SSE");
+            expect(streamingSection?.phases.process).toContain("ResizeObserver");
+            expect(streamingSection?.phases.process).toContain("AbortController");
         }
     });
 
     it("uses the Desktop ownership and app-contract cases for the portfolio", () => {
         for (const language of ["ko", "en"] as const) {
-            const { page, architecture } = getPortfolioProjectContent(language);
+            const { page } = getPortfolioProjectContent(language);
 
             expect(page.sections.map((section) => section.id)).toEqual([
                 "ownership",
                 "appContract",
             ]);
             expect(page.overviewDescription).toContain("Playwright");
-            expect(page.keyOutcome.value).toContain(
-                language === "ko" ? "등록, 로딩, 탐색 계약" : "registering, loading, and navigating",
-            );
-            expect(architecture.diagram.loader).toContain("appLoaderRegistry");
+            expect(page.architecture?.markdown).toContain("appLoaderRegistry");
         }
     });
 
     it("uses only the documented problem-solving cases for the remaining projects", () => {
         const contracts = [
-            [getMcpProjectContent, ["performance", "progressProtocol"]],
+            [getMcpProjectContent, ["performance", "addressCorrection"]],
             [
                 getVoiceGatewayProjectContent,
-                ["providerArchitecture", "audioPacing"],
+                ["callFlow", "sttAccuracy", "providerArchitecture", "audioPacing"],
             ],
             [getWchmsProjectContent, ["learningMaterialAlignment"]],
             [getFlareProjectContent, ["informationFlow"]],

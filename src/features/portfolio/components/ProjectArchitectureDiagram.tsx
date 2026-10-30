@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useState } from "react";
+import { ImagePreview, type OpenImageViewer } from "@/components/ui/ImageViewer";
+import type { Language } from "@/lib/i18n/language";
 
 type ProjectArchitectureDiagramProps = {
   chart: string;
@@ -10,13 +12,11 @@ type ProjectArchitectureDiagramProps = {
   wide?: boolean;
   scrollable?: boolean;
   scrollLabel?: string;
+  openImage: OpenImageViewer;
+  language: Language;
 };
 
 let isMermaidInitialized = false;
-
-export function escapeMermaidLabel(label: string) {
-  return label.replaceAll('"', "&quot;");
-}
 
 export function ProjectArchitectureDiagram({
   chart,
@@ -26,18 +26,16 @@ export function ProjectArchitectureDiagram({
   wide = false,
   scrollable = false,
   scrollLabel,
+  openImage,
+  language,
 }: ProjectArchitectureDiagramProps) {
   const generatedId = useId();
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [imageSrc, setImageSrc] = useState("");
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
   useEffect(() => {
     let isCancelled = false;
-    const container = containerRef.current;
-
     async function renderDiagram() {
-      if (!container) return;
-
       setStatus("loading");
 
       try {
@@ -62,23 +60,21 @@ export function ProjectArchitectureDiagram({
             flowchart: {
               curve: "basis",
               htmlLabels: false,
-              useMaxWidth: true,
+              useMaxWidth: false,
             },
           });
           isMermaidInitialized = true;
         }
 
         const renderId = `project-architecture-${generatedId.replaceAll(":", "")}`;
-        const { svg, bindFunctions } = await mermaid.render(renderId, chart);
+        const { svg } = await mermaid.render(renderId, chart);
 
         if (isCancelled) return;
 
-        container.innerHTML = svg;
-        bindFunctions?.(container);
+        setImageSrc(`data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`);
         setStatus("ready");
       } catch {
         if (isCancelled) return;
-        container.replaceChildren();
         setStatus("error");
       }
     }
@@ -87,7 +83,6 @@ export function ProjectArchitectureDiagram({
 
     return () => {
       isCancelled = true;
-      container?.replaceChildren();
     };
   }, [chart, generatedId]);
 
@@ -96,14 +91,16 @@ export function ProjectArchitectureDiagram({
       role={scrollable ? "region" : undefined}
       aria-label={scrollable ? scrollLabel : undefined}
       tabIndex={scrollable ? 0 : undefined}
-      className={`mx-auto overflow-x-auto rounded-xl border border-[var(--application-border)] bg-white p-3 sm:p-5 [&_svg]:mx-auto [&_svg]:h-auto [&_svg]:w-full ${wide ? "max-w-none [&_svg]:min-w-[58rem]" : "max-w-[30rem] [&_svg]:min-w-[26rem]"}`}
+      className={`mx-auto overflow-x-auto p-1 ${wide ? "max-w-none" : "max-w-[30rem]"}`}
     >
-      <div
-        ref={containerRef}
-        role={status === "ready" ? "img" : undefined}
-        aria-label={status === "ready" ? label : undefined}
-        aria-hidden={status === "ready" ? undefined : "true"}
-      />
+      {status === "ready" ? (
+        <ImagePreview
+          image={{ src: imageSrc, alt: label }}
+          openImage={openImage}
+          language={language}
+          className={wide ? "min-w-[58rem]" : "min-w-[26rem]"}
+        />
+      ) : null}
       {status === "loading" ? (
         <p role="status" className="py-28 text-center text-sm text-slate-600">
           {loadingLabel}

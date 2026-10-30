@@ -1,29 +1,29 @@
-import enFlare from "@/features/portfolio/i18n/en/Flare.json";
-import enKepco from "@/features/portfolio/i18n/en/Kepco.json";
-import enMcp from "@/features/portfolio/i18n/en/Mcp.json";
-import enOptigen from "@/features/portfolio/i18n/en/Optigen.json";
-import enPortfolio from "@/features/portfolio/i18n/en/Portfolio.json";
-import enVoiceGateway from "@/features/portfolio/i18n/en/VoiceGateway.json";
-import enWchms from "@/features/portfolio/i18n/en/WCHMS.json";
-import koFlare from "@/features/portfolio/i18n/ko/Flare.json";
-import koKepco from "@/features/portfolio/i18n/ko/Kepco.json";
-import koMcp from "@/features/portfolio/i18n/ko/Mcp.json";
-import koOptigen from "@/features/portfolio/i18n/ko/Optigen.json";
-import koPortfolio from "@/features/portfolio/i18n/ko/Portfolio.json";
-import koVoiceGateway from "@/features/portfolio/i18n/ko/VoiceGateway.json";
-import koWchms from "@/features/portfolio/i18n/ko/WCHMS.json";
 import type { Language } from "@/lib/i18n/language";
 import type { ProjectSlug } from "@/features/portfolio/types/projectTypes";
+import { projectDocuments } from "./projectDocuments";
+import { readProjectDocument } from "./projectMetadata";
+
+function title(language: Language, slug: ProjectSlug) {
+    return readProjectDocument(projectDocuments[slug][language]).metadata.title;
+}
 
 export const projectTitles = {
-  ko: {
-    portfolio: koPortfolio.title, optigen: koOptigen.title, mcp: koMcp.title,
-    "voice-gateway": koVoiceGateway.title, kepco: koKepco.title,
-    wchms: koWchms.title, flare: koFlare.title,
-  },
-  en: {
-    portfolio: enPortfolio.title, optigen: enOptigen.title, mcp: enMcp.title,
-    "voice-gateway": enVoiceGateway.title, kepco: enKepco.title,
-    wchms: enWchms.title, flare: enFlare.title,
-  },
+    ko: {
+        "portfolio": title("ko", "portfolio"),
+        "optigen": title("ko", "optigen"),
+        "mcp": title("ko", "mcp"),
+        "voice-gateway": title("ko", "voice-gateway"),
+        "kepco": title("ko", "kepco"),
+        "wchms": title("ko", "wchms"),
+        "flare": title("ko", "flare"),
+    },
+    en: {
+        "portfolio": title("en", "portfolio"),
+        "optigen": title("en", "optigen"),
+        "mcp": title("en", "mcp"),
+        "voice-gateway": title("en", "voice-gateway"),
+        "kepco": title("en", "kepco"),
+        "wchms": title("en", "wchms"),
+        "flare": title("en", "flare"),
+    },
 } satisfies Record<Language, Record<ProjectSlug, string>>;

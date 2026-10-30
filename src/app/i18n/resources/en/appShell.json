@@ -8,10 +8,10 @@
     "notes": "Guestbook",
     "settings": "Settings",
     "portfolio": "Portfolio",
-    "optigen": "OptiGen AI Platform",
+    "optigen": "OptiGen Frontend",
     "mcp": "OptiGen MCP Server",
-    "voice-gateway": "AICC Voice Gateway",
-    "kepco": "Public-Sector Contact Center Advisor",
+    "voice-gateway": "OptiGen Voice Gateway",
+    "kepco": "Korea Electric Power Contact Center Advisor",
     "wchms": "WCHMS",
     "flare": "Flare"
   },

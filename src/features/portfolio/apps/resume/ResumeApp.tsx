@@ -64,7 +64,7 @@ export default function ResumeApp({
                                             <h5 className="font-semibold">
                                                 {experience.title}
                                             </h5>
-                                            <p className="text-sm text-slate-600">
+                                            <p className="break-keep text-sm text-slate-600">
                                                 {experience.role}
                                             </p>
                                         </div>
@@ -72,7 +72,10 @@ export default function ResumeApp({
                                             {experience.period}
                                         </span>
                                     </div>
-                                    <div className="mt-4 space-y-4">
+                                    <p className="mt-2 text-sm leading-6 text-slate-700">
+                                        {experience.summary}
+                                    </p>
+                                    <div className="mt-3 space-y-4">
                                         {experience.highlights.map((highlight) => (
                                             <section key={highlight.title}>
                                                 <h6 className="text-sm font-semibold">

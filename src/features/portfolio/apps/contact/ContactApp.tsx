@@ -12,8 +12,8 @@ export default function ContactApp({}: ContactAppProps) {
         <div
             className="application-app-surface min-h-full w-full overflow-y-auto"
         >
-            <div className="my-8 mx-4 md:mx-36">
-                <div className="px-6 py-4">
+            <div className="application-content-inset my-8 mx-4 md:mx-36">
+                <div className="application-content-inset px-6 py-4">
                     <h2 className="font-bold text-2xl mb-4">
                         {t("title")}
                     </h2>

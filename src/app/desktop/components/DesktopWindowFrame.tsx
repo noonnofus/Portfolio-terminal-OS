@@ -16,6 +16,7 @@ import { useLanguageStore } from "@/lib/i18n/useLanguageStore";
 import { AppRuntimeBoundary } from "@/app/desktop/components/AppRuntimeBoundary";
 import { getAppTitle } from "@/app/desktop/lib/getAppTitle";
 import { useTranslation } from "react-i18next";
+import { useDesktopStore } from "@/app/desktop/store/DesktopStoreProvider";
 
 /* ── macOS-style traffic-light SVG icons ────────────────── */
 
@@ -137,7 +138,8 @@ export function DesktopWindowFrame({
           : "inactive";
 
     /* ── Maximize state ─────────────────────────────────── */
-    const [maximized, setMaximized] = useState(false);
+    const maximized = useDesktopStore((state) => state.fullscreenWindowId === win.windowId);
+    const setFullscreenWindow = useDesktopStore((state) => state.setFullscreenWindow);
 
     const handleMinimize = () => {
         navigate({
@@ -149,6 +151,7 @@ export function DesktopWindowFrame({
     /* ── Drag state (desktop ≥1024px only) ──────────────── */
     const sectionRef = useRef<HTMLElement>(null);
     const headingRef = useRef<HTMLHeadingElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
     const wasActiveRef = useRef(false);
     const dragState = useRef<{
         startX: number;
@@ -222,10 +225,12 @@ export function DesktopWindowFrame({
 
     useEffect(() => {
         if (active && !wasActiveRef.current) {
-            requestAnimationFrame(() => headingRef.current?.focus());
+            requestAnimationFrame(() =>
+                (maximized ? contentRef.current : headingRef.current)?.focus({ preventScroll: true }),
+            );
         }
         wasActiveRef.current = active;
-    }, [active]);
+    }, [active, maximized]);
 
     useEffect(() => {
         const usesTouchWindowLayout =
@@ -274,7 +279,6 @@ export function DesktopWindowFrame({
               width: "100vw",
               height: `calc(100dvh - ${DESKTOP_SYSTEM_BAR_HEIGHT_PX}px)`,
               zIndex: active ? 80 : 40 + index,
-              borderRadius: "0px",
           }
         : {
               left: `${currentLeft}px`,
@@ -309,10 +313,10 @@ export function DesktopWindowFrame({
           );
     const minimizeX = shouldReduceMotion
         ? 0
-        : targetX - (currentLeft + windowWidth / 2);
+        : targetX - ((maximized ? 0 : currentLeft) + windowWidth / 2);
     const minimizeY = shouldReduceMotion
         ? 0
-        : screenHeight - 34 - (currentTop + windowHeight / 2);
+        : screenHeight - 34 - ((maximized ? DESKTOP_SYSTEM_BAR_HEIGHT_PX : currentTop) + windowHeight / 2);
 
     return (
         <AnimatePresence>
@@ -337,6 +341,8 @@ export function DesktopWindowFrame({
                     onPointerUp={handlePointerUp}
                     onLostPointerCapture={handlePointerUp}
                     style={windowStyle}
+                    layout={!shouldReduceMotion}
+                    layoutDependency={maximized}
                     initial={false}
                     animate={{
                         scale: 1,
@@ -355,13 +361,19 @@ export function DesktopWindowFrame({
                         ease: [0.16, 1, 0.3, 1], // easeOutExpo for ultra smooth experience
                     }}
                 >
+                    {maximized && (
+                        <div aria-hidden="true" className="application-title-bar-trigger" />
+                    )}
                     {/* ── macOS-style title bar ──────────── */}
                     <div
                         className="application-title-bar"
                         onPointerDown={handlePointerDown}
                     >
                         {/* Traffic lights (left side) */}
-                        <div className="application-traffic-lights">
+                        <div
+                            className="application-traffic-lights"
+                            inert={!active ? true : undefined}
+                        >
                             <button
                                 type="button"
                                 aria-label={`${title} close`}
@@ -392,7 +404,11 @@ export function DesktopWindowFrame({
                                         ? `${title} restore`
                                         : `${title} maximize`
                                 }
-                                onClick={() => setMaximized((v) => !v)}
+                                onClick={() => {
+                                    setFullscreenWindow(maximized ? null : win.windowId);
+                                    // Keep pointer activation from pinning the overlay open via focus-within.
+                                    contentRef.current?.focus({ preventScroll: true });
+                                }}
                                 className="application-traffic-light application-traffic-maximize"
                             >
                                 {maximized ? (
@@ -418,6 +434,8 @@ export function DesktopWindowFrame({
 
                     {/* ── Window content ─────────────────── */}
                     <div
+                        ref={contentRef}
+                        tabIndex={-1}
                         className="application-window-content"
                         inert={!active ? true : undefined}
                     >

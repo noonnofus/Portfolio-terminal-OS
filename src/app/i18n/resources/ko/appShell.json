@@ -8,10 +8,10 @@
     "notes": "방명록",
     "settings": "설정",
     "portfolio": "포트폴리오",
-    "optigen": "OptiGen AI 플랫폼",
+    "optigen": "OptiGen 프론트엔드",
     "mcp": "OptiGen MCP 서버",
-    "voice-gateway": "AICC Voice Gateway",
-    "kepco": "공공기관 상담 어드바이저",
+    "voice-gateway": "OptiGen Voice Gateway",
+    "kepco": "한국전력 상담 어드바이저",
     "wchms": "WCHMS",
     "flare": "Flare"
   },

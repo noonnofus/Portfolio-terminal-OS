@@ -9,14 +9,6 @@ export default defineConfig({
     retries: process.env.CI ? 2 : 0,
     workers: process.env.CI ? 1 : undefined,
     reporter: process.env.CI ? "github" : "list",
-    expect: {
-        toHaveScreenshot: {
-            threshold: 0,
-            maxDiffPixels: 0,
-            maxDiffPixelRatio: 0,
-            animations: "disabled",
-        },
-    },
     use: {
         baseURL,
         trace: "on-first-retry",

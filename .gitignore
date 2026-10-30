@@ -75,3 +75,6 @@ _workspace
 
 DESIGN.md
 PRODUCT.md
+
+# Local diagram sources and verification artifacts
+.archify/
