@@ -8,8 +8,8 @@ const projects = [
     },
     {
         appId: "project:optigen",
-        listTitle: "OptiGen AI 플랫폼",
-        windowTitle: "OptiGen AI 플랫폼",
+        listTitle: "OptiGen 프론트엔드",
+        windowTitle: "OptiGen 프론트엔드",
     },
     {
         appId: "project:mcp",
@@ -18,13 +18,13 @@ const projects = [
     },
     {
         appId: "project:voice-gateway",
-        listTitle: "AICC Voice Gateway",
-        windowTitle: "AICC Voice Gateway",
+        listTitle: "OptiGen Voice Gateway",
+        windowTitle: "OptiGen Voice Gateway",
     },
     {
         appId: "project:kepco",
-        listTitle: "공공기관 상담 어드바이저",
-        windowTitle: "공공기관 상담 어드바이저",
+        listTitle: "한국전력 상담 어드바이저",
+        windowTitle: "한국전력 상담 어드바이저",
     },
     {
         appId: "project:wchms",

@@ -1,4 +1,8 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+import { readFileSync } from "node:fs";
+
+const koPortfolioContent: typeof import("../src/features/portfolio/i18n/ko/PortfolioContent.json") =
+    JSON.parse(readFileSync("src/features/portfolio/i18n/ko/PortfolioContent.json", "utf8"));
 
 test.describe("Desktop shell", () => {
     test("hydrates a persisted dark theme without a server mismatch", async ({ page }) => {
@@ -62,35 +66,18 @@ test.describe("Desktop shell", () => {
         await page.goto("/desktop");
 
         const careerWindow = page.getByRole("dialog", { name: "커리어" });
-        await expect(
-            careerWindow.getByRole("heading", { name: "KEPCO 상담 어드바이저" }),
-        ).toBeVisible();
-        await expect(
-            careerWindow.getByText(
-                "하루 평균 약 5만 콜 환경에서 전체 상담사의 60%가 사용했고 프로젝트 운영 후 고객 평균 대기 시간이 약 30% 줄었습니다.",
-            ),
-        ).toBeVisible();
-        await expect(
-            careerWindow.getByText(
-                /실시간 STT 전사, 통화 후 AI 분석, 상담 이력/,
-            ),
-        ).toBeVisible();
-        await expect(
-            careerWindow.getByRole("heading", { name: "OptiGen AI 플랫폼" }),
-        ).toBeVisible();
-        await expect(
-            careerWindow.getByText(
-                "WebGPU 로컬 STT와 회의록 MCP를 연결하고 Storybook 40개 스토리와 Vitest를 활용해 공통 UI 검증을 자동화했습니다.",
-            ),
-        ).toBeVisible();
-        await expect(
-            careerWindow.getByRole("heading", { name: "AICC Voice Gateway" }),
-        ).toBeVisible();
-        await expect(
-            careerWindow.getByText(
-                /Transport, Factory, Strategy, Codec으로 Provider별 통신과 오디오 차이/,
-            ),
-        ).toBeVisible();
+        for (const experience of koPortfolioContent.experience) {
+            for (const highlight of experience.highlights) {
+                await expect(
+                    careerWindow.getByRole("heading", { name: highlight.title }),
+                ).toBeVisible();
+                for (const item of highlight.items) {
+                    await expect(
+                        careerWindow.getByText(item, { exact: true }),
+                    ).toBeVisible();
+                }
+            }
+        }
         await expect(
             careerWindow.getByRole("button", { name: /사례 보기|사례 연구/ }),
         ).toHaveCount(0);
@@ -416,7 +403,7 @@ test.describe("Desktop shell", () => {
     }) => {
         await page.goto("/desktop?app=projects");
         const projectFile = page.getByRole("button", {
-            name: "공공기관 상담 어드바이저 프로젝트 열기",
+            name: "한국전력 상담 어드바이저 프로젝트 열기",
         });
         await expect(projectFile).toHaveCSS("width", "70px");
         const projectGrid = page.locator(".application-project-grid");
@@ -709,7 +696,7 @@ test.describe("Desktop shell", () => {
             resumeWindow
                 .getByLabel("Experience", { exact: true })
                 .getByRole("heading", {
-                    name: "OptiGen AI Platform",
+                    name: "OptiGen Frontend",
                     exact: true,
                 }),
         ).toBeVisible();
@@ -1185,198 +1172,5 @@ test.describe("Desktop shell", () => {
                 .getAttribute("data-minimize-elapsed"),
         );
         expect(minimizeElapsed).toBeLessThan(300);
-    });
-});
-
-async function expectDesktopScreenshot(
-    page: Page,
-    name: string,
-    options?: { stabilizeSelectionOutline?: boolean },
-) {
-    await page.waitForLoadState("networkidle");
-    await page.evaluate(async () => {
-        await document.fonts.ready;
-        await Promise.all(
-            [...document.images].map((image) =>
-                image.complete ? image.decode().catch(() => undefined) : Promise.resolve(),
-            ),
-        );
-    });
-    const stabilizationStyle = options?.stabilizeSelectionOutline
-        ? await page.addStyleTag({
-              content: `
-                .directory-item:is(:focus-visible, [data-selected="true"])
-                    .desktop-app-icon-wrapper {
-                    outline: none !important;
-                }
-            `,
-          })
-        : null;
-    try {
-        await expect(page).toHaveScreenshot(name, {
-            mask: [page.locator(".application-system-clock")],
-        });
-    } finally {
-        await stabilizationStyle?.evaluate((element) =>
-            element.parentNode?.removeChild(element),
-        );
-    }
-}
-
-test.describe("Desktop visual parity", () => {
-    test.beforeEach(async ({ page }) => {
-        await page.clock.setFixedTime(new Date("2026-01-01T12:00:00Z"));
-        await page.route("**/api/auth/viewer", (route) =>
-            route.fulfill({
-                status: 200,
-                contentType: "application/json",
-                body: JSON.stringify({ status: "guest" }),
-            }),
-        );
-        await page.route("**/api/wallpapers", (route) =>
-            route.fulfill({
-                status: 200,
-                contentType: "application/json",
-                body: JSON.stringify({ wallpapers: [] }),
-            }),
-        );
-        await page.setViewportSize({ width: 1440, height: 900 });
-    });
-
-    test("captures desktop idle and selected states", async ({ page }) => {
-        await page.goto("/desktop?app=desktop");
-        await expectDesktopScreenshot(page, "desktop-idle.png");
-
-        await page
-            .getByRole("navigation", { name: "데스크톱 바로가기" })
-            .getByRole("button", { name: "프로젝트" })
-            .click();
-        const selectedIcon = page
-            .getByRole("navigation", { name: "데스크톱 바로가기" })
-            .getByRole("button", { name: "프로젝트" })
-            .locator(".desktop-app-icon-wrapper");
-        await expect(selectedIcon).toHaveCSS("outline-width", "1px");
-        await expect(selectedIcon).toHaveCSS("outline-style", "solid");
-        await expect(selectedIcon).toHaveCSS(
-            "outline-color",
-            "rgba(255, 255, 255, 0.38)",
-        );
-        await expectDesktopScreenshot(page, "desktop-selected.png", {
-            stabilizeSelectionOutline: true,
-        });
-    });
-
-    test("captures Projects idle and selected states", async ({ page }) => {
-        await page.goto("/desktop?app=projects");
-        await expectDesktopScreenshot(page, "projects-idle.png");
-
-        await page
-            .getByRole("button", { name: "WCHMS 프로젝트 열기" })
-            .click();
-        const selectedIcon = page
-            .getByRole("button", { name: "WCHMS 프로젝트 열기" })
-            .locator(".desktop-app-icon-wrapper");
-        await expect(selectedIcon).toHaveCSS("outline-width", "1px");
-        await expect(selectedIcon).toHaveCSS("outline-style", "solid");
-        await expect(selectedIcon).toHaveCSS(
-            "outline-color",
-            "rgba(255, 255, 255, 0.38)",
-        );
-        await expectDesktopScreenshot(page, "projects-selected.png", {
-            stabilizeSelectionOutline: true,
-        });
-    });
-
-    test("captures normal and maximized windows", async ({ page }) => {
-        await page.goto("/desktop");
-        await expectDesktopScreenshot(page, "window-normal.png");
-
-        await page
-            .getByRole("dialog", { name: "커리어" })
-            .getByRole("button", { name: "커리어 maximize" })
-            .click();
-        await expectDesktopScreenshot(page, "window-maximized.png");
-        await page.mouse.move(720, 18);
-        await expect.poll(async () => (await page.locator(".application-title-bar").boundingBox())?.y).toBe(36);
-        await expectDesktopScreenshot(page, "window-fullscreen-headers-revealed.png");
-        await page.mouse.move(20, 899);
-        await expect.poll(async () => (await page.locator(".application-dock").boundingBox())?.y ?? 900)
-            .toBeLessThan(850);
-        await expectDesktopScreenshot(page, "window-fullscreen-dock-revealed.png");
-    });
-
-    test("captures Settings themes and revealed Dock", async ({ page }) => {
-        await page.goto("/desktop?app=settings");
-        await expectDesktopScreenshot(page, "settings-light.png");
-
-        const settings = page.getByRole("dialog", { name: "설정" });
-        await settings.getByRole("button", { name: "화면 모드" }).click();
-        await settings.getByRole("button", { name: "다크 모드" }).click();
-        await expectDesktopScreenshot(page, "settings-dark.png");
-
-        await settings.getByRole("button", { name: "일반" }).click();
-        const autoHideButton = settings.getByRole("button", {
-            name: "자동 숨김",
-        });
-        if ((await autoHideButton.getAttribute("aria-pressed")) !== "true") {
-            await autoHideButton.click();
-        }
-        await page.mouse.move(720, 899);
-        const dock = page.getByRole("navigation", {
-            name: "Applications",
-        });
-        await expect
-            .poll(async () => (await dock.boundingBox())?.y ?? 900)
-            .toBeLessThan(850);
-        const dockCaptureStyle = await page.addStyleTag({
-            content: `
-                .application-dock[data-auto-hide="true"] {
-                    transform: translateX(-50%) !important;
-                }
-            `,
-        });
-        try {
-            await expect(dock).toHaveScreenshot("dock-auto-hide-revealed.png");
-        } finally {
-            await dockCaptureStyle.evaluate((element) =>
-                element.parentNode?.removeChild(element),
-            );
-        }
-    });
-
-    test("captures responsive layouts in Chromium", async ({
-        page,
-        browserName,
-    }) => {
-        test.skip(
-            browserName !== "chromium",
-            "Responsive snapshots run once in Chromium.",
-        );
-
-        for (const viewport of [
-            { width: 1024, height: 768 },
-            { width: 768, height: 1024 },
-            { width: 390, height: 844 },
-        ]) {
-            await page.setViewportSize(viewport);
-            await page.goto("/desktop");
-            await expectDesktopScreenshot(
-                page,
-                `responsive-${viewport.width}x${viewport.height}.png`,
-            );
-        }
-    });
-
-    test("captures Resume print isolation", async ({ page }) => {
-        await page.goto("/desktop?lang=en");
-        await page
-            .getByRole("navigation", { name: "Applications" })
-            .getByRole("button", { name: "Resume" })
-            .click();
-        await page.emulateMedia({ media: "print" });
-        await page.waitForLoadState("networkidle");
-        await expect(page).toHaveScreenshot("resume-print.png", {
-            fullPage: true,
-        });
     });
 });

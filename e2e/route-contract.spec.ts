@@ -92,27 +92,27 @@ test.describe("route compatibility", () => {
         const projects = [
             {
                 slug: "optigen",
-                dialog: "OptiGen AI 플랫폼",
+                dialog: "OptiGen 프론트엔드",
                 diagram:
-                    "OptiGen 웹 애플리케이션과 API, AI 서비스, MCP, Voice Gateway의 관계를 보여주는 플랫폼 흐름도",
+                    "웹 챗과 전화 콜, 공통 API와 AI 서비스, 문서 처리와 저장소를 연결하고 하단에 챗과 OptiGen 모드의 콜 프로세스 및 관계 범례를 배치한 OptiGen 시스템 아키텍처",
             },
             {
                 slug: "mcp",
                 dialog: "OptiGen MCP 서버",
                 diagram:
-                    "OptiGen 대화에서 AI 서비스와 MCP 서버를 거쳐 업무 API와 장시간 작업을 실행하는 흐름도",
+                    "OptiGen AI 에이전트와 Express 라우터, 회의록 생성 파이프라인, 주문접수 콜봇과 발음 유사도 기반 주소 검증을 보여주고 하단에 전체 프로세스와 관계 범례를 배치한 MCP 서버 시스템 아키텍처",
             },
             {
                 slug: "kepco",
-                dialog: "공공기관 상담 어드바이저",
+                dialog: "한국전력 상담 어드바이저",
                 diagram:
-                    "여러 브라우저 탭 중 한 탭만 Refresh Token으로 서버 갱신을 수행하고 BroadcastChannel로 새 Access Token을 공유하는 흐름도",
+                    "여러 탭의 서버 갱신 요청을 Web Lock으로 직렬화하고 BroadcastChannel로 새 Access Token을 공유하는 흐름도",
             },
             {
                 slug: "voice-gateway",
-                dialog: "AICC Voice Gateway",
+                dialog: "OptiGen Voice Gateway",
                 diagram:
-                    "전화 통화가 PBX와 SIP 연결 계층, 통화별 Worker, Transport Factory, Strategy와 Codec을 거쳐 Voice AI Provider에 연결되는 흐름도",
+                    "Main Thread의 ARI Client, MainOrchestrator와 WorkerRegistry, 통화별 Worker의 RTP, STT, TurnManager, OptiGenTransport와 TTS를 보여주는 Voice Gateway 구조도",
             },
             {
                 slug: "portfolio",
@@ -142,24 +142,6 @@ test.describe("route compatibility", () => {
         await page.setViewportSize({ width: 390, height: 844 });
         const projects = [
             {
-                slug: "optigen",
-                region: "플랫폼 전체 흐름도 가로 스크롤 영역",
-                image:
-                    "OptiGen 웹 애플리케이션과 API, AI 서비스, MCP, Voice Gateway의 관계를 보여주는 플랫폼 흐름도",
-            },
-            {
-                slug: "mcp",
-                region: "MCP 도구 실행 흐름도 가로 스크롤 영역",
-                image:
-                    "OptiGen 대화에서 AI 서비스와 MCP 서버를 거쳐 업무 API와 장시간 작업을 실행하는 흐름도",
-            },
-            {
-                slug: "voice-gateway",
-                region: "실시간 음성 흐름도 가로 스크롤 영역",
-                image:
-                    "전화 통화가 PBX와 SIP 연결 계층, 통화별 Worker, Transport Factory, Strategy와 Codec을 거쳐 Voice AI Provider에 연결되는 흐름도",
-            },
-            {
                 slug: "portfolio",
                 region:
                     "포트폴리오 폴더와 실행 구조도, 가로로 스크롤할 수 있습니다.",
@@ -187,6 +169,179 @@ test.describe("route compatibility", () => {
         }
     });
 
+    test("image viewer keeps transparent diagrams readable in dark mode", async ({ page }, testInfo) => {
+        await page.addInitScript(() => localStorage.setItem("theme", "dark"));
+        await page.goto("/desktop?app=project&slug=portfolio");
+        await expect(page.locator(".application-shell")).toHaveAttribute("data-theme", "dark");
+
+        const project = page.locator('[data-window-id="project:portfolio"]');
+        const opener = project.getByRole("button", { name: /^이미지 크게 보기:/ });
+        await expect(opener).toHaveCSS("background-color", "rgb(255, 255, 255)");
+        await opener.click();
+        await expect(project.getByRole("dialog").getByRole("img")).toHaveCSS("background-color", "rgb(255, 255, 255)");
+        await page.screenshot({ path: testInfo.outputPath("dark-image-preview.png") });
+    });
+
+    for (const projectSlug of ["voice-gateway", "optigen", "mcp", "portfolio", "kepco"] as const) {
+    for (const language of ["ko", "en"] as const) {
+        for (const width of [390, 1440]) {
+            test(`${projectSlug} diagram preview stays within its window (${language}, ${width})`, async ({
+                page,
+            }) => {
+                await page.setViewportSize({ width, height: 1000 });
+                await page.addInitScript((language) => {
+                    localStorage.setItem("desktop:preferences", JSON.stringify({
+                        version: 1,
+                        preferences: { language },
+                    }));
+                }, language);
+                await page.goto(`${language === "en" ? "/en" : ""}/desktop?app=project&slug=${projectSlug}`);
+
+                const project = page.locator(`[data-window-id="project:${projectSlug}"]`);
+                const opener = project.getByRole("button", {
+                    name: language === "ko" ? /^이미지 크게 보기:/ : /^View larger image:/,
+                });
+                const preview = project.getByRole("dialog");
+                const close = preview.getByRole("button", {
+                    name: language === "ko" ? "확대 이미지 닫기" : "Close enlarged image",
+                });
+                const surface = project.locator(".application-app-surface");
+
+                if (projectSlug === "optigen") {
+                    const source = await opener.getByRole("img").getAttribute("src");
+                    const response = await page.request.get(source!);
+                    expect(response.ok()).toBe(true);
+                    const svg = await response.text();
+                    expect(svg).toContain('data-portfolio-process="chat"');
+                    expect(svg).toContain('data-portfolio-process="call"');
+                    expect(svg).toContain('data-portfolio-legend="relationships"');
+                }
+
+                await opener.focus();
+                await expect.poll(() => project.locator(".application-window-content").evaluate(
+                    (element) => element.scrollHeight - element.clientHeight,
+                )).toBeLessThanOrEqual(1);
+                const scrollTop = await surface.evaluate((element) => element.scrollTop);
+                const thumbnailWidth = await opener.evaluate((element) => element.clientWidth);
+                await page.keyboard.press("Enter");
+                await expect(preview).toBeVisible();
+                await expect.poll(() => preview.evaluate(
+                    (element) => element.contains(document.activeElement),
+                )).toBe(true);
+                await expect.poll(() => surface.evaluate(
+                    (element) => element.closest("[inert]") !== null,
+                )).toBe(true);
+                await expect(preview.getByRole("img")).toBeVisible();
+
+                const bounds = await preview.evaluate((element) => {
+                    const rect = element.getBoundingClientRect();
+                    const content = element.closest(".application-window-content")!.getBoundingClientRect();
+                    const image = element.querySelector("img")!.getBoundingClientRect();
+                    return {
+                        withinWindow: rect.left >= content.left && rect.right <= content.right && rect.top >= content.top && rect.bottom <= content.bottom,
+                        fits: image.left >= rect.left && image.right <= rect.right && image.top >= rect.top && image.bottom <= rect.bottom,
+                        imageWidth: image.width,
+                    };
+                });
+                expect(bounds.withinWindow).toBe(true);
+                expect(bounds.fits).toBe(true);
+                if (projectSlug === "voice-gateway") {
+                    expect(bounds.imageWidth).toBeGreaterThan(thumbnailWidth);
+                }
+
+                const image = preview.getByRole("img");
+                await expect(image).toHaveCSS("background-color", "rgb(255, 255, 255)");
+                const canvas = preview.getByRole("group");
+                const zoomIn = preview.getByRole("button", {
+                    name: language === "ko" ? "확대" : "Zoom in", exact: true,
+                });
+                const zoomOut = preview.getByRole("button", {
+                    name: language === "ko" ? "축소" : "Zoom out", exact: true,
+                });
+                await zoomIn.click();
+                await expect.poll(() => image.evaluate(
+                    (element) => element.getBoundingClientRect().width,
+                )).toBeGreaterThan(bounds.imageWidth * 1.99);
+
+                const imageX = await image.evaluate((element) => element.getBoundingClientRect().x);
+                const frame = (await preview.boundingBox())!;
+                const centerX = frame.x + frame.width / 2;
+                const centerY = frame.y + frame.height / 2;
+                await page.mouse.move(centerX, centerY);
+                await page.mouse.down();
+                await page.mouse.move(centerX - 60, centerY + 20, { steps: 6 });
+                await page.mouse.up();
+                await expect.poll(() => image.evaluate(
+                    (element, startX) => Math.abs(element.getBoundingClientRect().x - startX), imageX,
+                )).toBeGreaterThan(20);
+
+                await zoomOut.click();
+                await expect.poll(() => image.evaluate(
+                    (element) => element.getBoundingClientRect().width,
+                )).toBeLessThanOrEqual(bounds.imageWidth + 1);
+
+                await canvas.focus();
+                await page.keyboard.press("+");
+                await expect.poll(() => image.evaluate(
+                    (element) => element.getBoundingClientRect().width,
+                )).toBeGreaterThan(bounds.imageWidth + 1);
+                const keyboardImageX = await image.evaluate((element) => element.getBoundingClientRect().x);
+                await page.keyboard.press("ArrowRight");
+                await expect.poll(() => image.evaluate(
+                    (element, startX) => Math.abs(element.getBoundingClientRect().x - startX), keyboardImageX,
+                )).toBeGreaterThan(1);
+                await page.keyboard.press("0");
+                await expect.poll(() => image.evaluate(
+                    (element) => element.getBoundingClientRect().width,
+                )).toBeLessThanOrEqual(bounds.imageWidth + 1);
+
+                await zoomIn.focus();
+                await page.keyboard.press("Tab");
+                await expect(close).toBeFocused();
+                await expect(close).toHaveCSS("outline-style", "solid");
+                await expect(close).toHaveCSS("outline-width", "2px");
+                await expect.poll(() => preview.evaluate(
+                    (element) => element.contains(document.activeElement),
+                )).toBe(true);
+                await page.keyboard.press("Shift+Tab");
+                await expect.poll(() => preview.evaluate(
+                    (element) => element.contains(document.activeElement),
+                )).toBe(true);
+                await page.keyboard.press("Escape");
+                await expect(preview).toHaveCount(0);
+                await expect(opener).toBeFocused();
+                expect(await surface.evaluate((element) => element.scrollTop)).toBe(scrollTop);
+
+                await opener.click();
+                await canvas.click();
+                await expect(preview).toBeVisible();
+                await canvas.dblclick();
+                await expect.poll(() => image.evaluate(
+                    (element) => element.getBoundingClientRect().width,
+                )).toBeGreaterThan(bounds.imageWidth + 1);
+                await close.click();
+                await expect(preview).toHaveCount(0);
+                await expect(opener).toBeFocused();
+
+                await opener.click();
+                await page.mouse.move(centerX, centerY);
+                await page.mouse.wheel(0, -150);
+                await expect.poll(() => image.evaluate(
+                    (element) => element.getBoundingClientRect().width,
+                )).toBeGreaterThan(bounds.imageWidth + 1);
+                await page.keyboard.press("Escape");
+                await expect(preview).toHaveCount(0);
+
+                await opener.click();
+                await preview.click({ position: { x: 2, y: 2 } });
+                await expect(preview).toHaveCount(0);
+                await expect(opener).toBeFocused();
+            });
+        }
+    }
+
+    }
+
     test("KEPCO case diagram stays with its problem-solving case", async ({
         page,
     }) => {
@@ -194,10 +349,13 @@ test.describe("route compatibility", () => {
         await page.goto("/desktop?app=project&slug=kepco");
 
         const dialog = page.getByRole("dialog", {
-            name: "공공기관 상담 어드바이저",
+            name: "한국전력 상담 어드바이저",
         });
-        const problemHeading = dialog.getByRole("heading", {
-            name: "배경 / 문제",
+        const authenticationCase = dialog.locator(
+            'section[aria-labelledby="kepco-multiTabAuth-title"]',
+        );
+        const problemHeading = authenticationCase.getByRole("heading", {
+            name: "개요", exact: true,
         });
         const diagram = dialog.getByRole("region", {
             name: "다이어그램 가로 스크롤 영역",
@@ -207,16 +365,16 @@ test.describe("route compatibility", () => {
         await expect(diagram).toBeVisible();
         await expect(
             diagram.getByRole("img", {
-                name: "여러 브라우저 탭 중 한 탭만 Refresh Token으로 서버 갱신을 수행하고 BroadcastChannel로 새 Access Token을 공유하는 흐름도",
+                name: "여러 탭의 서버 갱신 요청을 Web Lock으로 직렬화하고 BroadcastChannel로 새 Access Token을 공유하는 흐름도",
             }),
         ).toBeVisible({ timeout: 15000 });
         await expect(diagram).toHaveAttribute("tabindex", "0");
-        const headingOrder = await dialog
+        const headingOrder = await authenticationCase
             .locator("h3, h4")
             .allTextContents();
-        expect(headingOrder.indexOf("배경 / 문제")).toBeLessThan(
+        expect(headingOrder.indexOf("개요")).toBeLessThan(
             headingOrder.indexOf(
-                "멀티탭 토큰 갱신을 작업 소유권과 결과 공유로 분리했습니다.",
+                "멀티탭 토큰 갱신의 요청 직렬화와 결과 공유를 분리했습니다.",
             ),
         );
         await expect(
@@ -233,21 +391,33 @@ test.describe("route compatibility", () => {
         await page.goto("/desktop?app=project&slug=kepco");
 
         const dialog = page.getByRole("dialog", {
-            name: "공공기관 상담 어드바이저",
+            name: "한국전력 상담 어드바이저",
         });
         const article = dialog.getByRole("article");
 
         await expect(
             article.getByRole("heading", {
-                name: "공공기관 상담 어드바이저",
+                name: "한국전력 상담 어드바이저",
             }),
         ).toHaveCSS("font-size", "32px");
         await expect(
             article.locator('p[class*="documentSummary"]').first(),
         ).toHaveCSS("font-size", "14.4px");
         await expect(
-            article.locator('p[class*="evidenceDescription"]').first(),
+            article.locator('div[class*="caseMarkdown"] > p').first(),
         ).toHaveCSS("font-size", "15.2px");
+        const paragraphOffsets = await article
+            .locator('section[class*="casePhase"]')
+            .evaluateAll((phases) => phases.flatMap((phase) => {
+                const headingLeft = phase.querySelector("h4")!.getBoundingClientRect().left;
+                return Array.from(phase.querySelectorAll("p"))
+                    .filter((paragraph) => !paragraph.closest("li"))
+                    .map((paragraph) => paragraph.getBoundingClientRect().left - headingLeft);
+            }));
+        expect(paragraphOffsets.length).toBeGreaterThan(0);
+        for (const offset of paragraphOffsets) {
+            expect(Math.abs(offset)).toBeLessThan(1);
+        }
         await expect(
             article.locator('dl[class*="contextList"]'),
         ).toHaveCSS("border-top-width", "1px");
@@ -256,7 +426,7 @@ test.describe("route compatibility", () => {
         ).toHaveCSS("border-bottom-width", "1px");
         await expect(
             article.locator('section[class*="caseArchitectureSection"]'),
-        ).toHaveCSS("border-top-width", "1px");
+        ).toHaveCSS("border-top-width", "0px");
 
         await page.goto("/desktop?app=project&slug=wchms");
         const wchmsArticle = page
@@ -268,7 +438,7 @@ test.describe("route compatibility", () => {
         ).toHaveCSS("border-bottom-width", "1px");
         await expect(
             wchmsArticle.locator('section[class*="caseSection"]').first(),
-        ).toHaveCSS("border-top-width", "0px");
+        ).toHaveCSS("border-top-width", "1px");
     });
 
     test("professional project routes expose evidence-backed problem solving", async ({
@@ -277,59 +447,59 @@ test.describe("route compatibility", () => {
         const projects = [
             {
                 slug: "kepco",
-                dialog: "공공기관 상담 어드바이저",
+                dialog: "한국전력 상담 어드바이저",
                 heading:
-                    "여러 탭의 비활성 로그아웃과 토큰 갱신 상태를 일관되게 관리",
+                    "멀티탭 인증과 비활성 로그아웃 동기화",
                 outcome: "전체 상담사의 60% 사용, 고객 평균 대기 시간 30% 감소",
-                caseCount: 1,
+                caseCount: 3,
             },
             {
                 slug: "optigen",
-                dialog: "OptiGen AI 플랫폼",
+                dialog: "OptiGen 프론트엔드",
                 heading:
-                    "스트리밍 응답이 길어져도 질문 위치가 밀리지 않는 채팅 레이아웃",
-                outcome: "POC, DEV, SOLUM 3개 실행 환경으로 확장한 AI 플랫폼 기반",
-                caseCount: 1,
+                    "AI 응답과 도구 실행 상태를 전달하는 대화 화면",
+                outcome: "초기 전송량 약 54% 감소",
+                caseCount: 4,
             },
             {
                 slug: "mcp",
                 dialog: "OptiGen MCP 서버",
                 heading:
-                    "장시간 MCP 작업의 진행 상태를 대화까지 전달하는 세션 기반 SSE",
+                    "실제 건물 정보와 발음 유사도를 이용한 동 번호 보정",
                 outcome:
-                    "음성 파일 기반 회의록 생성 구현, 처리 시간 21.8% 단축",
+                    "동 번호 오인식 전사 353건 중 259건에 정답 후보 제안",
                 caseCount: 2,
             },
             {
                 slug: "voice-gateway",
-                dialog: "AICC Voice Gateway",
+                dialog: "OptiGen Voice Gateway",
                 heading:
-                    "Provider별 통신과 오디오 차이를 Transport와 Factory로 격리",
+                    "STT 평가 파이프라인 구축과 주소 인식 개선",
                 outcome:
-                    "Provider 변경 범위를 Transport, Strategy와 Codec으로 제한",
-                caseCount: 2,
+                    "동, 호수 전사 오류 18.9% 감소",
+                caseCount: 4,
             },
             {
                 slug: "portfolio",
                 dialog: "포트폴리오",
-                heading: "Desktop shell과 제품 기능을 변경 이유에 따라 분리",
-                outcome: "새 Desktop 앱을 같은 등록, 로딩, 탐색 계약으로 추가하는 구조 정립",
+                heading: "Desktop과 앱 기능의 책임 분리",
+                outcome: "앱 등록 정합성과 탐색 동작 검증",
                 caseCount: 2,
             },
             {
                 slug: "wchms",
                 dialog: "WCHMS",
-                heading: "학습자 자습과 직원용 수업 자료의 난이도 기준 통합",
+                heading: "자습과 수업 자료의 난이도 기준 통합",
                 outcome:
-                    "자습, 수업 자료 생성과 운영 관리를 하나의 제품 흐름으로 연결",
+                    "하나의 기준으로 연결된 학습과 운영",
                 caseCount: 1,
             },
             {
                 slug: "flare",
                 dialog: "Flare",
-                heading: "흩어진 산불 정보를 지도 중심의 탐색 흐름으로 통합",
+                heading: "산불 정보 탐색과 질문, 알림 연결",
                 outcome:
-                    "지도, 위험 지표, 뉴스, 질문과 알림을 하나의 PWA로 통합",
+                    "탐색에서 질문과 알림까지 연결",
                 caseCount: 1,
             },
         ] as const;
@@ -350,25 +520,40 @@ test.describe("route compatibility", () => {
             await expect(
                 dialog.getByRole("heading", { name: project.heading }),
             ).toBeVisible();
+            const headingOrder = await dialog.locator("h3, h4").allTextContents();
+            expect(headingOrder.indexOf("프로젝트 개요")).toBeLessThan(
+                headingOrder.indexOf("프로젝트 정보"),
+            );
             await expect(
-                dialog.getByText("Problem Solving", { exact: true }),
+                dialog.getByText("주요 작업", { exact: true }),
             ).toHaveCount(project.caseCount);
             await expect(
                 dialog.getByRole("heading", {
-                    name: "배경 / 문제",
+                    name: "개요", exact: true,
                 }).first(),
             ).toBeVisible();
             await expect(
                 dialog.getByRole("heading", {
-                    name: "해결 과정",
+                    name: "세부 내용", exact: true,
                 }).first(),
             ).toBeVisible();
             await expect(
-                dialog.getByRole("heading", { name: "결과" }).first(),
+                dialog.getByRole("heading", { name: "성과", exact: true }).first(),
             ).toBeVisible();
             await expect(
                 dialog.getByText(project.outcome, { exact: true }).first(),
             ).toBeVisible();
+            await expect(
+                dialog.getByRole("region", { name: "주요 성과", exact: true }),
+            ).toHaveCount(project.slug === "kepco" ? 1 : 0);
+            if (project.slug === "wchms" || project.slug === "flare") {
+                const players = dialog.locator("video");
+                await expect(players).toHaveCount(project.slug === "flare" ? 2 : 1);
+                for (const player of await players.all()) {
+                    await expect(player).toHaveAttribute("controls", "");
+                    await expect(player.locator("source")).toHaveAttribute("src", /^\/videos\/.+\.mp4$/);
+                }
+            }
         }
 
         await page.goto("/desktop?app=project&slug=mcp");
@@ -390,16 +575,16 @@ test.describe("route compatibility", () => {
         });
         await expect(
             englishMcpDialog.getByRole("heading", {
-                name: "Background / Problem",
+                name: /^Overview$/i,
             }).first(),
         ).toBeVisible();
         await expect(
             englishMcpDialog.getByRole("heading", {
-                name: "Solution / Process",
+                name: /^Implementation$/i,
             }).first(),
         ).toBeVisible();
         await expect(
-            englishMcpDialog.getByRole("heading", { name: "Result" }).first(),
+            englishMcpDialog.getByRole("heading", { name: /^Outcomes$/i }).first(),
         ).toBeVisible();
     });
 
@@ -407,10 +592,10 @@ test.describe("route compatibility", () => {
         page,
     }) => {
         const projects = [
-            ["kepco", "Public-Sector Contact Center Advisor", 1],
-            ["optigen", "OptiGen AI Platform", 1],
+            ["kepco", "Korea Electric Power Contact Center Advisor", 3],
+            ["optigen", "OptiGen Frontend", 4],
             ["mcp", "OptiGen MCP Server", 2],
-            ["voice-gateway", "AICC Voice Gateway", 2],
+            ["voice-gateway", "OptiGen Voice Gateway", 4],
             ["portfolio", "Portfolio", 2],
             ["wchms", "WCHMS", 1],
             ["flare", "Flare", 1],
@@ -429,8 +614,11 @@ test.describe("route compatibility", () => {
                 dialog.getByRole("heading", { name: "Project overview" }),
             ).toBeVisible();
             await expect(
-                dialog.getByText("Problem Solving", { exact: true }),
+                dialog.getByText("Selected work", { exact: true }),
             ).toHaveCount(caseCount);
+            await expect(
+                dialog.getByRole("region", { name: "Project outcomes", exact: true }),
+            ).toHaveCount(slug === "kepco" ? 1 : 0);
         }
     });
 
