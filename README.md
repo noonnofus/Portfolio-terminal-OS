@@ -53,7 +53,7 @@ Live site: [hyunhokim.is-a.dev](https://hyunhokim.is-a.dev/)
 | Server state | TanStack Query 5 |
 | Auth and data | Supabase SSR, Supabase Auth, Supabase Postgres, GitHub OAuth |
 | Terminal | xterm.js, `@xterm/addon-fit` |
-| Editor and Markdown | TipTap, `@tiptap/markdown`, `react-markdown`, `remark-gfm`, `rehype-raw` |
+| Editor and Markdown | TipTap, `@tiptap/markdown`, `react-markdown`, `remark-gfm` |
 | UI libraries | Framer Motion, lucide-react, Mermaid |
 | Testing | Vitest, Playwright |
 | Deployment target | Vercel |

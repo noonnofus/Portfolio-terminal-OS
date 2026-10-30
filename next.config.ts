@@ -14,6 +14,23 @@ function getSupabaseCspOrigin() {
 
 const nextConfig: NextConfig = {
     reactCompiler: true,
+    turbopack: {
+        rules: {
+            "*.md": {
+                condition: { query: "?raw" },
+                loaders: ["raw-loader"],
+                as: "*.js",
+            },
+        },
+    },
+    webpack(config) {
+        config.module.rules.push({
+            test: /\.md$/,
+            resourceQuery: /raw/,
+            type: "asset/source",
+        });
+        return config;
+    },
     images: {
         imageSizes: [16, 32, 48, 64, 96, 128, 180, 196, 256, 384, 400],
         remotePatterns: [
