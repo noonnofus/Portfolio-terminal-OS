@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Hyunho Kim, Frontend Developer Portfolio";
+export const alt = "Hyunho Kim, Software Engineer Portfolio";
 export const size = {
   width: 1200,
   height: 630,
@@ -35,7 +35,7 @@ export default function OpenGraphImage() {
             marginTop: 22,
           }}
         >
-          Frontend Developer
+          Software Engineer
         </div>
         <div
           style={{
@@ -46,7 +46,7 @@ export default function OpenGraphImage() {
             marginTop: 28,
           }}
         >
-          Next.js, TypeScript, and product-focused web applications
+          Web interfaces, backend services, and AI integrations
         </div>
       </div>
     ),

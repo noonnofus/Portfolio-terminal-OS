@@ -1,43 +1,51 @@
 {
   "profile": {
     "name": "HyunHo Kim",
-    "role": "Frontend Developer",
+    "role": "Software Engineer",
     "summary": [
-      "I believe small differences in user experience shape a product's overall quality.",
-      "I turn design intent into code and improve maintainability through reusable components and clear file structures.",
-      "I validate critical user flows with Playwright-based end-to-end and unit tests, then start with reproducible conditions when resolving issues.",
-      "I automate repetitive work with AI, but always verify the results myself. I believe developers are ultimately responsible for delivering trustworthy outcomes."
+      "I’m Hyun Ho Kim, a software engineer working across user interfaces, backend services, and AI integrations. Building on my frontend experience, I have implemented web interfaces, MCP servers, and a real-time voice gateway for contact-center services and a B2B AI platform.",
+      "I designed and built the frontend, Voice Gateway, and MCP server for the B2B AI platform OptiGen. I separated streamed answers from tool state and implemented audio-based meeting documents with long-running task progress. I established shared components, a design system, and UI tests. Changes to font and chart loading reduced initial data transfer by approximately 54% in the recorded checks.",
+      "For the Voice Gateway, I implemented per-call bot configuration, STT/TTS, and provider-specific communication and audio handling. In the NICE PoC, I built repeatable STT evaluation under telephone-audio conditions, numerical normalization, and phonetic correction. ITN rule improvements reduced building and unit-number errors by 18.9% across 1,426 repeated-evaluation transcript observations."
     ],
     "location": "South Korea"
   },
   "experience": [
     {
       "title": "LOGOS AI",
-      "role": "Full-Stack Developer",
+      "role": "Full-Stack Engineer / AI Application Engineer",
+      "summary": "I designed and built the frontend, Voice Gateway, and MCP server for OptiGen, participated in enterprise AI service proofs of concept, and extended features for customer-specific requirements.",
       "period": "Aug 2025 ~ Present",
       "highlights": [
         {
-          "title": "KEPCO Contact Center Advisor",
+          "title": "Korea Electric Power Contact Center Advisor",
           "items": [
-            "I designed and implemented the agent and manager frontend from live STT transcription through post-call AI analysis and consultation history.",
-            "During the pilot, I trained agents and turned their feedback into name search, favorites, and a dedicated favorites tab.",
-            "In an environment averaging about 50,000 calls a day, the system was used by 60% of all agents, and average customer wait time decreased by about 30% after the project entered operation."
+            "I designed and implemented the agent and administrator frontend connecting live STT, post-call AI analysis, and consultation history.",
+            "I implemented polling/SSE transitions, transcript recovery, recording synchronization, and multi-tab authentication, and incorporated feedback from the on-site pilot.",
+            "In an environment averaging about 50,000 calls a day, 60% of all agents used the service and average customer wait time fell by about 30% after launch. These are operating outcomes for the project as a whole."
           ]
         },
         {
-          "title": "OptiGen AI Platform",
+          "title": "OptiGen Frontend",
           "items": [
-            "I designed and implemented the frontend and UI/UX from the ground up, including chat, agent settings, conversation history, documents, and administrative features.",
-            "I aligned SSE event rules with the backend and connected response generation, MCP tool execution, completion, and error states to the conversation flow.",
-            "I connected WebGPU local STT with the meeting-minutes MCP and automated shared-UI verification with 40 Storybook stories and Vitest."
+            "I designed and built the administration and user conversation frontend of a B2B AI platform and extended features to meet customer requirements.",
+            "I agreed on SSE event rules with the backend to separate answers from tool state and established a design system, Storybook component tests, and PR CI.",
+            "Recorded page checks showed approximately 54% less initial data transfer and document-editor CLS falling from 0.225 to 0. I also organized environment-specific deployment settings and migrated server commands from SSH to SSM."
           ]
         },
         {
-          "title": "AICC Voice Gateway",
+          "title": "OptiGen MCP Server",
           "items": [
-            "I implemented an AICC Voice Gateway connecting PBX and SIP integration, per-call Workers, and multiple Voice AI backends.",
-            "Transport, Factory, Strategy, and Codec boundaries isolate provider protocol and audio differences.",
-            "I implemented VAD-based silence and background-noise handling, DTMF input, call sessions, and reconnection flows."
+            "I designed and implemented an MCP server and tools that accept audio files in OptiGen conversations and return meeting documents and transcripts.",
+            "I connected transcription, diarization, and summarization to Markdown and DOCX meeting documents, reducing processing time by 21.8% in a local comparison of the same 95-minute recording with caching disabled.",
+            "I separated server instances and connections by session for long-running tasks and delivered execution stages, progress, and final document links in the conversation."
+          ]
+        },
+        {
+          "title": "OptiGen Voice Gateway",
+          "items": [
+            "I was responsible for gateway design and implementation connecting PBX/SIP integration, per-call Workers, and multiple Voice AI backends.",
+            "I isolated provider protocols and audio formats from shared call handling and made STT/TTS selectable through bot configuration.",
+            "For the NICE PoC, I implemented STT evaluation, ITN, and phonetic MCP correction. ITN rule improvements reduced building and unit-number errors by 18.9% across 1,426 transcript observations. In a separate MCP evaluation of 353 missed building numbers, 259 received the correct candidate."
           ]
         }
       ]
@@ -52,13 +60,13 @@
     { "label": "Tools", "items": ["Git", "GitHub", "Jira", "Figma"] }
   ],
   "projects": [
-    { "slug": "portfolio", "summary": "An OS-style portfolio for the browser that keeps window state, URLs, folder interactions, and preferences in one consistent model." },
-    { "slug": "optigen", "summary": "A B2B AI platform for managing organizations, permissions, AI bots, and documents with RAG-grounded conversations, extended through MCP and Voice Gateway." },
-    { "slug": "mcp", "summary": "An MCP server that connects OptiGen AI to external business APIs and reports progress and results for long-running work such as meeting-minute generation." },
-    { "slug": "voice-gateway", "summary": "A real-time voice gateway connecting PBX and SIP calls with multiple Voice AI backends while isolating provider protocol and audio differences." },
-    { "slug": "kepco", "summary": "A contact-center support system that connects live STT transcription, post-call AI analysis, and call-history search for agents." },
-    { "slug": "wchms", "summary": "An AI-assisted self-study and course management platform supporting dementia prevention programs for Japanese seniors in Vancouver." },
-    { "slug": "flare", "summary": "A wildfire information PWA combining live maps, risk indicators, news, notifications, and a focused AI chatbot." }
+    { "slug": "portfolio", "summary": "A bilingual portfolio with terminal and desktop navigation. I separated window state from URL navigation and implemented app registration rules and keyboard interaction." },
+    { "slug": "optigen", "summary": "The administration and conversation frontend of a B2B AI platform. I built the interfaces, streaming responses, design system, and UI tests, reducing initial transfer size by approximately 54% in recorded checks." },
+    { "slug": "mcp", "summary": "An MCP server that turns audio into meeting documents and transcripts. I built the pipeline and session-specific progress, reducing processing time by 21.8% in a local comparison of the same 95-minute recording with caching disabled." },
+    { "slug": "voice-gateway", "summary": "A real-time gateway between telephone and AI services. I implemented per-call settings and audio handling; NICE PoC ITN improvements reduced building and unit-number errors by 18.9% across 1,426 transcript observations." },
+    { "slug": "kepco", "summary": "A service for live transcripts, AI analysis, recordings, and consultation history. I built agent and administrator interfaces, transcript recovery, analysis review, and multi-tab authentication." },
+    { "slug": "wchms", "summary": "A multilingual service connecting older adults’ AI self-study with course operations. I implemented shared difficulty levels, teaching-material generation, and the material database schema." },
+    { "slug": "flare", "summary": "A team project combining wildfire maps, news, and risk indicators. I implemented key full-stack features including PWA installation, a wildfire AI chatbot, and web push notifications." }
   ],
   "education": [
     {

@@ -31,6 +31,7 @@ export type ProfileContent = {
 export type ExperienceContent = {
   title: string;
   role: string;
+  summary: string;
   period: string;
   highlights: readonly ExperienceHighlight[];
   logo?: PortfolioAssetPath;

@@ -156,10 +156,10 @@ export default function AboutApp({ language }: AboutAppProps) {
                     <p className="text-[length:var(--application-text-caption)] font-semibold uppercase tracking-[0.16em] text-[var(--application-accent-text)]">
                         {t("eyebrow")}
                     </p>
-                    <h2 className="mt-3 font-bold text-3xl tracking-tight text-[var(--application-app-surface-text)] md:text-4xl">
+                    <h2 className="mt-3 break-keep font-bold text-3xl tracking-tight text-[var(--application-app-surface-text)] md:text-4xl">
                         {t("title")}
                     </h2>
-                    <div className="mt-5 max-w-2xl space-y-2 text-[length:var(--application-text-reading)] leading-[1.6] text-[var(--application-app-surface-muted)]">
+                    <div className="mt-5 space-y-2 break-keep text-[length:var(--application-text-reading)] leading-[1.6] text-[var(--application-app-surface-muted)]">
                         {content.profile.summary.map((paragraph, index) => (
                             <p
                                 key={paragraph}
@@ -214,17 +214,20 @@ export default function AboutApp({ language }: AboutAppProps) {
                                     <h4 className="text-2xl font-semibold tracking-tight text-[var(--application-app-surface-text)]">
                                         {experience.title}
                                     </h4>
-                                    <p className="mt-1 text-[length:var(--application-text-body)] font-medium text-[var(--application-app-surface-muted)]">
+                                    <p className="mt-1 break-keep text-[length:var(--application-text-body)] font-medium leading-6 text-[var(--application-app-surface-text)]">
                                         {experience.role}
                                     </p>
-                                    <div className="mt-6 space-y-8 text-left">
+                                    <p className="mt-2 text-[length:var(--application-text-reading)] leading-6 text-[var(--application-app-surface-muted)]">
+                                        {experience.summary}
+                                    </p>
+                                    <div className="mt-4 space-y-6 text-left">
                                         {experience.highlights.map(
                                             (highlight) => (
                                                 <section key={highlight.title}>
                                                     <h5 className="text-base font-semibold text-[var(--application-app-surface-text)]">
                                                         {highlight.title}
                                                     </h5>
-                                                    <ul className="m-0 mt-3 list-none space-y-3 p-0">
+                                                    <ul className="m-0 mt-2 list-none space-y-2 p-0">
                                                         {highlight.items.map(
                                                             (item) => (
                                                                 <li
