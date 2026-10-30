@@ -1,10 +1,11 @@
-import { Fragment, type ReactNode } from "react";
+import { Fragment } from "react";
+import { ProjectMarkdown } from "./ProjectMarkdown";
+import { ImageViewer, type OpenImageViewer } from "@/components/ui/ImageViewer";
 import type { Language } from "@/lib/i18n/language";
 import type {
   ProjectCaseStudyPhase,
   ProjectDetailPageContent,
 } from "@/features/portfolio/content/projectDetailContent";
-import { ProjectArchitectureDiagram } from "./ProjectArchitectureDiagram";
 import { ProjectTechBadges } from "./ProjectTechBadges";
 import styles from "./ProjectContent.module.css";
 
@@ -13,14 +14,14 @@ const phaseLabelsByLanguage: Record<
   Record<ProjectCaseStudyPhase, string>
 > = {
   ko: {
-    problem: "배경 / 문제",
-    process: "해결 과정",
-    result: "결과",
+    problem: "개요",
+    process: "세부 내용",
+    result: "성과",
   },
   en: {
-    problem: "Background / Problem",
-    process: "Solution / Process",
-    result: "Result",
+    problem: "Overview",
+    process: "Implementation",
+    result: "Outcomes",
   },
 };
 
@@ -29,33 +30,9 @@ const projectInfoLabels: Record<Language, string> = {
   en: "Project information",
 };
 
-type ProjectArchitectureBase = {
-  title: string;
-  description: string;
-  label: string;
-  caption: string;
-  loadingLabel: string;
-  errorLabel: string;
-  sectionId?: string;
-  wide?: boolean;
-  scrollable?: boolean;
-  scrollLabel?: string;
-};
-
-export type ProjectArchitecture = ProjectArchitectureBase &
-  (
-    | { chart: string; content?: never }
-    | { chart?: never; content: ReactNode }
-  );
-
 type ProjectCaseStudyPageProps = ProjectDetailPageContent & {
   projectId: string;
   language: Language;
-  stackLabel: string;
-  stack: readonly string[];
-  problemSolvingLabel?: string;
-  children?: ReactNode;
-  architecture?: ProjectArchitecture;
 };
 
 export function ProjectCaseStudyPage({
@@ -71,16 +48,13 @@ export function ProjectCaseStudyPage({
   keyOutcome,
   sections,
   problemSolvingLabel,
-  children,
+  walkthrough,
   architecture,
 }: ProjectCaseStudyPageProps) {
   const phaseLabels = phaseLabelsByLanguage[language];
-  const orderedSections = [
-    ...sections.filter((section) => section.isProblemSolving),
-    ...sections.filter((section) => !section.isProblemSolving),
-  ];
   const renderArchitecture = (
     architectureSectionId: string,
+    openImage: OpenImageViewer,
     isCaseStudy = false,
   ) => {
     if (!architecture) return null;
@@ -106,19 +80,7 @@ export function ProjectCaseStudyPage({
           {architecture.description}
         </p>
         <figure className="mt-5">
-          {"content" in architecture ? (
-            architecture.content
-          ) : (
-            <ProjectArchitectureDiagram
-              chart={architecture.chart}
-              label={architecture.label}
-              loadingLabel={architecture.loadingLabel}
-              errorLabel={architecture.errorLabel}
-              wide={architecture.wide}
-              scrollable={architecture.scrollable}
-              scrollLabel={architecture.scrollLabel}
-            />
-          )}
+          <ProjectMarkdown markdown={architecture.markdown} language={language} media={architecture} openImage={openImage} />
           <figcaption
             className={`${styles.supportingText} mt-3 text-[var(--application-app-surface-muted)]`}
           >
@@ -130,6 +92,7 @@ export function ProjectCaseStudyPage({
   };
 
   return (
+    <ImageViewer language={language}>{(openImage) => (
     <div className="application-app-surface h-full w-full overflow-y-auto">
       <article lang={language} className={`application-content-inset ${styles.readingArticle}`}>
         <header className={styles.documentHeader}>
@@ -144,6 +107,26 @@ export function ProjectCaseStudyPage({
             {summary}
           </p>
         </header>
+
+        <section
+          className={styles.overviewSection}
+          aria-labelledby={`${projectId}-overview-title`}
+        >
+          <h3
+            id={`${projectId}-overview-title`}
+            className={`${styles.sectionTitle} font-semibold text-[var(--application-app-surface-text)]`}
+          >
+            {overviewTitle}
+          </h3>
+          {overviewDescription.split("\n\n").map((paragraph) => (
+            <p
+              key={paragraph}
+              className={`${styles.sectionDescription} mt-3 text-[var(--application-app-surface-muted)]`}
+            >
+              {paragraph}
+            </p>
+          ))}
+        </section>
 
         <section
           className={styles.projectInfoSection}
@@ -174,41 +157,17 @@ export function ProjectCaseStudyPage({
           </div>
         </section>
 
-        <section
-          className={styles.overviewSection}
-          aria-labelledby={`${projectId}-overview-title`}
-        >
-          <h3
-            id={`${projectId}-overview-title`}
-            className={`${styles.sectionTitle} font-semibold text-[var(--application-app-surface-text)]`}
-          >
-            {overviewTitle}
-          </h3>
-          {overviewDescription.split("\n\n").map((paragraph) => (
-            <p
-              key={paragraph}
-              className={`${styles.sectionDescription} mt-3 text-[var(--application-app-surface-muted)]`}
-            >
-              {paragraph}
-            </p>
-          ))}
-        </section>
-
         {architecture && !architecture.sectionId
-          ? renderArchitecture("architecture")
+          ? renderArchitecture("architecture", openImage)
           : null}
 
-        {orderedSections.map((section) => (
+        {sections.map((section) => (
           <section
             key={section.id}
-            className={
-              section.isProblemSolving
-                ? styles.caseSection
-                : styles.supportingSection
-            }
+            className={styles.caseSection}
             aria-labelledby={`${projectId}-${section.id}-title`}
           >
-            {section.isProblemSolving && problemSolvingLabel ? (
+            {problemSolvingLabel ? (
               <p className={styles.caseTypeLabel}>{problemSolvingLabel}</p>
             ) : null}
             <h3
@@ -217,104 +176,53 @@ export function ProjectCaseStudyPage({
             >
               {section.title}
             </h3>
-            <p
-              className={`${styles.sectionDescription} mt-3 text-[var(--application-app-surface-muted)]`}
-            >
-              {section.description}
-            </p>
-            {section.isProblemSolving ? (
-              <div className={styles.casePhases}>
-                {(
-                  [
-                    ["problem", phaseLabels.problem],
-                    ["process", phaseLabels.process],
-                    ["result", phaseLabels.result],
-                  ] as const
-                ).map(([phase, label]) => {
-                  const items = section.items.filter(
-                    (item) => item.phase === phase,
-                  );
-
-                  return items.length > 0 ? (
-                    <Fragment key={phase}>
-                      <section className={styles.casePhase}>
-                        <h4 className={styles.casePhaseLabel}>{label}</h4>
-                        <ul className={styles.caseEvidenceList}>
-                          {items.map((item) => (
-                            <li key={item.id} className={styles.evidenceItem}>
-                              {item.description.split("\n\n").map(
-                                (paragraph, index) => (
-                                  <p
-                                    key={paragraph}
-                                    className={`${styles.evidenceDescription} ${index > 0 ? "mt-3" : ""} text-[var(--application-app-surface-muted)]`}
-                                  >
-                                    {index === 0 && item.title ? (
-                                      <>
-                                        <strong className="font-semibold text-[var(--application-app-surface-text)]">
-                                          {item.title}
-                                        </strong>{" "}
-                                      </>
-                                    ) : null}
-                                    {paragraph}
-                                  </p>
-                                ),
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      </section>
-                      {phase === "problem" &&
-                      architecture?.sectionId === section.id
-                        ? renderArchitecture(
-                            `${section.id}-architecture`,
-                            true,
-                          )
-                        : null}
-                    </Fragment>
-                  ) : null;
-                })}
-              </div>
-            ) : (
-              <ul className={styles.evidenceList}>
-                {section.items.map((item) => (
-                  <li key={item.id} className={styles.evidenceItem}>
-                    <h4
-                      className={`${styles.evidenceTitle} font-semibold text-[var(--application-app-surface-text)]`}
-                    >
-                      {item.title}
-                    </h4>
-                    <p
-                      className={`${styles.evidenceDescription} text-[var(--application-app-surface-muted)]`}
-                    >
-                      {item.description}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <div className={styles.casePhases}>
+              {(["problem", "process", "result"] as const).map((phase) => (
+                <Fragment key={phase}>
+                  <section className={styles.casePhase}>
+                    <h4 className={styles.casePhaseLabel}>{phaseLabels[phase]}</h4>
+                    <ProjectMarkdown markdown={section.phases[phase]} language={language} openImage={openImage} />
+                  </section>
+                  {phase === "problem" && architecture?.sectionId === section.id
+                    ? renderArchitecture(`${section.id}-architecture`, openImage, true)
+                    : null}
+                </Fragment>
+              ))}
+            </div>
           </section>
         ))}
 
-        {children}
+        {walkthrough ? (
+          <section className={styles.supportingSection} aria-labelledby={`${projectId}-walkthrough-title`}>
+            <h3 id={`${projectId}-walkthrough-title`} className={`${styles.sectionTitle} font-semibold text-[var(--application-app-surface-text)]`}>{walkthrough.title}</h3>
+            <p className={`${styles.supportingText} mt-3 text-[var(--application-app-surface-muted)]`}>{walkthrough.description}</p>
+            <div className={`${styles.walkthroughMedia} mt-5`}>
+              <ProjectMarkdown markdown={walkthrough.markdown} language={language} media={walkthrough} openImage={openImage} />
+            </div>
+          </section>
+        ) : null}
 
-        <section
-          className={styles.keyOutcomeSection}
-          aria-labelledby={`${projectId}-outcome-title`}
-        >
-          <p
-            id={`${projectId}-outcome-title`}
-            className={styles.keyOutcomeLabel}
+        {keyOutcome ? (
+          <section
+            className={styles.keyOutcomeSection}
+            aria-labelledby={`${projectId}-outcome-title`}
           >
-            {keyOutcome.label}
-          </p>
-          <p className={styles.keyOutcomeValue}>{keyOutcome.value}</p>
-          {keyOutcome.description ? (
-            <p className={styles.keyOutcomeDescription}>
-              {keyOutcome.description}
+            <p
+              id={`${projectId}-outcome-title`}
+              className={styles.keyOutcomeLabel}
+            >
+              {keyOutcome.label}
             </p>
-          ) : null}
-        </section>
+            <p className={styles.keyOutcomeValue}>{keyOutcome.value}</p>
+            {keyOutcome.description ? (
+              <p className={styles.keyOutcomeDescription}>
+                {keyOutcome.description}
+              </p>
+            ) : null}
+          </section>
+        ) : null}
       </article>
     </div>
+    )}</ImageViewer>
   );
 }

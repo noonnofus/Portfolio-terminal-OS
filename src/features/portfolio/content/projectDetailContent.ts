@@ -1,105 +1,72 @@
-export type ProjectCaseStudyPhase = "problem" | "process" | "result";
+import { parseProjectMarkdown, type ProjectCaseStudySection } from "./parseProjectMarkdown";
+import { readProjectDocument } from "./projectMetadata";
+import { projectDocuments } from "./projectDocuments";
+import type { Language } from "@/lib/i18n/language";
+import type { ProjectSlug } from "@/features/portfolio/types/projectTypes";
+import type { ProjectMediaBlock, ProjectMetadata } from "./projectMetadata";
 
-export type ProjectDetailText = {
-    title: string;
-    description: string;
-};
+export type { ProjectMediaBlock } from "./projectMetadata";
 
-export type ProjectDetailItem = ProjectDetailText;
-
-export type ProjectDetailSectionSource = ProjectDetailText & {
-    items: Record<string, ProjectDetailItem>;
-};
-
-export type ProjectDetailResource = {
-    title: string;
-    summary: string;
-    stackLabel: string;
-    problemSolvingLabel: string;
-    keyOutcome: {
-        label: string;
-        value: string;
-        description?: string;
-    };
-    projectContext: Record<
-        string,
-        {
-            label: string;
-            description: string;
-        }
-    >;
-};
-
-export type ProjectCaseStudyContext = {
-    id: string;
-    label: string;
-    description: string;
-};
-
-export type ProjectCaseStudySection = {
-    id: string;
-    title: string;
-    description: string;
-    isProblemSolving?: boolean;
-    items: readonly {
-        id: string;
-        title: string;
-        description: string;
-        phase?: ProjectCaseStudyPhase;
-    }[];
-};
+export type { ProjectCaseStudyPhase, ProjectCaseStudySection } from "./parseProjectMarkdown";
 
 export type ProjectDetailPageContent = {
     title: string;
     summary: string;
+    stack: readonly string[];
     stackLabel: string;
     overviewTitle: string;
     overviewDescription: string;
-    contexts: readonly ProjectCaseStudyContext[];
-    keyOutcome: ProjectDetailResource["keyOutcome"];
+    contexts: readonly { id: string; label: string; description: string }[];
+    keyOutcome?: ProjectMetadata["keyOutcome"];
     sections: readonly ProjectCaseStudySection[];
     problemSolvingLabel: string;
+    architecture?: ProjectMediaBlock;
+    walkthrough?: ProjectMediaBlock;
 };
 
-type SectionItemSpec = {
-    id: string;
-    phase?: ProjectCaseStudyPhase;
-};
-
-type SectionSpec = {
-    id: string;
-    source: ProjectDetailSectionSource;
-    items: readonly SectionItemSpec[];
-    isProblemSolving?: boolean;
-};
-
-export function createProjectDetailPageContent(
-    resource: ProjectDetailResource,
-    overview: ProjectDetailText,
-    sections: readonly SectionSpec[],
+export function getProjectDetailPageContent(
+    slug: ProjectSlug,
+    language: Language,
 ): ProjectDetailPageContent {
+    return createProjectDetailPageContent(projectDocuments[slug][language]);
+}
+
+export function createProjectDetailPageContent(source: string): ProjectDetailPageContent {
+    const { metadata, body } = readProjectDocument(source);
+    const nodes = parseProjectBody(body);
+
     return {
-        title: resource.title,
-        summary: resource.summary,
-        stackLabel: resource.stackLabel,
-        overviewTitle: overview.title,
-        overviewDescription: overview.description,
-        contexts: Object.entries(resource.projectContext).map(
+        title: metadata.title,
+        summary: metadata.summary,
+        stack: metadata.stack,
+        stackLabel: metadata.stackLabel,
+        overviewTitle: metadata.projectIntro.title,
+        overviewDescription: metadata.projectIntro.description,
+        contexts: Object.entries(metadata.projectContext).map(
             ([id, context]) => ({ id, ...context }),
         ),
-        keyOutcome: resource.keyOutcome,
-        sections: sections.map((section) => ({
-            id: section.id,
-            title: section.source.title,
-            description: section.source.description,
-            ...(section.isProblemSolving
-                ? { isProblemSolving: true }
-                : {}),
-            items: section.items.map((item) => ({
-                ...item,
-                ...section.source.items[item.id],
-            })),
-        })),
-        problemSolvingLabel: resource.problemSolvingLabel,
+        keyOutcome: metadata.keyOutcome,
+        sections: parseProjectMarkdown(nodes.cases),
+        problemSolvingLabel: metadata.problemSolvingLabel,
+        architecture: metadata.architecture && {
+            ...metadata.architecture,
+            markdown: nodes.architecture,
+        },
+        walkthrough: metadata.walkthrough && {
+            ...metadata.walkthrough,
+            markdown: nodes.walkthrough,
+        },
     };
+}
+
+function parseProjectBody(body: string) {
+    const blocks = { architecture: "", walkthrough: "" };
+    const cases = body.replace(
+        /<!-- (architecture|walkthrough) -->\s*([\s\S]*?)\s*<!-- \/\1 -->/g,
+        (_, kind: keyof typeof blocks, markdown: string) => {
+            blocks[kind] = markdown;
+            return "";
+        },
+    );
+    return { ...blocks, cases };
 }

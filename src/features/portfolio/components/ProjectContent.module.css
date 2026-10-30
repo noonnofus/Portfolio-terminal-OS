@@ -4,8 +4,8 @@
   --app-projects-size-reading-max-width: 51.25rem;
   --app-projects-space-page-inline: 1.25rem;
   --app-projects-space-page-inline-wide: 2.5rem;
-  --app-projects-space-page-block: 2.25rem;
-  --app-projects-space-page-block-wide: 3.5rem;
+  --app-projects-space-page-block: 1.5rem;
+  --app-projects-space-page-block-wide: 2.5rem;
   --app-projects-font-size-document-title: 1.75rem;
   --app-projects-font-size-section-title: 1.125rem;
   --app-projects-font-size-reading: 0.95rem;
@@ -22,10 +22,11 @@
   --app-projects-size-tech-badge-icon: 1rem;
   --app-projects-font-size-tech-badge: var(--application-text-callout);
   --app-projects-line-height-tech-badge: 1.35;
-  --app-projects-space-section: 2.5rem;
-  --app-projects-space-section-featured: 2.5rem;
-  --app-projects-space-section-supporting: 2.25rem;
-  --app-projects-space-section-inset: 1.5rem;
+  --app-projects-space-section: 2rem;
+  --app-projects-space-section-featured: 2rem;
+  --app-projects-space-section-supporting: 1.75rem;
+  --app-projects-space-section-inset: 1rem;
+  --app-projects-space-phase: 1.5rem;
   --app-projects-space-row: 0.75rem;
   --app-projects-size-context-label: 5.25rem;
   --app-projects-font-size-context: 0.875rem;
@@ -107,7 +108,7 @@
 
 .overviewGrid {
   min-width: 0;
-  margin-top: 1.5rem;
+  margin-top: var(--app-projects-space-section-inset);
 }
 
 .caseSection {
@@ -124,8 +125,7 @@
 
 .caseArchitectureSection {
   min-width: 0;
-  margin-top: 2rem;
-  border-top: 1px solid var(--application-border);
+  margin-top: var(--app-projects-space-phase);
   padding-top: var(--app-projects-space-section-inset);
 }
 
@@ -199,14 +199,6 @@
   border-top: 1px solid var(--application-border);
 }
 
-.evidenceList {
-  display: grid;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-  padding: 0;
-  list-style: none;
-}
-
 .caseTypeLabel {
   margin-bottom: 0.5rem;
   color: var(--application-accent-text);
@@ -217,8 +209,8 @@
 
 .casePhases {
   display: grid;
-  gap: 2rem;
-  margin-top: 2rem;
+  gap: var(--app-projects-space-phase);
+  margin-top: var(--app-projects-space-phase);
 }
 
 .casePhase {
@@ -226,33 +218,66 @@
   min-width: 0;
 }
 
-.casePhase + .casePhase {
-  border-top: 1px solid var(--application-border);
-  padding-top: 1.5rem;
+.caseMarkdown {
+  min-width: 0;
+  color: var(--application-app-surface-muted);
+  font-size: var(--app-projects-font-size-reading);
+  line-height: var(--app-projects-line-height-reading);
+  overflow-wrap: anywhere;
 }
 
-.caseEvidenceList {
-  display: grid;
-  gap: 1rem;
-  margin: 0;
-  padding-left: 1.25rem;
+.caseMarkdown > * + *,
+.caseMarkdown li + li,
+.caseMarkdown li > * + * {
+  margin-top: var(--app-projects-space-row);
 }
 
-.caseEvidenceList li::marker {
+.caseMarkdown strong {
+  color: var(--application-app-surface-text);
+  font-weight: var(--application-weight-semibold);
+}
+
+.caseMarkdown ul,
+.caseMarkdown ol {
+  padding-inline-start: 1.25rem;
+}
+
+.caseMarkdown ul {
+  list-style: disc;
+}
+
+.caseMarkdown ol {
+  list-style: decimal;
+}
+
+.caseMarkdown li::marker {
   color: var(--application-accent-text);
 }
 
-.evidenceItem {
-  min-width: 0;
+.caseMarkdown a {
+  color: var(--application-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
-.evidenceTitle,
-.evidenceDescription {
-  min-width: 0;
+.caseMarkdown a:focus-visible {
+  outline: 2px solid var(--application-accent-text);
+  outline-offset: 3px;
 }
 
-.evidenceDescription {
-  margin-top: 0.5rem;
+.caseMarkdown pre {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.walkthroughMedia > div {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.walkthroughMedia > div > * {
+  margin: 0;
 }
 
 .supportingText {
