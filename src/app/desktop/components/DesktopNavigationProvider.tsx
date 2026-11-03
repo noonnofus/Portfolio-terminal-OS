@@ -18,6 +18,7 @@ import {
     hasPendingNavigationTimedOut,
     HISTORY_TRAVERSAL_TIMEOUT_MS,
 } from "@/app/desktop/lib/pendingNavigation";
+import { syncDesktopMetadata } from "@/app/desktop/lib/syncDesktopMetadata";
 import { planNavigation } from "@/app/desktop/lib/planNavigation";
 import type {
     DesktopHistoryState,
@@ -98,11 +99,12 @@ export function DesktopNavigationProvider({
         setNavigationBusy(false);
     }, []);
 
-    const executeStoreCommands = useCallback(
+    const applyNavigationCommands = useCallback(
         (commands: readonly StoreCommand[]) => {
             for (const command of commands) {
                 store.getState().dispatch(command);
             }
+            queueMicrotask(syncDesktopMetadata);
         },
         [store],
     );
@@ -140,7 +142,7 @@ export function DesktopNavigationProvider({
                 historyState,
             );
 
-            executeStoreCommands(plan.storeCommands);
+            applyNavigationCommands(plan.storeCommands);
             if (plan.languageEffect !== null) {
                 setGlobalLanguage(plan.languageEffect);
             }
@@ -213,7 +215,7 @@ export function DesktopNavigationProvider({
                             "",
                             backEffect.fallbackUrl,
                         );
-                        executeStoreCommands([
+                        applyNavigationCommands([
                             {
                                 type: "apply-url-state",
                                 view: backEffect.fallbackEntry.desktop.view,
@@ -249,7 +251,7 @@ export function DesktopNavigationProvider({
         [
             clearPending,
             clearExpiredGuard,
-            executeStoreCommands,
+            applyNavigationCommands,
             replayQueuedEvents,
             setGlobalLanguage,
             store,
@@ -304,7 +306,7 @@ export function DesktopNavigationProvider({
             canonicalUrl,
         );
         latestEntryRef.current = entry;
-        executeStoreCommands([{ type: "apply-url-state", view }]);
+        applyNavigationCommands([{ type: "apply-url-state", view }]);
         setGlobalLanguage(view.lang);
         store.getState().setUrlReady(true);
 
@@ -335,7 +337,7 @@ export function DesktopNavigationProvider({
                     "",
                     serializeDesktopUrl(expiredIntent.desktop.view),
                 );
-                executeStoreCommands([
+                applyNavigationCommands([
                     {
                         type: "apply-url-state",
                         view: expiredIntent.desktop.view,
@@ -377,7 +379,7 @@ export function DesktopNavigationProvider({
                 nextEntry,
             );
 
-            executeStoreCommands(plan.storeCommands);
+            applyNavigationCommands(plan.storeCommands);
             if (plan.languageEffect !== null) {
                 setGlobalLanguage(plan.languageEffect);
             }
@@ -425,7 +427,7 @@ export function DesktopNavigationProvider({
                 );
             }
 
-            executeStoreCommands([
+            applyNavigationCommands([
                 {
                     type: "apply-url-state",
                     view: restoredView,
@@ -451,7 +453,7 @@ export function DesktopNavigationProvider({
     }, [
         clearPending,
         clearExpiredGuard,
-        executeStoreCommands,
+        applyNavigationCommands,
         replayQueuedEvents,
         setGlobalLanguage,
         store,

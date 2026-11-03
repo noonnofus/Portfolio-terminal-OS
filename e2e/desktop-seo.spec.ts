@@ -1,0 +1,274 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { expect, test, type Page } from "@playwright/test";
+import { readProjectDocument } from "../src/features/portfolio/content/projectMetadata";
+import { projectSlugs, type ProjectSlug } from "../src/features/portfolio/types/projectTypes";
+import { languages, type Language } from "../src/lib/i18n/language";
+import { SITE_URL } from "../src/lib/seo/siteMetadata";
+
+function projectMetadata(slug: ProjectSlug, language: Language) {
+  return readProjectDocument(readFileSync(join(
+    process.cwd(), "src/features/portfolio/content/markdown", language, `${slug}.md`,
+  ), "utf8")).metadata;
+}
+
+async function readMetadata(page: Page, html: string) {
+  return page.evaluate((markup) => {
+    const doc = new DOMParser().parseFromString(markup, "text/html");
+    const meta = (selector: string) => Array.from(
+      doc.querySelectorAll<HTMLMetaElement>(selector), (node) => node.content,
+    );
+    const links = (selector: string) => Array.from(
+      doc.querySelectorAll(selector), (node) => node.getAttribute("href"),
+    );
+
+    return {
+      titles: Array.from(doc.querySelectorAll("title"), (node) => node.textContent),
+      descriptions: meta('meta[name="description"]'),
+      canonicals: links('link[rel="canonical"]'),
+      ko: links('link[rel="alternate"][hreflang="ko"]'),
+      en: links('link[rel="alternate"][hreflang="en"]'),
+      ogTitles: meta('meta[property="og:title"]'),
+      ogDescriptions: meta('meta[property="og:description"]'),
+      ogUrls: meta('meta[property="og:url"]'),
+      twitterTitles: meta('meta[name="twitter:title"]'),
+      twitterDescriptions: meta('meta[name="twitter:description"]'),
+      robots: meta('meta[name="robots"]'),
+      headCanonicalCount: doc.head.querySelectorAll('link[rel="canonical"]').length,
+    };
+  }, html);
+}
+
+function expectProjectMetadata(
+  actual: Awaited<ReturnType<typeof readMetadata>>,
+  slug: ProjectSlug,
+  language: Language,
+) {
+  const project = projectMetadata(slug, language);
+  const title = `${project.title} | ${language === "ko" ? "김현호" : "Hyunho Kim"}`;
+  const path = `${language === "ko" ? "/desktop" : "/en/desktop"}?app=project&slug=${slug}`;
+
+  expect(actual).toMatchObject({
+    titles: [title],
+    descriptions: [project.summary],
+    canonicals: [`${SITE_URL}${path}`],
+    ko: [`${SITE_URL}/desktop?app=project&slug=${slug}`],
+    en: [`${SITE_URL}/en/desktop?app=project&slug=${slug}`],
+    ogTitles: [title],
+    ogDescriptions: [project.summary],
+    ogUrls: [`${SITE_URL}${path}`],
+    twitterTitles: [title],
+    twitterDescriptions: [project.summary],
+  });
+}
+
+test.describe("Desktop server metadata", () => {
+  for (const language of languages) {
+    test(`publishes every ${language} project in the initial HTML for sharing`, async ({ page, request }) => {
+      for (const slug of projectSlugs) {
+        const path = language === "ko" ? "/desktop" : "/en/desktop";
+        const response = await request.get(`${path}?app=project&slug=${slug}`, {
+          headers: { "User-Agent": "facebookexternalhit/1.1" },
+        });
+        expect(response.status()).toBe(200);
+        const actual = await readMetadata(page, await response.text());
+        expectProjectMetadata(actual, slug, language);
+        expect(actual.headCanonicalCount).toBe(1);
+      }
+    });
+
+    test(`renders the ${language} project with its request metadata`, async ({ page }) => {
+      const path = language === "ko" ? "/desktop" : "/en/desktop";
+      await page.goto(`${path}?app=project&slug=kepco`);
+      const project = projectMetadata("kepco", language);
+      await expect(page).toHaveTitle(`${project.title} | ${language === "ko" ? "김현호" : "Hyunho Kim"}`);
+      await expect(page.getByRole("dialog", { name: project.title, exact: true })).toBeVisible();
+      expectProjectMetadata(await readMetadata(page, await page.content()), "kepco", language);
+    });
+  }
+
+  for (const userAgent of ["Mozilla/5.0", "Googlebot"]) {
+    test(`includes metadata in the full response for ${userAgent}`, async ({ page, request }) => {
+      const response = await request.get("/desktop?app=project&slug=kepco&utm_source=shared", {
+        headers: { "User-Agent": userAgent },
+      });
+      expect(response.status()).toBe(200);
+      expectProjectMetadata(await readMetadata(page, await response.text()), "kepco", "ko");
+    });
+  }
+
+  test("preserves entry metadata, Desktop defaults and the auth noindex", async ({ page, request }) => {
+    for (const [path, canonical] of [
+      ["/", SITE_URL],
+      ["/en", `${SITE_URL}/en`],
+      ["/desktop", `${SITE_URL}/desktop`],
+      ["/en/desktop", `${SITE_URL}/en/desktop`],
+      ["/desktop?app=project&slug=missing", `${SITE_URL}/desktop`],
+    ]) {
+      const response = await request.get(path, { headers: { "User-Agent": "facebookexternalhit/1.1" } });
+      expect(response.status()).toBe(200);
+      const actual = await readMetadata(page, await response.text());
+      expect(actual.titles).toHaveLength(1);
+      expect(actual.canonicals).toEqual([canonical]);
+    }
+
+    const response = await request.get("/auth/auth-error");
+    expect(response.status()).toBe(200);
+    const actual = await readMetadata(page, await response.text());
+    expect(actual.robots).toEqual(["noindex, nofollow"]);
+  });
+});
+
+async function expectCurrentProjectMetadata(
+  page: Page,
+  slug: ProjectSlug,
+  language: Language,
+) {
+  await expect(async () => {
+    expectProjectMetadata(await readMetadata(page, await page.content()), slug, language);
+    await expect(page.locator('meta[property="og:image"]')).toHaveCount(1);
+    await expect(page.locator('meta[name="twitter:image"]')).toHaveCount(1);
+    const locale = page.locator('meta[property="og:locale"]');
+    await expect(locale).toHaveCount(1);
+    await expect(locale).toHaveAttribute("content", language === "ko" ? "ko_KR" : "en_US");
+  }).toPass({ timeout: 5000 });
+}
+
+test("keeps project metadata and Desktop entries through back and forward", async ({ page }) => {
+  await page.goto("/desktop?app=project&slug=kepco");
+  const kepco = page.getByRole("dialog", {
+    name: projectMetadata("kepco", "ko").title,
+    exact: true,
+  });
+  await expect(kepco).toBeVisible();
+  await expectCurrentProjectMetadata(page, "kepco", "ko");
+  await kepco.evaluate((node) => node.setAttribute("data-seo-runtime", "preserved"));
+  const kepcoEntry = await page.evaluate(() => JSON.stringify(window.history.state.desktop));
+
+  await page.getByRole("navigation", { name: "Applications" })
+    .getByRole("button", { name: "프로젝트", exact: true }).click();
+  await page.getByRole("button", { name: "WCHMS 프로젝트 열기", exact: true }).dblclick();
+  await expect(page).toHaveURL(/app=project&slug=wchms$/);
+  await expectCurrentProjectMetadata(page, "wchms", "ko");
+  const wchmsEntry = await page.evaluate(() => JSON.stringify(window.history.state.desktop));
+
+  await page.goBack();
+  await expect(page).toHaveURL(/app=projects$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/app=project&slug=kepco$/);
+  await expectCurrentProjectMetadata(page, "kepco", "ko");
+  expect(await page.evaluate(() => JSON.stringify(window.history.state.desktop))).toBe(kepcoEntry);
+  await expect(kepco).toHaveAttribute("data-seo-runtime", "preserved");
+
+  await page.goForward();
+  await expect(page).toHaveURL(/app=projects$/);
+  await page.goForward();
+  await expect(page).toHaveURL(/app=project&slug=wchms$/);
+  await expectCurrentProjectMetadata(page, "wchms", "ko");
+  expect(await page.evaluate(() => JSON.stringify(window.history.state.desktop))).toBe(wchmsEntry);
+});
+
+for (const delayed of [false, true]) {
+  test(`normalizes persisted language with delayed scripts=${delayed}`, async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem("desktop:preferences", JSON.stringify({
+      version: 1, preferences: { language: "en", wallpaper: "golden_gate_light", dockAutoHide: false },
+    })));
+    if (delayed) {
+      await page.route("**/*.js*", async route => {
+        await new Promise(resolve => setTimeout(resolve, 150));
+        await route.continue();
+      });
+    }
+    await page.goto("/desktop?app=project&slug=kepco", { waitUntil: "commit" });
+    await expect(page).toHaveURL(/\/en\/desktop\?app=project&slug=kepco$/);
+    await expectCurrentProjectMetadata(page, "kepco", "en");
+    await page.waitForLoadState("load");
+    await expectCurrentProjectMetadata(page, "kepco", "en");
+  });
+}
+
+test("restores project metadata on persisted pageshow", async ({ page }) => {
+  await page.goto("/desktop?app=project&slug=kepco");
+  await expectCurrentProjectMetadata(page, "kepco", "ko");
+  await page.evaluate(() => {
+    window.history.replaceState(window.history.state, "", "/en/desktop?app=project&slug=wchms");
+    window.dispatchEvent(new PageTransitionEvent("pageshow", { persisted: true }));
+  });
+  await expectCurrentProjectMetadata(page, "wchms", "en");
+});
+
+for (const action of ["close", "minimize"]) {
+  test(`updates default metadata after project ${action}`, async ({ page }) => {
+    await page.goto("/desktop?app=project&slug=kepco");
+    const dialog = page.getByRole("dialog", { name: projectMetadata("kepco", "ko").title, exact: true });
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole("button", { name: `${projectMetadata("kepco", "ko").title} ${action}`, exact: true }).click();
+    await expect(page).not.toHaveURL(/app=project&slug=kepco/);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `${SITE_URL}/desktop`);
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", `${SITE_URL}/desktop`);
+  });
+}
+
+for (const queued of [false, true]) {
+  test(`handles back timeout and late popstate with queued navigation=${queued}`, async ({ page }) => {
+    await page.goto("/desktop?app=projects");
+    await page.getByRole("button", { name: "한국전력 상담 어드바이저 프로젝트 열기", exact: true }).dblclick();
+    await expectCurrentProjectMetadata(page, "kepco", "ko");
+    const stale = await page.evaluate(() => {
+      window.history.back = () => undefined;
+      return window.history.state;
+    });
+    const dialog = page.getByRole("dialog", { name: projectMetadata("kepco", "ko").title, exact: true });
+    await dialog.getByRole("button", { name: `${projectMetadata("kepco", "ko").title} close`, exact: true }).click();
+    if (queued) {
+      await page.getByRole("navigation", { name: "Applications" }).getByRole("button", { name: "설정", exact: true }).click();
+    }
+    await expect(page).toHaveURL(queued ? /app=settings$/ : /app=projects$/);
+    const restoredEntry = await page.evaluate(() => JSON.stringify(window.history.state.desktop));
+    await page.evaluate(state => window.dispatchEvent(new PopStateEvent("popstate", { state })), stale);
+    await expect(page).toHaveURL(queued ? /app=settings$/ : /app=projects$/);
+    expect(await page.evaluate(() => JSON.stringify(window.history.state.desktop))).toBe(restoredEntry);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `${SITE_URL}/desktop`);
+  });
+}
+
+test("changes language and preserves the running terminal", async ({ page }) => {
+  await page.goto("/desktop?app=terminal");
+  const terminal = page.locator('[data-window-id="terminal"] .xterm').first();
+  await expect(terminal).toBeVisible();
+  await terminal.evaluate(node => node.setAttribute("data-seo-runtime", "preserved"));
+  const input = page.locator('[data-window-id="terminal"] .xterm-helper-textarea');
+  await input.focus();
+  await page.keyboard.press("Space");
+  await page.keyboard.type("seo-preserved-input");
+  const rows = page.locator('[data-window-id="terminal"] .xterm-rows');
+  await expect(rows).toContainText("seo-preserved-input");
+  const dock = page.getByRole("navigation", { name: "Applications" });
+  await dock.getByRole("button", { name: "프로젝트", exact: true }).click();
+  await page.getByRole("button", { name: "WCHMS 프로젝트 열기", exact: true }).dblclick();
+  await expectCurrentProjectMetadata(page, "wchms", "ko");
+  await dock.getByRole("button", { name: "터미널", exact: true }).click();
+  await expect(rows).toContainText("seo-preserved-input");
+  await dock.getByRole("button", { name: "설정", exact: true }).click();
+  const settings = page.getByRole("dialog", { name: "설정", exact: true });
+  await settings.getByRole("button", { name: "일반", exact: true }).click();
+  await settings.getByRole("button", { name: "English", exact: true }).click();
+  await dock.getByRole("button", { name: "Projects", exact: true }).click();
+  await page.getByRole("button", { name: "WCHMS open project", exact: true }).dblclick();
+  await expectCurrentProjectMetadata(page, "wchms", "en");
+  await dock.getByRole("button", { name: "Terminal", exact: true }).click();
+  await expect(terminal).toHaveAttribute("data-seo-runtime", "preserved");
+  // Language changes intentionally replay the existing terminal boot sequence.
+});
+
+test("restores metadata after a real document traversal", async ({ page }) => {
+  await page.addInitScript(() => window.addEventListener("pageshow", event => {
+    document.documentElement.dataset.seoPersisted = String(event.persisted);
+  }));
+  await page.goto("/desktop?app=project&slug=kepco");
+  await expectCurrentProjectMetadata(page, "kepco", "ko");
+  await page.goto("about:blank");
+  await page.goBack();
+  await expectCurrentProjectMetadata(page, "kepco", "ko");
+  test.info().annotations.push({ type: "BFCache persisted", description: String(await page.locator("html").getAttribute("data-seo-persisted")) });
+});

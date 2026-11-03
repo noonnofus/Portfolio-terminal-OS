@@ -1,10 +1,8 @@
 import { ImageResponse } from "next/og";
+import { SOCIAL_IMAGE } from "@/lib/seo/siteMetadata";
 
-export const alt = "Hyunho Kim, Software Engineer Portfolio";
-export const size = {
-  width: 1200,
-  height: 630,
-};
+export const alt = SOCIAL_IMAGE.alt;
+export const size = { width: SOCIAL_IMAGE.width, height: SOCIAL_IMAGE.height };
 export const contentType = "image/png";
 
 export default function OpenGraphImage() {

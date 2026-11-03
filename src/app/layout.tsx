@@ -3,7 +3,10 @@ import "./globals.css";
 import "@xterm/xterm/css/xterm.css";
 import ClientProvider from "./ClientProvider";
 import { DEFAULT_LANGUAGE } from "@/lib/i18n/language";
+
 import {
+  SEO_COPY,
+  SHARED_SOCIAL_METADATA,
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_URL,
@@ -13,39 +16,24 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: SITE_NAME,
-    template: "김현호 | %s",
+    template: `${SEO_COPY.ko.authorName} | %s`,
   },
   description: SITE_DESCRIPTION,
-  alternates: {
-    canonical: "/",
-    languages: {
-      ko: "/",
-      en: "/en",
-    },
-  },
+  alternates: { canonical: "/", languages: { ko: "/", en: "/en" } },
   openGraph: {
-    type: "website",
-    locale: "ko_KR",
+    ...SHARED_SOCIAL_METADATA.openGraph,
+    locale: SEO_COPY.ko.locale,
     url: "/",
-    siteName: "Hyunho Kim Portfolio",
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "Hyunho Kim, Software Engineer Portfolio",
-      },
-    ],
   },
   twitter: {
-    card: "summary_large_image",
+    ...SHARED_SOCIAL_METADATA.twitter,
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: ["/opengraph-image"],
   },
 };
+
 
 export default function RootLayout({
   children,
