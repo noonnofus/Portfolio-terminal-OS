@@ -52,7 +52,9 @@ jobs:
         run: npm run lint
 
       - name: Typecheck
-        run: npx tsc --noEmit --pretty false
+        run: |
+          npx next typegen
+          npx tsc --noEmit --pretty false
 
       - name: Unit tests
         run: npm test
