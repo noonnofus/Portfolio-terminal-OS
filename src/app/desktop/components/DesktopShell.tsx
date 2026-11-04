@@ -59,7 +59,7 @@ export function DesktopShell() {
         <div inert={fullscreenWindowId !== null ? true : undefined}>
           <DesktopShortcuts />
         </div>
-        {initialView.app === "project" || initialView.app === "projects" || urlReady ? <DesktopWindowLayer /> : null}
+        {initialView.app === "project" || initialView.app === "projects" || initialView.app === "about" || urlReady ? <DesktopWindowLayer /> : null}
         <DesktopDock />
         <div aria-hidden="true" className="application-dock-bottom-edge" />
       </div>

@@ -293,7 +293,8 @@ export function DesktopNavigationProvider({
         latestEntryRef.current = entry;
         const sameInitialWindow = (initialView.app === "project" &&
             view.app === "project" && initialView.slug === view.slug) ||
-            (initialView.app === "projects" && view.app === "projects");
+            (initialView.app === "projects" && view.app === "projects") ||
+            (initialView.app === "about" && view.app === "about");
         applyNavigationCommands(sameInitialWindow ? [] : [{ type: "apply-url-state", view }]);
         setGlobalLanguage(view.lang);
 

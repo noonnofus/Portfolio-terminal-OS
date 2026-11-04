@@ -1,6 +1,7 @@
 "use client";
 
 import { useDesktopInitialView } from "@/app/desktop/store/DesktopStoreProvider";
+import AboutApp from "@/features/portfolio/apps/about/AboutApp";
 import { ProjectCaseStudyPage } from "@/features/portfolio/components/ProjectCaseStudyPage";
 import { getProjectDetailPageContent } from "@/features/portfolio/content/projectDetailContent";
 import { appLoaderRegistry } from "@/app/desktop/lib/appLoaderRegistry";
@@ -20,6 +21,10 @@ export function DesktopAppRenderer({
     language: Language;
 }) {
     const initialView = useDesktopInitialView();
+    // ponytail: reuse the requested About UI outside the dynamic streaming fallback.
+    if (initialView.app === "about" && appId === "about") {
+        return <AboutApp language={language} />;
+    }
     // Keep the requested article outside the dynamic loader's streaming fallback.
     if (initialView.app === "project" && appId === `project:${initialView.slug}`) {
         return <ProjectCaseStudyPage

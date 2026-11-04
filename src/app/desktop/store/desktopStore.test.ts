@@ -9,6 +9,17 @@ describe("Desktop store", () => {
         expect(store.getInitialState().urlReady).toBe(false);
     });
     for (const lang of ["ko", "en"] as const) {
+        it(`seeds the ${lang} About window in SSR and live snapshots`, () => {
+            const store = createDesktopStore(undefined, { app: "about", lang });
+            for (const state of [store.getInitialState(), store.getState()]) {
+                expect(state.windows).toEqual([{
+                    windowId: "about", appId: "about", minimized: false, activationOrder: 1,
+                }]);
+                expect(state.focus).toEqual({ mode: "windows", activeWindowId: "about" });
+                expect(state.activationSequence).toBe(1);
+                expect(state.urlReady).toBe(false);
+            }
+        });
         for (const slug of ["portfolio", "optigen", "mcp", "voice-gateway", "kepco", "wchms", "flare"] as const) {
             it(`seeds both SSR and live snapshots for ${lang}/${slug}`, () => {
                 const store = createDesktopStore(undefined, { app: "project", slug, lang });

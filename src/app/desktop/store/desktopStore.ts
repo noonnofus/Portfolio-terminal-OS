@@ -119,8 +119,8 @@ export function createDesktopStore(
         ...initialState,
         ...(initialView?.app === "project"
             ? activateApp(initialState, `project:${initialView.slug}`)
-            : initialView?.app === "projects"
-            ? activateApp(initialState, "projects")
+            : initialView?.app === "projects" || initialView?.app === "about"
+            ? activateApp(initialState, initialView.app)
             : {}),
         setViewer: (viewer) => set({ viewer }),
         dispatch: (command) =>

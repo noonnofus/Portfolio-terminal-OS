@@ -7,6 +7,7 @@ import { languages, type Language } from "../src/lib/i18n/language";
 import { SITE_URL } from "../src/lib/seo/siteMetadata";
 import koPortfolio from "../src/features/portfolio/i18n/ko/PortfolioContent.json";
 import enPortfolio from "../src/features/portfolio/i18n/en/PortfolioContent.json";
+import { DEFAULT_UI_PREFERENCES, encodeUiPreferences, UI_PREFERENCES_COOKIE } from "../src/lib/preferences/uiPreferences";
 
 function projectMetadata(slug: ProjectSlug, language: Language) {
   return readProjectDocument(readFileSync(join(
@@ -279,7 +280,7 @@ test("restores metadata after a real document traversal", async ({ page }) => {
 
 
 test.describe("Desktop project body without JavaScript", () => {
-  test.use({ javaScriptEnabled: false });
+  test.use({ javaScriptEnabled: false, viewport: { width: 320, height: 844 } });
   for (const language of languages) {
     for (const slug of projectSlugs) {
       test(`${language}/${slug} provides a visible article in server HTML`, async ({ page }) => {
@@ -294,6 +295,9 @@ test.describe("Desktop project body without JavaScript", () => {
         await expect(article).toContainText(project.summary);
         expect(await article.locator("h3").count()).toBeGreaterThan(0);
         await expect(page.locator('[data-app-type="project"]')).toHaveCount(1);
+        const box = await page.locator('[data-app-type="project"]').boundingBox();
+        expect(box!.x).toBeGreaterThanOrEqual(0);
+        expect(box!.x + box!.width).toBeLessThanOrEqual(320);
       });
     }
   }
@@ -384,7 +388,7 @@ async function expectCurrentProfile(page: Page, language: Language) {
 }
 
 test.describe("Desktop profile JSON-LD server HTML", () => {
-  test.use({ javaScriptEnabled: false });
+  test.use({ javaScriptEnabled: false, viewport: { width: 320, height: 844 } });
   for (const language of languages) {
     test(`includes exactly one ${language} profile before JavaScript`, async ({ page }) => {
       const path = language === "ko" ? "/desktop" : "/en/desktop";
@@ -394,6 +398,19 @@ test.describe("Desktop profile JSON-LD server HTML", () => {
         const script = page.locator('script[type="application/ld+json"]');
         await expect(script).toHaveCount(1);
         expectProfile(JSON.parse(await script.textContent() ?? ""), language);
+        const content = language === "ko" ? koPortfolio : enPortfolio;
+        const article = page.locator('[data-window-id="about"] article');
+        await expect(article).toBeVisible();
+        await expect(article).toHaveAttribute("lang", language);
+        for (const paragraph of content.profile.summary) {
+          await expect(article).toContainText(paragraph);
+        }
+        await expect(article).toContainText(content.experience[0].title);
+        await expect(article).toContainText(content.education[0].institution);
+        await expect(page.locator('[data-window-id="about"]')).toHaveCount(1);
+        const box = await page.locator('[data-window-id="about"]').boundingBox();
+        expect(box!.x).toBeGreaterThanOrEqual(0);
+        expect(box!.x + box!.width).toBeLessThanOrEqual(320);
       }
     });
 
@@ -423,6 +440,10 @@ test.describe("Desktop profile JSON-LD server HTML", () => {
     const script = page.locator('script[type="application/ld+json"]');
     await expect(script).toHaveCount(1);
     expectProfile(JSON.parse(await script.textContent() ?? ""), "en");
+    const article = page.locator('[data-window-id="about"] article');
+    await expect(article).toBeVisible();
+    await expect(article).toHaveAttribute("lang", "en");
+    await expect(article).toContainText(enPortfolio.profile.summary[0]);
   });
 });
 
@@ -469,27 +490,73 @@ test("Desktop profile JSON-LD changes language and restores on persisted pagesho
   await expectCurrentProfile(page, "ko");
 });
 
-test("Desktop profile JSON-LD survives delayed hydration without duplication", async ({ page }) => {
-  await page.route("**/api/auth/viewer", route => route.fulfill({ status: 200, json: { status: "guest" } }));
-  let releaseScripts!: () => void;
-  const ready = new Promise<void>(resolve => { releaseScripts = resolve; });
-  await page.route("**/*.js*", async route => {
-    await ready;
-    await route.continue();
-  });
-  const errors: string[] = [];
-  page.on("pageerror", error => errors.push(error.message));
-  page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
-  try {
-    await page.goto("/en/desktop", { waitUntil: "commit" });
-    const script = page.locator('script[type="application/ld+json"]');
-    await expect(script).toHaveCount(1);
-    expectProfile(JSON.parse(await script.textContent() ?? ""), "en");
-    releaseScripts();
-    await expectCurrentProfile(page, "en");
-    await expect(script).toHaveCount(1);
-    expect(errors).toEqual([]);
-  } finally {
-    releaseScripts();
+for (const language of languages) {
+  for (const width of [320, 390, 1440]) {
+    test(`Desktop profile JSON-LD and About HTML survive delayed hydration (${language}, ${width}px)`, async ({ page, context, baseURL }) => {
+      await page.setViewportSize({ width, height: 844 });
+      await context.addCookies([{
+        name: UI_PREFERENCES_COOKIE,
+        value: encodeUiPreferences({ ...DEFAULT_UI_PREFERENCES, colorMode: width === 390 ? "dark" : "light", wallpaper: "tahoe_dark" }),
+        url: baseURL!,
+      }]);
+      await page.addInitScript(() => localStorage.setItem("desktop:preferences", JSON.stringify({
+        version: 1, preferences: { language: "en", wallpaper: "golden_gate_light", dockAutoHide: false },
+      })));
+      await page.route("**/api/auth/viewer", route => route.fulfill({ status: 200, json: { status: "guest" } }));
+      let releaseScripts!: () => void;
+      const ready = new Promise<void>(resolve => { releaseScripts = resolve; });
+      await page.route("**/*.js*", async route => {
+        await ready;
+        await route.continue();
+      });
+      const errors: string[] = [];
+      page.on("pageerror", error => errors.push(error.message));
+      page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
+      try {
+        await page.goto(language === "ko" ? "/desktop" : "/en/desktop", { waitUntil: "commit" });
+        const script = page.locator('script[type="application/ld+json"]');
+        await expect(script).toHaveCount(1);
+        expectProfile(JSON.parse(await script.textContent() ?? ""), language);
+        const about = page.locator('[data-window-id="about"]');
+        const article = about.locator("article");
+        await expect(article).toBeVisible();
+        await expect(article).toHaveAttribute("lang", language);
+        const content = language === "ko" ? koPortfolio : enPortfolio;
+        await expect(article).toContainText(content.profile.summary[0]);
+        await expect(about.getByRole("button").first()).toBeDisabled();
+        const initialArticle = await article.elementHandle();
+        const tab = article.getByRole("tab").first();
+        await tab.focus();
+        const before = await about.boundingBox();
+        expect(before!.x).toBeGreaterThanOrEqual(0);
+        expect(before!.x + before!.width).toBeLessThanOrEqual(width);
+        const background = await about.evaluate(node => getComputedStyle(node).backgroundColor);
+        expect(background).not.toBe("rgba(0, 0, 0, 0)");
+        await expect(page.locator(".application-shell")).toHaveAttribute("data-wallpaper", "tahoe_dark");
+        const historyLength = await page.evaluate(() => history.length);
+        releaseScripts();
+        await expect(about.getByRole("button").first()).toBeEnabled();
+        await expectCurrentProfile(page, language);
+        await expect(script).toHaveCount(1);
+        await expect(page.locator('[data-window-id="about"]')).toHaveCount(1);
+        expect(await article.evaluate((node, initial) => node.isSameNode(initial), initialArticle)).toBe(true);
+        expect(await page.evaluate(() => history.length)).toBe(historyLength);
+        const after = await about.boundingBox();
+        expect(after!.x).toBeGreaterThanOrEqual(0);
+        expect(after!.x + after!.width).toBeLessThanOrEqual(width);
+        for (const key of ["x", "y", "width", "height"] as const) {
+          expect(Math.abs(after![key] - before![key])).toBeLessThan(1);
+        }
+        expect(await about.evaluate(node => getComputedStyle(node).backgroundColor)).toBe(background);
+        await expect(tab).toBeFocused();
+        await page.keyboard.press("ArrowRight");
+        await expect(article.getByRole("tab").nth(1)).toBeFocused();
+        await expect(article.getByRole("tab").nth(1)).toHaveAttribute("aria-selected", "true");
+        await expect(article.getByRole("tabpanel")).toContainText("TanStack Query");
+        expect(errors).toEqual([]);
+      } finally {
+        releaseScripts();
+      }
+    });
   }
-});
+}

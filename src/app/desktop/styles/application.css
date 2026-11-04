@@ -1,7 +1,7 @@
 /* Hallmark: design-system = The Evidence Desktop; target = Desktop shell */
 /* Shared OS application-shell styles. */
 .application-shell {
-  --application-window-min-width: 360px;
+  --application-window-min-width: min(360px, 100vw);
   position: relative;
   min-height: 100dvh;
   overflow: hidden;
