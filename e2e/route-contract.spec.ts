@@ -106,7 +106,7 @@ test.describe("route compatibility", () => {
                 slug: "kepco",
                 dialog: "한국전력 상담 어드바이저",
                 diagram:
-                    "여러 탭의 서버 갱신 요청을 Web Lock으로 직렬화하고 BroadcastChannel로 새 Access Token을 공유하는 흐름도",
+                    "프론트엔드 담당 영역과 API, Redis, 데이터베이스 및 외부 연동을 구분하고 실시간 전사, 분석과 배치 흐름을 보여주는 한국전력 상담 어드바이저 시스템 아키텍처",
             },
             {
                 slug: "voice-gateway",
@@ -200,7 +200,7 @@ test.describe("route compatibility", () => {
                 const project = page.locator(`[data-window-id="project:${projectSlug}"]`);
                 const opener = project.getByRole("button", {
                     name: language === "ko" ? /^이미지 크게 보기:/ : /^View larger image:/,
-                });
+                }).first();
                 const preview = project.getByRole("dialog");
                 const close = preview.getByRole("button", {
                     name: language === "ko" ? "확대 이미지 닫기" : "Close enlarged image",
@@ -342,7 +342,7 @@ test.describe("route compatibility", () => {
 
     }
 
-    test("KEPCO case diagram stays with its problem-solving case", async ({
+    test("KEPCO authentication diagram stays with its case", async ({
         page,
     }) => {
         await page.setViewportSize({ width: 390, height: 844 });
@@ -354,34 +354,16 @@ test.describe("route compatibility", () => {
         const authenticationCase = dialog.locator(
             'section[aria-labelledby="kepco-multiTabAuth-title"]',
         );
-        const problemHeading = authenticationCase.getByRole("heading", {
-            name: "개요", exact: true,
-        });
-        const diagram = dialog.getByRole("region", {
-            name: "다이어그램 가로 스크롤 영역",
+        const overview = authenticationCase.locator('section[class*="casePhase"]').first();
+        const diagram = overview.getByRole("img", {
+            name: "여러 탭의 서버 갱신 요청을 Web Lock으로 직렬화하고 BroadcastChannel로 새 Access Token을 공유하는 흐름도",
         });
 
-        await expect(problemHeading).toBeVisible();
+        await expect(overview.getByRole("heading", { name: "개요", exact: true })).toBeVisible();
         await expect(diagram).toBeVisible();
-        await expect(
-            diagram.getByRole("img", {
-                name: "여러 탭의 서버 갱신 요청을 Web Lock으로 직렬화하고 BroadcastChannel로 새 Access Token을 공유하는 흐름도",
-            }),
-        ).toBeVisible({ timeout: 15000 });
-        await expect(diagram).toHaveAttribute("tabindex", "0");
-        const headingOrder = await authenticationCase
-            .locator("h3, h4")
-            .allTextContents();
-        expect(headingOrder.indexOf("개요")).toBeLessThan(
-            headingOrder.indexOf(
-                "멀티탭 토큰 갱신의 요청 직렬화와 결과 공유를 분리했습니다.",
-            ),
-        );
-        await expect(
-            diagram.evaluate(
-                (element) => element.scrollWidth > element.clientWidth,
-            ),
-        ).resolves.toBe(true);
+        await expect(diagram).toHaveAttribute("src", "/diagrams/kepco-token-refresh-ko.svg");
+        await expect(overview.getByRole("button", { name: /^이미지 크게 보기:/ })).toHaveCount(1);
+        await expect(authenticationCase.locator('img[src*="kepco-system-architecture"]')).toHaveCount(0);
     });
 
     test("project detail applies the reading typography tokens", async ({
@@ -398,6 +380,7 @@ test.describe("route compatibility", () => {
         await expect(
             article.getByRole("heading", {
                 name: "한국전력 상담 어드바이저",
+                exact: true,
             }),
         ).toHaveCSS("font-size", "32px");
         await expect(
@@ -425,8 +408,8 @@ test.describe("route compatibility", () => {
             article.locator('dl[class*="contextList"]'),
         ).toHaveCSS("border-bottom-width", "1px");
         await expect(
-            article.locator('section[class*="caseArchitectureSection"]'),
-        ).toHaveCSS("border-top-width", "0px");
+            article.locator('section[class*="architectureSection"]'),
+        ).toHaveCSS("border-top-width", "1px");
 
         await page.goto("/desktop?app=project&slug=wchms");
         const wchmsArticle = page
@@ -449,8 +432,8 @@ test.describe("route compatibility", () => {
                 slug: "kepco",
                 dialog: "한국전력 상담 어드바이저",
                 heading:
-                    "멀티탭 인증과 비활성 로그아웃 동기화",
-                outcome: "전체 상담사의 60% 사용, 고객 평균 대기 시간 30% 감소",
+                    "멀티탭 인증과 세션 관리 안정화",
+                outcome: /상담사의 약 60%가 서비스를 사용했으며.*30%/,
                 caseCount: 3,
             },
             {
@@ -545,7 +528,7 @@ test.describe("route compatibility", () => {
             ).toBeVisible();
             await expect(
                 dialog.getByRole("region", { name: "주요 성과", exact: true }),
-            ).toHaveCount(project.slug === "kepco" ? 1 : 0);
+            ).toHaveCount(0);
             if (project.slug === "wchms" || project.slug === "flare") {
                 const players = dialog.locator("video");
                 await expect(players).toHaveCount(project.slug === "flare" ? 2 : 1);
@@ -618,7 +601,13 @@ test.describe("route compatibility", () => {
             ).toHaveCount(caseCount);
             await expect(
                 dialog.getByRole("region", { name: "Project outcomes", exact: true }),
-            ).toHaveCount(slug === "kepco" ? 1 : 0);
+            ).toHaveCount(0);
+            if (slug === "kepco") {
+                const overview = dialog.locator('section[aria-labelledby="kepco-overview-title"]');
+                await expect(overview).toContainText("60%");
+                await expect(overview).toContainText("30%");
+                await expect(overview).toContainText("live wait-time readings");
+            }
         }
     });
 

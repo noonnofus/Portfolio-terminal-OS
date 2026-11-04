@@ -60,9 +60,7 @@ describe("project detail content", () => {
                     }
                 }
                 expect(page.contexts).toHaveLength(3);
-                expect(page.keyOutcome !== undefined).toBe(
-                    getProjectContent === getKepcoProjectContent,
-                );
+                expect(page.keyOutcome).toBeUndefined();
                 expect(page.sections.length).toBeGreaterThan(0);
                 expect(
                     page.sections.every(
@@ -77,7 +75,7 @@ describe("project detail content", () => {
         }
     });
 
-    it("uses the multi-tab broadcast case and preserves KEPCO operating outcomes", () => {
+    it("keeps KEPCO operating outcomes in the overview", () => {
         for (const language of ["ko", "en"] as const) {
             const { page } = getKepcoProjectContent(language);
 
@@ -91,12 +89,14 @@ describe("project detail content", () => {
             );
             expect(authSection?.phases.process).toContain("BroadcastChannel");
             expect(authSection?.phases.process).toContain("Web Lock");
-            expect(page.keyOutcome?.value).toBe(
-                language === "ko"
-                    ? "전체 상담사의 60% 사용, 고객 평균 대기 시간 30% 감소"
-                    : "Used by 60% of agents, with average customer wait time reduced by 30%",
+            expect(page.keyOutcome).toBeUndefined();
+            expect(page.overviewDescription).toContain("60%");
+            expect(page.overviewDescription).toContain("30%");
+            expect(page.overviewDescription).toContain(
+                language === "ko" ? "실시간 대기 시간 표시값" : "live wait-time readings",
             );
-            expect(page.architecture?.markdown).toContain("BroadcastChannel");
+            expect(page.architecture?.markdown).toContain(`kepco-system-architecture-${language}.svg`);
+            expect(authSection?.phases.problem).toContain(`kepco-token-refresh-${language}.svg`);
         }
     });
 

@@ -3,16 +3,16 @@ title: Korea Electric Power Contact Center Advisor
 stackLabel: Technology stack
 problemSolvingLabel: Selected work
 summary: An internal contact-center service connecting live transcripts, post-call AI analysis, and call history. I owned frontend design and implementation for agents and administrators, incorporating feedback from the pilot operation.
-keyOutcome:
-  label: Project outcomes
-  value: Used by 60% of agents, with average customer wait time reduced by 30%
-  description: These are operating outcomes for the advisor service as a whole, including live transcription, AI analysis, and consultation history.
 projectIntro:
   title: Project overview
   description: |-
-    I designed and implemented the frontend for agents and administrators at Korea Electric Power’s contact center. Agents can follow live transcripts and call state, then review recordings, AI analysis, and consultation history. Administrators can inspect consultations and find individual agents.
+    An internal web service for Korea Electric Power’s contact center, where agents follow live transcripts, review post-call AI analysis and consultation history, and administrators monitor ongoing consultations.
 
-    I implemented polling/SSE transitions, transcript recovery, recording synchronization, and multi-tab authentication. I also supported the pilot on site and used feedback to improve agent-search and favorites API integration and failure handling.
+    I owned frontend design and implementation for agents and administrators. I connected call detection, live transcription, analysis review, and recording playback to match the consultation workflow.
+
+    To help agents accustomed to their existing workflows feel comfortable using a new system, I visited the contact center during development to collect feedback on their daily difficulties and the service. I used that feedback to improve agent search and favorites and explained how to use the service during the pilot.
+
+    Approximately 60% of agents went on to use the service, and a comparison of the contact center’s live wait-time readings before and after deployment showed a decrease of approximately 30% in customer wait time.
 projectContext:
   service:
     label: Service
@@ -22,7 +22,7 @@ projectContext:
     description: Agents handling live calls and managers reviewing consultation status and history
   role:
     label: My scope
-    description: Agent and admin frontend design and implementation, real-time state and multi-tab authentication, pilot-site guidance, and feedback-driven improvements
+    description: Full frontend design and implementation for agents and administrators, live transcripts, AI analysis and recording integration, multi-tab authentication and session management, and on-site pilot support and feedback-driven improvements
 stack:
   - React 19
   - TypeScript
@@ -33,109 +33,93 @@ stack:
   - Axios
   - Playwright
 architecture:
-  title: I separated multi-tab refresh request serialization from result distribution.
-  description: "Activity timing and logout are synchronized across tabs for the project's 15-minute inactivity policy. The diagram below focuses on token refresh: Web Locks coordinate refresh work and BroadcastChannel distributes the refreshed Access Token."
-  alt: Flow showing Web Locks serializing server refresh requests across tabs and BroadcastChannel distributing refreshed Access Tokens
-  caption: IdleTimer uses its own channel for activity synchronization. A separate authentication channel carries logout and refreshed tokens; tabs that are logging out do not adopt incoming tokens.
-  loading: Loading the architecture diagram.
-  error: The architecture diagram could not be displayed.
-  scrollLabel: Horizontal scroll area for the diagram
-  wide: true
-  sectionId: multiTabAuth
+  title: "KEPCO Contact Center Advisor System Architecture"
+  description: "The diagram distinguishes my frontend scope, the modules of one backend application, data stores, and external integrations. It follows live transcript delivery, post-call analysis, revised consultation results, and batch reanalysis."
+  alt: "KEPCO Contact Center Advisor system architecture showing my frontend scope, API modules, Redis, database, external integrations, and live transcript, analysis, and batch flows"
+  caption: "I designed and implemented the role-based screens, call detection, transcript state handling, and API client in the frontend area. Arrows indicate request and event-delivery directions."
+  loading: "Loading the system architecture."
+  error: "Unable to display the system architecture."
+  processDescription: "My scope is frontend design and implementation for agents and administrators. The frontend contains role-based screens, call detection, transcript state handling, and the API client. It polls once per second while waiting, then subscribes to call-specific SSE when a call starts. Snapshot, partial, and final transcript events update the display, while the API client coordinates token refresh across tabs. Apache serves static files and relays API requests and SSE events. Web API, STT and call handling, AI analysis, Sales and Distribution inbound handling, and batch jobs are modules of one Spring Boot application. Calls and final utterances are persisted, and final utterances undergo asynchronous ITN and masking. Redis events reach the frontend through Web API and Apache. After a call, classification and summary results are saved and sent to the Sales and Distribution ESB when transfer conditions allow it. Revised external consultation results are stored through the inbound module. Batch jobs request missing-call retransmission from the recording system, clean up expired records, and retry calls missing analysis. Recording playback also passes through Web API. The legend distinguishes frontend, backend modules, the web server, data stores, and external integrations."
+  width: 1434
+  height: 772
 ---
 
 <!-- architecture -->
 
-```mermaid
-flowchart TB
-    subgraph before["Previous flow"]
-      direction LR
-      signal["BroadcastChannel, refresh signal"] --> repeatedRefresh["Every tab requests a server token refresh"] --> race["Single-use Refresh Token race, 401"]
-    end
-
-    decision["Separate request serialization and result sharing"]
-
-    subgraph after["Improved flow"]
-      direction LR
-      tabs["Several tabs need a fresh token"] --> ownerRefresh["Serialize server refresh requests with Web Locks"] --> broadcast["BroadcastChannel sends the new Access Token"] --> adopt["Receiving tabs check logout state and compare exp"]
-    end
-
-    before --> decision --> after
-
-    classDef problem fill:#fff1f2,stroke:#e11d48,stroke-width:2px,color:#881337
-    classDef pivot fill:#fff7ed,stroke:#ea580c,stroke-width:2px,color:#7c2d12
-    classDef owner fill:#e8f1ff,stroke:#2563eb,stroke-width:2px,color:#172554
-    classDef shared fill:#ecfdf5,stroke:#059669,stroke-width:2px,color:#064e3b
-    class signal,repeatedRefresh,race problem
-    class decision pivot
-    class tabs,ownerRefresh owner
-    class broadcast,adopt shared
-```
+![KEPCO Contact Center Advisor system architecture showing my frontend scope, API modules, Redis, database, external integrations, and live transcript, analysis, and batch flows](/diagrams/kepco-system-architecture-en.svg)
 
 <!-- /architecture -->
 
 <!-- case: liveTranscript -->
 
-## Live transcripts and reconnection across call states
+## Live consultation and administrator monitoring
 
 ### Overview
 
-Agents needed to read live transcripts and retain the conversation when the screen’s streaming connection was interrupted and restored.
-
-**A lifecycle for call detection and transcript delivery** I connected current-call detection, live transcription, and waiting for the next call. Confirmed text stays visible during reconnection; transcript state resets only when the call changes.
+Agents needed to follow transcripts during their calls, while administrators needed to review several ongoing consultations together. I reflected call start, call end, and connection changes in the interface while preserving the conversation during recovery.
 
 ### Implementation
 
-**Switching between waiting polls and live SSE** While waiting, the interface polls for the current call every second and switches to SSE when a call starts. Call end, fatal errors, or exhausted retries resume polling so the next call can be detected.
+- **Call detection and live transcript delivery**
+  While waiting, the interface polls for the current call every second. When a call starts, it stops polling and subscribes to call-specific SSE. Polling resumes after the call ends or connection recovery is stopped so the next call can be detected.
 
-**Separating partial and confirmed speech** Each speaker’s partial text is replaced with its latest version. Confirmed utterances are deduplicated by ID and ordered by time. Reconnection preserves the current call’s text until a server snapshot reconciles state.
+- **Updating partial transcripts and applying final utterances**
+  I updated in-progress text in real time as PARTIAL results arrived and replaced it with confirmed text when the server returned FINAL results after ITN and other post-processing. I ordered confirmed utterances by their start times to preserve the conversation flow even when post-processing results arrived out of order. During reconnection, confirmed text stays visible until a server snapshot reconciles the accumulated utterances and current in-progress text.
 
-**Reconnection based on error type** I distinguished authentication renewal, invalid permission or call state, and network interruption. A missing heartbeat triggers bounded retries, while switching browser tabs keeps the connection open.
+- **Shared components designed for maintainability**
+  To improve maintainability across agent and administrator screens, I split the transcript interface into shared components for the card structure, search, conversation list and scrolling, analysis results, and connection notices. Shared hooks centralize transcript delivery and search logic so changes can be made in one place, while each screen composes its role-specific call information and additional features.
+
+- **Connection recovery and guidance based on the cause**
+  I implemented bounded automatic reconnection for temporary communication failures and token refresh followed by reconnection when authentication expires. The interface stops retrying and displays a notice when access is denied or the call cannot be found. I also configured the connection to remain open when switching tabs to avoid unnecessary reconnections.
 
 ### Outcomes
 
-**Recovery without clearing confirmed speech** Confirmed text remains readable during reconnection and is reconciled with server state afterward. Tests cover snapshots, duplicate utterances, ordering, and error-specific retry behavior.
+I implemented screens for agents to follow transcripts from call start to end and for administrators to monitor several consultations together. Confirmed text remains visible during reconnection so users can continue reviewing the conversation while waiting for recovery.
 
 <!-- case: consultationReview -->
 
-## Connecting transcript search, recordings, and AI analysis
+## AI analysis review and consultation history navigation
 
 ### Overview
 
-Reviewing a consultation required finding the underlying utterances, listening to the recording, and checking both the original AI output and saved analysis.
-
-**Aligning speech, playback, and analysis state** I synchronized transcript and recording navigation without letting automatic live following interrupt search or playback. Analysis also needed to distinguish the initial streamed output from saved final values.
+After a call, agents needed to review the classification and summary produced by AI and revisit past conversations alongside their recordings. I connected post-call analysis review, consultation history search, and sentence-level recording playback in the interface.
 
 ### Implementation
 
-**Linking utterances to recording timestamps** The interface highlights the utterance matching playback time, and selecting a sentence seeks the recording to that point. Exploring earlier speech stops automatic following; ResizeObserver detects changes in transcript height.
+- **Separating original AI output from saved final results**
+  Classification and summary results can be revised after AI generation, so I kept the original output separate from the saved final results. I displayed AI results received over SSE immediately, then fetched saved results from the detail API when analysis ended.
 
-**Immediate AI output followed by saved values** I displayed classification and summary events received over SSE immediately, then fetched saved analysis when processing ended. Failed refreshes preserve the existing result and use bounded retries.
+- **Handling missed analysis-completion events**
+  If the connection ended after the call without delivering an analysis-completion event, the interface retrieved results through the detail API. Failed requests preserve the existing display and use bounded retries.
+
+- **Linking transcript sentences to recording timestamps**
+  Selecting a sentence in consultation history seeks the recording to that utterance’s start time. The interface highlights the current utterance during playback and stops automatic following when users explore earlier speech themselves.
 
 ### Outcomes
 
-**Reviewing evidence and analysis together** Transcript search, sentence-level recording navigation, and original and confirmed analysis form one consultation-review flow. Tests cover playback synchronization, stopping automatic following, and retrying failed confirmed-value requests.
+I enabled users to distinguish original AI output from saved final results after a call and to review past conversations alongside their recordings in consultation history.
 
 <!-- case: multiTabAuth -->
 
-## Synchronizing multi-tab authentication and idle logout
+## Multi-tab authentication and session management
 
 ### Overview
 
-I kept activity and authentication state consistent across consultation tabs and prevented refresh failures from propagating into logout in other tabs.
+Consultation work across several tabs required handling overlapping token-refresh requests and idle logout caused by another tab during an active call. I coordinated authentication state across tabs and incorporated actual call state into session management.
 
-**Idle logout that respects call state** Independent activity timers could log out one tab while an agent was working in another or leave a closed session visible. The implementation needed to use the server-provided inactivity limit and pause the timer during active calls.
-
-**Concurrent use of single-use refresh tokens** When several tabs received 401 responses together, each tried to refresh with the same single-use Refresh Token. After one tab consumed it, the others retried with an already-used token, received 401 responses, and could propagate logout to otherwise valid tabs.
+![Flow showing Web Locks serializing server refresh requests across tabs and BroadcastChannel distributing refreshed Access Tokens](/diagrams/kepco-token-refresh-en.svg "Multi-tab token refresh flow")
 
 ### Implementation
 
-**Synchronizing activity and propagating logout** react-idle-timer coordinates activity and timers using crossTab, leaderElection, and syncTimers. The leader handles the server request for inactivity logout. Tabs receiving logged-out on a separate authentication BroadcastChannel clear tokens and query caches, then navigate to the login page.
+- **Coordinating refresh requests and sharing results**
+  I serialized refresh requests across tabs with Web Lock and distributed refreshed Access Tokens through BroadcastChannel. Receiving tabs apply the token without making a separate refresh request.
 
-**Serializing refresh requests and sharing results** Web Lock prevents concurrent server refresh requests, while an authentication BroadcastChannel shares the new Access Token. Receiving tabs apply it without making another refresh request.
+- **Blocking token application after logout begins**
+  Tabs that have started logging out reject late refresh responses and tokens from other tabs. Comparing expiration times also prevents older tokens from replacing the current authentication state.
 
-**Rejecting older tokens and late refresh results during logout** Receiving tabs check logout state and the token’s exp value and apply only a newer Access Token. Starting logout blocks refreshes and late result application; Refresh Tokens are never sent through the channel.
+- **Respecting call state in idle handling**
+  I synchronized activity timing and logout across tabs and paused the inactivity timer during active calls. Network and server errors are separated from invalid authentication, correcting paths where temporary communication failures could propagate into logout across tabs.
 
 ### Outcomes
 
-**Verifying token application and error separation** Tests verify that receiving tabs adopt a new Access Token without a server request and ignore missing payloads, tokens received during logout, and older expirations. Network and 5xx failures are also separated from invalid authentication so temporary outages do not expand into cross-tab logout.
+I synchronized authentication refresh and logout across tabs and paused idle logout during active calls. I also blocked late responses from restoring authentication state after logout had begun.
