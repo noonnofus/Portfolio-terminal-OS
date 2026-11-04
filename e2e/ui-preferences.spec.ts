@@ -143,16 +143,16 @@ test("preserves keyboard focus chosen before hydration", async ({ page }) => {
   const ready = new Promise<void>(resolve => { release = resolve; });
   await page.route("**/*.js*", async route => { await ready; await route.continue(); });
   try {
-    await page.goto("/en/desktop?app=project&slug=kepco", { waitUntil: "commit" });
+    await page.goto("/en/desktop?app=project&slug=mcp", { waitUntil: "commit" });
     const opener = page.getByRole("button", { name: /^View larger image:/ }).first();
     await opener.focus();
     await expect(opener).toBeFocused();
     release();
-    await expect(page.locator('[data-window-id="project:kepco"] button').first()).toBeEnabled();
+    await expect(page.locator('[data-window-id="project:mcp"] button').first()).toBeEnabled();
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     await expect(opener).toBeFocused();
     await page.keyboard.press("Enter");
-    await expect(page.locator('[data-window-id="project:kepco"]').getByRole("dialog")).toBeVisible();
+    await expect(page.locator('[data-window-id="project:mcp"]').getByRole("dialog")).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(opener).toBeFocused();
   } finally { release(); }

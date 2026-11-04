@@ -141,6 +141,7 @@ async function expectCurrentProjectMetadata(
 
 test("keeps project metadata and Desktop entries through back and forward", async ({ page }) => {
   await page.goto("/desktop?app=project&slug=kepco");
+  await expect(page.locator('[data-window-id="project:kepco"] button').first()).toBeEnabled();
   const kepco = page.getByRole("dialog", {
     name: projectMetadata("kepco", "ko").title,
     exact: true,
@@ -194,6 +195,7 @@ for (const delayed of [false, true]) {
 
 test("restores project metadata on persisted pageshow", async ({ page }) => {
   await page.goto("/desktop?app=project&slug=kepco");
+  await expect(page.locator('[data-window-id="project:kepco"] button').first()).toBeEnabled();
   await expectCurrentProjectMetadata(page, "kepco", "ko");
   await page.evaluate(() => {
     window.history.replaceState(window.history.state, "", "/en/desktop?app=project&slug=wchms");
