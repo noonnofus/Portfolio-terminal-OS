@@ -19,7 +19,7 @@ import {
 import { createOpenAppCommand } from "@/app/desktop/types/appTypes";
 import { useDesktopNavigation } from "@/app/desktop/hooks/useDesktopNavigation";
 import type { WindowId } from "@/app/desktop/types/navigationTypes";
-import { useLanguageStore } from "@/lib/i18n/useLanguageStore";
+import { useDesktopLanguage } from "@/app/desktop/store/DesktopStoreProvider";
 import { useTranslation } from "react-i18next";
 
 const ZERO_POINT: Point = { x: 0, y: 0 };
@@ -46,13 +46,13 @@ export function DirectorySurface({
   directory: DirectoryFolderNode;
   variant: "desktop" | "window";
 }) {
-  const language = useLanguageStore((state) => state.currentLanguage);
+  const language = useDesktopLanguage();
   const { t } = useTranslation("appShell", { lng: language });
   const { navigate, navigationBusy } = useDesktopNavigation();
   const surfaceRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const itemElements = useRef(
-    new Map<DirectoryNodeId, HTMLButtonElement>(),
+    new Map<DirectoryNodeId, HTMLElement>(),
   );
   const [contentWidth, setContentWidth] = useState(0);
   const [selectedNodeId, setSelectedNodeId] =
@@ -70,7 +70,7 @@ export function DirectorySurface({
 
   const registerElement = (
     nodeId: DirectoryNodeId,
-    element: HTMLButtonElement | null,
+    element: HTMLElement | null,
   ) => {
     if (element === null) itemElements.current.delete(nodeId);
     else itemElements.current.set(nodeId, element);
@@ -119,9 +119,13 @@ export function DirectorySurface({
     const surface = surfaceRef.current;
     const grid = gridRef.current;
     if (surface === null || grid === null) return;
-    setContentWidth(grid.getBoundingClientRect().width);
+    const measureGrid = () => {
+      const style = getComputedStyle(grid);
+      setContentWidth(grid.clientWidth - Number.parseFloat(style.paddingLeft) - Number.parseFloat(style.paddingRight));
+    };
+    measureGrid();
     const observer = new ResizeObserver(() => {
-      setContentWidth(grid.getBoundingClientRect().width);
+      measureGrid();
       requestAnimationFrame(reclampAll);
     });
     observer.observe(surface);
@@ -135,7 +139,7 @@ export function DirectorySurface({
   useLayoutEffect(() => {
     if (focusedNodeId === null) return;
     const active = document.activeElement;
-    if (active instanceof HTMLButtonElement && active.dataset.nodeId) {
+    if (active instanceof HTMLElement && active.dataset.nodeId) {
       itemElements.current.get(focusedNodeId)?.focus();
     }
   }, [columnCount, focusedNodeId]);
@@ -148,7 +152,7 @@ export function DirectorySurface({
   };
 
   const handleKeyDown = (
-    event: KeyboardEvent<HTMLButtonElement>,
+    event: KeyboardEvent<HTMLElement>,
     index: number,
     nodeId: DirectoryNodeId,
   ) => {

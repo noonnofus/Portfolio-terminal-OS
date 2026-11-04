@@ -12,7 +12,7 @@ import { DesktopAppRenderer } from "@/app/desktop/components/DesktopAppRenderer"
 import { WindowErrorBoundary } from "@/app/desktop/components/WindowErrorBoundary";
 import { useDesktopNavigation } from "@/app/desktop/hooks/useDesktopNavigation";
 import type { DesktopWindowSnapshot } from "@/app/desktop/types/navigationTypes";
-import { useLanguageStore } from "@/lib/i18n/useLanguageStore";
+import { useDesktopLanguage } from "@/app/desktop/store/DesktopStoreProvider";
 import { AppRuntimeBoundary } from "@/app/desktop/components/AppRuntimeBoundary";
 import { getAppTitle } from "@/app/desktop/lib/getAppTitle";
 import { useTranslation } from "react-i18next";
@@ -123,7 +123,7 @@ export function DesktopWindowFrame({
     index: number;
     clampEpoch: number;
 }) {
-    const language = useLanguageStore((state) => state.currentLanguage);
+    const language = useDesktopLanguage();
     const { t } = useTranslation("appShell", { lng: language });
     const { navigate, navigationBusy } = useDesktopNavigation();
     const shouldReduceMotion = useReducedMotion();
@@ -165,6 +165,10 @@ export function DesktopWindowFrame({
     const defaultTop = 32 + index * 36;
     const currentLeft = pos?.left ?? defaultLeft;
     const currentTop = pos?.top ?? defaultTop;
+    const initialWidth = `max(var(--application-window-min-width), min(${app.window.width}px, calc(100vw - ${DESKTOP_WINDOW_MAX_WIDTH_OFFSET_PX}px)))`;
+    const initialHeight = `min(${app.window.height}px, calc(100dvh - ${DESKTOP_WINDOW_CHROME_RESERVE_PX}px))`;
+    const initialLeft = `clamp(0px, ${defaultLeft}px, calc(100vw - ${initialWidth}))`;
+    const initialTop = `clamp(0px, ${defaultTop}px, calc(100dvh - ${DESKTOP_WINDOW_CHROME_RESERVE_PX}px - ${initialHeight}))`;
 
     const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
         // Only primary button, desktop viewport, not maximized
@@ -181,11 +185,12 @@ export function DesktopWindowFrame({
         const el = sectionRef.current;
         if (!el) return;
 
+        const computedStyle = getComputedStyle(el);
         dragState.current = {
             startX: e.clientX,
             startY: e.clientY,
-            origLeft: currentLeft,
-            origTop: currentTop,
+            origLeft: Number.parseFloat(computedStyle.left),
+            origTop: Number.parseFloat(computedStyle.top),
         };
 
         el.setPointerCapture(e.pointerId);
@@ -225,9 +230,11 @@ export function DesktopWindowFrame({
 
     useEffect(() => {
         if (active && !wasActiveRef.current) {
-            requestAnimationFrame(() =>
-                (maximized ? contentRef.current : headingRef.current)?.focus({ preventScroll: true }),
-            );
+            requestAnimationFrame(() => {
+                const section = sectionRef.current;
+                if (section?.dataset.active !== "true" || section.contains(document.activeElement)) return;
+                (maximized ? contentRef.current : headingRef.current)?.focus({ preventScroll: true });
+            });
         }
         wasActiveRef.current = active;
     }, [active, maximized]);
@@ -281,8 +288,8 @@ export function DesktopWindowFrame({
               zIndex: active ? 80 : 40 + index,
           }
         : {
-              left: `${currentLeft}px`,
-              top: `${currentTop}px`,
+              left: pos === null ? initialLeft : `${pos.left}px`,
+              top: pos === null ? initialTop : `${pos.top}px`,
               width: `${app.window.width}px`,
               height: `${app.window.height}px`,
               maxWidth: `calc(100vw - ${DESKTOP_WINDOW_MAX_WIDTH_OFFSET_PX}px)`,

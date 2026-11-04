@@ -9,13 +9,8 @@ export type DesktopPreferences = {
     dockAutoHide: boolean;
 };
 
-type StoredDesktopPreferences = {
-    version: 1;
-    preferences: DesktopPreferences;
-};
-
 export const DESKTOP_PREFERENCES_STORAGE_KEY = "desktop:preferences";
-const LEGACY_GUI_PREFERENCES_STORAGE_KEY = "gui:preferences";
+export const LEGACY_GUI_PREFERENCES_STORAGE_KEY = "gui:preferences";
 
 const languages = new Set<DesktopPreferences["language"]>(["ko", "en"]);
 export function readDesktopPreferences(
@@ -58,24 +53,5 @@ export function readDesktopPreferences(
         };
     } catch {
         return null;
-    }
-}
-
-export function writeDesktopPreferences(
-    storage: Pick<Storage, "setItem">,
-    preferences: DesktopPreferences,
-) {
-    const value: StoredDesktopPreferences = {
-        version: 1,
-        preferences,
-    };
-
-    try {
-        storage.setItem(
-            DESKTOP_PREFERENCES_STORAGE_KEY,
-            JSON.stringify(value),
-        );
-    } catch {
-        // Storage can be unavailable in privacy-restricted browser contexts.
     }
 }

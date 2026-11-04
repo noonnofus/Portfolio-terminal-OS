@@ -5,6 +5,8 @@ import { readProjectDocument } from "../src/features/portfolio/content/projectMe
 import { projectSlugs, type ProjectSlug } from "../src/features/portfolio/types/projectTypes";
 import { languages, type Language } from "../src/lib/i18n/language";
 import { SITE_URL } from "../src/lib/seo/siteMetadata";
+import koPortfolio from "../src/features/portfolio/i18n/ko/PortfolioContent.json";
+import enPortfolio from "../src/features/portfolio/i18n/en/PortfolioContent.json";
 
 function projectMetadata(slug: ProjectSlug, language: Language) {
   return readProjectDocument(readFileSync(join(
@@ -35,6 +37,8 @@ async function readMetadata(page: Page, html: string) {
       twitterDescriptions: meta('meta[name="twitter:description"]'),
       robots: meta('meta[name="robots"]'),
       headCanonicalCount: doc.head.querySelectorAll('link[rel="canonical"]').length,
+      profiles: Array.from(doc.querySelectorAll('script[type="application/ld+json"]'),
+        node => JSON.parse(node.textContent ?? "")),
     };
   }, html);
 }
@@ -147,7 +151,7 @@ test("keeps project metadata and Desktop entries through back and forward", asyn
 
   await page.getByRole("navigation", { name: "Applications" })
     .getByRole("button", { name: "프로젝트", exact: true }).click();
-  await page.getByRole("button", { name: "WCHMS 프로젝트 열기", exact: true }).dblclick();
+  await page.getByRole("link", { name: "WCHMS 프로젝트 열기", exact: true }).dblclick();
   await expect(page).toHaveURL(/app=project&slug=wchms$/);
   await expectCurrentProjectMetadata(page, "wchms", "ko");
   const wchmsEntry = await page.evaluate(() => JSON.stringify(window.history.state.desktop));
@@ -169,7 +173,7 @@ test("keeps project metadata and Desktop entries through back and forward", asyn
 });
 
 for (const delayed of [false, true]) {
-  test(`normalizes persisted language with delayed scripts=${delayed}`, async ({ page }) => {
+  test(`keeps URL language over persisted language with delayed scripts=${delayed}`, async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem("desktop:preferences", JSON.stringify({
       version: 1, preferences: { language: "en", wallpaper: "golden_gate_light", dockAutoHide: false },
     })));
@@ -180,10 +184,10 @@ for (const delayed of [false, true]) {
       });
     }
     await page.goto("/desktop?app=project&slug=kepco", { waitUntil: "commit" });
-    await expect(page).toHaveURL(/\/en\/desktop\?app=project&slug=kepco$/);
-    await expectCurrentProjectMetadata(page, "kepco", "en");
+    await expect(page).toHaveURL(/\/desktop\?app=project&slug=kepco$/);
+    await expectCurrentProjectMetadata(page, "kepco", "ko");
     await page.waitForLoadState("load");
-    await expectCurrentProjectMetadata(page, "kepco", "en");
+    await expectCurrentProjectMetadata(page, "kepco", "ko");
   });
 }
 
@@ -212,7 +216,7 @@ for (const action of ["close", "minimize"]) {
 for (const queued of [false, true]) {
   test(`handles back timeout and late popstate with queued navigation=${queued}`, async ({ page }) => {
     await page.goto("/desktop?app=projects");
-    await page.getByRole("button", { name: "한국전력 상담 어드바이저 프로젝트 열기", exact: true }).dblclick();
+    await page.getByRole("link", { name: "한국전력 상담 어드바이저 프로젝트 열기", exact: true }).dblclick();
     await expectCurrentProjectMetadata(page, "kepco", "ko");
     const stale = await page.evaluate(() => {
       window.history.back = () => undefined;
@@ -245,7 +249,7 @@ test("changes language and preserves the running terminal", async ({ page }) => 
   await expect(rows).toContainText("seo-preserved-input");
   const dock = page.getByRole("navigation", { name: "Applications" });
   await dock.getByRole("button", { name: "프로젝트", exact: true }).click();
-  await page.getByRole("button", { name: "WCHMS 프로젝트 열기", exact: true }).dblclick();
+  await page.getByRole("link", { name: "WCHMS 프로젝트 열기", exact: true }).dblclick();
   await expectCurrentProjectMetadata(page, "wchms", "ko");
   await dock.getByRole("button", { name: "터미널", exact: true }).click();
   await expect(rows).toContainText("seo-preserved-input");
@@ -254,7 +258,7 @@ test("changes language and preserves the running terminal", async ({ page }) => 
   await settings.getByRole("button", { name: "일반", exact: true }).click();
   await settings.getByRole("button", { name: "English", exact: true }).click();
   await dock.getByRole("button", { name: "Projects", exact: true }).click();
-  await page.getByRole("button", { name: "WCHMS open project", exact: true }).dblclick();
+  await page.getByRole("link", { name: "WCHMS open project", exact: true }).dblclick();
   await expectCurrentProjectMetadata(page, "wchms", "en");
   await dock.getByRole("button", { name: "Terminal", exact: true }).click();
   await expect(terminal).toHaveAttribute("data-seo-runtime", "preserved");
@@ -271,4 +275,221 @@ test("restores metadata after a real document traversal", async ({ page }) => {
   await page.goBack();
   await expectCurrentProjectMetadata(page, "kepco", "ko");
   test.info().annotations.push({ type: "BFCache persisted", description: String(await page.locator("html").getAttribute("data-seo-persisted")) });
+});
+
+
+test.describe("Desktop project body without JavaScript", () => {
+  test.use({ javaScriptEnabled: false });
+  for (const language of languages) {
+    for (const slug of projectSlugs) {
+      test(`${language}/${slug} provides a visible article in server HTML`, async ({ page }) => {
+        const path = language === "ko" ? "/desktop" : "/en/desktop";
+        const project = projectMetadata(slug, language);
+        const response = await page.goto(`${path}?app=project&slug=${slug}`);
+        expect(response?.status()).toBe(200);
+        const article = page.locator(`[data-window-id="project:${slug}"] article`);
+        await expect(article).toHaveAttribute("lang", language);
+        await expect(article).toBeVisible();
+        await expect(article.locator("h2")).toHaveText(project.title);
+        await expect(article).toContainText(project.summary);
+        expect(await article.locator("h3").count()).toBeGreaterThan(0);
+        await expect(page.locator('[data-app-type="project"]')).toHaveCount(1);
+      });
+    }
+  }
+});
+
+
+test("hydrates the existing article despite a different saved language with delayed scripts", async ({ page }) => {
+  await page.route("**/api/auth/viewer", route => route.fulfill({
+    status: 200, json: { status: "guest" },
+  }));
+  await page.addInitScript(() => localStorage.setItem("desktop:preferences", JSON.stringify({
+    version: 1, preferences: { language: "en", wallpaper: "golden_gate_light", dockAutoHide: false },
+  })));
+  let releaseScripts!: () => void;
+  const scriptsReady = new Promise<void>(resolve => { releaseScripts = resolve; });
+  await page.route("**/*.js*", async route => {
+    await scriptsReady;
+    await route.continue();
+  });
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
+  try {
+    await page.goto("/desktop?app=project&slug=kepco", { waitUntil: "commit" });
+    const article = page.locator('[data-window-id="project:kepco"] article');
+    await expect(article).toBeVisible();
+    await expect(article).toHaveAttribute("lang", "ko");
+    const initialArticle = await article.elementHandle();
+    await expect(page.locator('[data-window-id="project:kepco"] button').first()).toBeDisabled();
+    releaseScripts();
+    await expect(page).toHaveURL(/\/desktop\?app=project&slug=kepco$/);
+    await expect(article).toHaveAttribute("lang", "ko");
+    expect(await article.evaluate((node, initial) => node.isSameNode(initial), initialArticle)).toBe(true);
+    await expect(article.locator("h2")).toHaveText(projectMetadata("kepco", "ko").title);
+    await expect(page.locator('[data-app-type="project"]')).toHaveCount(1);
+    await expect(page.locator('[data-window-id="project:kepco"] button').first()).toBeEnabled();
+    expect(errors).toEqual([]);
+  } finally {
+    releaseScripts();
+  }
+});
+
+function expectProfile(profile: unknown, language: Language) {
+  const content = language === "ko" ? koPortfolio : enPortfolio;
+  const other = language === "ko" ? enPortfolio : koPortfolio;
+  const url = `${SITE_URL}${language === "ko" ? "/desktop" : "/en/desktop"}`;
+  expect(profile).toMatchObject({
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "@id": `${url}#profile`,
+    url,
+    inLanguage: language,
+    mainEntity: {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#person`,
+      name: content.profile.name,
+      alternateName: other.profile.name,
+      jobTitle: content.profile.role,
+      description: content.profile.summary[0],
+      worksFor: [{
+        "@type": "Organization",
+        name: content.experience[0].title,
+        alternateName: content.experience[0].alternateName,
+      }],
+      alumniOf: [{
+        "@type": "EducationalOrganization",
+        name: content.education[0].institution,
+        alternateName: "BCIT",
+      }],
+      sameAs: [content.contact.github, content.contact.linkedin],
+    },
+  });
+}
+
+async function expectCurrentProfile(page: Page, language: Language) {
+  const script = page.locator('script[type="application/ld+json"]');
+  await expect(script).toHaveCount(1);
+  await expect(async () => {
+    expectProfile(JSON.parse(await script.textContent() ?? ""), language);
+  }).toPass();
+  const content = language === "ko" ? koPortfolio : enPortfolio;
+  const about = page.locator('[data-window-id="about"]');
+  await expect(about).toBeVisible();
+  await expect(about.locator("article h2")).toBeVisible();
+  await expect(about).toContainText(content.profile.summary[0]);
+  await expect(about).toContainText(content.experience[0].title);
+  await expect(about).toContainText(content.education[0].institution);
+}
+
+test.describe("Desktop profile JSON-LD server HTML", () => {
+  test.use({ javaScriptEnabled: false });
+  for (const language of languages) {
+    test(`includes exactly one ${language} profile before JavaScript`, async ({ page }) => {
+      const path = language === "ko" ? "/desktop" : "/en/desktop";
+      for (const query of ["", "?app=about"]) {
+        const response = await page.goto(`${path}${query}`);
+        expect(response?.status()).toBe(200);
+        const script = page.locator('script[type="application/ld+json"]');
+        await expect(script).toHaveCount(1);
+        expectProfile(JSON.parse(await script.textContent() ?? ""), language);
+      }
+    });
+
+    test(`excludes the ${language} profile from other app requests`, async ({ page, request }) => {
+      const path = language === "ko" ? "/desktop" : "/en/desktop";
+      const queries = [
+        ...["projects", "settings", "resume", "notes", "contact", "terminal", "desktop"].map(app => `?app=${app}`),
+        ...projectSlugs.map(slug => `?app=project&slug=${slug}`),
+        "?app=project&slug=missing",
+      ];
+      for (const query of queries) {
+        const response = await request.get(`${path}${query}`);
+        expect(response.status()).toBe(200);
+        const actual = await readMetadata(page, await response.text());
+        expect(actual.profiles, `${path}${query}`).toEqual([]);
+        expect(actual.headCanonicalCount).toBe(1);
+      }
+      for (const terminal of ["/", "/en"]) {
+        const response = await request.get(terminal);
+        expect((await readMetadata(page, await response.text())).profiles).toEqual([]);
+      }
+    });
+  }
+
+  test("uses the validated request language for a legacy query", async ({ page }) => {
+    await page.goto("/desktop?app=about&lang=en");
+    const script = page.locator('script[type="application/ld+json"]');
+    await expect(script).toHaveCount(1);
+    expectProfile(JSON.parse(await script.textContent() ?? ""), "en");
+  });
+});
+
+test("Desktop profile JSON-LD follows URL history while its window stays mounted", async ({ page }) => {
+  await page.goto("/desktop");
+  await expectCurrentProfile(page, "ko");
+  const about = page.locator('[data-window-id="about"]');
+  await about.evaluate(node => node.setAttribute("data-jsonld-runtime", "preserved"));
+  await page.getByRole("navigation", { name: "Applications" })
+    .getByRole("button", { name: "프로젝트", exact: true }).click();
+  await expect(page).toHaveURL(/app=projects$/);
+  await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(0);
+  await expect(about).toHaveAttribute("data-jsonld-runtime", "preserved");
+  await page.getByRole("link", { name: "WCHMS 프로젝트 열기", exact: true }).dblclick();
+  await expect(page).toHaveURL(/app=project&slug=wchms$/);
+  await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(0);
+  await page.goBack();
+  await expect(page).toHaveURL(/app=projects$/);
+  await page.goBack();
+  await expectCurrentProfile(page, "ko");
+  await expect(about).toHaveAttribute("data-jsonld-runtime", "preserved");
+  await page.goForward();
+  await expect(page).toHaveURL(/app=projects$/);
+  await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(0);
+});
+
+test("Desktop profile JSON-LD changes language and restores on persisted pageshow", async ({ page }) => {
+  await page.goto("/desktop");
+  await expectCurrentProfile(page, "ko");
+  const dock = page.getByRole("navigation", { name: "Applications" });
+  await dock.getByRole("button", { name: "설정", exact: true }).click();
+  await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(0);
+  const settings = page.getByRole("dialog", { name: "설정", exact: true });
+  await settings.getByRole("button", { name: "일반", exact: true }).click();
+  await settings.getByRole("button", { name: "English", exact: true }).click();
+  await expect(page).toHaveURL(/\/en\/desktop\?app=settings$/);
+  await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(0);
+  await dock.getByRole("button", { name: "Career", exact: true }).click();
+  await expectCurrentProfile(page, "en");
+  await page.evaluate(() => {
+    window.history.replaceState(window.history.state, "", "/desktop");
+    window.dispatchEvent(new PageTransitionEvent("pageshow", { persisted: true }));
+  });
+  await expectCurrentProfile(page, "ko");
+});
+
+test("Desktop profile JSON-LD survives delayed hydration without duplication", async ({ page }) => {
+  await page.route("**/api/auth/viewer", route => route.fulfill({ status: 200, json: { status: "guest" } }));
+  let releaseScripts!: () => void;
+  const ready = new Promise<void>(resolve => { releaseScripts = resolve; });
+  await page.route("**/*.js*", async route => {
+    await ready;
+    await route.continue();
+  });
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
+  try {
+    await page.goto("/en/desktop", { waitUntil: "commit" });
+    const script = page.locator('script[type="application/ld+json"]');
+    await expect(script).toHaveCount(1);
+    expectProfile(JSON.parse(await script.textContent() ?? ""), "en");
+    releaseScripts();
+    await expectCurrentProfile(page, "en");
+    await expect(script).toHaveCount(1);
+    expect(errors).toEqual([]);
+  } finally {
+    releaseScripts();
+  }
 });

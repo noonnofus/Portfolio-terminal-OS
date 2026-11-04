@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+.ui-theme-image-dark,
+html.dark .ui-theme-image-light {
+  display: none;
+}
+
+html.dark .ui-theme-image-dark {
+  display: block;
+}
+
+html.dark .ui-theme-invert {
+  filter: invert(1);
+}
+
 @theme {
   /* Pencil design primitives */
   --font-pen-primary: var(--app-font-sans);

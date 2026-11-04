@@ -29,11 +29,12 @@ import type {
 import {
     selectWorkspaceState,
 } from "@/app/desktop/store/desktopStore";
-import { useDesktopStoreApi } from "@/app/desktop/store/DesktopStoreProvider";
+import { useDesktopStoreApi, useDesktopStore, useDesktopInitialView } from "@/app/desktop/store/DesktopStoreProvider";
 import {
-    readDesktopPreferences,
-    writeDesktopPreferences,
-} from "@/app/desktop/store/desktopPreferences";
+    patchUiPreferencesCookie,
+    readUiPreferencesCookie,
+    subscribeUiPreferences,
+} from "@/lib/preferences/uiPreferences.client";
 import { DesktopNavigationContext } from "@/app/desktop/hooks/useDesktopNavigation";
 import { useLanguageStore } from "@/lib/i18n/useLanguageStore";
 import type { Language } from "@/lib/i18n/language";
@@ -61,6 +62,8 @@ export function DesktopNavigationProvider({
     defaultLanguage?: Language;
 }) {
     const store = useDesktopStoreApi();
+    const initialView = useDesktopInitialView();
+    const urlReady = useDesktopStore((state) => state.urlReady);
     const setGlobalLanguage = useLanguageStore(
         (state) => state.setLanguage,
     );
@@ -120,6 +123,7 @@ export function DesktopNavigationProvider({
 
     const navigate = useCallback(
         (event: QueuedNavigationEvent) => {
+            if (!store.getState().urlReady) return;
             const pending = pendingRef.current;
             if (pending !== null) {
                 const result = enqueuePendingNavigationEvent(
@@ -263,26 +267,7 @@ export function DesktopNavigationProvider({
     }, [navigate]);
 
     useEffect(() => {
-        const preferences = readDesktopPreferences(window.localStorage);
-        if (preferences !== null) {
-            store.getState().dispatch({
-                type: "change-wallpaper",
-                wallpaper: preferences.wallpaper,
-            });
-            store.getState().dispatch({
-                type: "change-dock-auto-hide",
-                enabled: preferences.dockAutoHide,
-            });
-        }
-
         const searchParams = new URLSearchParams(window.location.search);
-        if (
-            defaultLanguage === "ko" &&
-            !searchParams.has("lang") &&
-            preferences !== null
-        ) {
-            searchParams.set("lang", preferences.language);
-        }
         const view = parseDesktopUrl(
             searchParams,
             getDesktopLanguageFromPathname(
@@ -306,23 +291,29 @@ export function DesktopNavigationProvider({
             canonicalUrl,
         );
         latestEntryRef.current = entry;
-        applyNavigationCommands([{ type: "apply-url-state", view }]);
+        const sameInitialWindow = (initialView.app === "project" &&
+            view.app === "project" && initialView.slug === view.slug) ||
+            (initialView.app === "projects" && view.app === "projects");
+        applyNavigationCommands(sameInitialWindow ? [] : [{ type: "apply-url-state", view }]);
         setGlobalLanguage(view.lang);
-        store.getState().setUrlReady(true);
 
-        const persistPreferences = () => {
-            const state = store.getState();
-            writeDesktopPreferences(window.localStorage, {
-                language: useLanguageStore.getState().currentLanguage,
-                wallpaper: state.wallpaper,
-                dockAutoHide: state.dockAutoHide,
+        let applyingPreferences = false;
+        const unsubscribePreferences = store.subscribe((state, previous) => {
+            if (applyingPreferences || (state.wallpaper === previous.wallpaper && state.dockAutoHide === previous.dockAutoHide)) return;
+            patchUiPreferencesCookie({
+                ...(state.wallpaper !== previous.wallpaper ? { wallpaper: state.wallpaper } : {}),
+                ...(state.dockAutoHide !== previous.dockAutoHide ? { dockAutoHide: state.dockAutoHide } : {}),
             });
-        };
-        persistPreferences();
-        const unsubscribePreferences = store.subscribe(persistPreferences);
-        const unsubscribeLanguage = useLanguageStore.subscribe(
-            persistPreferences,
-        );
+        });
+        const unsubscribeCookie = subscribeUiPreferences(() => {
+            const preferences = readUiPreferencesCookie();
+            if (!preferences) return;
+            // Apply both fields without persisting an intermediate state over the cookie.
+            applyingPreferences = true;
+            if (store.getState().wallpaper !== preferences.wallpaper) store.getState().dispatch({ type: "change-wallpaper", wallpaper: preferences.wallpaper });
+            if (store.getState().dockAutoHide !== preferences.dockAutoHide) store.getState().dispatch({ type: "change-dock-auto-hide", enabled: preferences.dockAutoHide });
+            applyingPreferences = false;
+        });
 
         const handlePopState = (popStateEvent: PopStateEvent) => {
             const expiredGuard = expiredIntentRef.current;
@@ -440,13 +431,14 @@ export function DesktopNavigationProvider({
         window.addEventListener("popstate", handlePopState);
         window.addEventListener("pagehide", handlePageHide);
         window.addEventListener("pageshow", handlePageShow);
+        store.getState().setUrlReady(true);
 
         return () => {
             window.removeEventListener("popstate", handlePopState);
             window.removeEventListener("pagehide", handlePageHide);
             window.removeEventListener("pageshow", handlePageShow);
             unsubscribePreferences();
-            unsubscribeLanguage();
+            unsubscribeCookie();
             clearPending();
             clearExpiredGuard();
         };
@@ -458,11 +450,12 @@ export function DesktopNavigationProvider({
         setGlobalLanguage,
         store,
         defaultLanguage,
+        initialView,
     ]);
 
     return (
         <DesktopNavigationContext.Provider
-            value={{ navigate, navigationBusy }}
+            value={{ navigate, navigationBusy: navigationBusy || !urlReady }}
         >
             {children}
         </DesktopNavigationContext.Provider>

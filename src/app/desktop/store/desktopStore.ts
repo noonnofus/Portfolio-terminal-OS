@@ -1,4 +1,5 @@
 import { createStore } from "zustand/vanilla";
+import { DEFAULT_UI_PREFERENCES, type UiPreferences } from "@/lib/preferences/uiPreferences";
 import type { Viewer } from "@/features/auth/types/viewer";
 import type { DesktopAppId, DesktopUrlState } from "@/app/desktop/types/appTypes";
 import type {
@@ -97,8 +98,10 @@ function activateApp(
 
 export function createDesktopStore(
     initialViewer: Viewer = { status: "guest" },
+    initialView?: DesktopUrlState,
+    initialPreferences: UiPreferences = DEFAULT_UI_PREFERENCES,
 ) {
-    return createStore<DesktopStore>()((set) => ({
+    const initialState: DesktopState = {
         windows: [],
         focus: { mode: "desktop", activeWindowId: null },
         nextEntrySequence: 1,
@@ -106,10 +109,19 @@ export function createDesktopStore(
         pageVisibility: "visible",
         resumeEpoch: 0,
         urlReady: false,
-        wallpaper: "golden_gate_light",
-        dockAutoHide: false,
+        wallpaper: initialPreferences.wallpaper,
+        dockAutoHide: initialPreferences.dockAutoHide,
         fullscreenWindowId: null,
         viewer: initialViewer,
+    };
+
+    return createStore<DesktopStore>()((set) => ({
+        ...initialState,
+        ...(initialView?.app === "project"
+            ? activateApp(initialState, `project:${initialView.slug}`)
+            : initialView?.app === "projects"
+            ? activateApp(initialState, "projects")
+            : {}),
         setViewer: (viewer) => set({ viewer }),
         dispatch: (command) =>
             set((state) => {

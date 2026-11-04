@@ -1,11 +1,12 @@
 import { expect, test } from "@playwright/test";
 import { readFileSync } from "node:fs";
+import { DEFAULT_UI_PREFERENCES, UI_PREFERENCES_COOKIE, encodeUiPreferences } from "../src/lib/preferences/uiPreferences";
 
 const koPortfolioContent: typeof import("../src/features/portfolio/i18n/ko/PortfolioContent.json") =
     JSON.parse(readFileSync("src/features/portfolio/i18n/ko/PortfolioContent.json", "utf8"));
 
 test.describe("Desktop shell", () => {
-    test("hydrates a persisted dark theme without a server mismatch", async ({ page }) => {
+    test("hydrates a persisted dark theme without a server mismatch", async ({ page, context, baseURL }) => {
         const hydrationErrors: string[] = [];
         page.on("console", (message) => {
             if (
@@ -15,7 +16,7 @@ test.describe("Desktop shell", () => {
                 hydrationErrors.push(message.text());
             }
         });
-        await page.addInitScript(() => localStorage.setItem("theme", "dark"));
+        await context.addCookies([{ name: UI_PREFERENCES_COOKIE, value: encodeUiPreferences({ ...DEFAULT_UI_PREFERENCES, colorMode: "dark" }), url: baseURL! }]);
 
         await page.goto("/desktop");
         await expect(page.locator(".application-shell")).toHaveAttribute(
@@ -174,7 +175,7 @@ test.describe("Desktop shell", () => {
         await page.goto("/desktop?app=desktop");
         const projectsShortcut = page
             .getByRole("navigation", { name: "데스크톱 바로가기" })
-            .getByRole("button", { name: "프로젝트" });
+            .getByRole("link", { name: "프로젝트" });
 
         await expect(projectsShortcut).toHaveCSS("width", "70px");
         await projectsShortcut.click();
@@ -229,19 +230,7 @@ test.describe("Desktop shell", () => {
             viewport: { width: 390, height: 844 },
         });
         const page = await mobileContext.newPage();
-        await page.addInitScript(() => {
-            globalThis.localStorage.setItem(
-                "desktop:preferences",
-                JSON.stringify({
-                    version: 1,
-                    preferences: {
-                        language: "ko",
-                        wallpaper: "golden_gate_light",
-                        dockAutoHide: true,
-                    },
-                }),
-            );
-        });
+        await mobileContext.addCookies([{ name: UI_PREFERENCES_COOKIE, value: encodeUiPreferences({ ...DEFAULT_UI_PREFERENCES, dockAutoHide: true }), url: test.info().project.use.baseURL! }]);
         await page.goto("/desktop");
 
         const window = page.getByRole("dialog", {
@@ -295,7 +284,7 @@ test.describe("Desktop shell", () => {
 
         const projectsShortcut = page
             .getByRole("navigation", { name: "데스크톱 바로가기" })
-            .getByRole("button", { name: "프로젝트" });
+            .getByRole("link", { name: "프로젝트" });
         const before = await projectsShortcut.boundingBox();
         expect(before).not.toBeNull();
 
@@ -402,13 +391,13 @@ test.describe("Desktop shell", () => {
         page,
     }) => {
         await page.goto("/desktop?app=projects");
-        const projectFile = page.getByRole("button", {
+        const projectFile = page.getByRole("link", {
             name: "한국전력 상담 어드바이저 프로젝트 열기",
         });
         await expect(projectFile).toHaveCSS("width", "70px");
         const projectGrid = page.locator(".application-project-grid");
         const projectFolder = page.locator(".application-folder-view");
-        const hoverTarget = page.getByRole("button", {
+        const hoverTarget = page.getByRole("link", {
             name: "Flare 프로젝트 열기",
         });
         const hoverStylesBefore = await hoverTarget.evaluate((element) => ({
@@ -508,14 +497,14 @@ test.describe("Desktop shell", () => {
             "70px",
         );
         await expect(
-            page.getByRole("button", {
+            page.getByRole("link", {
                 name: "WCHMS 프로젝트 열기",
             }),
         ).toBeVisible();
         expect(mediaRequests).toEqual([]);
 
         await page
-            .getByRole("button", { name: "WCHMS 프로젝트 열기" })
+            .getByRole("link", { name: "WCHMS 프로젝트 열기" })
             .dblclick();
         await expect(page).toHaveURL(/app=project&slug=wchms/);
         await expect(
@@ -527,7 +516,7 @@ test.describe("Desktop shell", () => {
         });
         await dock.getByRole("button", { name: "프로젝트" }).click();
         await page
-            .getByRole("button", { name: "Flare 프로젝트 열기" })
+            .getByRole("link", { name: "Flare 프로젝트 열기" })
             .dblclick();
 
         await expect(page).toHaveURL(/app=project&slug=flare/);
@@ -540,7 +529,7 @@ test.describe("Desktop shell", () => {
 
         await dock.getByRole("button", { name: "프로젝트" }).click();
         await page
-            .getByRole("button", { name: "WCHMS 프로젝트 열기" })
+            .getByRole("link", { name: "WCHMS 프로젝트 열기" })
             .dblclick();
 
         await expect(
@@ -755,7 +744,7 @@ test.describe("Desktop shell", () => {
         await settingsWindow.getByRole("button", { name: "General" }).click();
         await settingsWindow.getByRole("button", { name: "Auto hide" }).click();
 
-        await page.goto("/desktop?app=settings");
+        await page.reload();
 
         await expect(page.locator("html")).toHaveAttribute("lang", "en");
         await expect(page.locator(".application-shell")).toHaveAttribute(
@@ -802,7 +791,10 @@ test.describe("Desktop shell", () => {
         );
         await expect
             .poll(() =>
-                page.evaluate(() => localStorage.getItem("theme")),
+                page.evaluate(() => {
+                    const cookie = document.cookie.split("; ").find(item => item.startsWith("portfolio-ui="));
+                    return cookie ? JSON.parse(decodeURIComponent(cookie.slice("portfolio-ui=".length))).colorMode : null;
+                }),
             )
             .toBe("dark");
     });

@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "@xterm/xterm/css/xterm.css";
 import ClientProvider from "./ClientProvider";
-import { DEFAULT_LANGUAGE } from "@/lib/i18n/language";
+import { DEFAULT_LANGUAGE, REQUEST_LANGUAGE_HEADER } from "@/lib/i18n/language";
+import { headers } from "next/headers";
+import { readUiPreferences } from "@/lib/preferences/readUiPreferences";
 
 import {
   SEO_COPY,
@@ -35,15 +37,26 @@ export const metadata: Metadata = {
 };
 
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const preferences = await readUiPreferences();
+  const language = (await headers()).get(REQUEST_LANGUAGE_HEADER) === "en" ? "en" : DEFAULT_LANGUAGE;
+  const colorModeScript = `(() => {
+    const preference = ${JSON.stringify(preferences.colorMode)};
+    const resolved = preference === "auto" ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : preference;
+    const root = document.documentElement;
+    root.classList.toggle("dark", resolved === "dark");
+    root.classList.toggle("light", resolved === "light");
+    root.style.colorScheme = resolved;
+  })();`;
   return (
-    <html lang={DEFAULT_LANGUAGE} suppressHydrationWarning>
+    <html lang={language} className={preferences.colorMode === "auto" ? undefined : preferences.colorMode} suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: colorModeScript }} /></head>
       <body>
-        <ClientProvider>{children}</ClientProvider>
+        <ClientProvider initialColorMode={preferences.colorMode}>{children}</ClientProvider>
       </body>
     </html>
   );

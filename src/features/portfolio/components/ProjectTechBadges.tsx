@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import styles from "./ProjectContent.module.css";
-import { useColorMode } from "@/components/providers/color-mode";
 
 type ProjectTechBadgesProps = {
   label: string;
@@ -85,32 +84,33 @@ export function ProjectTechBadges({
   label,
   items,
 }: ProjectTechBadgesProps) {
-  const { resolvedColorMode } = useColorMode();
-
   return (
     <ul className={styles.techBadges} role="list" aria-label={label}>
       {items.map((item) => {
         const icon = technologyIcons[item];
-        const src =
-          resolvedColorMode === "dark" ? (icon?.darkSrc ?? icon?.src) : icon?.src;
 
         return (
           <li key={item} className={styles.techBadge}>
-            {src ? (
-              <Image
+            {icon ? (
+              <><Image
                 aria-hidden="true"
                 alt=""
-                className={`${styles.techBadgeIcon}${
-                  icon?.invertOnDark && resolvedColorMode === "dark"
-                    ? " invert"
-                    : ""
-                }`}
+                className={`${styles.techBadgeIcon}${icon.darkSrc ? " ui-theme-image-light" : ""}${icon.invertOnDark ? " ui-theme-invert" : ""}`}
                 draggable={false}
                 height={16}
                 sizes="16px"
-                src={src}
+                src={icon.src}
                 width={16}
-              />
+              />{icon.darkSrc && <Image
+                aria-hidden="true"
+                alt=""
+                className={`${styles.techBadgeIcon} ui-theme-image-dark`}
+                draggable={false}
+                height={16}
+                sizes="16px"
+                src={icon.darkSrc}
+                width={16}
+              />}</>
             ) : null}
             {item}
           </li>

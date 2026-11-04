@@ -1,29 +1,22 @@
 import type { Metadata } from "next";
 import {
   getDesktopUrlBasePath,
-  parseDesktopUrl,
+  parseDesktopSearchParams,
+  type DesktopSearchParams,
   serializeDesktopUrl,
 } from "@/app/desktop/lib/parseDesktopAppTarget";
 import type { DesktopUrlState } from "@/app/desktop/types/appTypes";
+import { getPortfolioContent } from "@/features/portfolio/content/getPortfolioContent";
 import { projectDocuments } from "@/features/portfolio/content/projectDocuments";
 import { readProjectDocument } from "@/features/portfolio/content/projectMetadata";
 import type { Language } from "@/lib/i18n/language";
-import { SEO_COPY, SHARED_SOCIAL_METADATA } from "@/lib/seo/siteMetadata";
-
-type SearchParams = Record<string, string | string[] | undefined>;
+import { SEO_COPY, SHARED_SOCIAL_METADATA, SITE_URL } from "@/lib/seo/siteMetadata";
 
 export function getDesktopMetadata(
-  query: SearchParams,
+  query: DesktopSearchParams,
   defaultLanguage: Language,
 ) {
-  const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(query)) {
-    if (value === undefined) continue;
-    for (const item of Array.isArray(value) ? value : [value]) {
-      params.append(key, item);
-    }
-  }
-  return getDesktopMetadataForView(parseDesktopUrl(params, defaultLanguage));
+  return getDesktopMetadataForView(parseDesktopSearchParams(query, defaultLanguage));
 }
 
 export function getDesktopMetadataForView(view: DesktopUrlState) {
@@ -63,6 +56,45 @@ export function getDesktopMetadataForView(view: DesktopUrlState) {
       description,
     },
   } satisfies Metadata;
+}
+
+export function getDesktopStructuredData(view: DesktopUrlState) {
+  if (view.app !== "about") return null;
+
+  const content = getPortfolioContent(view.lang);
+  const other = getPortfolioContent(view.lang === "ko" ? "en" : "ko");
+  const url = `${SITE_URL}${getDesktopUrlBasePath(view.lang)}`;
+  const employers = content.experience
+    .filter(experience => experience.current === true)
+    .map(experience => ({
+      "@type": "Organization" as const,
+      name: experience.title,
+      alternateName: experience.alternateName,
+    }));
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "@id": `${url}#profile`,
+    url,
+    inLanguage: view.lang,
+    mainEntity: {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#person`,
+      name: content.profile.name,
+      alternateName: other.profile.name,
+      jobTitle: content.profile.role,
+      description: content.profile.summary[0],
+      url,
+      ...(employers.length > 0 ? { worksFor: employers } : {}),
+      alumniOf: content.education.map(education => ({
+        "@type": "EducationalOrganization" as const,
+        name: education.institution,
+        alternateName: education.alternateName,
+      })),
+      sameAs: [content.contact.github, content.contact.linkedin],
+    },
+  } as const;
 }
 
 // Reset inherited fields so DesktopMetadata owns each tag exactly once.

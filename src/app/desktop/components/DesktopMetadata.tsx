@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { getDesktopMetadataForView } from "@/app/desktop/lib/getDesktopMetadata";
+import { getDesktopMetadataForView, getDesktopStructuredData } from "@/app/desktop/lib/getDesktopMetadata";
 import { getDesktopLanguageFromPathname, parseDesktopUrl } from "@/app/desktop/lib/parseDesktopAppTarget";
 import { SITE_URL } from "@/lib/seo/siteMetadata";
 
@@ -18,6 +18,7 @@ export function DesktopMetadata({ initialPath }: { initialPath: string }) {
   const url = new URL(path, SITE_URL);
   const view = parseDesktopUrl(url.searchParams, getDesktopLanguageFromPathname(url.pathname, "ko"));
   const metadata = getDesktopMetadataForView(view);
+  const structuredData = getDesktopStructuredData(view);
   const absoluteUrl = (value: string) => new URL(value, SITE_URL).href;
   return <>
     <title>{metadata.title.absolute}</title>
@@ -39,5 +40,14 @@ export function DesktopMetadata({ initialPath }: { initialPath: string }) {
     <meta name="twitter:title" content={metadata.twitter.title} />
     <meta name="twitter:description" content={metadata.twitter.description} />
     {metadata.twitter.images.map(image => <meta key={image} name="twitter:image" content={absoluteUrl(image)} />)}
+    {structuredData !== null && (
+      <script
+        id="desktop-profile-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+        }}
+      />
+    )}
   </>;
 }

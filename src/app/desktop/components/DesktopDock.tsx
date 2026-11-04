@@ -10,13 +10,13 @@ import {
 import { dockAppIds } from "@/app/desktop/config/dockApps";
 import { useDesktopNavigation } from "@/app/desktop/hooks/useDesktopNavigation";
 import { useDesktopStore } from "@/app/desktop/store/DesktopStoreProvider";
-import { useLanguageStore } from "@/lib/i18n/useLanguageStore";
+import { useDesktopLanguage } from "@/app/desktop/store/DesktopStoreProvider";
 import { DesktopAppIcon } from "@/app/desktop/components/DesktopAppIcon";
 import { getAppTitle } from "@/app/desktop/lib/getAppTitle";
 import { useTranslation } from "react-i18next";
 
 export function DesktopDock() {
-    const language = useLanguageStore((state) => state.currentLanguage);
+    const language = useDesktopLanguage();
     const { t } = useTranslation("appShell", { lng: language });
     const activeWindowId = useDesktopStore((state) =>
         state.focus.mode === "windows" ? state.focus.activeWindowId : null,

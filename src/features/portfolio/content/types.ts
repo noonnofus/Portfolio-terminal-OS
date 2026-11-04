@@ -30,6 +30,8 @@ export type ProfileContent = {
 
 export type ExperienceContent = {
   title: string;
+  current?: boolean;
+  alternateName?: string;
   role: string;
   summary: string;
   period: string;
@@ -49,6 +51,7 @@ export type SkillGroup = {
 
 export type EducationContent = {
   institution: string;
+  alternateName?: string;
   program: string;
   period: string;
   logo?: PortfolioAssetPath;

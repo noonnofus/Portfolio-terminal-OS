@@ -1,6 +1,5 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
 import { MotionConfig } from "framer-motion";
 import Image from "next/image";
 import { DesktopShortcuts } from "@/app/desktop/components/DesktopShortcuts";
@@ -8,7 +7,7 @@ import { DesktopDock } from "@/app/desktop/components/DesktopDock";
 import { DesktopSystemBar } from "@/app/desktop/components/DesktopSystemBar";
 import { DesktopWindowLayer } from "@/app/desktop/components/DesktopWindowLayer";
 import { usePageVisibilitySync } from "@/app/desktop/hooks/usePageVisibilitySync";
-import { useDesktopStore } from "@/app/desktop/store/DesktopStoreProvider";
+import { useDesktopStore, useDesktopInitialView } from "@/app/desktop/store/DesktopStoreProvider";
 import { useColorMode } from "@/components/providers/color-mode";
 import "@/app/desktop/styles/application.css";
 import { getWallpaperStyle } from "@/app/desktop/lib/wallpaperPresentation";
@@ -17,17 +16,13 @@ import { selectFullscreenWindowId } from "@/app/desktop/store/desktopStore";
 
 export function DesktopShell() {
   usePageVisibilitySync();
+  const initialView = useDesktopInitialView();
   const urlReady = useDesktopStore((state) => state.urlReady);
   const wallpaper = useDesktopStore((state) => state.wallpaper);
   const fullscreenWindowId = useDesktopStore(selectFullscreenWindowId);
   const setFullscreenWindow = useDesktopStore((state) => state.setFullscreenWindow);
   const wallpaperDefinition = wallpaperCatalog[wallpaper];
   const { resolvedColorMode } = useColorMode();
-  const themeMounted = useSyncExternalStore(
-    () => () => undefined,
-    () => true,
-    () => false,
-  );
 
   return (
     <MotionConfig reducedMotion="user">
@@ -35,7 +30,7 @@ export function DesktopShell() {
         className="application-shell"
         data-wallpaper={wallpaper}
         data-fullscreen={fullscreenWindowId !== null}
-        data-theme={themeMounted ? resolvedColorMode : undefined}
+        data-theme={resolvedColorMode}
         style={getWallpaperStyle(wallpaper)}
         onKeyDown={(event) => {
           if (event.key === "Escape" && !event.defaultPrevented && fullscreenWindowId !== null) {
@@ -64,7 +59,7 @@ export function DesktopShell() {
         <div inert={fullscreenWindowId !== null ? true : undefined}>
           <DesktopShortcuts />
         </div>
-        {urlReady ? <DesktopWindowLayer /> : null}
+        {initialView.app === "project" || initialView.app === "projects" || urlReady ? <DesktopWindowLayer /> : null}
         <DesktopDock />
         <div aria-hidden="true" className="application-dock-bottom-edge" />
       </div>

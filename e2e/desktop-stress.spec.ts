@@ -56,7 +56,7 @@ test("all project windows stay bounded and release DOM after close", async ({
 
     for (const project of projects) {
         await page
-            .getByRole("button", {
+            .getByRole("link", {
                 name: `${project.listTitle} 프로젝트 열기`,
             })
             .dblclick();

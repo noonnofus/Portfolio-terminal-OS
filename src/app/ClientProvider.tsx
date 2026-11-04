@@ -5,6 +5,8 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from '@/app/i18n';
 import { useEffect } from 'react';
 import { useLanguageStore } from '@/lib/i18n/useLanguageStore';
+import type { ColorModePreference } from '@/lib/preferences/uiPreferences';
+import { migrateUiPreferences } from '@/app/migrateUiPreferences';
 
 function I18nWrapper({ children }: { children: React.ReactNode }) {
     const language = useLanguageStore((state) => state.currentLanguage);
@@ -19,12 +21,15 @@ function I18nWrapper({ children }: { children: React.ReactNode }) {
 
 export default function ClientProvider({
     children,
+    initialColorMode,
 }: Readonly<{
     children: React.ReactNode;
+    initialColorMode: ColorModePreference;
 }>) {
+    useEffect(migrateUiPreferences, []);
     return (
         <I18nextProvider i18n={i18n}>
-            <AppProvider>
+            <AppProvider initialColorMode={initialColorMode}>
                 <I18nWrapper>
                     {children}
                 </I18nWrapper>

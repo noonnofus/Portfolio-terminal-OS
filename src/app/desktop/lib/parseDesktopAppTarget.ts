@@ -117,3 +117,22 @@ export function isSameDesktopUrlState(
 ): boolean {
     return serializeDesktopUrl(left) === serializeDesktopUrl(right);
 }
+
+export type DesktopSearchParams = Record<
+    string,
+    string | string[] | undefined
+>;
+
+export function parseDesktopSearchParams(
+    query: DesktopSearchParams,
+    defaultLanguage: Language,
+): DesktopUrlState {
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(query)) {
+        if (value === undefined) continue;
+        for (const item of Array.isArray(value) ? value : [value]) {
+            params.append(key, item);
+        }
+    }
+    return parseDesktopUrl(params, defaultLanguage);
+}

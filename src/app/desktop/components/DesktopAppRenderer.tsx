@@ -1,5 +1,8 @@
 "use client";
 
+import { useDesktopInitialView } from "@/app/desktop/store/DesktopStoreProvider";
+import { ProjectCaseStudyPage } from "@/features/portfolio/components/ProjectCaseStudyPage";
+import { getProjectDetailPageContent } from "@/features/portfolio/content/projectDetailContent";
 import { appLoaderRegistry } from "@/app/desktop/lib/appLoaderRegistry";
 import { type DesktopAppId, isFolderAppId } from "@/app/desktop/types/appTypes";
 import { DirectorySurface } from "@/app/desktop/components/directory/DirectorySurface";
@@ -16,6 +19,16 @@ export function DesktopAppRenderer({
     appId: DesktopAppId;
     language: Language;
 }) {
+    const initialView = useDesktopInitialView();
+    // Keep the requested article outside the dynamic loader's streaming fallback.
+    if (initialView.app === "project" && appId === `project:${initialView.slug}`) {
+        return <ProjectCaseStudyPage
+            {...getProjectDetailPageContent(initialView.slug, language)}
+            projectId={initialView.slug}
+            language={language}
+        />;
+    }
+
     if (isFolderAppId(appId)) {
         const directory = findDirectoryByAppId(appId);
         if (directory === null) return null;
