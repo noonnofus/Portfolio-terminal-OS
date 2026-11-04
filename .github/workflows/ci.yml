@@ -17,6 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  NEXT_PUBLIC_SITE_URL: https://hyunhokim.is-a.dev
   APP_ORIGIN: http://localhost:3000
   NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ci-placeholder-publishable-key
@@ -51,7 +52,9 @@ jobs:
         run: npm run lint
 
       - name: Typecheck
-        run: npx tsc --noEmit --pretty false
+        run: |
+          npx next typegen
+          npx tsc --noEmit --pretty false
 
       - name: Unit tests
         run: npm test

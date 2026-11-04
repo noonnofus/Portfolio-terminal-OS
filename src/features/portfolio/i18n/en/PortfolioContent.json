@@ -12,6 +12,8 @@
   "experience": [
     {
       "title": "LOGOS AI",
+      "current": true,
+      "alternateName": "로고스에이아이",
       "role": "Full-Stack Engineer / AI Application Engineer",
       "summary": "I designed and built the frontend, Voice Gateway, and MCP server for OptiGen, participated in enterprise AI service proofs of concept, and extended features for customer-specific requirements.",
       "period": "Aug 2025 ~ Present",
@@ -71,6 +73,7 @@
   "education": [
     {
       "institution": "British Columbia Institute of Technology (BCIT)",
+      "alternateName": "BCIT",
       "program": "Full-Stack Web Development",
       "period": "Aug 2023 ~ Jun 2025"
     }

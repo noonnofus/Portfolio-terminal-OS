@@ -2,13 +2,16 @@
 
 import * as React from "react";
 import { Moon, Sun } from "lucide-react";
+import type { ColorModePreference } from "@/lib/preferences/uiPreferences";
+import { patchUiPreferencesCookie, readUiPreferencesCookie, subscribeUiPreferences } from "@/lib/preferences/uiPreferences.client";
+
+export type { ColorModePreference } from "@/lib/preferences/uiPreferences";
 
 export type ColorMode = "light" | "dark";
-export type ColorModePreference = ColorMode | "auto";
 
 export type ColorModeProviderProps = {
   children: React.ReactNode;
-  defaultTheme?: ColorModePreference;
+  initialColorMode: ColorModePreference;
 };
 
 export interface UseColorModeReturn {
@@ -18,10 +21,7 @@ export interface UseColorModeReturn {
   toggleColorMode: () => void;
 }
 
-const COLOR_MODE_STORAGE_KEY = "theme";
-const COLOR_MODE_EVENT = "color-mode-change";
-const DEFAULT_COLOR_MODE: ColorModePreference = "light";
-const DEFAULT_COLOR_MODE_SNAPSHOT = "light:light";
+const ColorModeContext = React.createContext<UseColorModeReturn | null>(null);
 
 function getSystemColorMode(): ColorMode {
   if (typeof window === "undefined") return "light";
@@ -32,29 +32,6 @@ function getSystemColorMode(): ColorMode {
 
 function resolveColorMode(colorMode: ColorModePreference): ColorMode {
   return colorMode === "auto" ? getSystemColorMode() : colorMode;
-}
-
-function getStoredColorMode(): ColorModePreference | null {
-  if (typeof window === "undefined") return null;
-  const value = window.localStorage.getItem(COLOR_MODE_STORAGE_KEY);
-  return value === "dark" || value === "light" || value === "auto"
-    ? value
-    : null;
-}
-
-function getCurrentColorMode(): ColorModePreference {
-  return getStoredColorMode() ?? DEFAULT_COLOR_MODE;
-}
-
-function getResolvedColorMode(): ColorMode {
-  if (typeof document === "undefined") return "light";
-  return document.documentElement.classList.contains("dark")
-    ? "dark"
-    : "light";
-}
-
-function getColorModeSnapshot() {
-  return `${getCurrentColorMode()}:${getResolvedColorMode()}`;
 }
 
 function applyColorMode(colorMode: ColorModePreference) {
@@ -69,65 +46,57 @@ function applyColorMode(colorMode: ColorModePreference) {
     "dark",
     resolvedColorMode === "dark",
   );
-  window.localStorage.setItem(COLOR_MODE_STORAGE_KEY, colorMode);
-  window.dispatchEvent(new Event(COLOR_MODE_EVENT));
+  document.documentElement.style.colorScheme = resolvedColorMode;
 }
 
-function subscribeColorMode(callback: () => void) {
+function subscribeSystemColorMode(callback: () => void) {
   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-  const handleSystemChange = () => {
-    if (getCurrentColorMode() === "auto") {
-      applyColorMode("auto");
-    }
-  };
-
-  window.addEventListener(COLOR_MODE_EVENT, callback);
-  window.addEventListener("storage", callback);
-  mediaQuery.addEventListener("change", handleSystemChange);
-
-  return () => {
-    window.removeEventListener(COLOR_MODE_EVENT, callback);
-    window.removeEventListener("storage", callback);
-    mediaQuery.removeEventListener("change", handleSystemChange);
-  };
+  mediaQuery.addEventListener("change", callback);
+  return () => mediaQuery.removeEventListener("change", callback);
 }
 
 export function ColorModeProvider({
   children,
-  defaultTheme = "light",
+  initialColorMode,
 }: ColorModeProviderProps) {
+  const [colorMode, setPreference] = React.useState(initialColorMode);
+  const systemColorMode = React.useSyncExternalStore<ColorMode>(subscribeSystemColorMode, getSystemColorMode, () => "light");
+  const resolvedColorMode = colorMode === "auto" ? systemColorMode : colorMode;
   React.useEffect(() => {
-    applyColorMode(getStoredColorMode() ?? defaultTheme);
-  }, [defaultTheme]);
+    // Resolve the actual OS value here, including the first auto hydration effect.
+    applyColorMode(colorMode);
+  }, [colorMode, systemColorMode]);
 
-  return <>{children}</>;
-}
-
-export function useColorMode(): UseColorModeReturn {
-  const colorModeSnapshot = React.useSyncExternalStore(
-    subscribeColorMode,
-    getColorModeSnapshot,
-    () => DEFAULT_COLOR_MODE_SNAPSHOT,
-  );
-  const [colorMode, resolvedColorMode] = colorModeSnapshot.split(":") as [
-    ColorModePreference,
-    ColorMode,
-  ];
+  React.useEffect(() => subscribeUiPreferences(() => {
+    const preferences = readUiPreferencesCookie();
+    if (preferences) {
+      setPreference(preferences.colorMode);
+      applyColorMode(preferences.colorMode);
+    }
+  }), []);
 
   const setColorMode = (nextColorMode: ColorModePreference) => {
+    setPreference(nextColorMode);
     applyColorMode(nextColorMode);
+    patchUiPreferencesCookie({ colorMode: nextColorMode });
   };
 
   const toggleColorMode = () => {
-    applyColorMode(getResolvedColorMode() === "dark" ? "light" : "dark");
+    setColorMode(resolveColorMode(colorMode) === "dark" ? "light" : "dark");
   };
 
-  return {
+  return <ColorModeContext.Provider value={{
     colorMode,
     resolvedColorMode,
     setColorMode,
     toggleColorMode,
-  };
+  }}>{children}</ColorModeContext.Provider>;
+}
+
+export function useColorMode(): UseColorModeReturn {
+  const value = React.useContext(ColorModeContext);
+  if (!value) throw new Error("ColorModeProvider is missing.");
+  return value;
 }
 
 export function useColorModeValue<T>(light: T, dark: T) {
@@ -136,8 +105,7 @@ export function useColorModeValue<T>(light: T, dark: T) {
 }
 
 export function ColorModeIcon() {
-  const { resolvedColorMode } = useColorMode();
-  return resolvedColorMode === "dark" ? <Moon /> : <Sun />;
+  return <><Moon className="ui-theme-image-dark" aria-hidden="true" /><Sun className="ui-theme-image-light" aria-hidden="true" /></>;
 }
 
 export const ColorModeButton = React.forwardRef<

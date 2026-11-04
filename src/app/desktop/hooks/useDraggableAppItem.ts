@@ -38,12 +38,12 @@ export function useDraggableAppItem({
   onOpen: () => void;
   onSelect: () => void;
 }) {
-  const ref = useRef<HTMLButtonElement>(null);
+  const ref = useRef<HTMLElement>(null);
   const dragState = useRef<DragState | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const handlePointerDown = (event: PointerEvent<HTMLButtonElement>) => {
-    if (event.button !== 0) return;
+  const handlePointerDown = (event: PointerEvent<HTMLElement>) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
     const element = ref.current;
     const boundsElement = boundsRef.current;
@@ -69,7 +69,7 @@ export function useDraggableAppItem({
     event.preventDefault();
   };
 
-  const handlePointerMove = (event: PointerEvent<HTMLButtonElement>) => {
+  const handlePointerMove = (event: PointerEvent<HTMLElement>) => {
     const state = dragState.current;
     if (state === null || state.bounds === undefined) return;
 
@@ -91,7 +91,7 @@ export function useDraggableAppItem({
     });
   };
 
-  const handlePointerUp = (event: PointerEvent<HTMLButtonElement>) => {
+  const handlePointerUp = (event: PointerEvent<HTMLElement>) => {
     const state = dragState.current;
     dragState.current = null;
     setIsDragging(false);

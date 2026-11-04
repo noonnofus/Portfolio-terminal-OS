@@ -15,8 +15,9 @@ import type {
 } from "@/app/desktop/components/directory/directoryTypes";
 import { appCatalog } from "@/app/desktop/config/appCatalog";
 import { getAppTitle } from "@/app/desktop/lib/getAppTitle";
-import { useLanguageStore } from "@/lib/i18n/useLanguageStore";
+import { useDesktopLanguage } from "@/app/desktop/store/DesktopStoreProvider";
 import { useTranslation } from "react-i18next";
+import { getDesktopUrlStateForApp, serializeDesktopUrl } from "@/app/desktop/lib/parseDesktopAppTarget";
 
 export function DirectoryItem({
   node,
@@ -45,14 +46,14 @@ export function DirectoryItem({
   onOpen: () => void;
   onFocus: () => void;
   onPositionChange: (position: Point) => void;
-  onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
+  onKeyDown: (event: KeyboardEvent<HTMLElement>) => void;
   onContextMenu: () => void;
   registerElement: (
     nodeId: DirectoryNodeId,
-    element: HTMLButtonElement | null,
+    element: HTMLElement | null,
   ) => void;
 }) {
-  const language = useLanguageStore((state) => state.currentLanguage);
+  const language = useDesktopLanguage();
   const { t } = useTranslation("appShell", { lng: language });
   const app = appCatalog[node.appId];
   const title = getAppTitle(app, t);
@@ -69,16 +70,20 @@ export function DirectoryItem({
     onOpen,
     onSelect,
   });
-  const setRef = (element: HTMLButtonElement | null) => {
+  const setRef = (element: HTMLElement | null) => {
     ref.current = element;
     registerElement(node.nodeId, element);
   };
 
+  const isLink = app.url.app === "project" || app.url.app === "projects";
+  const Element = isLink ? "a" : "button";
+
   return (
-    <button
+    <Element
       ref={setRef}
-      type="button"
-      disabled={navigationBusy}
+      {...(isLink
+        ? { href: serializeDesktopUrl(getDesktopUrlStateForApp(node.appId, language)), draggable: false }
+        : { type: "button" as const, disabled: navigationBusy })}
       tabIndex={focused ? 0 : -1}
       aria-label={
         variant === "desktop"
@@ -99,11 +104,26 @@ export function DirectoryItem({
       onPointerUp={handlePointerUp}
       onLostPointerCapture={handlePointerUp}
       onClick={(event) => {
+        if (isLink) {
+          if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || navigationBusy) return;
+          event.preventDefault();
+        }
         if (event.detail === 0) onOpen();
       }}
-      onDoubleClick={onOpen}
-      onKeyDown={onKeyDown}
+      onDoubleClick={(event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        onOpen();
+      }}
+      onKeyDown={(event) => {
+        if (isLink && event.key === "Enter" && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+          event.preventDefault();
+          onOpen();
+          return;
+        }
+        onKeyDown(event);
+      }}
       onContextMenu={(event) => {
+        if (isLink) return;
         event.preventDefault();
         onContextMenu();
       }}
@@ -118,6 +138,6 @@ export function DirectoryItem({
         <DirectoryItemIcon node={node} />
       </span>
       <span className="desktop-app-name pointer-events-none">{title}</span>
-    </button>
+    </Element>
   );
 }

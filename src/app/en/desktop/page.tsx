@@ -1,47 +1,18 @@
-import type { Metadata } from "next";
+import { parseDesktopSearchParams, serializeDesktopUrl } from "@/app/desktop/lib/parseDesktopAppTarget";
+import { DesktopMetadata } from "@/app/desktop/components/DesktopMetadata";
+import { desktopMetadataReset } from "@/app/desktop/lib/getDesktopMetadata";
 import { DesktopClient } from "@/app/desktop/DesktopClient";
+import { readUiPreferences } from "@/lib/preferences/readUiPreferences";
 
-const title = "Desktop Portfolio | Hyunho Kim";
-const description =
-  "Explore Hyunho Kim's projects, career, and resume in an interactive portfolio.";
+export const metadata = desktopMetadataReset;
 
-export const metadata: Metadata = {
-  title: { absolute: title },
-  description,
-  alternates: {
-    canonical: "/en/desktop",
-    languages: {
-      ko: "/desktop",
-      en: "/en/desktop",
-    },
-  },
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "/en/desktop",
-    siteName: "Hyunho Kim Portfolio",
-    title,
-    description,
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "Hyunho Kim, Software Engineer Portfolio",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-    images: ["/opengraph-image"],
-  },
-};
-
-export default function EnglishDesktopPage() {
+export default async function EnglishDesktopPage({ searchParams }: PageProps<"/en/desktop">) {
+  const initialView = parseDesktopSearchParams(await searchParams, "en");
+  const preferences = await readUiPreferences();
+  const initialPath = serializeDesktopUrl(initialView);
   return (
     <>
+      <DesktopMetadata initialPath={initialPath} />
       <section className="sr-only" lang="en">
         <h1>Hyunho Kim, Desktop Portfolio</h1>
         <p>
@@ -50,7 +21,7 @@ export default function EnglishDesktopPage() {
         </p>
         <a href="/en">Open the English terminal portfolio</a>
       </section>
-      <DesktopClient language="en" />
+      <DesktopClient initialView={initialView} initialPreferences={preferences} language="en" />
     </>
   );
 }

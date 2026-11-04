@@ -2,6 +2,48 @@ import { describe, expect, it } from "vitest";
 import { createDesktopStore, selectFullscreenWindowId } from "@/app/desktop/store/desktopStore";
 
 describe("Desktop store", () => {
+    it("seeds the project directory for server-rendered links", () => {
+        const store = createDesktopStore(undefined, { app: "projects", lang: "en" });
+        expect(store.getInitialState().windows.map(window => window.appId)).toEqual(["projects"]);
+        expect(store.getInitialState().focus).toEqual({ mode: "windows", activeWindowId: "projects" });
+        expect(store.getInitialState().urlReady).toBe(false);
+    });
+    for (const lang of ["ko", "en"] as const) {
+        it(`seeds the ${lang} About window in SSR and live snapshots`, () => {
+            const store = createDesktopStore(undefined, { app: "about", lang });
+            for (const state of [store.getInitialState(), store.getState()]) {
+                expect(state.windows).toEqual([{
+                    windowId: "about", appId: "about", minimized: false, activationOrder: 1,
+                }]);
+                expect(state.focus).toEqual({ mode: "windows", activeWindowId: "about" });
+                expect(state.activationSequence).toBe(1);
+                expect(state.urlReady).toBe(false);
+            }
+        });
+        for (const slug of ["portfolio", "optigen", "mcp", "voice-gateway", "kepco", "wchms", "flare"] as const) {
+            it(`seeds both SSR and live snapshots for ${lang}/${slug}`, () => {
+                const store = createDesktopStore(undefined, { app: "project", slug, lang });
+                for (const state of [store.getInitialState(), store.getState()]) {
+                    expect(state.windows).toHaveLength(1);
+                    expect(state.windows[0].appId).toBe(`project:${slug}`);
+                    expect(state.focus).toEqual({ mode: "windows", activeWindowId: `project:${slug}` });
+                    expect(state.activationSequence).toBe(1);
+                    expect(state.urlReady).toBe(false);
+                }
+            });
+        }
+    }
+
+    it("isolates seeded workspaces and preserves non-project defaults", () => {
+        const first = createDesktopStore(undefined, { app: "project", slug: "kepco", lang: "ko" });
+        const second = createDesktopStore(undefined, { app: "project", slug: "mcp", lang: "en" });
+        first.getState().dispatch({ type: "close-window", windowId: "project:kepco" });
+        expect(first.getState().windows).toHaveLength(0);
+        expect(second.getState().windows[0].appId).toBe("project:mcp");
+        expect(createDesktopStore().getInitialState().windows).toEqual([]);
+        expect(createDesktopStore(undefined, { app: "terminal", lang: "ko" }).getInitialState().windows).toEqual([]);
+    });
+
     it("uses fullscreen chrome only for the active window and clears it on close", () => {
         const store = createDesktopStore();
         const dispatch = store.getState().dispatch;

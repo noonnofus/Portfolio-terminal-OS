@@ -2,8 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "@xterm/xterm/css/xterm.css";
 import ClientProvider from "./ClientProvider";
-import { DEFAULT_LANGUAGE } from "@/lib/i18n/language";
+import { DEFAULT_LANGUAGE, REQUEST_LANGUAGE_HEADER } from "@/lib/i18n/language";
+import { headers } from "next/headers";
+import { readUiPreferences } from "@/lib/preferences/readUiPreferences";
+
 import {
+  SEO_COPY,
+  SHARED_SOCIAL_METADATA,
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_URL,
@@ -13,49 +18,45 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: SITE_NAME,
-    template: "김현호 | %s",
+    template: `${SEO_COPY.ko.authorName} | %s`,
   },
   description: SITE_DESCRIPTION,
-  alternates: {
-    canonical: "/",
-    languages: {
-      ko: "/",
-      en: "/en",
-    },
-  },
+  alternates: { canonical: "/", languages: { ko: "/", en: "/en" } },
   openGraph: {
-    type: "website",
-    locale: "ko_KR",
+    ...SHARED_SOCIAL_METADATA.openGraph,
+    locale: SEO_COPY.ko.locale,
     url: "/",
-    siteName: "Hyunho Kim Portfolio",
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "Hyunho Kim, Software Engineer Portfolio",
-      },
-    ],
   },
   twitter: {
-    card: "summary_large_image",
+    ...SHARED_SOCIAL_METADATA.twitter,
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: ["/opengraph-image"],
   },
 };
 
-export default function RootLayout({
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const preferences = await readUiPreferences();
+  const language = (await headers()).get(REQUEST_LANGUAGE_HEADER) === "en" ? "en" : DEFAULT_LANGUAGE;
+  const colorModeScript = `(() => {
+    const preference = ${JSON.stringify(preferences.colorMode)};
+    const resolved = preference === "auto" ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : preference;
+    const root = document.documentElement;
+    root.classList.toggle("dark", resolved === "dark");
+    root.classList.toggle("light", resolved === "light");
+    root.style.colorScheme = resolved;
+  })();`;
   return (
-    <html lang={DEFAULT_LANGUAGE} suppressHydrationWarning>
+    <html lang={language} className={preferences.colorMode === "auto" ? undefined : preferences.colorMode} suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: colorModeScript }} /></head>
       <body>
-        <ClientProvider>{children}</ClientProvider>
+        <ClientProvider initialColorMode={preferences.colorMode}>{children}</ClientProvider>
       </body>
     </html>
   );

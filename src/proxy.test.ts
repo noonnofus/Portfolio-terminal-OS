@@ -12,6 +12,7 @@ vi.mock("@/lib/supabase/server", () => ({
 }));
 
 import { config, proxy } from "@/proxy";
+import { REQUEST_LANGUAGE_HEADER } from "@/lib/i18n/language";
 
 describe("proxy", () => {
   beforeEach(() => {
@@ -21,6 +22,8 @@ describe("proxy", () => {
   });
 
   it.each([
+    ["GET", "/"],
+    ["GET", "/en"],
     ["GET", "/desktop"],
     ["HEAD", "/desktop"],
     ["GET", "/en/desktop"],
@@ -45,8 +48,24 @@ describe("proxy", () => {
     expect(getClaims).toHaveBeenCalledOnce();
   });
 
-  it("only matches Desktop and account-related backend routes", () => {
+  it.each([
+    ["/", "ko"], ["/en", "en"], ["/desktop", "ko"],
+    ["/en/desktop?app=project&slug=kepco", "en"],
+    ["/desktop?lang=en", "en"], ["/en/desktop?lang=ko", "ko"],
+    ["/en/desktop?lang=invalid", "en"],
+    [`/en/desktop?lang=ko&extra=${"a".repeat(256)}`, "en"],
+  ])("forwards URL language for %s and overrides client headers", async (path, language) => {
+    const response = await proxy(new NextRequest(`https://portfolio.example${path}`, {
+      headers: { [REQUEST_LANGUAGE_HEADER]: language === "en" ? "ko" : "en" },
+    }));
+    expect(response.headers.get(`x-middleware-request-${REQUEST_LANGUAGE_HEADER}`)).toBe(language);
+    expect(createSupabaseServerClient).not.toHaveBeenCalled();
+  });
+
+  it("matches public entry pages and account-related backend routes", () => {
     expect(config.matcher).toEqual([
+      "/",
+      "/en",
       "/desktop/:path*",
       "/en/desktop/:path*",
       "/api/auth/viewer",

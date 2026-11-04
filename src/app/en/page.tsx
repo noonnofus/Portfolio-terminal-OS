@@ -1,41 +1,25 @@
 import type { Metadata } from "next";
 import TerminalRouteClient from "@/features/terminal/components/TerminalRouteClient";
 
-const title = "Hyunho Kim | Software Engineer Portfolio";
-const description =
-  "Hyunho Kim's software engineering portfolio, connecting user interfaces, backend services, and AI into working products.";
+import { SEO_COPY, SHARED_SOCIAL_METADATA } from "@/lib/seo/siteMetadata";
+
+const { title, description, locale } = SEO_COPY.en;
 
 export const metadata: Metadata = {
   title: { absolute: title },
   description,
-  alternates: {
-    canonical: "/en",
-    languages: {
-      ko: "/",
-      en: "/en",
-    },
-  },
+  alternates: { canonical: "/en", languages: { ko: "/", en: "/en" } },
   openGraph: {
-    type: "website",
-    locale: "en_US",
+    ...SHARED_SOCIAL_METADATA.openGraph,
+    locale,
     url: "/en",
-    siteName: "Hyunho Kim Portfolio",
     title,
     description,
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "Hyunho Kim, Software Engineer Portfolio",
-      },
-    ],
   },
   twitter: {
-    card: "summary_large_image",
+    ...SHARED_SOCIAL_METADATA.twitter,
     title,
     description,
-    images: ["/opengraph-image"],
   },
 };
 

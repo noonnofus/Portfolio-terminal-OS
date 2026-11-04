@@ -12,6 +12,8 @@
   "experience": [
     {
       "title": "(주)로고스에이아이",
+      "current": true,
+      "alternateName": "LogosAI",
       "role": "풀스택 엔지니어 / AI 서비스 엔지니어",
       "summary": "OptiGen의 프론트엔드, Voice Gateway와 MCP 서버 전반을 설계하고 구현했습니다. 기업 고객 대상 AI 서비스 PoC와 고객사별 기능 확장에 참여했습니다.",
       "period": "2025.08 ~ 현재",
@@ -71,6 +73,7 @@
   "education": [
     {
       "institution": "British Columbia Institute of Technology (BCIT)",
+      "alternateName": "BCIT",
       "program": "Full-Stack Web Development",
       "period": "2023.08 ~ 2025.06"
     }

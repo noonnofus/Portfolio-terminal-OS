@@ -3,22 +3,17 @@ import { describe, expect, it } from "vitest";
 import {
     DESKTOP_PREFERENCES_STORAGE_KEY,
     readDesktopPreferences,
-    writeDesktopPreferences,
 } from "@/app/desktop/store/desktopPreferences";
 
 describe("Desktop preferences storage", () => {
-    it("round-trips validated preferences", () => {
-        const values = new Map<string, string>();
+    it("reads validated legacy preferences", () => {
+        const values = new Map([[DESKTOP_PREFERENCES_STORAGE_KEY, JSON.stringify({
+            version: 1,
+            preferences: { language: "en", wallpaper: "tahoe_light", dockAutoHide: true },
+        })]]);
         const storage = {
             getItem: (key: string) => values.get(key) ?? null,
-            setItem: (key: string, value: string) => values.set(key, value),
         };
-
-        writeDesktopPreferences(storage, {
-            language: "en",
-            wallpaper: "tahoe_light",
-            dockAutoHide: true,
-        });
 
         expect(readDesktopPreferences(storage)).toEqual({
             language: "en",

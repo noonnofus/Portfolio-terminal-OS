@@ -3,7 +3,6 @@
 import type { LucideIcon } from "lucide-react";
 import Image from "next/image";
 
-import { useColorMode } from "@/components/providers/color-mode";
 
 type LucideStackIconProps = {
   label: string;
@@ -51,22 +50,28 @@ function BrandStackIcon({
   darkSrc,
   invertOnDark = false,
 }: BrandStackIconProps) {
-  const { resolvedColorMode } = useColorMode();
-  const iconSrc = resolvedColorMode === "dark" ? (darkSrc ?? src) : src;
-  const shouldInvert = invertOnDark && resolvedColorMode === "dark";
-
   return (
     <div className="flex min-w-0 flex-col items-center gap-2 text-center">
       <Image
         aria-hidden="true"
         alt=""
-        className={`size-8 shrink-0 object-contain${shouldInvert ? " invert" : ""}`}
+        className={`size-8 shrink-0 object-contain${darkSrc ? " ui-theme-image-light" : ""}${invertOnDark ? " ui-theme-invert" : ""}`}
         draggable={false}
         height={32}
         sizes="32px"
-        src={iconSrc}
+        src={src}
         width={32}
       />
+      {darkSrc && <Image
+        aria-hidden="true"
+        alt=""
+        className="size-8 shrink-0 object-contain ui-theme-image-dark"
+        draggable={false}
+        height={32}
+        sizes="32px"
+        src={darkSrc}
+        width={32}
+      />}
       <StackIconLabel label={label} />
     </div>
   );

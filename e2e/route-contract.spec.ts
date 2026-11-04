@@ -74,7 +74,7 @@ test.describe("route compatibility", () => {
     }) => {
         await page.goto("/desktop?app=projects");
         await page
-            .getByRole("button", {
+            .getByRole("link", {
                 name: "WCHMS 프로젝트 열기",
             })
             .dblclick();

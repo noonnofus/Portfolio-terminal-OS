@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { DEFAULT_UI_PREFERENCES, UI_PREFERENCES_COOKIE, decodeUiPreferences, encodeUiPreferences } from "../src/lib/preferences/uiPreferences";
 
 const career = (page: Page) => page.locator('[data-window-id="about"]');
 
@@ -119,9 +120,9 @@ test.describe("Desktop fullscreen", () => {
         await expect(page.locator(".application-shell")).toHaveAttribute("data-fullscreen", "false");
     });
 
-    for (const theme of ["light", "dark"]) {
-        test(`fills the fullscreen viewport with the app surface in ${theme} mode`, async ({ page }) => {
-            await page.addInitScript((value) => localStorage.setItem("theme", value), theme);
+    for (const theme of ["light", "dark"] as const) {
+        test(`fills the fullscreen viewport with the app surface in ${theme} mode`, async ({ page, context, baseURL }) => {
+            await context.addCookies([{ name: UI_PREFERENCES_COOKIE, value: encodeUiPreferences({ ...DEFAULT_UI_PREFERENCES, colorMode: theme }), url: baseURL! }]);
             await page.goto("/desktop");
             await expect(page.locator(".application-shell")).toHaveAttribute("data-theme", theme);
             const dialog = career(page);
@@ -304,13 +305,8 @@ test.describe("Desktop fullscreen", () => {
     }
 
     for (const dockAutoHide of [false, true]) {
-        test(`reveals the Dock at the bottom with auto-hide ${dockAutoHide}`, async ({ page }) => {
-            await page.addInitScript((autoHide) => {
-                localStorage.setItem("desktop:preferences", JSON.stringify({
-                    version: 1,
-                    preferences: { language: "ko", wallpaper: "golden_gate_light", dockAutoHide: autoHide },
-                }));
-            }, dockAutoHide);
+        test(`reveals the Dock at the bottom with auto-hide ${dockAutoHide}`, async ({ page, context, baseURL }) => {
+            await context.addCookies([{ name: UI_PREFERENCES_COOKIE, value: encodeUiPreferences({ ...DEFAULT_UI_PREFERENCES, dockAutoHide }), url: baseURL! }]);
             await page.goto("/desktop");
             await maximize(page);
 
@@ -333,9 +329,7 @@ test.describe("Desktop fullscreen", () => {
             } else {
                 await expect.poll(async () => (await dock.boundingBox())!.y).toBeLessThan(834);
             }
-            expect(await page.evaluate(() =>
-                JSON.parse(localStorage.getItem("desktop:preferences")!).preferences.dockAutoHide,
-            )).toBe(dockAutoHide);
+            expect(decodeUiPreferences((await context.cookies()).find(cookie => cookie.name === UI_PREFERENCES_COOKIE)?.value)?.dockAutoHide).toBe(dockAutoHide);
         });
     }
 

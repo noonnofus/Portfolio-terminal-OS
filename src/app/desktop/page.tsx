@@ -1,43 +1,14 @@
-import type { Metadata } from "next";
+import { parseDesktopSearchParams, serializeDesktopUrl } from "@/app/desktop/lib/parseDesktopAppTarget";
+import { DesktopMetadata } from "@/app/desktop/components/DesktopMetadata";
+import { desktopMetadataReset } from "@/app/desktop/lib/getDesktopMetadata";
 import { DesktopClient } from "@/app/desktop/DesktopClient";
+import { readUiPreferences } from "@/lib/preferences/readUiPreferences";
 
-export const metadata: Metadata = {
-  title: "Software Engineer Portfolio",
-  description:
-    "김현호의 프로젝트, 커리어, 이력서를 둘러볼 수 있는 인터랙티브 포트폴리오입니다.",
-  alternates: {
-    canonical: "/desktop",
-    languages: {
-      ko: "/desktop",
-      en: "/en/desktop",
-    },
-  },
-  openGraph: {
-    type: "website",
-    locale: "ko_KR",
-    url: "/desktop",
-    siteName: "Hyunho Kim Portfolio",
-    title: "Software Engineer Portfolio",
-    description:
-      "김현호의 프로젝트, 커리어, 이력서를 둘러볼 수 있는 인터랙티브 포트폴리오입니다.",
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "Hyunho Kim, Software Engineer Portfolio",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Software Engineer Portfolio",
-    description:
-      "김현호의 프로젝트, 커리어, 이력서를 둘러볼 수 있는 인터랙티브 포트폴리오입니다.",
-    images: ["/opengraph-image"],
-  },
-};
+export const metadata = desktopMetadataReset;
 
-export default function DesktopPage() {
-  return <DesktopClient />;
+export default async function DesktopPage({ searchParams }: PageProps<"/desktop">) {
+  const initialView = parseDesktopSearchParams(await searchParams, "ko");
+  const preferences = await readUiPreferences();
+  const initialPath = serializeDesktopUrl(initialView);
+  return <><DesktopMetadata initialPath={initialPath} /><DesktopClient initialView={initialView} initialPreferences={preferences} /></>;
 }
