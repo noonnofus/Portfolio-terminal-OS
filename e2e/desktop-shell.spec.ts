@@ -278,6 +278,45 @@ test.describe("Desktop shell", () => {
         await mobileContext.close();
     });
 
+    for (const hasTouch of [false, true]) {
+        test(`keeps dock controls inside narrow viewports (touch: ${hasTouch})`, async ({ browser }) => {
+            const context = await browser.newContext({
+                hasTouch,
+                viewport: { width: 320, height: 844 },
+            });
+            const page = await context.newPage();
+            await page.goto("/desktop");
+            const dock = page.getByRole("navigation", { name: "Applications" });
+            const buttons = dock.getByRole("button");
+            await expect(buttons).toHaveCount(7);
+            await expect(buttons.first()).toBeEnabled();
+
+            for (const width of [320, 375, 390, 400, 1440]) {
+                await page.setViewportSize({ width, height: 844 });
+                for (const target of [dock, ...await buttons.all()]) {
+                    const box = await target.boundingBox();
+                    expect(box).not.toBeNull();
+                    expect(box!.x).toBeGreaterThanOrEqual(0);
+                    expect(box!.x + box!.width).toBeLessThanOrEqual(width);
+                    expect(box!.width).toBeGreaterThanOrEqual(44);
+                    expect(box!.height).toBeGreaterThanOrEqual(44);
+                }
+            }
+
+            await page.setViewportSize({ width: 320, height: 844 });
+            for (const name of ["설정", "커리어"]) {
+                const button = dock.getByRole("button", { name, exact: true });
+                if (hasTouch) await button.tap();
+                else {
+                    await button.focus();
+                    await button.press("Enter");
+                }
+                await expect(page.getByRole("dialog", { name, exact: true })).toBeVisible();
+            }
+            await context.close();
+        });
+    }
+
     test("drags desktop shortcuts at narrow viewport widths", async ({ page }) => {
         await page.setViewportSize({ width: 390, height: 844 });
         await page.goto("/desktop?app=desktop");

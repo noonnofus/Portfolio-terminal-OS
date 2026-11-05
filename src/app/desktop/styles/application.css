@@ -536,6 +536,17 @@
   border-radius: 14px;
 }
 
+@media (width < 400px) {
+  .application-dock {
+    gap: 0;
+    padding-inline: 4px;
+  }
+
+  .dock-app {
+    width: 44px;
+  }
+}
+
 .dock-app:hover,
 .dock-app:focus-visible,
 .dock-app[aria-pressed="true"] {
