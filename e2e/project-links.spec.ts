@@ -93,18 +93,37 @@ test.describe("project discovery without JavaScript", () => {
   }
 });
 
-test("serves 18 sitemap URLs with both canonical versions of each project", async ({ request }) => {
+test("serves 18 sitemap URLs with both canonical versions of each project", async ({ request, page }) => {
   const response = await request.get("/sitemap.xml");
   expect(response.ok()).toBe(true);
   const xml = await response.text();
-  const locations = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(match => match[1].replaceAll("&amp;", "&"));
+  const parsed = await page.evaluate(markup => {
+    const document = new DOMParser().parseFromString(markup, "application/xml");
+    return {
+      error: document.querySelector("parsererror")?.textContent ?? null,
+      entries: Array.from(document.getElementsByTagNameNS("http://www.sitemaps.org/schemas/sitemap/0.9", "url"), entry => ({
+        url: entry.getElementsByTagNameNS("http://www.sitemaps.org/schemas/sitemap/0.9", "loc")[0]?.textContent,
+        alternates: Array.from(entry.getElementsByTagNameNS("http://www.w3.org/1999/xhtml", "link"), link => ({
+          rel: link.getAttribute("rel"),
+          lang: link.getAttribute("hreflang"),
+          url: link.getAttribute("href"),
+        })),
+      })),
+    };
+  }, xml);
+  expect(parsed.error).toBeNull();
+  const locations = parsed.entries.map(entry => entry.url);
   expect(locations).toHaveLength(18);
   expect(new Set(locations).size).toBe(18);
   for (const slug of projectSlugs) {
-    for (const prefix of ["", "/en"]) expect(locations).toContain(`${SITE_URL}${prefix}/desktop?app=project&slug=${slug}`);
+    const alternates = [
+      { rel: "alternate", lang: "ko", url: `${SITE_URL}/desktop?app=project&slug=${slug}` },
+      { rel: "alternate", lang: "en", url: `${SITE_URL}/en/desktop?app=project&slug=${slug}` },
+    ];
+    for (const alternate of alternates) {
+      expect(parsed.entries.find(entry => entry.url === alternate.url)?.alternates).toEqual(alternates);
+    }
   }
-  expect(xml).toContain('hreflang="ko"');
-  expect(xml).toContain('hreflang="en"');
 });
 
 for (const button of ["left", "middle"] as const) {

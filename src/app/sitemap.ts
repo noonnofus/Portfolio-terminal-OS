@@ -26,12 +26,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    // Next.js 16.3.4 interpolates these values into XML without escaping query separators.
     ...projectSlugs.flatMap(slug => languages.map(lang => ({
-      url: `${SITE_URL}${serializeDesktopUrl({ app: "project", slug, lang })}`,
+      url: `${SITE_URL}${serializeDesktopUrl({ app: "project", slug, lang })}`.replaceAll("&", "&amp;"),
       alternates: {
         languages: Object.fromEntries(languages.map(language => [
           language,
-          `${SITE_URL}${serializeDesktopUrl({ app: "project", slug, lang: language })}`,
+          `${SITE_URL}${serializeDesktopUrl({ app: "project", slug, lang: language })}`.replaceAll("&", "&amp;"),
         ])),
       },
     }))),

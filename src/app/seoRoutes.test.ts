@@ -69,13 +69,13 @@ describe("SEO metadata routes", () => {
     ]);
   });
 
-  it("lists all 14 canonical project URLs and matching language alternates", () => {
+  it("escapes all 14 project URLs and matching language alternates for sitemap XML", () => {
     const entries = sitemap();
     expect(entries).toHaveLength(18);
     expect(new Set(entries.map(entry => entry.url)).size).toBe(18);
     for (const slug of projectSlugs) {
-      const ko = `${SITE_URL}/desktop?app=project&slug=${slug}`;
-      const en = `${SITE_URL}/en/desktop?app=project&slug=${slug}`;
+      const ko = `${SITE_URL}/desktop?app=project&amp;slug=${slug}`;
+      const en = `${SITE_URL}/en/desktop?app=project&amp;slug=${slug}`;
       for (const url of [ko, en]) expect(entries.find(entry => entry.url === url)).toEqual({
         url, alternates: { languages: { ko, en } },
       });
