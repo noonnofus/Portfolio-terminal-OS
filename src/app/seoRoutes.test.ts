@@ -16,7 +16,7 @@ describe("SEO metadata routes", () => {
     expect(response.headers.get("Content-Type")).toBe("text/plain; charset=utf-8");
     const text = await response.text();
     const english = getPortfolioContent("en");
-    expect(text.startsWith(`# Hyunho Kim (noonnofus) Portfolio\n\n> ${english.profile.summary[0]}\n`)).toBe(true);
+    expect(text.startsWith(`# Kevin Hyun Ho Kim Portfolio\n\n> ${english.profile.summary[0]}\n`)).toBe(true);
     expect(text).toContain(`${english.profile.name}, also known as noonnofus`);
     expect(text.match(/^# .+/gm)).toHaveLength(1);
     expect(text.match(/^## .+/gm)).toEqual(["## Korean", "## English", "## Optional"]);

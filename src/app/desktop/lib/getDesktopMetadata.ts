@@ -82,7 +82,7 @@ export function getDesktopStructuredData(view: DesktopUrlState) {
       "@type": "Person",
       "@id": `${SITE_URL}/#person`,
       name: content.profile.name,
-      alternateName: [other.profile.name, SITE_NICKNAME],
+      alternateName: [other.profile.name, "Hyunho Kim", SITE_NICKNAME],
       jobTitle: content.profile.role,
       description: content.profile.summary[0],
       url,

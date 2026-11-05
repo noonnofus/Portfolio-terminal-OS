@@ -712,7 +712,7 @@ test.describe("Desktop shell", () => {
 
         await expect(
             resumeWindow.getByRole("heading", {
-                name: "HyunHo Kim",
+                name: "Kevin Hyun Ho Kim",
             }),
         ).toBeVisible();
         await expect(
@@ -1039,7 +1039,7 @@ test.describe("Desktop shell", () => {
 
         await expect(
             page.locator(".application-system-title"),
-        ).toHaveText("김현호 (noonnofus)");
+        ).toHaveText("김현호");
         await expect(page.locator(".application-viewer-name")).toContainText(
             "Guest",
         );

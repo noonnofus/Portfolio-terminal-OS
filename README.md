@@ -1,4 +1,4 @@
-# Hyunho Kim (noonnofus) Portfolio
+# Kevin Hyun Ho Kim Portfolio
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 

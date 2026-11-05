@@ -17,7 +17,7 @@ describe("Desktop request metadata", () => {
       const { metadata: project } = readProjectDocument(
         projectDocuments[slug][language],
       );
-      const title = `${project.title} | ${language === "ko" ? "김현호 (noonnofus)" : "Hyunho Kim (noonnofus)"}`;
+      const title = `${project.title} | ${language === "ko" ? "김현호" : "Kevin Hyun Ho Kim"}`;
       const canonical = `${language === "ko" ? "/desktop" : "/en/desktop"}?app=project&slug=${slug}`;
 
 const shared = getDesktopMetadataForView({ app: "project", slug, lang: language });
@@ -101,7 +101,7 @@ describe("Desktop profile structured data", () => {
         "@type": "Person",
         "@id": `${SITE_URL}/#person`,
         name: content.profile.name,
-        alternateName: [other.profile.name, "noonnofus"],
+        alternateName: [other.profile.name, "Hyunho Kim", "noonnofus"],
         jobTitle: content.profile.role,
         description: content.profile.summary[0],
         url,

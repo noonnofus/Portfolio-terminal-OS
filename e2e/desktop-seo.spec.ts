@@ -50,7 +50,7 @@ function expectProjectMetadata(
   language: Language,
 ) {
   const project = projectMetadata(slug, language);
-  const title = `${project.title} | ${language === "ko" ? "김현호 (noonnofus)" : "Hyunho Kim (noonnofus)"}`;
+  const title = `${project.title} | ${language === "ko" ? "김현호" : "Kevin Hyun Ho Kim"}`;
   const path = `${language === "ko" ? "/desktop" : "/en/desktop"}?app=project&slug=${slug}`;
 
   expect(actual).toMatchObject({
@@ -86,7 +86,7 @@ test.describe("Desktop server metadata", () => {
       const path = language === "ko" ? "/desktop" : "/en/desktop";
       await page.goto(`${path}?app=project&slug=kepco`);
       const project = projectMetadata("kepco", language);
-      await expect(page).toHaveTitle(`${project.title} | ${language === "ko" ? "김현호 (noonnofus)" : "Hyunho Kim (noonnofus)"}`);
+      await expect(page).toHaveTitle(`${project.title} | ${language === "ko" ? "김현호" : "Kevin Hyun Ho Kim"}`);
       await expect(page.getByRole("dialog", { name: project.title, exact: true })).toBeVisible();
       expectProjectMetadata(await readMetadata(page, await page.content()), "kepco", language);
     });
@@ -356,7 +356,7 @@ function expectProfile(profile: unknown, language: Language) {
       "@type": "Person",
       "@id": `${SITE_URL}/#person`,
       name: content.profile.name,
-      alternateName: [other.profile.name, "noonnofus"],
+      alternateName: [other.profile.name, "Hyunho Kim", "noonnofus"],
       jobTitle: content.profile.role,
       description: content.profile.summary[0],
       worksFor: [{

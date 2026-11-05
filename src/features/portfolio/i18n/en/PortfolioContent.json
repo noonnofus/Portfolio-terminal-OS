@@ -1,9 +1,9 @@
 {
   "profile": {
-    "name": "HyunHo Kim",
+    "name": "Kevin Hyun Ho Kim",
     "role": "Software Engineer",
     "summary": [
-      "I’m Hyun Ho Kim, a software engineer working across user interfaces, backend services, and AI integrations. Building on my frontend experience, I have implemented web interfaces, MCP servers, and a real-time voice gateway for contact-center services and a B2B AI platform.",
+      "I’m Kevin Hyun Ho Kim, a software engineer working across user interfaces, backend services, and AI integrations. Building on my frontend experience, I have implemented web interfaces, MCP servers, and a real-time voice gateway for contact-center services and a B2B AI platform.",
       "I designed and built the frontend, Voice Gateway, and MCP server for the B2B AI platform OptiGen. I separated streamed answers from tool state and implemented audio-based meeting documents with long-running task progress. I established shared components, a design system, and UI tests. Changes to font and chart loading reduced initial data transfer by approximately 54% in the recorded checks.",
       "For the Voice Gateway, I implemented per-call bot configuration, STT/TTS, and provider-specific communication and audio handling. In the NICE PoC, I built repeatable STT evaluation under telephone-audio conditions, numerical normalization, and phonetic correction. ITN rule improvements reduced building and unit-number errors by 18.9% across 1,426 repeated-evaluation transcript observations."
     ],
