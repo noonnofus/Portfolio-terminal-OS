@@ -3,6 +3,7 @@ import { DesktopMetadata } from "@/app/desktop/components/DesktopMetadata";
 import { desktopMetadataReset } from "@/app/desktop/lib/getDesktopMetadata";
 import { DesktopClient } from "@/app/desktop/DesktopClient";
 import { readUiPreferences } from "@/lib/preferences/readUiPreferences";
+import { SEO_COPY } from "@/lib/seo/siteMetadata";
 
 export const metadata = desktopMetadataReset;
 
@@ -14,11 +15,8 @@ export default async function EnglishDesktopPage({ searchParams }: PageProps<"/e
     <>
       <DesktopMetadata initialPath={initialPath} />
       <section className="sr-only" lang="en">
-        <h1>Hyunho Kim, Desktop Portfolio</h1>
-        <p>
-          Explore Hyunho Kim&apos;s projects, career, and resume in an
-          interactive desktop portfolio.
-        </p>
+        <h1>{SEO_COPY.en.desktop.title}</h1>
+        <p>{SEO_COPY.en.desktop.description}</p>
         <a href="/en">Open the English terminal portfolio</a>
       </section>
       <DesktopClient initialView={initialView} initialPreferences={preferences} language="en" />

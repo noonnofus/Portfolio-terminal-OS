@@ -6,7 +6,7 @@ import { getPortfolioContent } from "@/features/portfolio/content/getPortfolioCo
 import { projectDocuments } from "@/features/portfolio/content/projectDocuments";
 import { readProjectDocument } from "@/features/portfolio/content/projectMetadata";
 import { languages } from "@/lib/i18n/language";
-import { SITE_URL } from "@/lib/seo/siteMetadata";
+import { SEO_COPY, SITE_URL } from "@/lib/seo/siteMetadata";
 import { projectSlugs } from "@/features/portfolio/types/projectTypes";
 
 describe("SEO metadata routes", () => {
@@ -16,7 +16,8 @@ describe("SEO metadata routes", () => {
     expect(response.headers.get("Content-Type")).toBe("text/plain; charset=utf-8");
     const text = await response.text();
     const english = getPortfolioContent("en");
-    expect(text.startsWith(`# ${english.profile.name} Portfolio\n\n> ${english.profile.summary[0]}\n`)).toBe(true);
+    expect(text.startsWith(`# Hyunho Kim (noonnofus) Portfolio\n\n> ${english.profile.summary[0]}\n`)).toBe(true);
+    expect(text).toContain(`${english.profile.name}, also known as noonnofus`);
     expect(text.match(/^# .+/gm)).toHaveLength(1);
     expect(text.match(/^## .+/gm)).toEqual(["## Korean", "## English", "## Optional"]);
     const urls = [...text.matchAll(/^- \[[^\]]+\]\(([^)]+)\): /gm)].map(match => match[1]);
@@ -34,7 +35,7 @@ describe("SEO metadata routes", () => {
     const section = text.split(`## ${heading}\n\n`)[1].split("\n\n## ")[0];
     const content = getPortfolioContent(lang);
     const base = `${SITE_URL}${lang === "ko" ? "/desktop" : "/en/desktop"}`;
-    expect(section).toContain(content.profile.name);
+    expect(section).toContain(SEO_COPY[lang].authorName);
     expect(section).toContain(`](${base}): ${content.profile.role}`);
     for (const slug of projectSlugs) {
       const { metadata } = readProjectDocument(projectDocuments[slug][lang]);

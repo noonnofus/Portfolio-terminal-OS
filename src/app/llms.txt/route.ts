@@ -4,7 +4,7 @@ import { projectDocuments } from "@/features/portfolio/content/projectDocuments"
 import { readProjectDocument } from "@/features/portfolio/content/projectMetadata";
 import { projectSlugs } from "@/features/portfolio/types/projectTypes";
 import { languages } from "@/lib/i18n/language";
-import { SITE_URL } from "@/lib/seo/siteMetadata";
+import { SEO_COPY, SITE_NICKNAME, SITE_URL } from "@/lib/seo/siteMetadata";
 
 export const dynamic = "force-static";
 
@@ -16,7 +16,7 @@ export function GET() {
     return [
       `## ${lang === "ko" ? "Korean" : "English"}`,
       "",
-      `- [${content.profile.name}, ${lang === "ko" ? "소개와 커리어" : "About and career"}](${aboutUrl}): ${content.profile.role}`,
+      `- [${SEO_COPY[lang].authorName}, ${lang === "ko" ? "소개와 커리어" : "About and career"}](${aboutUrl}): ${content.profile.role}`,
       ...projectSlugs.map(slug => {
         const { metadata } = readProjectDocument(projectDocuments[slug][lang]);
         const url = `${SITE_URL}${serializeDesktopUrl({ app: "project", slug, lang })}`;
@@ -25,9 +25,9 @@ export function GET() {
     ].join("\n");
   });
   const text = [
-    `# ${english.profile.name} Portfolio`,
+    `# ${SEO_COPY.en.authorName} Portfolio`,
     `> ${english.profile.summary[0]}`,
-    "This portfolio is available in Korean and English. The links below lead to profile and project pages with readable content in the server HTML.",
+    `This is the portfolio of ${english.profile.name}, also known as ${SITE_NICKNAME}. It is available in Korean and English. The links below lead to profile and project pages with readable content in the server HTML.`,
     ...sections,
     [
       "## Optional",

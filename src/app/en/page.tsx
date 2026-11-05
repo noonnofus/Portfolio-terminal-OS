@@ -27,11 +27,8 @@ export default function EnglishTerminalPage() {
   return (
     <main className="h-dvh w-dvw overflow-hidden bg-black">
       <section className="sr-only" lang="en">
-        <h1>Hyunho Kim, Software Engineer Portfolio</h1>
-        <p>
-          Explore Hyunho Kim&apos;s software engineering experience, projects,
-          and career through an interactive terminal portfolio.
-        </p>
+        <h1>{title}</h1>
+        <p>{description}</p>
       </section>
       <TerminalRouteClient initialLanguage="en" />
     </main>

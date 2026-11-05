@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { SOCIAL_IMAGE } from "@/lib/seo/siteMetadata";
+import { SEO_COPY, SOCIAL_IMAGE } from "@/lib/seo/siteMetadata";
 
 export const alt = SOCIAL_IMAGE.alt;
 export const size = { width: SOCIAL_IMAGE.width, height: SOCIAL_IMAGE.height };
@@ -23,7 +23,7 @@ export default function OpenGraphImage() {
         }}
       >
         <div style={{ color: "#86efac", display: "flex", fontSize: 30 }}>
-          HYUNHO KIM
+          {SEO_COPY.en.authorName}
         </div>
         <div
           style={{

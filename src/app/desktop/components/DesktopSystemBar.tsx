@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { createOpenAppCommand } from "@/app/desktop/types/appTypes";
 import { useDesktopNavigation } from "@/app/desktop/hooks/useDesktopNavigation";
-import { useDesktopStore } from "@/app/desktop/store/DesktopStoreProvider";
+import { useDesktopInitialView, useDesktopStore } from "@/app/desktop/store/DesktopStoreProvider";
+import { useLanguageStore } from "@/lib/i18n/useLanguageStore";
 
 /* ── Icons (dineshd.dev style — Lucide-like stroked SVGs) ─── */
 
@@ -86,6 +88,11 @@ function SystemClock() {
 /* ── System bar ───────────────────────────────────────────── */
 
 export function DesktopSystemBar() {
+    const { t } = useTranslation("common");
+    const initialView = useDesktopInitialView();
+    const urlReady = useDesktopStore((state) => state.urlReady);
+    const currentLanguage = useLanguageStore((state) => state.currentLanguage);
+    const language = urlReady ? currentLanguage : initialView.lang;
     const windows = useDesktopStore((state) => state.windows);
     const focus = useDesktopStore((state) => state.focus);
     const viewer = useDesktopStore((state) => state.viewer);
@@ -140,7 +147,7 @@ export function DesktopSystemBar() {
             </div>
 
             <strong className="application-system-title">
-                Hyunho&apos;s Portfolio
+                {t("siteName", { lng: language })}
             </strong>
 
             <nav

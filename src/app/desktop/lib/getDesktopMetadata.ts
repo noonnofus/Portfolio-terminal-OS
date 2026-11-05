@@ -10,7 +10,7 @@ import { getPortfolioContent } from "@/features/portfolio/content/getPortfolioCo
 import { projectDocuments } from "@/features/portfolio/content/projectDocuments";
 import { readProjectDocument } from "@/features/portfolio/content/projectMetadata";
 import type { Language } from "@/lib/i18n/language";
-import { SEO_COPY, SHARED_SOCIAL_METADATA, SITE_URL } from "@/lib/seo/siteMetadata";
+import { SEO_COPY, SHARED_SOCIAL_METADATA, SITE_NICKNAME, SITE_URL } from "@/lib/seo/siteMetadata";
 
 export function getDesktopMetadata(
   query: DesktopSearchParams,
@@ -82,7 +82,7 @@ export function getDesktopStructuredData(view: DesktopUrlState) {
       "@type": "Person",
       "@id": `${SITE_URL}/#person`,
       name: content.profile.name,
-      alternateName: other.profile.name,
+      alternateName: [other.profile.name, SITE_NICKNAME],
       jobTitle: content.profile.role,
       description: content.profile.summary[0],
       url,

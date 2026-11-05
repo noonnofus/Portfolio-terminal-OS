@@ -1,6 +1,6 @@
 {
   "boot": {
-    "introduction": "Hello, I'm HyunHo Kim, a Node.js-based junior full-stack web developer.",
+    "introduction": "Hello, I'm HyunHo Kim (noonnofus), a Node.js-based junior full-stack web developer.",
     "experience": "I've built the frontend of an AI agent platform from scratch and implemented the Voice Gateway responsible for real-time voice processing in an AICC solution.",
     "aiApproach": "Beyond simply using AI, I validate it firsthand and combine multiple agents to produce better results.",
     "helpHint": "To see available commands, type \"help\" and press Enter.",

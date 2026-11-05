@@ -6,26 +6,27 @@ if (!siteUrl) {
   throw new Error("NEXT_PUBLIC_SITE_URL is required");
 }
 export const SITE_URL = new URL(siteUrl).origin;
+export const SITE_NICKNAME = "noonnofus";
 
 export const SEO_COPY = {
   ko: {
-    authorName: "김현호",
-    title: "김현호 | 소프트웨어 엔지니어 포트폴리오",
-    description: "사용자 화면부터 서버와 AI 연동까지 제품의 흐름을 연결하는 소프트웨어 엔지니어 김현호의 포트폴리오입니다.",
+    authorName: `김현호 (${SITE_NICKNAME})`,
+    title: `김현호 (${SITE_NICKNAME}) | 소프트웨어 엔지니어 포트폴리오`,
+    description: `사용자 화면부터 서버와 AI 연동까지 제품의 흐름을 연결하는 소프트웨어 엔지니어 김현호 (${SITE_NICKNAME})의 포트폴리오입니다.`,
     locale: "ko_KR",
     desktop: {
-      title: "김현호 | Software Engineer Portfolio",
-      description: "김현호의 프로젝트, 커리어, 이력서를 둘러볼 수 있는 인터랙티브 포트폴리오입니다.",
+      title: `김현호 (${SITE_NICKNAME}) | Software Engineer Portfolio`,
+      description: `김현호 (${SITE_NICKNAME})의 프로젝트, 커리어, 이력서를 둘러볼 수 있는 인터랙티브 포트폴리오입니다.`,
     },
   },
   en: {
-    authorName: "Hyunho Kim",
-    title: "Hyunho Kim | Software Engineer Portfolio",
-    description: "Hyunho Kim's software engineering portfolio, connecting user interfaces, backend services, and AI into working products.",
+    authorName: `Hyunho Kim (${SITE_NICKNAME})`,
+    title: `Hyunho Kim (${SITE_NICKNAME}) | Software Engineer Portfolio`,
+    description: `Hyunho Kim (${SITE_NICKNAME})'s software engineering portfolio, connecting user interfaces, backend services, and AI into working products.`,
     locale: "en_US",
     desktop: {
-      title: "Desktop Portfolio | Hyunho Kim",
-      description: "Explore Hyunho Kim's projects, career, and resume in an interactive portfolio.",
+      title: `Desktop Portfolio | Hyunho Kim (${SITE_NICKNAME})`,
+      description: `Explore Hyunho Kim (${SITE_NICKNAME})'s projects, career, and resume in an interactive portfolio.`,
     },
   },
 } satisfies Record<Language, {
@@ -44,13 +45,13 @@ export const SOCIAL_IMAGE = {
   url: "/opengraph-image",
   width: 1200,
   height: 630,
-  alt: "Hyunho Kim, Software Engineer Portfolio",
+  alt: SEO_COPY.en.title,
 };
 
 export const SHARED_SOCIAL_METADATA = {
   openGraph: {
     type: "website",
-    siteName: "Hyunho Kim Portfolio",
+    siteName: SEO_COPY.en.authorName,
     images: [SOCIAL_IMAGE],
   },
   twitter: {

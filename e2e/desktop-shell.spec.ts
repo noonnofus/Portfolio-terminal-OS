@@ -1000,7 +1000,7 @@ test.describe("Desktop shell", () => {
 
         await expect(
             page.locator(".application-system-title"),
-        ).toHaveText("Hyunho's Portfolio");
+        ).toHaveText("김현호 (noonnofus)");
         await expect(page.locator(".application-viewer-name")).toContainText(
             "Guest",
         );
