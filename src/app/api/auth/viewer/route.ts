@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isAuthSessionMissingError } from "@supabase/supabase-js";
 
 import { getViewerForUser } from "@/features/auth/server/getViewer";
 import { createSupabaseRequestClient } from "@/lib/supabase/server";
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest) {
       error,
     } = await supabase.auth.getUser();
 
-    if (error) {
+    if (error && !isAuthSessionMissingError(error)) {
       return NextResponse.json(
         { error: "viewer_unavailable" },
         {
