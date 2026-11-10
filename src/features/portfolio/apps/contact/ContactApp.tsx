@@ -1,61 +1,62 @@
-import { Contact, ExternalLink, GitBranch, Mail } from "lucide-react";
+"use client";
+
+import { ExternalLink, GitBranch, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { getPortfolioContent } from "@/features/portfolio/content/getPortfolioContent";
 import type { Language } from "@/lib/i18n/language";
 
 interface ContactAppProps {
     language: Language;
 }
 
-export default function ContactApp({}: ContactAppProps) {
-    const { t } = useTranslation(["Contact", "common"]);
+export default function ContactApp({ language }: ContactAppProps) {
+    const { t } = useTranslation("Contact", { lng: language });
+    const { contact } = getPortfolioContent(language);
+    const links = [
+        { label: t("email"), value: contact.email, href: `mailto:${contact.email}`, Icon: Mail },
+        { label: "GitHub", value: contact.github, href: contact.github, Icon: GitBranch },
+    ];
+
     return (
-        <div
-            className="application-app-surface min-h-full w-full overflow-y-auto"
-        >
-            <div className="application-content-inset my-8 mx-4 md:mx-36">
-                <div className="application-content-inset px-6 py-4">
-                    <h2 className="font-bold text-2xl mb-4">
+        <div className="application-app-surface min-h-full w-full">
+            <article
+                lang={language}
+                aria-labelledby="contact-heading"
+                className="application-content-inset mx-auto w-full max-w-2xl px-6 py-6"
+            >
+                <header>
+                    <h2
+                        id="contact-heading"
+                        className="text-[length:var(--application-text-large-title)] font-semibold tracking-tight text-[var(--application-app-surface-text)]"
+                    >
                         {t("title")}
                     </h2>
-
-                    <p className="mt-2 mb-4 text-md text-pen-gray-700 dark:text-slate-300">
+                    <p className="mt-2 break-keep text-[length:var(--application-text-body)] leading-5 text-[var(--application-app-surface-muted)]">
                         {t("description")}
                     </p>
-
-                    <div className="flex flex-col gap-4 items-start">
-                        <div className="flex items-center gap-3">
-                            <Mail className="w-5 h-5" />
+                </header>
+                <ul className="-mx-3 mt-4 divide-y divide-[var(--application-app-divider)]">
+                    {links.map(({ label, value, href, Icon }) => (
+                        <li key={label} className="py-1">
                             <a
-                                href="mailto:kevinvancouver02@gmail.com"
-                                className="flex cursor-pointer items-center gap-1 underline underline-offset-4"
+                                href={href}
+                                className="group flex min-h-14 items-center gap-3 rounded-[var(--application-radius-panel)] px-3 py-2 outline-offset-[-2px] transition-colors hover:bg-[var(--application-control-hover)] focus-visible:outline-2 focus-visible:outline-[var(--application-focus-blue)]"
                             >
-                                kevinvancouver02@gmail.com <ExternalLink />
+                                <Icon aria-hidden="true" className="size-5 shrink-0 text-[var(--application-app-surface-muted)]" />
+                                <span className="min-w-0 flex-1">
+                                    <span className="block text-[length:var(--application-text-callout)] leading-4 text-[var(--application-app-surface-muted)]">
+                                        {label}
+                                    </span>
+                                    <span className="block text-[length:var(--application-text-reading)] font-medium leading-5 text-[var(--application-app-surface-text)] group-hover:text-[var(--application-accent-text)] [overflow-wrap:anywhere]">
+                                        {value.replace(/^https:\/\/(?:www\.)?/, "").replace(/\/$/, "")}
+                                    </span>
+                                </span>
+                                <ExternalLink aria-hidden="true" className="size-4 shrink-0 text-[var(--application-app-surface-muted)]" />
                             </a>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                            <GitBranch className="w-5 h-5" />
-                            <a
-                                href="https://github.com/noonnofus"
-                                className="flex cursor-pointer items-center gap-1 underline underline-offset-4"
-                            >
-                                github.com/noonnofus <ExternalLink />
-                            </a>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                            <Contact className="w-5 h-5" />
-                            <a
-                                href="https://www.linkedin.com/in/kevin-hyun-ho-kim/"
-                                className="flex cursor-pointer items-center gap-1 underline underline-offset-4"
-                            >
-                                linkedin.com/in/kevin-hyun-ho-kim{" "}
-                                <ExternalLink />
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        </li>
+                    ))}
+                </ul>
+            </article>
         </div>
     );
 }
