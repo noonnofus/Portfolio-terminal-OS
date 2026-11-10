@@ -4,7 +4,7 @@ import {
     isSameDesktopUrlState,
     serializeDesktopUrl,
 } from "@/app/desktop/lib/parseDesktopAppTarget";
-import type { DesktopUrlState } from "@/app/desktop/types/appTypes";
+import type { DesktopUrlState, OpenAppCommand } from "@/app/desktop/types/appTypes";
 import type { Language } from "@/lib/i18n/language";
 import type {
     DesktopHistoryState,
@@ -148,13 +148,16 @@ export function planNavigation(
     switch (event.type) {
         case "open-app": {
             const targetView = getDesktopUrlStateForCommand(event, language);
+            const openCommand: OpenAppCommand = targetView.app === "projects"
+                ? { type: "open-app", appId: "projects", params: {} }
+                : event;
 
             if (
                 historyState !== null &&
                 isSameDesktopUrlState(historyState.desktop.view, targetView)
             ) {
                 return {
-                    storeCommands: [event],
+                    storeCommands: [openCommand],
                     historyEffect: { type: "none" },
                     languageEffect: null,
                 };
@@ -166,7 +169,7 @@ export function planNavigation(
                 historyState?.desktop.view ?? null,
             );
             return {
-                storeCommands: [event, { type: "advance-entry-sequence" }],
+                storeCommands: [openCommand, { type: "advance-entry-sequence" }],
                 historyEffect: {
                     type: "push",
                     entry,

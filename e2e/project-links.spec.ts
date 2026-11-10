@@ -5,7 +5,7 @@ import { readProjectDocument } from "../src/features/portfolio/content/projectMe
 import koPortfolio from "../src/features/portfolio/i18n/ko/PortfolioContent.json";
 import enPortfolio from "../src/features/portfolio/i18n/en/PortfolioContent.json";
 import { DEFAULT_UI_PREFERENCES, encodeUiPreferences, UI_PREFERENCES_COOKIE } from "../src/lib/preferences/uiPreferences";
-import { projectSlugs } from "../src/features/portfolio/types/projectTypes";
+import { enabledProjectSlugs, requireProjects } from "./projectAvailability";
 import { SITE_URL } from "../src/lib/seo/siteMetadata";
 
 test("serves a static llms guide independently of visitor cookies and supports HEAD", async ({ request }) => {
@@ -36,16 +36,16 @@ test("serves a static llms guide independently of visitor cookies and supports H
 
 test.describe("llms guide discovery without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
-  test("links to all 16 canonical profile and project pages with readable content", async ({ request, page }) => {
+  test("links to the canonical profile and enabled project pages with readable content", async ({ request, page }) => {
     const response = await request.get("/llms.txt");
     expect(response.status()).toBe(200);
     const text = await response.text();
     const links = [...text.matchAll(/^- \[[^\]]+\]\(([^)]+)\): /gm)].map(match => new URL(match[1]));
-    expect(links).toHaveLength(18);
+    expect(links).toHaveLength(4 + enabledProjectSlugs.length * 2);
     const internal = links.filter(url => url.origin === SITE_URL);
     const expected = ["", "/en"].flatMap(prefix => [
       `${SITE_URL}${prefix}/desktop`,
-      ...projectSlugs.map(slug => `${SITE_URL}${prefix}/desktop?app=project&slug=${slug}`),
+      ...enabledProjectSlugs.map(slug => `${SITE_URL}${prefix}/desktop?app=project&slug=${slug}`),
     ]);
     expect(internal.map(url => url.href).sort()).toEqual(expected.sort());
     for (const url of internal) {
@@ -82,18 +82,20 @@ test.describe("project discovery without JavaScript", () => {
       await expect(page).toHaveURL(`${base}?app=projects`);
       const folder = page.locator('[data-window-id="projects"]');
       await expect(folder).toBeVisible();
-      await expect(folder.getByRole("link")).toHaveCount(projectSlugs.length);
-      for (const slug of projectSlugs) {
+      await expect(folder.getByRole("link")).toHaveCount(enabledProjectSlugs.length);
+      for (const slug of enabledProjectSlugs) {
         await expect(folder.locator(`a[href="${base}?app=project&slug=${slug}"]`)).toHaveCount(1);
       }
-      await folder.locator(`a[href="${base}?app=project&slug=kepco"]`).click();
-      await expect(page.locator("article")).toBeVisible();
-      await expect(page.locator("article")).toHaveAttribute("lang", language);
+      if (enabledProjectSlugs.length > 0) {
+        await folder.getByRole("link").first().click();
+        await expect(page.locator("article")).toBeVisible();
+        await expect(page.locator("article")).toHaveAttribute("lang", language);
+      }
     });
   }
 });
 
-test("serves 18 sitemap URLs with both canonical versions of each project", async ({ request, page }) => {
+test("serves both canonical sitemap versions of each enabled project", async ({ request, page }) => {
   const response = await request.get("/sitemap.xml");
   expect(response.ok()).toBe(true);
   const xml = await response.text();
@@ -113,9 +115,9 @@ test("serves 18 sitemap URLs with both canonical versions of each project", asyn
   }, xml);
   expect(parsed.error).toBeNull();
   const locations = parsed.entries.map(entry => entry.url);
-  expect(locations).toHaveLength(18);
-  expect(new Set(locations).size).toBe(18);
-  for (const slug of projectSlugs) {
+  expect(locations).toHaveLength(4 + enabledProjectSlugs.length * 2);
+  expect(new Set(locations).size).toBe(locations.length);
+  for (const slug of enabledProjectSlugs) {
     const alternates = [
       { rel: "alternate", lang: "ko", url: `${SITE_URL}/desktop?app=project&slug=${slug}` },
       { rel: "alternate", lang: "en", url: `${SITE_URL}/en/desktop?app=project&slug=${slug}` },
@@ -128,6 +130,7 @@ test("serves 18 sitemap URLs with both canonical versions of each project", asyn
 
 for (const button of ["left", "middle"] as const) {
   test(`preserves native link navigation with ${button === "left" ? "a modifier" : "middle click"}`, async ({ page, context, browserName }) => {
+    requireProjects("kepco");
     await page.goto("/en/desktop?app=projects");
     const link = page.locator('[data-window-id="projects"] a[href$="slug=kepco"]');
     await expect(page.locator('[data-window-id="projects"] button').first()).toBeEnabled();
@@ -148,6 +151,7 @@ for (const button of ["left", "middle"] as const) {
 }
 
 test("hydrates the same folder and uses existing History for keyboard link activation", async ({ page }) => {
+  requireProjects("kepco");
   let release!: () => void;
   const ready = new Promise<void>(resolve => { release = resolve; });
   await page.route("**/*.js*", async route => { await ready; await route.continue(); });

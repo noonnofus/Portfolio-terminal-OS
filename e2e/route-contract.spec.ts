@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { isProjectEnabled, requireProjects } from "./projectAvailability";
 
 test.describe("route compatibility", () => {
     test("redirects legacy GUI URLs to the matching Desktop route", async ({
@@ -72,6 +73,7 @@ test.describe("route compatibility", () => {
     test("project loaders render localized content on demand", async ({
         page,
     }) => {
+        requireProjects("wchms");
         await page.goto("/desktop?app=projects");
         await page
             .getByRole("link", {
@@ -123,6 +125,7 @@ test.describe("route compatibility", () => {
         ] as const;
 
         for (const project of projects) {
+            if (!isProjectEnabled(project.slug)) continue;
             await page.goto(`/desktop?app=project&slug=${project.slug}`);
 
             const projectDialog = page.getByRole("dialog", {
@@ -151,6 +154,7 @@ test.describe("route compatibility", () => {
         ] as const;
 
         for (const project of projects) {
+            if (!isProjectEnabled(project.slug)) continue;
             await page.goto(`/desktop?app=project&slug=${project.slug}`);
             const diagram = page.getByRole("region", {
                 name: project.region,
@@ -170,6 +174,7 @@ test.describe("route compatibility", () => {
     });
 
     test("image viewer keeps transparent diagrams readable in dark mode", async ({ page }, testInfo) => {
+        requireProjects("portfolio");
         await page.addInitScript(() => localStorage.setItem("theme", "dark"));
         await page.goto("/desktop?app=project&slug=portfolio");
         await expect(page.locator(".application-shell")).toHaveAttribute("data-theme", "dark");
@@ -188,6 +193,7 @@ test.describe("route compatibility", () => {
             test(`${projectSlug} diagram preview stays within its window (${language}, ${width})`, async ({
                 page,
             }) => {
+                requireProjects(projectSlug);
                 await page.setViewportSize({ width, height: 1000 });
                 await page.addInitScript((language) => {
                     localStorage.setItem("desktop:preferences", JSON.stringify({
@@ -345,6 +351,7 @@ test.describe("route compatibility", () => {
     test("KEPCO authentication diagram stays with its case", async ({
         page,
     }) => {
+        requireProjects("kepco");
         await page.setViewportSize({ width: 390, height: 844 });
         await page.goto("/desktop?app=project&slug=kepco");
 
@@ -369,6 +376,7 @@ test.describe("route compatibility", () => {
     test("project detail applies the reading typography tokens", async ({
         page,
     }) => {
+        requireProjects("kepco", "wchms");
         await page.setViewportSize({ width: 1024, height: 768 });
         await page.goto("/desktop?app=project&slug=kepco");
 
@@ -488,6 +496,7 @@ test.describe("route compatibility", () => {
         ] as const;
 
         for (const project of projects) {
+            if (!isProjectEnabled(project.slug)) continue;
             await page.goto(`/desktop?app=project&slug=${project.slug}`);
             const dialog = page.getByRole("dialog", {
                 name: project.dialog,
@@ -539,6 +548,7 @@ test.describe("route compatibility", () => {
             }
         }
 
+        if (!isProjectEnabled("mcp")) return;
         await page.goto("/desktop?app=project&slug=mcp");
         const mcpDialog = page.getByRole("dialog", {
             name: "OptiGen MCP 서버",
@@ -585,6 +595,7 @@ test.describe("route compatibility", () => {
         ] as const;
 
         for (const [slug, dialogName, caseCount] of projects) {
+            if (!isProjectEnabled(slug)) continue;
             await page.goto(`/desktop?app=project&slug=${slug}&lang=en`);
             const dialog = page.getByRole("dialog", { name: dialogName });
 

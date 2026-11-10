@@ -9,6 +9,7 @@ export type ProjectStatus = "live" | "archived" | "private";
 
 export type ProjectCatalogEntry = {
   slug: ProjectSlug;
+  enabled: boolean;
   order: number;
   status: ProjectStatus;
   stack: readonly string[];

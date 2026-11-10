@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createDesktopStore, selectFullscreenWindowId } from "@/app/desktop/store/desktopStore";
+import { isProjectEnabled } from "@/features/portfolio/content/projectManifest";
+import { projectSlugs } from "@/features/portfolio/types/projectTypes";
 
 describe("Desktop store", () => {
     it("seeds the project directory for server-rendered links", () => {
@@ -20,13 +22,14 @@ describe("Desktop store", () => {
                 expect(state.urlReady).toBe(false);
             }
         });
-        for (const slug of ["portfolio", "optigen", "mcp", "voice-gateway", "kepco", "wchms", "flare"] as const) {
+        for (const slug of projectSlugs) {
             it(`seeds both SSR and live snapshots for ${lang}/${slug}`, () => {
                 const store = createDesktopStore(undefined, { app: "project", slug, lang });
+                const appId = isProjectEnabled(slug) ? `project:${slug}` : "projects";
                 for (const state of [store.getInitialState(), store.getState()]) {
                     expect(state.windows).toHaveLength(1);
-                    expect(state.windows[0].appId).toBe(`project:${slug}`);
-                    expect(state.focus).toEqual({ mode: "windows", activeWindowId: `project:${slug}` });
+                    expect(state.windows[0].appId).toBe(appId);
+                    expect(state.focus).toEqual({ mode: "windows", activeWindowId: appId });
                     expect(state.activationSequence).toBe(1);
                     expect(state.urlReady).toBe(false);
                 }
@@ -37,9 +40,9 @@ describe("Desktop store", () => {
     it("isolates seeded workspaces and preserves non-project defaults", () => {
         const first = createDesktopStore(undefined, { app: "project", slug: "kepco", lang: "ko" });
         const second = createDesktopStore(undefined, { app: "project", slug: "mcp", lang: "en" });
-        first.getState().dispatch({ type: "close-window", windowId: "project:kepco" });
+        first.getState().dispatch({ type: "close-window", windowId: isProjectEnabled("kepco") ? "project:kepco" : "projects" });
         expect(first.getState().windows).toHaveLength(0);
-        expect(second.getState().windows[0].appId).toBe("project:mcp");
+        expect(second.getState().windows[0].appId).toBe(isProjectEnabled("mcp") ? "project:mcp" : "projects");
         expect(createDesktopStore().getInitialState().windows).toEqual([]);
         expect(createDesktopStore(undefined, { app: "terminal", lang: "ko" }).getInitialState().windows).toEqual([]);
     });
@@ -103,11 +106,11 @@ describe("Desktop store", () => {
         });
 
         expect(store.getState().windows.map((window) => window.appId)).toEqual(
-            ["project:wchms"],
+            [isProjectEnabled("wchms") ? "project:wchms" : "projects"],
         );
         expect(store.getState().focus).toEqual({
             mode: "windows",
-            activeWindowId: "project:wchms",
+            activeWindowId: isProjectEnabled("wchms") ? "project:wchms" : "projects",
         });
     });
 

@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { enabledProjectSlugs } from "./projectAvailability";
 
 const projects = [
     {
@@ -38,11 +39,16 @@ const projects = [
     },
 ] as const;
 
+const activeProjects = projects.filter((project) =>
+    enabledProjectSlugs.some((slug) => project.appId === `project:${slug}`),
+);
+
 test("all project windows stay bounded and release DOM after close", async ({
     page,
     browserName,
     context,
 }) => {
+    test.skip(activeProjects.length === 0, "No project windows are enabled.");
     test.setTimeout(60_000);
     test.skip(
         browserName !== "chromium",
@@ -54,7 +60,7 @@ test("all project windows stay bounded and release DOM after close", async ({
         name: "Applications",
     });
 
-    for (const project of projects) {
+    for (const project of activeProjects) {
         await page
             .getByRole("link", {
                 name: `${project.listTitle} 프로젝트 열기`,
@@ -79,7 +85,7 @@ test("all project windows stay bounded and release DOM after close", async ({
             (metric) => metric.name === "JSHeapUsedSize",
         )?.value ?? 0;
 
-    for (const project of projects) {
+    for (const project of activeProjects) {
         const dialog = page.getByRole("dialog", {
             name: project.windowTitle,
         });

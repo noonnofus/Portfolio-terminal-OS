@@ -8,12 +8,13 @@ import * as portfolio from "@/features/portfolio/content/getPortfolioContent";
 import { projectDocuments } from "@/features/portfolio/content/projectDocuments";
 import { readProjectDocument } from "@/features/portfolio/content/projectMetadata";
 import { projectSlugs } from "@/features/portfolio/types/projectTypes";
+import { enabledProjectSlugs } from "@/features/portfolio/content/projectSummaries";
 import { SEO_COPY, SITE_URL } from "@/lib/seo/siteMetadata";
 import { languages } from "@/lib/i18n/language";
 
 describe("Desktop request metadata", () => {
   for (const language of languages) {
-    it.each(projectSlugs)(`describes %s in ${language}`, (slug) => {
+    it.each(enabledProjectSlugs)(`describes %s in ${language}`, (slug) => {
       const { metadata: project } = readProjectDocument(
         projectDocuments[slug][language],
       );

@@ -1,4 +1,5 @@
 import { appCatalog } from "@/app/desktop/config/appCatalog";
+import { orderedProjectSummaries } from "@/features/portfolio/content/projectSummaries";
 import {
   defineFileNode,
   defineFolderNode,
@@ -21,50 +22,14 @@ export const projectsDirectory = defineFolderNode({
   nodeId: "desktop:folder:projects",
   appId: appCatalog.projects.appId,
   appearance: "folder",
-  children: [
+  children: orderedProjectSummaries.map(({ slug }) =>
     defineFileNode({
       kind: "file",
-      nodeId: "desktop:project:kepco",
-      appId: appCatalog["project:kepco"].appId,
+      nodeId: `desktop:project:${slug}`,
+      appId: appCatalog[`project:${slug}`].appId,
       appearance: "document",
     }),
-    defineFileNode({
-      kind: "file",
-      nodeId: "desktop:project:optigen",
-      appId: appCatalog["project:optigen"].appId,
-      appearance: "document",
-    }),
-    defineFileNode({
-      kind: "file",
-      nodeId: "desktop:project:portfolio",
-      appId: appCatalog["project:portfolio"].appId,
-      appearance: "document",
-    }),
-    defineFileNode({
-      kind: "file",
-      nodeId: "desktop:project:mcp",
-      appId: appCatalog["project:mcp"].appId,
-      appearance: "document",
-    }),
-    defineFileNode({
-      kind: "file",
-      nodeId: "desktop:project:voice-gateway",
-      appId: appCatalog["project:voice-gateway"].appId,
-      appearance: "document",
-    }),
-    defineFileNode({
-      kind: "file",
-      nodeId: "desktop:project:wchms",
-      appId: appCatalog["project:wchms"].appId,
-      appearance: "document",
-    }),
-    defineFileNode({
-      kind: "file",
-      nodeId: "desktop:project:flare",
-      appId: appCatalog["project:flare"].appId,
-      appearance: "document",
-    }),
-  ],
+  ),
 });
 
 export const desktopDirectory: DirectoryFolderNode = {

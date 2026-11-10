@@ -1,3 +1,4 @@
+import { requireProjects } from "./projectAvailability";
 import { expect, test } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { DEFAULT_UI_PREFERENCES, UI_PREFERENCES_COOKIE, encodeUiPreferences } from "../src/lib/preferences/uiPreferences";
@@ -429,6 +430,7 @@ test.describe("Desktop shell", () => {
     test("gives project files the desktop selection and bounded drag contract", async ({
         page,
     }) => {
+        requireProjects("kepco", "flare");
         await page.goto("/desktop?app=projects");
         const projectFile = page.getByRole("link", {
             name: "한국전력 상담 어드바이저 프로젝트 열기",
@@ -516,6 +518,7 @@ test.describe("Desktop shell", () => {
     test("opens independent project windows without eager media", async ({
         page,
     }) => {
+        requireProjects("wchms", "flare");
         const mediaRequests: string[] = [];
         page.on("request", (request) => {
             if (request.resourceType() === "media") {

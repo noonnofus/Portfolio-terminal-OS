@@ -2,7 +2,7 @@ import { serializeDesktopUrl } from "@/app/desktop/lib/parseDesktopAppTarget";
 import { getPortfolioContent } from "@/features/portfolio/content/getPortfolioContent";
 import { projectDocuments } from "@/features/portfolio/content/projectDocuments";
 import { readProjectDocument } from "@/features/portfolio/content/projectMetadata";
-import { projectSlugs } from "@/features/portfolio/types/projectTypes";
+import { enabledProjectSlugs } from "@/features/portfolio/content/projectSummaries";
 import { languages } from "@/lib/i18n/language";
 import { SEO_COPY, SITE_NICKNAME, SITE_URL } from "@/lib/seo/siteMetadata";
 
@@ -17,7 +17,7 @@ export function GET() {
       `## ${lang === "ko" ? "Korean" : "English"}`,
       "",
       `- [${SEO_COPY[lang].authorName}, ${lang === "ko" ? "소개와 커리어" : "About and career"}](${aboutUrl}): ${content.profile.role}`,
-      ...projectSlugs.map(slug => {
+      ...enabledProjectSlugs.map(slug => {
         const { metadata } = readProjectDocument(projectDocuments[slug][lang]);
         const url = `${SITE_URL}${serializeDesktopUrl({ app: "project", slug, lang })}`;
         return `- [${metadata.title}](${url}): ${metadata.summary}`;

@@ -1,3 +1,4 @@
+import { requireProjects } from "./projectAvailability";
 import { expect, test, type Page } from "@playwright/test";
 import { DEFAULT_UI_PREFERENCES, UI_PREFERENCES_COOKIE, decodeUiPreferences, encodeUiPreferences } from "../src/lib/preferences/uiPreferences";
 
@@ -238,6 +239,7 @@ test.describe("Desktop fullscreen", () => {
         { id: "project:portfolio", title: "포트폴리오", surface: ".application-content-inset", insets: ".application-content-inset", url: "/desktop?app=project&slug=portfolio" },
     ]) {
         test(`keeps ${app.id} content below the fullscreen header without duplicate top spacing`, async ({ page }) => {
+            if (app.id === "project:portfolio") requireProjects("portfolio");
             await page.goto(app.url);
             const dialog = page.locator(`[data-window-id="${app.id}"]`);
             await expect(dialog.locator(app.surface)).toBeVisible();
@@ -288,6 +290,7 @@ test.describe("Desktop fullscreen", () => {
         { id: "project:portfolio", url: "/desktop?app=project&slug=portfolio", scroller: ".application-app-surface", firstContent: ".application-content-inset > header > h2" },
     ]) {
         test(`scrolls the initial fullscreen clearance away with ${app.id} content`, async ({ page }) => {
+            if (app.id === "project:portfolio") requireProjects("portfolio");
             await page.setViewportSize({ width: 1280, height: 300 });
             await page.goto(app.url);
             const dialog = page.locator(`[data-window-id="${app.id}"]`);

@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 import { readProjectDocument } from "../src/features/portfolio/content/projectMetadata";
 import { projectSlugs, type ProjectSlug } from "../src/features/portfolio/types/projectTypes";
+import { enabledProjectSlugs, requireProjects } from "./projectAvailability";
 import { languages, type Language } from "../src/lib/i18n/language";
 import { SITE_URL } from "../src/lib/seo/siteMetadata";
 import koPortfolio from "../src/features/portfolio/i18n/ko/PortfolioContent.json";
@@ -70,7 +71,7 @@ function expectProjectMetadata(
 test.describe("Desktop server metadata", () => {
   for (const language of languages) {
     test(`publishes every ${language} project in the initial HTML for sharing`, async ({ page, request }) => {
-      for (const slug of projectSlugs) {
+      for (const slug of enabledProjectSlugs) {
         const path = language === "ko" ? "/desktop" : "/en/desktop";
         const response = await request.get(`${path}?app=project&slug=${slug}`, {
           headers: { "User-Agent": "facebookexternalhit/1.1" },
@@ -83,6 +84,7 @@ test.describe("Desktop server metadata", () => {
     });
 
     test(`renders the ${language} project with its request metadata`, async ({ page }) => {
+      requireProjects("kepco");
       const path = language === "ko" ? "/desktop" : "/en/desktop";
       await page.goto(`${path}?app=project&slug=kepco`);
       const project = projectMetadata("kepco", language);
@@ -94,6 +96,7 @@ test.describe("Desktop server metadata", () => {
 
   for (const userAgent of ["Mozilla/5.0", "Googlebot"]) {
     test(`includes metadata in the full response for ${userAgent}`, async ({ page, request }) => {
+      requireProjects("kepco");
       const response = await request.get("/desktop?app=project&slug=kepco&utm_source=shared", {
         headers: { "User-Agent": userAgent },
       });
@@ -140,6 +143,7 @@ async function expectCurrentProjectMetadata(
 }
 
 test("keeps project metadata and Desktop entries through back and forward", async ({ page }) => {
+  requireProjects("kepco", "wchms");
   await page.goto("/desktop?app=project&slug=kepco");
   await expect(page.locator('[data-window-id="project:kepco"] button').first()).toBeEnabled();
   const kepco = page.getByRole("dialog", {
@@ -176,6 +180,7 @@ test("keeps project metadata and Desktop entries through back and forward", asyn
 
 for (const delayed of [false, true]) {
   test(`keeps URL language over persisted language with delayed scripts=${delayed}`, async ({ page }) => {
+    requireProjects("kepco");
     await page.addInitScript(() => localStorage.setItem("desktop:preferences", JSON.stringify({
       version: 1, preferences: { language: "en", wallpaper: "golden_gate_light", dockAutoHide: false },
     })));
@@ -194,6 +199,7 @@ for (const delayed of [false, true]) {
 }
 
 test("restores project metadata on persisted pageshow", async ({ page }) => {
+  requireProjects("kepco", "wchms");
   await page.goto("/desktop?app=project&slug=kepco");
   await expect(page.locator('[data-window-id="project:kepco"] button').first()).toBeEnabled();
   await expectCurrentProjectMetadata(page, "kepco", "ko");
@@ -206,6 +212,7 @@ test("restores project metadata on persisted pageshow", async ({ page }) => {
 
 for (const action of ["close", "minimize"]) {
   test(`updates default metadata after project ${action}`, async ({ page }) => {
+    requireProjects("kepco");
     await page.goto("/desktop?app=project&slug=kepco");
     const dialog = page.getByRole("dialog", { name: projectMetadata("kepco", "ko").title, exact: true });
     await expect(dialog).toBeVisible();
@@ -218,6 +225,7 @@ for (const action of ["close", "minimize"]) {
 
 for (const queued of [false, true]) {
   test(`handles back timeout and late popstate with queued navigation=${queued}`, async ({ page }) => {
+    requireProjects("kepco");
     await page.goto("/desktop?app=projects");
     await page.getByRole("link", { name: "한국전력 상담 어드바이저 프로젝트 열기", exact: true }).dblclick();
     await expectCurrentProjectMetadata(page, "kepco", "ko");
@@ -240,6 +248,7 @@ for (const queued of [false, true]) {
 }
 
 test("changes language and preserves the running terminal", async ({ page }) => {
+  requireProjects("wchms");
   await page.goto("/desktop?app=terminal");
   const terminal = page.locator('[data-window-id="terminal"] .xterm').first();
   await expect(terminal).toBeVisible();
@@ -269,6 +278,7 @@ test("changes language and preserves the running terminal", async ({ page }) => 
 });
 
 test("restores metadata after a real document traversal", async ({ page }) => {
+  requireProjects("kepco");
   await page.addInitScript(() => window.addEventListener("pageshow", event => {
     document.documentElement.dataset.seoPersisted = String(event.persisted);
   }));
@@ -284,7 +294,7 @@ test("restores metadata after a real document traversal", async ({ page }) => {
 test.describe("Desktop project body without JavaScript", () => {
   test.use({ javaScriptEnabled: false, viewport: { width: 320, height: 844 } });
   for (const language of languages) {
-    for (const slug of projectSlugs) {
+    for (const slug of enabledProjectSlugs) {
       test(`${language}/${slug} provides a visible article in server HTML`, async ({ page }) => {
         const path = language === "ko" ? "/desktop" : "/en/desktop";
         const project = projectMetadata(slug, language);
@@ -307,6 +317,7 @@ test.describe("Desktop project body without JavaScript", () => {
 
 
 test("hydrates the existing article despite a different saved language with delayed scripts", async ({ page }) => {
+  requireProjects("kepco");
   await page.route("**/api/auth/viewer", route => route.fulfill({
     status: 200, json: { status: "guest" },
   }));
@@ -450,6 +461,7 @@ test.describe("Desktop profile JSON-LD server HTML", () => {
 });
 
 test("Desktop profile JSON-LD follows URL history while its window stays mounted", async ({ page }) => {
+  requireProjects("wchms");
   await page.goto("/desktop");
   await expectCurrentProfile(page, "ko");
   const about = page.locator('[data-window-id="about"]');

@@ -1,4 +1,4 @@
-import { projectManifest } from "@/features/portfolio/content/projectManifest";
+import { isProjectEnabled, projectManifest } from "@/features/portfolio/content/projectManifest";
 import { projectTitles } from "@/features/portfolio/content/projectTitles";
 import type {
     ContactContent,
@@ -85,7 +85,7 @@ function toPortfolioContent(
                 summary: project.summary,
                 stack: projectManifest[slug].resumeStack,
             };
-        }),
+        }).filter((project) => isProjectEnabled(project.slug)),
         education: resource.education.map((education, index) => ({
             ...education,
             ...(index === 0

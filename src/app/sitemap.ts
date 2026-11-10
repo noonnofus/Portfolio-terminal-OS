@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo/siteMetadata";
 import { languages } from "@/lib/i18n/language";
-import { projectSlugs } from "@/features/portfolio/types/projectTypes";
+import { enabledProjectSlugs } from "@/features/portfolio/content/projectSummaries";
 import { serializeDesktopUrl } from "@/app/desktop/lib/parseDesktopAppTarget";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -27,7 +27,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     // Next.js 16.3.4 interpolates these values into XML without escaping query separators.
-    ...projectSlugs.flatMap(slug => languages.map(lang => ({
+    ...enabledProjectSlugs.flatMap(slug => languages.map(lang => ({
       url: `${SITE_URL}${serializeDesktopUrl({ app: "project", slug, lang })}`.replaceAll("&", "&amp;"),
       alternates: {
         languages: Object.fromEntries(languages.map(language => [

@@ -14,6 +14,7 @@ import { collectFolderAppIds } from "@/app/desktop/components/directory/director
 import { wallpaperIds } from "@/features/settings/config/wallpaperCatalog";
 import enAppShell from "@/app/i18n/resources/en/appShell.json";
 import koAppShell from "@/app/i18n/resources/ko/appShell.json";
+import { isProjectEnabled } from "@/features/portfolio/content/projectManifest";
 import {
     getDesktopLanguageFromPathname,
     parseDesktopUrl,
@@ -78,11 +79,11 @@ describe("Desktop app boundaries", () => {
         });
         expect(
             parseDesktopUrl(new URLSearchParams("app=project&slug=wchms&lang=en")),
-        ).toEqual({
+        ).toEqual(isProjectEnabled("wchms") ? {
             app: "project",
             slug: "wchms",
             lang: "en",
-        });
+        } : { app: "projects", lang: "en" });
         expect(
             serializeDesktopUrl({
                 app: "project",

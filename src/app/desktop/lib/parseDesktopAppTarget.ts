@@ -1,4 +1,5 @@
 import { appCatalog } from "@/app/desktop/config/appCatalog";
+import { isProjectEnabled } from "@/features/portfolio/content/projectManifest";
 import {
     isProjectSlug,
     type DesktopAppId,
@@ -66,7 +67,7 @@ export function parseDesktopUrl(
             return { app: "settings", lang };
         case "project": {
             const slug = searchParams.get("slug");
-            return slug !== null && isProjectSlug(slug)
+            return slug !== null && isProjectSlug(slug) && isProjectEnabled(slug)
                 ? { app: "project", slug, lang }
                 : { app: "projects", lang };
         }
@@ -98,7 +99,9 @@ export function getDesktopUrlStateForApp(
     const target = appCatalog[appId].url;
 
     if (target.app === "project") {
-        return { app: "project", slug: target.slug, lang: language };
+        return isProjectEnabled(target.slug)
+            ? { app: "project", slug: target.slug, lang: language }
+            : { app: "projects", lang: language };
     }
 
     return { app: target.app, lang: language };

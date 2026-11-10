@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { projectSlugs } from "@/features/portfolio/types/projectTypes";
+import { enabledProjectSlugs } from "@/features/portfolio/content/projectSummaries";
 import { portfolioContent } from "@/features/portfolio/content/getPortfolioContent";
 
 describe("portfolio content model", () => {
@@ -14,7 +14,7 @@ describe("portfolio content model", () => {
             expect(content.contact.email).toContain("@");
             expect(
                 content.projects.map((project) => project.slug),
-            ).toEqual(projectSlugs);
+            ).toEqual(enabledProjectSlugs);
         }
     });
 

@@ -1,14 +1,13 @@
-import { projectDocuments } from "./projectDocuments";
-import { readProjectDocument } from "./projectMetadata";
 import type { ProjectCatalogEntry } from "@/features/portfolio/content/types";
 import type { ProjectSlug } from "@/features/portfolio/types/projectTypes";
 
+// Set enabled to false to hide a project in both languages. Rebuild for production.
 export const projectManifest = {
     portfolio: {
         slug: "portfolio",
+        enabled: false,
         order: 14,
         status: "private",
-        stack: readProjectDocument(projectDocuments["portfolio"].ko).metadata.stack,
         resumeStack: ["Next.js", "TypeScript", "Zustand", "Tailwind CSS"],
         icon: "/icons/optimized/document.png",
         links: {},
@@ -16,9 +15,9 @@ export const projectManifest = {
     },
     optigen: {
         slug: "optigen",
+        enabled: true,
         order: 12,
         status: "private",
-        stack: readProjectDocument(projectDocuments["optigen"].ko).metadata.stack,
         resumeStack: ["Next.js", "TypeScript", "TanStack Query", "Zustand"],
         icon: "/icons/optimized/document.png",
         links: {},
@@ -26,9 +25,9 @@ export const projectManifest = {
     },
     mcp: {
         slug: "mcp",
+        enabled: true,
         order: 20,
         status: "private",
-        stack: readProjectDocument(projectDocuments["mcp"].ko).metadata.stack,
         resumeStack: ["Node.js", "TypeScript", "MCP SDK", "Express.js"],
         icon: "/icons/optimized/document.png",
         links: {},
@@ -36,9 +35,9 @@ export const projectManifest = {
     },
     "voice-gateway": {
         slug: "voice-gateway",
+        enabled: true,
         order: 21,
         status: "private",
-        stack: readProjectDocument(projectDocuments["voice-gateway"].ko).metadata.stack,
         resumeStack: ["Node.js", "TypeScript", "WebSocket", "Pino"],
         icon: "/icons/optimized/document.png",
         links: {},
@@ -46,9 +45,9 @@ export const projectManifest = {
     },
     kepco: {
         slug: "kepco",
+        enabled: true,
         order: 10,
         status: "private",
-        stack: readProjectDocument(projectDocuments["kepco"].ko).metadata.stack,
         resumeStack: ["React 19", "TypeScript", "TanStack Query", "Zustand"],
         icon: "/icons/optimized/document.png",
         links: {},
@@ -56,9 +55,9 @@ export const projectManifest = {
     },
     wchms: {
         slug: "wchms",
+        enabled: false,
         order: 30,
         status: "private",
-        stack: readProjectDocument(projectDocuments["wchms"].ko).metadata.stack,
         resumeStack: ["Next.js", "TypeScript", "MySQL", "OpenAI"],
         icon: "/icons/optimized/document.png",
         links: {},
@@ -66,12 +65,16 @@ export const projectManifest = {
     },
     flare: {
         slug: "flare",
+        enabled: false,
         order: 40,
         status: "private",
-        stack: readProjectDocument(projectDocuments["flare"].ko).metadata.stack,
         resumeStack: ["Next.js", "TypeScript", "PostgreSQL", "OpenAI"],
         icon: "/icons/optimized/document.png",
         links: {},
         media: [],
     },
-} satisfies Record<ProjectSlug, ProjectCatalogEntry>;
+} satisfies Record<ProjectSlug, Omit<ProjectCatalogEntry, "stack">>;
+
+export function isProjectEnabled(slug: ProjectSlug): boolean {
+    return projectManifest[slug].enabled;
+}

@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { isProjectEnabled } from "./projectAvailability";
 
 test.describe("initial document language", () => {
   test.use({ javaScriptEnabled: false });
@@ -13,7 +14,10 @@ test.describe("initial document language", () => {
       const response = await page.goto(path);
       expect(response?.status()).toBe(200);
       await expect(page.locator("html")).toHaveAttribute("lang", language);
-      if (path.includes("slug=")) await expect(page.locator("article")).toHaveAttribute("lang", language);
+      if (path.includes("slug=")) {
+        if (isProjectEnabled("kepco")) await expect(page.locator("article")).toHaveAttribute("lang", language);
+        else await expect(page.locator("article")).toHaveCount(0);
+      }
     });
   }
 });

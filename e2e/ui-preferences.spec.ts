@@ -1,6 +1,6 @@
 import { expect, test, type BrowserContext, type Page } from "@playwright/test";
 import { DEFAULT_UI_PREFERENCES, UI_PREFERENCES_COOKIE, decodeUiPreferences, encodeUiPreferences, type UiPreferences } from "../src/lib/preferences/uiPreferences";
-import { projectSlugs } from "../src/features/portfolio/types/projectTypes";
+import { enabledProjectSlugs, requireProjects } from "./projectAvailability";
 
 const selected: UiPreferences = { ...DEFAULT_UI_PREFERENCES, colorMode: "dark", wallpaper: "tahoe_dark", dockAutoHide: true };
 
@@ -37,7 +37,7 @@ test.describe("cookie preferences without JavaScript", () => {
     test(`${colorMode} renders saved appearance and every localized project from the server`, async ({ page, context, baseURL }) => {
       await seed(context, baseURL!, { ...selected, colorMode });
       for (const language of ["ko", "en"]) {
-        for (const slug of projectSlugs) {
+        for (const slug of enabledProjectSlugs) {
           const response = await page.goto(`${language === "ko" ? "" : "/en"}/desktop?app=project&slug=${slug}`);
           expect(response?.status()).toBe(200);
           await expect(page.locator("html")).toHaveClass(colorMode);
@@ -57,6 +57,7 @@ test.describe("cookie preferences without JavaScript", () => {
 
 for (const width of [390, 639, 640, 1024, 1440]) {
   test(`keeps first window and shortcut geometry at ${width}px through hydration`, async ({ page, context, baseURL }) => {
+    requireProjects("kepco");
     await page.setViewportSize({ width, height: 768 });
     await seed(context, baseURL!);
     let release!: () => void;
@@ -96,6 +97,7 @@ for (const width of [390, 639, 640, 1024, 1440]) {
 
 for (const os of ["light", "dark"] as const) {
   test(`resolves auto before scripts hydrate with OS ${os}`, async ({ page, context, baseURL }) => {
+    requireProjects("portfolio");
     await page.emulateMedia({ colorScheme: os });
     await seed(context, baseURL!, { ...selected, colorMode: "auto" });
     let release!: () => void;
@@ -121,6 +123,7 @@ for (const os of ["light", "dark"] as const) {
 }
 
 test("catches cookie changes made after the server response but before subscriptions", async ({ page, context, baseURL }) => {
+  requireProjects("kepco");
   await seed(context, baseURL!, DEFAULT_UI_PREFERENCES);
   let release!: () => void;
   const ready = new Promise<void>(resolve => { release = resolve; });
@@ -139,6 +142,7 @@ test("catches cookie changes made after the server response but before subscript
 });
 
 test("preserves keyboard focus chosen before hydration", async ({ page }) => {
+  requireProjects("mcp");
   let release!: () => void;
   const ready = new Promise<void>(resolve => { release = resolve; });
   await page.route("**/*.js*", async route => { await ready; await route.continue(); });
@@ -159,6 +163,7 @@ test("preserves keyboard focus chosen before hydration", async ({ page }) => {
 });
 
 test("migrates legacy settings with one reload, preserving URL and unrelated storage", async ({ page, context }) => {
+  requireProjects("kepco");
   let documents = 0;
   page.on("request", request => { if (request.isNavigationRequest() && request.frame() === page.mainFrame()) documents++; });
   await page.addInitScript(() => {
@@ -182,6 +187,7 @@ test("migrates legacy settings with one reload, preserving URL and unrelated sto
 });
 
 test("valid cookies win over conflicting legacy preferences", async ({ page, context, baseURL }) => {
+  requireProjects("kepco");
   await seed(context, baseURL!);
   await page.addInitScript(() => localStorage.setItem("theme", "light"));
   await page.goto("/desktop?app=project&slug=kepco");
@@ -250,6 +256,7 @@ test("preserves a fresh cookie field when the runtime has not received its notif
 });
 
 test("isolates appearance across browser contexts and server requests", async ({ browser, baseURL }) => {
+  requireProjects("kepco");
   const a = await browser.newContext({ javaScriptEnabled: false });
   const b = await browser.newContext({ javaScriptEnabled: false });
   try {

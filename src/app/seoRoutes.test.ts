@@ -8,6 +8,8 @@ import { readProjectDocument } from "@/features/portfolio/content/projectMetadat
 import { languages } from "@/lib/i18n/language";
 import { SEO_COPY, SITE_URL } from "@/lib/seo/siteMetadata";
 import { projectSlugs } from "@/features/portfolio/types/projectTypes";
+import { isProjectEnabled } from "@/features/portfolio/content/projectManifest";
+import { enabledProjectSlugs } from "@/features/portfolio/content/projectSummaries";
 
 describe("SEO metadata routes", () => {
   it("publishes a UTF-8 llms guide with unique public links", async () => {
@@ -21,9 +23,10 @@ describe("SEO metadata routes", () => {
     expect(text.match(/^# .+/gm)).toHaveLength(1);
     expect(text.match(/^## .+/gm)).toEqual(["## Korean", "## English", "## Optional"]);
     const urls = [...text.matchAll(/^- \[[^\]]+\]\(([^)]+)\): /gm)].map(match => match[1]);
-    expect(urls).toHaveLength(18);
-    expect(new Set(urls).size).toBe(18);
-    expect(urls.filter(url => new URL(url).origin === SITE_URL)).toHaveLength(16);
+    expect(urls).toHaveLength(4 + enabledProjectSlugs.length * languages.length);
+    expect(new Set(urls).size).toBe(urls.length);
+    expect(urls.filter(url => new URL(url).origin === SITE_URL))
+      .toHaveLength((1 + enabledProjectSlugs.length) * languages.length);
     expect(urls.filter(url => new URL(url).origin !== SITE_URL))
       .toEqual([english.contact.github, english.contact.linkedin]);
     expect(text.endsWith("\n")).toBe(true);
@@ -38,10 +41,14 @@ describe("SEO metadata routes", () => {
     expect(section).toContain(SEO_COPY[lang].authorName);
     expect(section).toContain(`](${base}): ${content.profile.role}`);
     for (const slug of projectSlugs) {
+      if (!isProjectEnabled(slug)) {
+        expect(section).not.toContain(`${base}?app=project&slug=${slug}`);
+        continue;
+      }
       const { metadata } = readProjectDocument(projectDocuments[slug][lang]);
       expect(section).toContain(`- [${metadata.title}](${base}?app=project&slug=${slug}): ${metadata.summary}`);
     }
-    expect(section.match(/^- \[/gm)).toHaveLength(8);
+    expect(section.match(/^- \[/gm)).toHaveLength(1 + enabledProjectSlugs.length);
   });
 
   it("publishes the public entry points in the sitemap", () => {
@@ -69,11 +76,15 @@ describe("SEO metadata routes", () => {
     ]);
   });
 
-  it("escapes all 14 project URLs and matching language alternates for sitemap XML", () => {
+  it("escapes enabled project URLs and matching language alternates for sitemap XML", () => {
     const entries = sitemap();
-    expect(entries).toHaveLength(18);
-    expect(new Set(entries.map(entry => entry.url)).size).toBe(18);
+    expect(entries).toHaveLength(4 + enabledProjectSlugs.length * languages.length);
+    expect(new Set(entries.map(entry => entry.url)).size).toBe(entries.length);
     for (const slug of projectSlugs) {
+      if (!isProjectEnabled(slug)) {
+        expect(entries.some(entry => entry.url.includes(`slug=${slug}`))).toBe(false);
+        continue;
+      }
       const ko = `${SITE_URL}/desktop?app=project&amp;slug=${slug}`;
       const en = `${SITE_URL}/en/desktop?app=project&amp;slug=${slug}`;
       for (const url of [ko, en]) expect(entries.find(entry => entry.url === url)).toEqual({

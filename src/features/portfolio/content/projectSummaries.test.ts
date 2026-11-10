@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { projectSlugs } from "@/features/portfolio/types/projectTypes";
 import { projectManifest } from "@/features/portfolio/content/projectManifest";
 import { getPortfolioContent } from "@/features/portfolio/content/getPortfolioContent";
-import { projectSummaries } from "@/features/portfolio/content/projectSummaries";
+import { enabledProjectSlugs, projectSummaries } from "@/features/portfolio/content/projectSummaries";
 import { languages } from "@/lib/i18n/language";
 
 describe("portfolio project summaries", () => {
@@ -29,7 +29,7 @@ describe("portfolio project summaries", () => {
             const projects = getPortfolioContent(language).projects;
 
             expect(projects.map((project) => project.slug).toSorted()).toEqual(
-                projectSlugs.toSorted(),
+                enabledProjectSlugs.toSorted(),
             );
             for (const project of projects) {
                 expect(project.title).not.toBe("");
