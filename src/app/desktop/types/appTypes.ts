@@ -102,6 +102,7 @@ export type DesktopAppUrlTargetMap = {
 
 export type DesktopAppCatalogEntry<K extends DesktopAppId> = {
     appId: K;
+    enabled: boolean;
     url: DesktopAppUrlTargetMap[K];
     titleKey: AppTitleKey<K>;
     icon: PublicAssetPath;

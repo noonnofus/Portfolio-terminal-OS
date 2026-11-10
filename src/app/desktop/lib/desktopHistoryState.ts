@@ -1,5 +1,5 @@
 import { isProjectSlug, type DesktopUrlState } from "@/app/desktop/types/appTypes";
-import { isProjectEnabled } from "@/features/portfolio/content/projectManifest";
+import { isAppEnabled } from "@/app/desktop/config/appCatalog";
 import type { DesktopHistoryState } from "@/app/desktop/types/navigationTypes";
 
 function isDesktopUrlState(value: unknown): value is DesktopUrlState {
@@ -16,19 +16,18 @@ function isDesktopUrlState(value: unknown): value is DesktopUrlState {
 
     if (app === "project") {
         const slug = Reflect.get(value, "slug");
-        return typeof slug === "string" && isProjectSlug(slug) && isProjectEnabled(slug);
+        return typeof slug === "string" && isProjectSlug(slug) && isAppEnabled(`project:${slug}`);
     }
 
-    return (
+    return app === "desktop" || ((
         app === "about" ||
         app === "projects" ||
         app === "resume" ||
         app === "terminal" ||
         app === "contact" ||
         app === "notes" ||
-        app === "settings" ||
-        app === "desktop"
-    );
+        app === "settings"
+    ) && isAppEnabled(app));
 }
 
 export function readDesktopHistoryState(

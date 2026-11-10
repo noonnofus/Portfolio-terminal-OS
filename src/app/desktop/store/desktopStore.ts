@@ -1,6 +1,5 @@
 import { createStore } from "zustand/vanilla";
-import { appCatalog } from "@/app/desktop/config/appCatalog";
-import { isProjectEnabled } from "@/features/portfolio/content/projectManifest";
+import { resolveEnabledAppId } from "@/app/desktop/config/appCatalog";
 import { DEFAULT_UI_PREFERENCES, type UiPreferences } from "@/lib/preferences/uiPreferences";
 import type { Viewer } from "@/features/auth/types/viewer";
 import type { DesktopAppId, DesktopUrlState } from "@/app/desktop/types/appTypes";
@@ -66,10 +65,14 @@ function activateApp(
     state: DesktopState,
     requestedAppId: DesktopAppId,
 ): Pick<DesktopState, "windows" | "focus" | "activationSequence"> {
-    const target = appCatalog[requestedAppId].url;
-    const appId = target.app === "project" && !isProjectEnabled(target.slug)
-        ? "projects"
-        : requestedAppId;
+    const appId = resolveEnabledAppId(requestedAppId);
+    if (appId === null) {
+        return {
+            windows: state.windows,
+            focus: { mode: "desktop", activeWindowId: null },
+            activationSequence: state.activationSequence,
+        };
+    }
     const activationSequence = state.activationSequence + 1;
     const existingWindow = state.windows.find(
         (window) => window.windowId === appId,

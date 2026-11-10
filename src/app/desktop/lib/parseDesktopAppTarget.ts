@@ -1,5 +1,4 @@
-import { appCatalog } from "@/app/desktop/config/appCatalog";
-import { isProjectEnabled } from "@/features/portfolio/content/projectManifest";
+import { appCatalog, resolveEnabledAppId } from "@/app/desktop/config/appCatalog";
 import {
     isProjectSlug,
     type DesktopAppId,
@@ -36,7 +35,7 @@ export function parseDesktopUrl(
     defaultLanguage: Language = "ko",
 ): DesktopUrlState {
     if (searchParams.toString().length > MAX_QUERY_LENGTH) {
-        return { app: "about", lang: defaultLanguage };
+        return getDesktopUrlStateForApp("about", defaultLanguage);
     }
 
     const requestedLanguage = searchParams.get("lang");
@@ -50,29 +49,25 @@ export function parseDesktopUrl(
         case null:
         case "":
         case "about":
-            return { app: "about", lang };
+            return getDesktopUrlStateForApp("about", lang);
         case "desktop":
             return { app: "desktop", lang };
         case "projects":
-            return { app: "projects", lang };
         case "resume":
-            return { app: "resume", lang };
         case "terminal":
-            return { app: "terminal", lang };
         case "contact":
-            return { app: "contact", lang };
         case "notes":
-            return { app: "notes", lang };
         case "settings":
-            return { app: "settings", lang };
+            return getDesktopUrlStateForApp(app, lang);
         case "project": {
             const slug = searchParams.get("slug");
-            return slug !== null && isProjectSlug(slug) && isProjectEnabled(slug)
-                ? { app: "project", slug, lang }
-                : { app: "projects", lang };
+            return getDesktopUrlStateForApp(
+                slug !== null && isProjectSlug(slug) ? `project:${slug}` : "projects",
+                lang,
+            );
         }
         default:
-            return { app: "about", lang };
+            return getDesktopUrlStateForApp("about", lang);
     }
 }
 
@@ -96,15 +91,10 @@ export function getDesktopUrlStateForApp(
     appId: DesktopAppId,
     language: Language,
 ): DesktopUrlState {
-    const target = appCatalog[appId].url;
-
-    if (target.app === "project") {
-        return isProjectEnabled(target.slug)
-            ? { app: "project", slug: target.slug, lang: language }
-            : { app: "projects", lang: language };
-    }
-
-    return { app: target.app, lang: language };
+    const enabledAppId = resolveEnabledAppId(appId);
+    return enabledAppId === null
+        ? { app: "desktop", lang: language }
+        : { ...appCatalog[enabledAppId].url, lang: language };
 }
 
 export function getDesktopUrlStateForCommand(

@@ -1,4 +1,4 @@
-import { appCatalog } from "@/app/desktop/config/appCatalog";
+import { appCatalog, isAppEnabled } from "@/app/desktop/config/appCatalog";
 import { orderedProjectSummaries } from "@/features/portfolio/content/projectSummaries";
 import {
   defineFileNode,
@@ -46,7 +46,7 @@ export const desktopDirectory: DirectoryFolderNode = {
       appearance: "document",
     }),
     notesNode,
-  ],
+  ].filter((node) => isAppEnabled(node.appId)),
 };
 
 function findDirectory(

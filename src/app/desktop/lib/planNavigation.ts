@@ -4,7 +4,7 @@ import {
     isSameDesktopUrlState,
     serializeDesktopUrl,
 } from "@/app/desktop/lib/parseDesktopAppTarget";
-import type { DesktopUrlState, OpenAppCommand } from "@/app/desktop/types/appTypes";
+import { createOpenAppCommand, type DesktopUrlState } from "@/app/desktop/types/appTypes";
 import type { Language } from "@/lib/i18n/language";
 import type {
     DesktopHistoryState,
@@ -148,9 +148,11 @@ export function planNavigation(
     switch (event.type) {
         case "open-app": {
             const targetView = getDesktopUrlStateForCommand(event, language);
-            const openCommand: OpenAppCommand = targetView.app === "projects"
-                ? { type: "open-app", appId: "projects", params: {} }
-                : event;
+            const openCommand: StoreCommand = targetView.app === "desktop"
+                ? { type: "show-desktop" }
+                : targetView.app === "project"
+                ? event
+                : createOpenAppCommand(targetView.app);
 
             if (
                 historyState !== null &&

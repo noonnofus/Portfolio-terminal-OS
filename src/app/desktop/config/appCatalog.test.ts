@@ -10,7 +10,7 @@ import {
     folderAppIds,
     publicAssetPath,
 } from "@/app/desktop/types/appTypes";
-import { collectFolderAppIds } from "@/app/desktop/components/directory/directoryTree";
+import { collectFolderAppIds, desktopDirectory } from "@/app/desktop/components/directory/directoryTree";
 import { wallpaperIds } from "@/features/settings/config/wallpaperCatalog";
 import enAppShell from "@/app/i18n/resources/en/appShell.json";
 import koAppShell from "@/app/i18n/resources/ko/appShell.json";
@@ -40,7 +40,6 @@ describe("Desktop app boundaries", () => {
         expect(dockAppIds).toEqual([
             "about",
             "projects",
-            "resume",
             "terminal",
             "contact",
             "notes",
@@ -48,7 +47,21 @@ describe("Desktop app boundaries", () => {
         ]);
 
         for (const appId of dockAppIds) {
+            expect(appCatalog[appId].enabled).toBe(true);
             expect(appCatalog[appId].dock?.visible).toBe(true);
+        }
+    });
+
+    it("disables only Resume among ordinary apps and preserves project visibility", () => {
+        for (const app of Object.values(appCatalog)) {
+            expect(app.enabled).toBe(app.url.app === "project"
+                ? isProjectEnabled(app.url.slug)
+                : app.appId !== "resume");
+        }
+        expect(desktopDirectory.children.map((node) => node.appId)).toEqual(["projects", "notes"]);
+        for (const language of ["ko", "en"] as const) {
+            expect(parseDesktopUrl(new URLSearchParams("app=resume"), language))
+                .toEqual({ app: "desktop", lang: language });
         }
     });
 

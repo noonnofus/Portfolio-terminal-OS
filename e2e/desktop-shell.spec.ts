@@ -1,4 +1,5 @@
-import { requireProjects } from "./projectAvailability";
+import { requireApps, requireProjects } from "./projectAvailability";
+import { dockAppIds } from "../src/app/desktop/config/dockApps";
 import { expect, test } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { DEFAULT_UI_PREFERENCES, UI_PREFERENCES_COOKIE, encodeUiPreferences } from "../src/lib/preferences/uiPreferences";
@@ -289,7 +290,7 @@ test.describe("Desktop shell", () => {
             await page.goto("/desktop");
             const dock = page.getByRole("navigation", { name: "Applications" });
             const buttons = dock.getByRole("button");
-            await expect(buttons).toHaveCount(7);
+            await expect(buttons).toHaveCount(dockAppIds.length);
             await expect(buttons.first()).toBeEnabled();
 
             for (const width of [320, 375, 390, 400, 1440]) {
@@ -702,6 +703,7 @@ test.describe("Desktop shell", () => {
     test("renders a bilingual HTML Resume with print isolation", async ({
         page,
     }) => {
+        requireApps("resume");
         await page.goto("/desktop?lang=en");
         await page
             .getByRole("navigation", { name: "Applications" })
