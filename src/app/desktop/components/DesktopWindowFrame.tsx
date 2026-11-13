@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
 import { appCatalog } from "@/app/desktop/config/appCatalog";
-import { dockAppIds } from "@/app/desktop/config/dockApps";
 import {
     createOpenAppCommand,
     type DesktopAppId,
@@ -108,6 +107,10 @@ const DESKTOP_SYSTEM_BAR_HEIGHT_PX = 36;
 const DESKTOP_WINDOW_MAX_WIDTH_OFFSET_PX = 48;
 const DESKTOP_WINDOW_CHROME_RESERVE_PX = 44; // 36 (system bar) + 8 (bottom padding)
 
+type DockTarget = { x: number; y: number; scale: number };
+const MINIMIZE_DURATION = 0.34;
+const RESTORE_DURATION = 0.32;
+
 /* ── Window frame component ─────────────────────────────── */
 
 export function DesktopWindowFrame({
@@ -141,7 +144,24 @@ export function DesktopWindowFrame({
     const maximized = useDesktopStore((state) => state.fullscreenWindowId === win.windowId);
     const setFullscreenWindow = useDesktopStore((state) => state.setFullscreenWindow);
 
+    const [dockTarget, setDockTarget] = useState<DockTarget | null>(null);
+
     const handleMinimize = () => {
+        const dockAppId = app.url.app === "project" ? "projects" : appId;
+        const icon = document.querySelector<HTMLElement>(`[data-dock-app-id="${dockAppId}"] .application-app-icon`);
+        const dock = icon?.closest<HTMLElement>(".application-dock");
+        const rect = sectionRef.current?.getBoundingClientRect();
+        if (!shouldReduceMotion && icon && dock && rect) {
+            const target = icon.getBoundingClientRect();
+            // Measure the resting Dock position, including fullscreen and auto-hide.
+            const targetY = globalThis.innerHeight - parseFloat(getComputedStyle(dock).bottom)
+                - dock.offsetHeight + target.top - dock.getBoundingClientRect().top + target.height / 2;
+            setDockTarget({
+                x: target.left + target.width / 2 - rect.left - rect.width / 2,
+                y: targetY - rect.top - rect.height / 2,
+                scale: Math.min(icon.offsetWidth / rect.width, icon.offsetHeight / rect.height),
+            });
+        }
         navigate({
             type: "minimize-window",
             windowId: appId,
@@ -163,8 +183,6 @@ export function DesktopWindowFrame({
 
     const defaultLeft = 64 + index * 44;
     const defaultTop = 32 + index * 36;
-    const currentLeft = pos?.left ?? defaultLeft;
-    const currentTop = pos?.top ?? defaultTop;
     const initialWidth = `max(var(--application-window-min-width), min(${app.window.width}px, calc(100vw - ${DESKTOP_WINDOW_MAX_WIDTH_OFFSET_PX}px)))`;
     const initialHeight = `min(${app.window.height}px, calc(100dvh - ${DESKTOP_WINDOW_CHROME_RESERVE_PX}px))`;
     const initialLeft = `clamp(0px, ${defaultLeft}px, calc(100vw - ${initialWidth}))`;
@@ -297,36 +315,28 @@ export function DesktopWindowFrame({
               zIndex: active ? 80 : 40 + index,
           };
 
-    // Calculate dynamic minimize transition offsets to the specific Dock icon
-    const dockIndex = dockAppIds.findIndex((dockAppId) => dockAppId === appId);
-    const screenWidth =
-        typeof window !== "undefined" ? window.innerWidth : 1024;
-    const screenHeight =
-        typeof window !== "undefined" ? window.innerHeight : 768;
-    const targetX =
-        screenWidth / 2 +
-        (dockIndex !== -1 ? dockIndex - (dockAppIds.length - 1) / 2 : 0) * 54;
-    const windowWidth = maximized
-        ? screenWidth
-        : Math.min(
-              app.window.width,
-              screenWidth - DESKTOP_WINDOW_MAX_WIDTH_OFFSET_PX,
-          );
-    const windowHeight = maximized
-        ? screenHeight - DESKTOP_SYSTEM_BAR_HEIGHT_PX
-        : Math.min(
-              app.window.height,
-              screenHeight - DESKTOP_WINDOW_CHROME_RESERVE_PX,
-          );
-    const minimizeX = shouldReduceMotion
-        ? 0
-        : targetX - ((maximized ? 0 : currentLeft) + windowWidth / 2);
-    const minimizeY = shouldReduceMotion
-        ? 0
-        : screenHeight - 34 - ((maximized ? DESKTOP_SYSTEM_BAR_HEIGHT_PX : currentTop) + windowHeight / 2);
+    const variants: Variants = {
+        docked: (target: DockTarget) => ({ ...target, opacity: 0 }),
+        open: {
+            x: 0, y: 0, scale: 1, opacity: 1,
+            transition: {
+                duration: shouldReduceMotion ? 0 : RESTORE_DURATION,
+                ease: [0.22, 0.75, 0.25, 1],
+                opacity: { duration: shouldReduceMotion ? 0 : 0.08 },
+            },
+        },
+        hidden: (target: DockTarget | null) => target && !shouldReduceMotion ? {
+            ...target, opacity: 0,
+            transition: {
+                duration: MINIMIZE_DURATION,
+                ease: [0.36, 0, 0.64, 1],
+                opacity: { delay: MINIMIZE_DURATION - 0.04, duration: 0.04, ease: "linear" },
+            },
+        } : { opacity: 0, transition: { duration: shouldReduceMotion ? 0 : 0.12 } },
+    };
 
     return (
-        <AnimatePresence>
+        <AnimatePresence custom={win.minimized ? dockTarget : null}>
             {!isHidden && (
                 <motion.section
                     ref={sectionRef as React.Ref<HTMLElement>}
@@ -350,18 +360,16 @@ export function DesktopWindowFrame({
                     style={windowStyle}
                     layout={!shouldReduceMotion}
                     layoutDependency={maximized}
-                    initial={false}
-                    animate={{
-                        scale: 1,
-                        x: 0,
-                        y: 0,
-                        opacity: 1,
+                    custom={dockTarget}
+                    variants={variants}
+                    initial={dockTarget && !shouldReduceMotion ? "docked" : false}
+                    animate="open"
+                    exit="hidden"
+                    onAnimationStart={(definition) => {
+                        sectionRef.current?.toggleAttribute("inert", definition === "hidden");
                     }}
-                    exit={{
-                        scale: shouldReduceMotion ? 1 : 0.15,
-                        x: minimizeX,
-                        y: minimizeY,
-                        opacity: 0,
+                    onAnimationComplete={(definition) => {
+                        if (definition === "open") setDockTarget(null);
                     }}
                     transition={{
                         duration: shouldReduceMotion ? 0 : 0.38,

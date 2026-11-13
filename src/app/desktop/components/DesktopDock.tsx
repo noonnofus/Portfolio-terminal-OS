@@ -32,7 +32,9 @@ export function DesktopDock() {
     const [bouncingAppId, setBouncingAppId] = useState<DesktopAppId | null>(null);
 
     const handleButtonClick = (appId: DesktopAppId) => {
-        setBouncingAppId(appId);
+        if (!windows.some((window) => window.appId === appId)) {
+            setBouncingAppId(appId);
+        }
         // Trigger navigation
         navigate(createOpenAppCommand(appId));
     };
@@ -77,6 +79,7 @@ export function DesktopDock() {
                             disabled={navigationBusy}
                             aria-label={title}
                             aria-pressed={isActive}
+                            data-dock-app-id={appId}
                             onClick={() => handleButtonClick(appId)}
                             className="dock-app relative"
                             // macOS-style hover scale + float lift effect
